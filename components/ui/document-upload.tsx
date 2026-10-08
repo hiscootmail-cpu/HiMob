@@ -83,7 +83,7 @@ function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange
         <div
           className={cn(
             "flex items-center gap-3 rounded-md border bg-hs-white p-3",
-            error ? "border-danger" : "border-line",
+            error ? "border-error-line" : "border-line",
           )}
         >
           {preview ? (
@@ -122,7 +122,7 @@ function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange
           className={cn(
             "flex cursor-pointer flex-col items-center gap-2 rounded-md border-2 border-dashed bg-hs-white px-4 py-6 text-center transition-colors hover:bg-surface",
             "[input:focus-visible+&]:ring-4 [input:focus-visible+&]:ring-hs-blue/40",
-            error ? "border-danger" : "border-line",
+            error ? "border-error-line" : "border-line",
           )}
         >
           <CameraIcon className="size-8 text-hs-black" />
@@ -132,7 +132,7 @@ function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange
       )}
 
       {error ? (
-        <p id={messageId} role="alert" className="text-sm text-danger">
+        <p id={messageId} role="alert" className="text-sm text-error">
           {error}
         </p>
       ) : null}

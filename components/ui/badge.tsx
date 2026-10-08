@@ -14,7 +14,7 @@ const badgeVariants = cva(
         pending: "bg-pink-soft text-on-pink",
         highlight: "bg-purple-soft text-on-purple",
         neutral: "bg-surface text-hs-black",
-        danger: "bg-danger-soft text-danger",
+        error: "border border-error-line bg-hs-white text-error",
       },
     },
     defaultVariants: { tone: "neutral" },

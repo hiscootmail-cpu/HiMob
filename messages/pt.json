@@ -53,10 +53,11 @@
         "hs-white": "Branco Flow",
         "hs-pink": "Rosa Flow",
         "hs-purple": "Roxo Flow",
-        "danger": "Vermelho (só ações irreversíveis)",
+        "danger": "Vermelho (só botões de ação irreversível)",
         "surface": "Cinza de fundo",
         "line": "Cinza de borda",
-        "muted": "Cinza de texto secundário"
+        "muted": "Cinza de texto secundário",
+        "error": "Rosa-escuro (avisos de erro)"
       }
     },
     "type": {
@@ -279,6 +280,30 @@
     "privacy": {
       "title": "Política de Privacidade",
       "placeholder": "O texto oficial da Política de Privacidade da Hi Scoot, de acordo com a LGPD, será publicado aqui antes do lançamento."
+    }
+  },
+  "verifyIdentity": {
+    "title": "Verificação de identidade",
+    "goHome": "Voltar ao início",
+    "rejected": {
+      "title": "Envie o documento de novo",
+      "description": "O nome no documento não bateu com o nome do seu cadastro. Envie de novo a frente e o verso.",
+      "reasonLabel": "Motivo informado pela equipe",
+      "exampleReason": "(Exemplo) O nome no documento está diferente do nome informado no cadastro.",
+      "lastAttempt": "Atenção: esta é a última tentativa. Se o nome não bater de novo, o cadastro será bloqueado.",
+      "submit": "Reenviar documento"
+    },
+    "pending": {
+      "title": "Documento em análise",
+      "description": "Recebemos a frente e o verso do seu documento. A equipe vai conferir o nome e avisar você assim que terminar."
+    },
+    "blocked": {
+      "title": "Cadastro bloqueado",
+      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Por segurança, este cadastro foi bloqueado."
+    },
+    "approved": {
+      "title": "Identidade verificada",
+      "description": "O nome do seu documento confere com o cadastro. Tudo certo para alugar e anunciar."
     }
   }
 }

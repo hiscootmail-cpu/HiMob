@@ -14,7 +14,7 @@ function Toaster(props: ToasterProps) {
           title: "!text-hs-black !font-semibold",
           description: "!text-muted",
           success: "[&_[data-icon]]:!text-on-green",
-          error: "[&_[data-icon]]:!text-danger",
+          error: "[&_[data-icon]]:!text-error",
         },
       }}
       {...props}

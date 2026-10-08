@@ -67,7 +67,7 @@ export function TermsConsent({
           onChange={(event) => onChange?.(event.currentTarget.checked)}
           className={cn(
             "mt-0.5 size-5 shrink-0 cursor-pointer rounded-sm accent-hs-green outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
-            error && "outline-2 outline-danger",
+            error && "outline-2 outline-error-line",
           )}
         />
         <span className="text-hs-black">
@@ -78,7 +78,7 @@ export function TermsConsent({
         </span>
       </label>
       {error ? (
-        <p role="alert" className="text-sm text-danger">
+        <p role="alert" className="text-sm text-error">
           {error}
         </p>
       ) : null}

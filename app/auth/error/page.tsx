@@ -18,7 +18,7 @@ export default async function AuthErrorPage() {
     <AuthCard
       title={t("title")}
       description={t("description")}
-      icon={<CircleAlert className="size-12 text-danger" aria-hidden />}
+      icon={<CircleAlert className="size-12 text-error" aria-hidden />}
     >
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button asChild size="lg" className="sm:flex-1">

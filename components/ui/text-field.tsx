@@ -11,7 +11,7 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
         "h-11 w-full min-w-0 rounded-md border border-line bg-hs-white px-4 text-base text-hs-black transition-colors outline-none placeholder:text-muted",
         "hover:border-hs-black/30 focus-visible:border-hs-blue focus-visible:ring-4 focus-visible:ring-hs-blue/25",
         "disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted",
-        "aria-invalid:border-danger aria-invalid:ring-danger/20",
+        "aria-invalid:border-error-line aria-invalid:ring-error-line/20",
         className,
       )}
       {...props}
@@ -48,7 +48,7 @@ function TextField({ id, label, hint, error, className, ...props }: TextFieldPro
       {message ? (
         <p
           id={messageId}
-          className={cn("text-sm", error ? "text-danger" : "text-muted")}
+          className={cn("text-sm", error ? "text-error" : "text-muted")}
           role={error ? "alert" : undefined}
         >
           {message}

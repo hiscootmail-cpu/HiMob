@@ -79,7 +79,7 @@ function PasswordField({
       {message ? (
         <p
           id={messageId}
-          className={cn("text-sm", error ? "text-danger" : "text-muted")}
+          className={cn("text-sm", error ? "text-error" : "text-muted")}
           role={error ? "alert" : undefined}
         >
           {message}

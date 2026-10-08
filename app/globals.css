@@ -7,7 +7,9 @@
  *
  * Paleta oficial: hs-green, hs-blue, hs-black, hs-white, hs-pink, hs-purple.
  * on-green / on-blue: texto escuro sobre botão verde/azul.
- * danger: só para ações irreversíveis (regra 10).
+ * danger: só para BOTÕES de ações irreversíveis (regra 10).
+ * error / error-line / error-soft: avisos de erro e situações de bloqueio,
+ * no rosa da paleta (não usam o vermelho, que é só para ação irreversível).
  * Tons de cinza (surface, line, muted): aprovados em 08/10/2026.
  * Fundos suaves das etiquetas (*-soft, on-pink, on-purple): derivados da paleta.
  */
@@ -27,6 +29,10 @@
   --color-danger: #e53e3e;
   --color-on-danger: #ffffff;
 
+  --color-error: #7a1f4f;
+  --color-error-line: #f05aa6;
+  --color-error-soft: #fdebf4;
+
   --color-surface: #f5f5f5;
   --color-line: #e5e5e5;
   --color-muted: #5c5c5c;
@@ -35,7 +41,6 @@
   --color-blue-soft: #e4f6fd;
   --color-pink-soft: #fdebf4;
   --color-purple-soft: #efeafc;
-  --color-danger-soft: #fdecec;
 
   --radius-sm: 8px;
   --radius-md: 12px;

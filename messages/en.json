@@ -53,10 +53,11 @@
         "hs-white": "Flow White",
         "hs-pink": "Flow Pink",
         "hs-purple": "Flow Purple",
-        "danger": "Red (irreversible actions only)",
+        "danger": "Red (irreversible action buttons only)",
         "surface": "Background gray",
         "line": "Border gray",
-        "muted": "Secondary text gray"
+        "muted": "Secondary text gray",
+        "error": "Dark pink (error messages)"
       }
     },
     "type": {
@@ -279,6 +280,30 @@
     "privacy": {
       "title": "Privacy Policy",
       "placeholder": "The official Hi Scoot Privacy Policy, in line with Brazil's LGPD, will be published here before launch."
+    }
+  },
+  "verifyIdentity": {
+    "title": "Identity verification",
+    "goHome": "Back to home",
+    "rejected": {
+      "title": "Upload your document again",
+      "description": "The name on the document did not match the name on your account. Upload the front and the back again.",
+      "reasonLabel": "Reason given by our team",
+      "exampleReason": "(Example) The name on the document is different from the name on your account.",
+      "lastAttempt": "Please note: this is your last attempt. If the name does not match again, your account will be blocked.",
+      "submit": "Upload document again"
+    },
+    "pending": {
+      "title": "Document under review",
+      "description": "We received the front and back of your document. Our team will check the name and let you know as soon as it is done."
+    },
+    "blocked": {
+      "title": "Account blocked",
+      "description": "The name on the document did not match your account in two attempts. For security reasons, this account has been blocked."
+    },
+    "approved": {
+      "title": "Identity verified",
+      "description": "The name on your document matches your account. You are all set to rent and list."
     }
   }
 }

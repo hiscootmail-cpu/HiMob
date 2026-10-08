@@ -24,7 +24,7 @@ export function LoginForm() {
   return (
     <form action={formAction} noValidate className="flex flex-col gap-5">
       {state.error ? (
-        <p role="alert" className="rounded-md border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger">
+        <p role="alert" className="rounded-md border border-error-line/40 bg-error-soft px-4 py-3 text-sm text-error">
           {t(`errors.${state.error}`)}
         </p>
       ) : null}

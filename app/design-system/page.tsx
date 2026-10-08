@@ -27,6 +27,7 @@ const palette = [
   { token: "hs-pink", hex: "#F05AA6", official: true },
   { token: "hs-purple", hex: "#8157E8", official: true },
   { token: "danger", hex: "#E53E3E", official: true },
+  { token: "error", hex: "#7A1F4F", official: false },
   { token: "surface", hex: "#F5F5F5", official: true },
   { token: "line", hex: "#E5E5E5", official: true },
   { token: "muted", hex: "#5C5C5C", official: true },
@@ -221,8 +222,8 @@ export default async function DesignSystemPage() {
           </div>
           <div className="flex flex-col gap-2">
             <StateLabel>{t("cards.error")}</StateLabel>
-            <Card className="border-danger/40 bg-danger-soft" role="alert">
-              <CardTitle className="text-base text-danger">{t("cards.errorTitle")}</CardTitle>
+            <Card className="border-error-line/40 bg-error-soft" role="alert">
+              <CardTitle className="text-base text-error">{t("cards.errorTitle")}</CardTitle>
               <CardDescription className="text-hs-black">{t("cards.errorText")}</CardDescription>
               <Button variant="outline" size="sm" className="w-fit">
                 {t("cards.retry")}
@@ -239,7 +240,7 @@ export default async function DesignSystemPage() {
           <Badge tone="pending">{t("badges.inReview")}</Badge>
           <Badge tone="highlight">{t("badges.new")}</Badge>
           <Badge tone="neutral">{t("badges.completed")}</Badge>
-          <Badge tone="danger">{t("badges.rejected")}</Badge>
+          <Badge tone="error">{t("badges.rejected")}</Badge>
         </div>
       </Section>
 
