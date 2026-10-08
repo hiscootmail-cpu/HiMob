@@ -176,5 +176,63 @@
       "full": "Full logo",
       "header": "Top menu version"
     }
+  },
+  "auth": {
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "capsLock": "Caps Lock is on.",
+      "passwordRule": "Use at least {min} characters."
+    },
+    "errors": {
+      "emailRequired": "Enter your email.",
+      "emailInvalid": "Check your email. It must look like name@example.com.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "Your password must have at least {min} characters.",
+      "invalidCredentials": "Incorrect email or password. Check them and try again."
+    },
+    "login": {
+      "title": "Log in",
+      "description": "Good to see you again. Log in to rent or list.",
+      "forgotPassword": "Forgot my password",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "signUp": {
+      "title": "Sign up",
+      "description": "One account to rent and list e-scooters and e-bikes.",
+      "emailHint": "We will send a confirmation link to this email.",
+      "submit": "Sign up",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in"
+    },
+    "signUpSuccess": {
+      "title": "Account created. Confirm your email",
+      "description": "We sent a link to your email. Open the message and tap the link to activate your account.",
+      "spamHint": "Not there after a few minutes? Check your spam or junk folder."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "We could not complete this action. The link may have expired or already been used. Go back to the start and try again."
+    },
+    "forgotPassword": {
+      "title": "Forgot my password",
+      "description": "Enter your account email. We will send you a link to create a new password.",
+      "submit": "Send link",
+      "backToLogin": "Back to Log in",
+      "sentTitle": "Check your email",
+      "sentDescription": "If there is an account with the email {email}, you will receive a link to create a new password.",
+      "sentHint": "The link is valid for a short time. Not there? Check your spam folder."
+    },
+    "updatePassword": {
+      "title": "Create a new password",
+      "description": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "submit": "Save new password"
+    }
   }
 }

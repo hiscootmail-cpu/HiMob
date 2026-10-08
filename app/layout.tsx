@@ -41,7 +41,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-hs-white text-hs-black">
         <NextIntlClientProvider>
           <SiteHeader signedIn={signedIn} />
-          <main className={cn("flex-1", signedIn && "pb-16 md:pb-0")}>{children}</main>
+          <main className={cn("flex flex-1 flex-col", signedIn && "pb-16 md:pb-0")}>{children}</main>
           <SiteFooter className={cn(signedIn && "pb-16 md:pb-0")} />
           {signedIn ? <BottomNav /> : null}
           <Toaster />

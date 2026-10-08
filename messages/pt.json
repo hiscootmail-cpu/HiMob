@@ -176,5 +176,63 @@
       "full": "Logo completa",
       "header": "Versão do menu do topo"
     }
+  },
+  "auth": {
+    "fields": {
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "password": "Senha",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Esconder senha",
+      "capsLock": "O Caps Lock está ligado.",
+      "passwordRule": "Use pelo menos {min} caracteres."
+    },
+    "errors": {
+      "emailRequired": "Informe seu e-mail.",
+      "emailInvalid": "Confira o e-mail. Ele precisa ter o formato nome@exemplo.com.",
+      "passwordRequired": "Informe sua senha.",
+      "passwordTooShort": "A senha precisa ter pelo menos {min} caracteres.",
+      "invalidCredentials": "E-mail ou senha incorretos. Confira e tente de novo."
+    },
+    "login": {
+      "title": "Entrar",
+      "description": "Que bom te ver de novo. Entre para alugar ou anunciar.",
+      "forgotPassword": "Esqueci minha senha",
+      "submit": "Entrar",
+      "noAccount": "Ainda não tem conta?",
+      "signUpLink": "Criar conta"
+    },
+    "signUp": {
+      "title": "Criar conta",
+      "description": "Uma conta só para alugar e anunciar patinetes e bikes elétricas.",
+      "emailHint": "Vamos enviar um link de confirmação para este e-mail.",
+      "submit": "Criar conta",
+      "haveAccount": "Já tem conta?",
+      "loginLink": "Entrar"
+    },
+    "signUpSuccess": {
+      "title": "Conta criada. Confirme seu e-mail",
+      "description": "Enviamos um link para o seu e-mail. Abra a mensagem e toque no link para ativar sua conta.",
+      "spamHint": "Não chegou em alguns minutos? Veja a caixa de spam ou lixo eletrônico."
+    },
+    "error": {
+      "title": "Algo deu errado",
+      "description": "Não foi possível concluir esta ação. O link pode ter expirado ou já ter sido usado. Volte ao início e tente de novo."
+    },
+    "forgotPassword": {
+      "title": "Esqueci minha senha",
+      "description": "Informe o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.",
+      "submit": "Enviar link",
+      "backToLogin": "Voltar para Entrar",
+      "sentTitle": "Confira seu e-mail",
+      "sentDescription": "Se existir uma conta com o e-mail {email}, você vai receber um link para criar uma senha nova.",
+      "sentHint": "O link vale por pouco tempo. Não chegou? Veja a caixa de spam."
+    },
+    "updatePassword": {
+      "title": "Criar senha nova",
+      "description": "Escolha uma senha nova para a sua conta.",
+      "newPassword": "Senha nova",
+      "submit": "Salvar senha nova"
+    }
   }
 }
