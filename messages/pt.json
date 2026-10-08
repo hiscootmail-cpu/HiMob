@@ -185,14 +185,22 @@
       "showPassword": "Mostrar senha",
       "hidePassword": "Esconder senha",
       "capsLock": "O Caps Lock está ligado.",
-      "passwordRule": "Use pelo menos {min} caracteres."
+      "passwordRule": "Use pelo menos {min} caracteres.",
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "Como está no seu documento"
     },
     "errors": {
       "emailRequired": "Informe seu e-mail.",
       "emailInvalid": "Confira o e-mail. Ele precisa ter o formato nome@exemplo.com.",
       "passwordRequired": "Informe sua senha.",
       "passwordTooShort": "A senha precisa ter pelo menos {min} caracteres.",
-      "invalidCredentials": "E-mail ou senha incorretos. Confira e tente de novo."
+      "invalidCredentials": "E-mail ou senha incorretos. Confira e tente de novo.",
+      "nameRequired": "Informe seu nome completo.",
+      "nameTooShort": "O nome precisa ter pelo menos {min} letras.",
+      "documentRequired": "Envie a foto ou o PDF do seu documento.",
+      "documentType": "Formato não aceito. Envie JPG, PNG ou PDF.",
+      "documentTooLarge": "Arquivo grande demais. O limite é {max} MB.",
+      "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade."
     },
     "login": {
       "title": "Entrar",
@@ -208,16 +216,21 @@
       "emailHint": "Vamos enviar um link de confirmação para este e-mail.",
       "submit": "Criar conta",
       "haveAccount": "Já tem conta?",
-      "loginLink": "Entrar"
+      "loginLink": "Entrar",
+      "terms": "Li e aceito os <terms>Termos de Uso</terms> e a <privacy>Política de Privacidade</privacy>."
     },
     "signUpSuccess": {
       "title": "Conta criada. Confirme seu e-mail",
       "description": "Enviamos um link para o seu e-mail. Abra a mensagem e toque no link para ativar sua conta.",
-      "spamHint": "Não chegou em alguns minutos? Veja a caixa de spam ou lixo eletrônico."
+      "spamHint": "Não chegou em alguns minutos? Veja a caixa de spam ou lixo eletrônico.",
+      "goToLogin": "Ir para Entrar",
+      "goHome": "Voltar ao início"
     },
     "error": {
       "title": "Algo deu errado",
-      "description": "Não foi possível concluir esta ação. O link pode ter expirado ou já ter sido usado. Volte ao início e tente de novo."
+      "description": "Não foi possível concluir esta ação. O link pode ter expirado ou já ter sido usado. Volte ao início e tente de novo.",
+      "goToLogin": "Ir para Entrar",
+      "goHome": "Voltar ao início"
     },
     "forgotPassword": {
       "title": "Esqueci minha senha",
@@ -233,6 +246,29 @@
       "description": "Escolha uma senha nova para a sua conta.",
       "newPassword": "Senha nova",
       "submit": "Salvar senha nova"
+    },
+    "document": {
+      "label": "Documento com foto (RG ou CNH)",
+      "choose": "Tirar foto ou escolher arquivo",
+      "limits": "JPG, PNG ou PDF, até {max} MB",
+      "change": "Trocar arquivo",
+      "remove": "Remover arquivo",
+      "tipsTitle": "Para a foto ser aprovada:",
+      "tip1": "Mostre o documento inteiro, com as quatro bordas aparecendo.",
+      "tip2": "Evite reflexo e sombra. Não use flash.",
+      "tip3": "Não cubra nenhuma parte com os dedos."
+    }
+  },
+  "legal": {
+    "close": "Fechar",
+    "pendingNotice": "Texto em preparação.",
+    "terms": {
+      "title": "Termos de Uso",
+      "placeholder": "O texto oficial dos Termos de Uso da Hi Scoot será publicado aqui antes do lançamento."
+    },
+    "privacy": {
+      "title": "Política de Privacidade",
+      "placeholder": "O texto oficial da Política de Privacidade da Hi Scoot, de acordo com a LGPD, será publicado aqui antes do lançamento."
     }
   }
 }

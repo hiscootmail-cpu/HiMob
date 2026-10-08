@@ -5,6 +5,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 // são montadas na hora do pedido. Por isso o modo "Cache Components" fica
 // desligado nesta fase.
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Documento de até 5 MB no cadastro + folga para o restante do formulário.
+      bodySizeLimit: "6mb",
+    },
+  },
   turbopack: {
     rules: {
       "*.css": {

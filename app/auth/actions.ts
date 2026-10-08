@@ -3,7 +3,9 @@
 import { redirect } from "next/navigation";
 
 import {
+  validateDocument,
   validateEmail,
+  validateFullName,
   validateNewPassword,
   validatePasswordPresent,
   type FieldErrorKey,
@@ -22,7 +24,13 @@ const DEMO_PASSWORD = "hiscoot123";
 export type AuthFormState = {
   /** Erro geral do formulário (chave em "auth.errors"). */
   error?: "invalidCredentials";
-  fieldErrors?: { email?: FieldErrorKey; password?: FieldErrorKey };
+  fieldErrors?: {
+    fullName?: FieldErrorKey;
+    email?: FieldErrorKey;
+    password?: FieldErrorKey;
+    document?: FieldErrorKey;
+    terms?: FieldErrorKey;
+  };
   /** Valores devolvidos para o campo não ficar vazio depois de um erro. */
   values?: { email?: string };
   /** Pedido concluído (usado em "Esqueci a senha"). */
@@ -51,21 +59,29 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
     return { error: "invalidCredentials", values: { email } };
   }
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function signUp(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
+  const fullName = text(formData, "fullName").trim();
   const email = text(formData, "email").trim();
   const password = text(formData, "password");
+  const document = formData.get("document");
+  const acceptedTerms = formData.get("terms") === "on";
 
   const fieldErrors = {
+    fullName: validateFullName(fullName) ?? undefined,
     email: validateEmail(email) ?? undefined,
     password: validateNewPassword(password) ?? undefined,
+    document: validateDocument(document instanceof File ? document : null) ?? undefined,
+    terms: acceptedTerms ? undefined : ("termsRequired" as const),
   };
-  if (fieldErrors.email || fieldErrors.password) {
+  if (Object.values(fieldErrors).some(Boolean)) {
     return { fieldErrors, values: { email } };
   }
 
+  // PROVISÓRIO: o documento ainda não é guardado. Quando o Supabase entrar,
+  // ele vai para uma pasta privada que só a equipe de verificação acessa.
   redirect("/auth/sign-up-success");
 }
 
@@ -91,5 +107,5 @@ export async function updatePassword(
   const passwordError = validateNewPassword(password);
   if (passwordError) return { fieldErrors: { password: passwordError } };
 
-  redirect("/");
+  redirect("/dashboard");
 }

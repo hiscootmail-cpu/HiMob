@@ -185,14 +185,22 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password",
       "capsLock": "Caps Lock is on.",
-      "passwordRule": "Use at least {min} characters."
+      "passwordRule": "Use at least {min} characters.",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "As shown on your ID"
     },
     "errors": {
       "emailRequired": "Enter your email.",
       "emailInvalid": "Check your email. It must look like name@example.com.",
       "passwordRequired": "Enter your password.",
       "passwordTooShort": "Your password must have at least {min} characters.",
-      "invalidCredentials": "Incorrect email or password. Check them and try again."
+      "invalidCredentials": "Incorrect email or password. Check them and try again.",
+      "nameRequired": "Enter your full name.",
+      "nameTooShort": "Your name must have at least {min} letters.",
+      "documentRequired": "Upload a photo or PDF of your ID.",
+      "documentType": "Format not accepted. Upload JPG, PNG or PDF.",
+      "documentTooLarge": "File too large. The limit is {max} MB.",
+      "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy."
     },
     "login": {
       "title": "Log in",
@@ -208,16 +216,21 @@
       "emailHint": "We will send a confirmation link to this email.",
       "submit": "Sign up",
       "haveAccount": "Already have an account?",
-      "loginLink": "Log in"
+      "loginLink": "Log in",
+      "terms": "I have read and accept the <terms>Terms of Use</terms> and the <privacy>Privacy Policy</privacy>."
     },
     "signUpSuccess": {
       "title": "Account created. Confirm your email",
       "description": "We sent a link to your email. Open the message and tap the link to activate your account.",
-      "spamHint": "Not there after a few minutes? Check your spam or junk folder."
+      "spamHint": "Not there after a few minutes? Check your spam or junk folder.",
+      "goToLogin": "Go to Log in",
+      "goHome": "Back to home"
     },
     "error": {
       "title": "Something went wrong",
-      "description": "We could not complete this action. The link may have expired or already been used. Go back to the start and try again."
+      "description": "We could not complete this action. The link may have expired or already been used. Go back to the start and try again.",
+      "goToLogin": "Go to Log in",
+      "goHome": "Back to home"
     },
     "forgotPassword": {
       "title": "Forgot my password",
@@ -233,6 +246,29 @@
       "description": "Choose a new password for your account.",
       "newPassword": "New password",
       "submit": "Save new password"
+    },
+    "document": {
+      "label": "Photo ID (RG or driver's license)",
+      "choose": "Take a photo or choose a file",
+      "limits": "JPG, PNG or PDF, up to {max} MB",
+      "change": "Change file",
+      "remove": "Remove file",
+      "tipsTitle": "For your photo to be approved:",
+      "tip1": "Show the whole document, with all four edges visible.",
+      "tip2": "Avoid glare and shadows. Do not use flash.",
+      "tip3": "Do not cover any part with your fingers."
+    }
+  },
+  "legal": {
+    "close": "Close",
+    "pendingNotice": "Text in preparation.",
+    "terms": {
+      "title": "Terms of Use",
+      "placeholder": "The official Hi Scoot Terms of Use will be published here before launch."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "placeholder": "The official Hi Scoot Privacy Policy, in line with Brazil's LGPD, will be published here before launch."
     }
   }
 }
