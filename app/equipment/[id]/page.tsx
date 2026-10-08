@@ -91,7 +91,19 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
                 {t("hostedBy", { name: equipment.host.full_name })}
                 {equipment.host.verified ? <VerifiedBadgeIcon className="size-5" title={t("verifiedHost")} /> : null}
               </span>
-              <span className="text-sm text-muted">{t("hostSince", { year: equipment.host.host_since })}</span>
+              <span className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
+                {equipment.host.rating ? (
+                  <span className="inline-flex items-center gap-1 text-hs-black">
+                    <StarIcon className="size-4" />
+                    {format.number(equipment.host.rating.average, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                    <span className="text-muted">{t("hostReviewCount", { count: equipment.host.rating.count })}</span>
+                  </span>
+                ) : (
+                  <span className="text-muted">{t("hostNoReviews")}</span>
+                )}
+                <span className="text-muted">·</span>
+                <span className="text-muted">{t("hostSince", { year: equipment.host.host_since })}</span>
+              </span>
             </span>
           </Link>
 

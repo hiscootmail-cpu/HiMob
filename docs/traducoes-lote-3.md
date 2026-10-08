@@ -1,8 +1,8 @@
 # Traduções do Lote 3 (Home com busca e mapa, Detalhe do equipamento)
 
-O inglês é uma PROPOSTA aguardando sua revisão. Textos entre chaves, como {price}, {km}, {count} e {year}, são trocados automaticamente pelo valor certo. Os trechos com "plural" escolhem singular ou plural sozinhos (1 diária / 2 diárias).
+Inglês aprovado em 09/10/2026. As 2 últimas linhas (nota do Host) entraram depois e aguardam revisão. Textos entre chaves, como {price}, {km}, {count} e {year}, são trocados automaticamente pelo valor certo. Os trechos com "plural" escolhem singular ou plural sozinhos (1 diária / 2 diárias).
 
-| # | Português | Inglês (proposta) |
+| # | Português | Inglês |
 |---|---|---|
 | 1 | Patinete elétrico | E-scooter |
 | 2 | Bike elétrica | E-bike |
@@ -74,3 +74,5 @@ O inglês é uma PROPOSTA aguardando sua revisão. Textos entre chaves, como {pr
 | 68 | Página não encontrada | Page not found |
 | 69 | O endereço pode estar errado, ou este anúncio não existe mais. | The address may be wrong, or this listing no longer exists. |
 | 70 | Voltar ao início | Back to home |
+| 71 | ({count, plural, one {# avaliação} other {# avaliações}} como Host) | ({count, plural, one {# review} other {# reviews}} as a Host) |
+| 72 | Ainda sem avaliações como Host | No reviews as a Host yet |

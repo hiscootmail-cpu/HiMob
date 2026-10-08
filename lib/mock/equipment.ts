@@ -6,9 +6,9 @@ import type { Equipment } from "@/lib/equipment";
  * por isso não passam pela tradução PT/EN da interface.
  */
 
-const rafael = { id: "host-rafael", full_name: "Rafael S.", verified: true, host_since: 2026 };
-const camila = { id: "host-camila", full_name: "Camila F.", verified: true, host_since: 2026 };
-const bruno = { id: "host-bruno", full_name: "Bruno M.", verified: false, host_since: 2026 };
+const rafael = { id: "host-rafael", full_name: "Rafael S.", verified: true, host_since: 2026, rating: { average: 4.9, count: 32 } };
+const camila = { id: "host-camila", full_name: "Camila F.", verified: true, host_since: 2026, rating: { average: 4.7, count: 15 } };
+const bruno = { id: "host-bruno", full_name: "Bruno M.", verified: false, host_since: 2026, rating: null };
 
 export const exampleEquipment: Equipment[] = [
   {
@@ -23,6 +23,7 @@ export const exampleEquipment: Equipment[] = [
     area: "Jardins",
     latitude: -23.5649,
     longitude: -46.6631,
+    photos: [],
     is_available: true,
     rating: { average: 4.9, count: 24 },
     host: rafael,
@@ -38,6 +39,7 @@ export const exampleEquipment: Equipment[] = [
     area: "Vila Nova Conceição",
     latitude: -23.5872,
     longitude: -46.6714,
+    photos: [],
     is_available: true,
     rating: { average: 4.7, count: 11 },
     host: camila,
@@ -53,6 +55,7 @@ export const exampleEquipment: Equipment[] = [
     area: "Pinheiros",
     latitude: -23.5667,
     longitude: -46.6869,
+    photos: [],
     is_available: true,
     rating: { average: 4.8, count: 9 },
     host: rafael,
@@ -68,6 +71,7 @@ export const exampleEquipment: Equipment[] = [
     area: "Paulista",
     latitude: -23.5614,
     longitude: -46.6559,
+    photos: [],
     is_available: true,
     rating: null,
     host: bruno,
@@ -83,6 +87,7 @@ export const exampleEquipment: Equipment[] = [
     area: "Vila Madalena",
     latitude: -23.5531,
     longitude: -46.6905,
+    photos: [],
     is_available: false,
     rating: { average: 4.6, count: 5 },
     host: camila,

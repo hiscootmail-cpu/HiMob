@@ -391,7 +391,9 @@
       "pickupInPast": "A retirada não pode ser antes de hoje.",
       "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
       "unavailable": "Este equipamento não está disponível para reserva."
-    }
+    },
+    "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
+    "hostNoReviews": "Ainda sem avaliações como Host"
   },
   "errorPage": {
     "title": "Algo deu errado",

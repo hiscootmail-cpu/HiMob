@@ -391,7 +391,9 @@
       "pickupInPast": "Pick-up cannot be before today.",
       "returnBeforePickup": "Return must be at least 1 day after pick-up.",
       "unavailable": "This equipment is not available for booking."
-    }
+    },
+    "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
+    "hostNoReviews": "No reviews as a Host yet"
   },
   "errorPage": {
     "title": "Something went wrong",

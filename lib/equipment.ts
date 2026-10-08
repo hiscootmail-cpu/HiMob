@@ -6,9 +6,17 @@ import { exampleEquipment } from "@/lib/mock/equipment";
  * tipo, título, descrição, preço por dia, cidade e localização.
  * Preço é SEMPRE por dia (daily_price), nunca por hora.
  *
- * Em aberto (perguntas para a Scoot): fotos do anúncio, bairro/região
- * mostrado no cartão, e se a nota é do equipamento ou do Host.
+ * Decisões de 09/10/2026:
+ * - Fotos: no mínimo 4 e no máximo 10 por anúncio.
+ * - Bairro (area) entra no cadastro do equipamento.
+ * - Endereço exato só aparece depois que a reserva é confirmada.
+ * - Aparecem as duas notas: a do equipamento e a do Host.
+ * - Título e descrição ficam no idioma em que o Host escreveu (sem tradução).
+ * - Preço por dia: cada Host define, dentro de um mínimo e um máximo (valores EM ABERTO).
  */
+
+export const MIN_PHOTOS = 4;
+export const MAX_PHOTOS = 10;
 
 export type EquipmentType = "scooter" | "ebike";
 
@@ -21,6 +29,8 @@ export type EquipmentHost = {
   verified: boolean;
   /** Ano em que virou Host ("Host desde 2026"). */
   host_since: number;
+  /** Nota do Host, calculada a partir das avaliações que ele recebeu. */
+  rating: { average: number; count: number } | null;
 };
 
 export type Equipment = {
@@ -32,13 +42,15 @@ export type Equipment = {
   /** Preço por dia, em reais. */
   daily_price: number;
   city: string;
-  /** Bairro ou região mostrada antes da reserva (o endereço exato não aparece). EM ABERTO. */
+  /** Bairro mostrado antes da reserva (o endereço exato só depois da confirmação). */
   area: string;
+  /** Endereços das fotos (de 4 a 10). Vazio nos exemplos: as fotos chegam com o Lote 5. */
+  photos: string[];
   latitude: number;
   longitude: number;
   /** O Host pode marcar como indisponível em "Meus anúncios". */
   is_available: boolean;
-  /** Calculado a partir das avaliações. EM ABERTO: nota do equipamento ou do Host. */
+  /** Nota do equipamento, calculada a partir das avaliações. */
   rating: { average: number; count: number } | null;
   host: EquipmentHost;
 };
