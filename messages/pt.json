@@ -32,11 +32,6 @@
     "slogan": "A cidade se move. Vem no Flow.",
     "rights": "© {year} Hi Scoot. Todos os direitos reservados."
   },
-  "home": {
-    "title": "O novo site da Hi Scoot está em construção",
-    "description": "Em breve você vai poder alugar e anunciar patinetes e bikes elétricas por aqui.",
-    "designSystemLink": "Ver as peças do site"
-  },
   "designSystem": {
     "badge": "Página de conferência",
     "title": "Peças do site Hi Scoot",
@@ -325,5 +320,87 @@
       "sentDescription": "A equipe vai analisar seu pedido com cuidado e sigilo, e avisar você assim que terminar."
     },
     "or": "ou"
+  },
+  "equipmentType": {
+    "scooter": "Patinete elétrico",
+    "ebike": "Bike elétrica"
+  },
+  "explore": {
+    "title": "Alugue perto de você",
+    "searchLabel": "Buscar equipamentos",
+    "searchPlaceholder": "Buscar patinete, bike ou bairro",
+    "typeFilterLabel": "Tipo de equipamento",
+    "filterAll": "Todos",
+    "nearMe": "Perto de mim",
+    "locationFallback": "Mostrando até {km} km do centro de São Paulo",
+    "locationGranted": "Mostrando até {km} km de você",
+    "locationDenied": "Não conseguimos sua localização. Mostrando até {km} km do centro de São Paulo",
+    "resultCount": "{count, plural, =0 {nenhum resultado} one {# resultado} other {# resultados}}",
+    "listLabel": "Lista de equipamentos",
+    "mapLabel": "Mapa de equipamentos",
+    "mapAttribution": "colaboradores do OpenStreetMap",
+    "pinLabel": "{title}, {price} por dia",
+    "seeDetails": "Ver detalhes",
+    "emptyTitle": "Nenhum equipamento encontrado",
+    "emptyText": "Tente outro bairro, outra palavra ou mude o tipo de equipamento.",
+    "clearFilters": "Limpar busca",
+    "showMap": "Ver mapa",
+    "showList": "Ver lista",
+    "unavailable": "Indisponível",
+    "noReviews": "Sem avaliações ainda",
+    "distance": "{km} km",
+    "verified": "verificado",
+    "pricePerDay": "{price}/dia",
+    "reserve": "Reservar",
+    "loading": "Carregando equipamentos"
+  },
+  "equipment": {
+    "backToSearch": "Voltar para a busca",
+    "unavailable": "Indisponível no momento",
+    "reviewCount": "({count, plural, one {# avaliação} other {# avaliações}})",
+    "noReviews": "Sem avaliações ainda",
+    "hostedBy": "Host: {name}",
+    "verifiedHost": "Identidade verificada",
+    "hostSince": "Host desde {year}",
+    "about": "Sobre o equipamento",
+    "whereTitle": "Onde retirar",
+    "whereNote": "O endereço exato aparece depois que a reserva for confirmada.",
+    "bookingLabel": "Reserva",
+    "perDay": "por dia",
+    "ownerNotice": "Este anúncio é seu. Quem visita esta página vê aqui as datas e o botão de reserva.",
+    "unavailableNotice": "Este equipamento está indisponível no momento.",
+    "notifyMe": "Avisar quando disponível",
+    "cancelNotify": "Cancelar aviso",
+    "notifyOn": "Vamos te avisar quando ele voltar a ficar disponível.",
+    "talkToHost": "Falar com o Host",
+    "chooseDates": "Escolha as datas",
+    "pickup": "Retirada",
+    "return": "Devolução",
+    "priceTimesDays": "{price} x {count, plural, one {# diária} other {# diárias}}",
+    "total": "Total",
+    "sendRequest": "Enviar solicitação",
+    "payAfterAccept": "Você só paga depois que o Host aceitar.",
+    "requestSentTitle": "Solicitação enviada",
+    "requestSentText": "O Host vai responder em breve. Você recebe um aviso quando ele aceitar.",
+    "seeMyReservations": "Ver minhas reservas",
+    "reserve": "Reservar",
+    "seeOptions": "Ver opções",
+    "errors": {
+      "pickupRequired": "Escolha a data de retirada.",
+      "returnRequired": "Escolha a data de devolução.",
+      "pickupInPast": "A retirada não pode ser antes de hoje.",
+      "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
+      "unavailable": "Este equipamento não está disponível para reserva."
+    }
+  },
+  "errorPage": {
+    "title": "Algo deu errado",
+    "description": "Não foi possível carregar esta página. Verifique sua conexão e tente de novo.",
+    "retry": "Tentar de novo"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "O endereço pode estar errado, ou este anúncio não existe mais.",
+    "goHome": "Voltar ao início"
   }
 }
