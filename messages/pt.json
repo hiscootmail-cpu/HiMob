@@ -99,7 +99,7 @@
       "title": "Campos de texto",
       "description": "Campo normal, com dica, com erro e desabilitado.",
       "nameLabel": "Nome completo",
-      "namePlaceholder": "Como está no seu documento",
+      "namePlaceholder": "Seu nome completo",
       "emailLabel": "E-mail",
       "emailPlaceholder": "voce@exemplo.com",
       "emailHint": "Vamos enviar a confirmação para este e-mail.",
@@ -188,7 +188,7 @@
       "capsLock": "O Caps Lock está ligado.",
       "passwordRule": "Use pelo menos {min} caracteres.",
       "fullName": "Nome completo",
-      "fullNamePlaceholder": "Como está no seu documento"
+      "fullNamePlaceholder": "Seu nome completo"
     },
     "errors": {
       "emailRequired": "Informe seu e-mail.",
@@ -312,7 +312,7 @@
     },
     "letter": {
       "title": "Você é uma pessoa trans e seu documento ainda não tem seu nome social?",
-      "description": "Você pode pedir a revisão do bloqueio. Envie a foto de uma carta escrita à mão com:",
+      "description": "Você pode pedir a revisão do seu cadastro. Envie a foto de uma carta escrita à mão com:",
       "item1": "Seu nome social",
       "item2": "Seu CPF",
       "fileLabel": "Foto da carta",
@@ -323,6 +323,7 @@
       "submit": "Enviar carta para revisão",
       "sentTitle": "Carta recebida",
       "sentDescription": "A equipe vai analisar seu pedido com cuidado e sigilo, e avisar você assim que terminar."
-    }
+    },
+    "or": "ou"
   }
 }

@@ -8,6 +8,7 @@ import { IdentityDocumentFields, type DocumentSide } from "@/components/auth/ide
 import { Button } from "@/components/ui/button";
 import { DOCUMENT_MAX_MB, validateDocument, type FieldErrorKey } from "@/lib/validation";
 import { resubmitDocument, type ResubmitState } from "./actions";
+import { LetterForm } from "./letter-form";
 import { PendingCard } from "./status-cards";
 
 const initialState: ResubmitState = {};
@@ -73,6 +74,14 @@ export function ResubmitForm({ reason }: { reason?: string }) {
           {t("rejected.submit")}
         </Button>
       </form>
+
+      {/* Carta já na 1ª recusa: a pessoa trans não precisa passar pelo bloqueio (aprovado em 08/10/2026). */}
+      <div className="flex items-center gap-3" aria-hidden>
+        <span className="h-px flex-1 bg-line" />
+        <span className="text-xs font-semibold text-muted uppercase">{t("or")}</span>
+        <span className="h-px flex-1 bg-line" />
+      </div>
+      <LetterForm />
     </AuthCard>
   );
 }

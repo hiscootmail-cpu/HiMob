@@ -99,7 +99,7 @@
       "title": "Text fields",
       "description": "Normal field, with a hint, with an error and disabled.",
       "nameLabel": "Full name",
-      "namePlaceholder": "As shown on your ID",
+      "namePlaceholder": "Your full name",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "emailHint": "We will send the confirmation to this email.",
@@ -188,7 +188,7 @@
       "capsLock": "Caps Lock is on.",
       "passwordRule": "Use at least {min} characters.",
       "fullName": "Full name",
-      "fullNamePlaceholder": "As shown on your ID"
+      "fullNamePlaceholder": "Your full name"
     },
     "errors": {
       "emailRequired": "Enter your email.",
@@ -312,7 +312,7 @@
     },
     "letter": {
       "title": "Are you a trans person whose ID does not yet show your chosen name?",
-      "description": "You can ask us to review the block. Upload a photo of a handwritten letter with:",
+      "description": "You can ask us to review your account. Upload a photo of a handwritten letter with:",
       "item1": "Your chosen name (nome social)",
       "item2": "Your CPF",
       "fileLabel": "Photo of the letter",
@@ -323,6 +323,7 @@
       "submit": "Send letter for review",
       "sentTitle": "Letter received",
       "sentDescription": "Our team will review your request carefully and confidentially, and let you know as soon as it is done."
-    }
+    },
+    "or": "or"
   }
 }
