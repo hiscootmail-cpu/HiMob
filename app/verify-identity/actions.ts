@@ -25,3 +25,21 @@ export async function resubmitDocument(_prev: ResubmitState, formData: FormData)
 
   return { done: true };
 }
+
+export type LetterState = {
+  fieldErrors?: { letter?: FieldErrorKey };
+  done?: boolean;
+};
+
+/**
+ * Revisão de cadastro bloqueado para pessoa trans com documento ainda não
+ * retificado: foto da carta escrita à mão com nome social e CPF.
+ * PROVISÓRIO: ainda não guarda o arquivo (ver aviso no início deste arquivo).
+ */
+export async function submitSocialNameLetter(_prev: LetterState, formData: FormData): Promise<LetterState> {
+  const letter = formData.get("letter");
+  const letterError = validateDocument(letter instanceof File ? letter : null);
+  if (letterError) return { fieldErrors: { letter: letterError } };
+
+  return { done: true };
+}

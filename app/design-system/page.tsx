@@ -27,7 +27,7 @@ const palette = [
   { token: "hs-pink", hex: "#F05AA6", official: true },
   { token: "hs-purple", hex: "#8157E8", official: true },
   { token: "danger", hex: "#E53E3E", official: true },
-  { token: "error", hex: "#7A1F4F", official: false },
+  { token: "error", hex: "#7A1F4F", official: true },
   { token: "surface", hex: "#F5F5F5", official: true },
   { token: "line", hex: "#E5E5E5", official: true },
   { token: "muted", hex: "#5C5C5C", official: true },

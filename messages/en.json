@@ -267,7 +267,11 @@
       "tipsTitle": "For your photo to be approved:",
       "tip1": "Show the whole document, with all four edges visible.",
       "tip2": "Avoid glare and shadows. Do not use flash.",
-      "tip3": "Do not cover any part with your fingers."
+      "tip3": "Do not cover any part with your fingers.",
+      "socialName": {
+        "title": "Trans person whose ID has not been updated yet?",
+        "text": "Upload your document as usual. If the name does not match, you can send a photo of a handwritten letter with your chosen name (nome social) and CPF, and our team will review it confidentially."
+      }
     }
   },
   "legal": {
@@ -299,11 +303,26 @@
     },
     "blocked": {
       "title": "Account blocked",
-      "description": "The name on the document did not match your account in two attempts. For security reasons, this account has been blocked."
+      "description": "The name on the document did not match your account in two attempts. For security reasons, this account has been blocked.",
+      "canBrowse": "You can still browse the website, but you cannot rent or list."
     },
     "approved": {
       "title": "Identity verified",
       "description": "The name on your document matches your account. You are all set to rent and list."
+    },
+    "letter": {
+      "title": "Are you a trans person whose ID does not yet show your chosen name?",
+      "description": "You can ask us to review the block. Upload a photo of a handwritten letter with:",
+      "item1": "Your chosen name (nome social)",
+      "item2": "Your CPF",
+      "fileLabel": "Photo of the letter",
+      "choose": "Photo of the handwritten letter",
+      "change": "Change the photo of the letter",
+      "remove": "Remove the photo of the letter",
+      "privacy": "Only our verification team sees this letter. It is handled confidentially, in line with Brazil's LGPD.",
+      "submit": "Send letter for review",
+      "sentTitle": "Letter received",
+      "sentDescription": "Our team will review your request carefully and confidentially, and let you know as soon as it is done."
     }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { DocumentUpload } from "@/components/ui/document-upload";
@@ -18,10 +19,11 @@ export function IdentityDocumentFields({ errors, onFileChange }: IdentityDocumen
   const t = useTranslations("auth.document");
   const descriptionId = useId();
   const tipsId = useId();
+  const socialNameId = useId();
 
   const common = {
     accept: DOCUMENT_ACCEPT,
-    describedBy: `${descriptionId} ${tipsId}`,
+    describedBy: `${descriptionId} ${socialNameId} ${tipsId}`,
   };
   const labels = (side: DocumentSide) => ({
     label: t(`${side}.label`),
@@ -37,6 +39,14 @@ export function IdentityDocumentFields({ errors, onFileChange }: IdentityDocumen
       <p id={descriptionId} className="-mt-1 text-sm text-muted">
         {t("purpose")}
       </p>
+
+      {/* Aviso para todos, na hora de enviar (aprovado em 08/10/2026). */}
+      <div id={socialNameId} className="flex gap-2 rounded-md border border-hs-blue/40 bg-blue-soft px-3 py-2">
+        <Info className="mt-0.5 size-4 shrink-0 text-on-blue" aria-hidden />
+        <p className="text-sm text-on-blue">
+          <span className="font-semibold text-on-blue">{t("socialName.title")}</span> {t("socialName.text")}
+        </p>
+      </div>
 
       <div className="grid min-w-0 gap-3 sm:grid-cols-2">
         <DocumentUpload

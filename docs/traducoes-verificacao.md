@@ -1,8 +1,8 @@
 # Traduções: Verificação de identidade e cor de erro
 
-O inglês é uma PROPOSTA aguardando sua revisão.
+Inglês aprovado em 08/10/2026.
 
-| # | Português | Inglês (proposta) |
+| # | Português | Inglês |
 |---|---|---|
 | 1 | Vermelho (só botões de ação irreversível) | Red (irreversible action buttons only) |
 | 2 | Rosa-escuro (avisos de erro) | Dark pink (error messages) |

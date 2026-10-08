@@ -267,7 +267,11 @@
       "tipsTitle": "Para a foto ser aprovada:",
       "tip1": "Mostre o documento inteiro, com as quatro bordas aparecendo.",
       "tip2": "Evite reflexo e sombra. Não use flash.",
-      "tip3": "Não cubra nenhuma parte com os dedos."
+      "tip3": "Não cubra nenhuma parte com os dedos.",
+      "socialName": {
+        "title": "Pessoa trans com documento ainda não retificado?",
+        "text": "Envie seu documento normalmente. Se o nome não bater, você pode enviar a foto de uma carta escrita à mão com seu nome social e CPF, e a equipe revisa com sigilo."
+      }
     }
   },
   "legal": {
@@ -299,11 +303,26 @@
     },
     "blocked": {
       "title": "Cadastro bloqueado",
-      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Por segurança, este cadastro foi bloqueado."
+      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Por segurança, este cadastro foi bloqueado.",
+      "canBrowse": "Você ainda pode navegar pelo site, mas não pode alugar nem anunciar."
     },
     "approved": {
       "title": "Identidade verificada",
       "description": "O nome do seu documento confere com o cadastro. Tudo certo para alugar e anunciar."
+    },
+    "letter": {
+      "title": "Você é uma pessoa trans e seu documento ainda não tem seu nome social?",
+      "description": "Você pode pedir a revisão do bloqueio. Envie a foto de uma carta escrita à mão com:",
+      "item1": "Seu nome social",
+      "item2": "Seu CPF",
+      "fileLabel": "Foto da carta",
+      "choose": "Foto da carta escrita à mão",
+      "change": "Trocar a foto da carta",
+      "remove": "Remover a foto da carta",
+      "privacy": "Só a equipe de verificação vê esta carta. Ela é tratada com sigilo, de acordo com a LGPD.",
+      "submit": "Enviar carta para revisão",
+      "sentTitle": "Carta recebida",
+      "sentDescription": "A equipe vai analisar seu pedido com cuidado e sigilo, e avisar você assim que terminar."
     }
   }
 }

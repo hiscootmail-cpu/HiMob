@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { AuthCard } from "@/components/auth/auth-card";
 import { VerifiedBadgeIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { LetterForm } from "./letter-form";
 
 function HomeButton() {
   const t = useTranslations("verifyIdentity");
@@ -31,7 +32,7 @@ export function PendingCard() {
   );
 }
 
-/** Segunda recusa: cadastro bloqueado. */
+/** Segunda recusa: cadastro bloqueado. Continua vendo o site, sem alugar nem anunciar. */
 export function BlockedCard() {
   const t = useTranslations("verifyIdentity.blocked");
   return (
@@ -40,6 +41,8 @@ export function BlockedCard() {
       description={t("description")}
       icon={<ShieldX className="size-12 text-error" aria-hidden />}
     >
+      <p className="text-sm text-hs-black">{t("canBrowse")}</p>
+      <LetterForm />
       <HomeButton />
     </AuthCard>
   );
