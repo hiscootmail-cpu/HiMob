@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "title": "Hi Scoot | A cidade se move. Vem no Flow.",
+    "description": "Alugue patinetes e bikes elétricas de pessoas da sua cidade, ou anuncie o seu e ganhe uma renda extra."
+  },
+  "language": {
+    "label": "Idioma",
+    "pt": "Português",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Hi Scoot, página inicial",
+    "mainMenu": "Menu principal",
+    "explore": "Explorar",
+    "reservations": "Minhas reservas",
+    "host": "Anunciar",
+    "conversations": "Conversas",
+    "profile": "Perfil",
+    "exploreShort": "Explorar",
+    "reservationsShort": "Reservas",
+    "hostShort": "Anunciar",
+    "conversationsShort": "Conversas",
+    "profileShort": "Perfil",
+    "signIn": "Entrar",
+    "signUp": "Criar conta"
+  },
+  "footer": {
+    "slogan": "A cidade se move. Vem no Flow.",
+    "rights": "© {year} Hi Scoot. Todos os direitos reservados."
+  },
+  "home": {
+    "title": "O novo site da Hi Scoot está em construção",
+    "description": "Em breve você vai poder alugar e anunciar patinetes e bikes elétricas por aqui.",
+    "designSystemLink": "Ver as peças do site"
+  },
+  "designSystem": {
+    "badge": "Página de conferência",
+    "title": "Peças do site Hi Scoot",
+    "intro": "Aqui ficam todas as peças que se repetem nas telas, com todas as variações. Confira cada uma e troque o idioma no topo para ver o texto em inglês.",
+    "colors": {
+      "title": "Cores",
+      "description": "Lista única de cores que todas as telas seguem. Trocar uma cor aqui troca no site inteiro.",
+      "official": "Oficial",
+      "proposal": "Proposta",
+      "names": {
+        "hs-green": "Verde Hi Scoot",
+        "hs-blue": "Azul Hi Scoot",
+        "hs-black": "Preto Scoot",
+        "hs-white": "Branco Flow",
+        "hs-pink": "Rosa Flow",
+        "hs-purple": "Roxo Flow",
+        "danger": "Vermelho (só ações irreversíveis)",
+        "surface": "Cinza de fundo",
+        "line": "Cinza de borda",
+        "muted": "Cinza de texto secundário"
+      }
+    },
+    "type": {
+      "title": "Fonte",
+      "description": "Inter em todo o site, em quatro tamanhos principais.",
+      "sampleHeading": "A cidade se move.",
+      "sampleSubheading": "Vem no Flow.",
+      "sampleBody": "Alugue um patinete perto de você e pague por diária.",
+      "sampleSmall": "Texto de apoio, para informações secundárias."
+    },
+    "icons": {
+      "title": "Ícones oficiais",
+      "description": "Os 19 ícones da Hi Scoot. Quando faltar um, usamos um da biblioteca Lucide."
+    },
+    "buttons": {
+      "title": "Botões",
+      "description": "Seis tipos de botão. Passe o mouse e clique para ver os estados de passar por cima e pressionado.",
+      "normal": "Normal",
+      "disabled": "Desabilitado",
+      "loading": "Carregando",
+      "sizes": "Tamanhos",
+      "iconOnly": "Botão só com ícone",
+      "withIcon": "Com ícone",
+      "variants": {
+        "primary": "Principal (verde)",
+        "secondary": "Secundário (azul)",
+        "outline": "Contorno",
+        "ghost": "Discreto",
+        "destructive": "Irreversível (vermelho)",
+        "link": "Link"
+      },
+      "size": {
+        "sm": "Pequeno",
+        "default": "Médio",
+        "lg": "Grande"
+      }
+    },
+    "fields": {
+      "title": "Campos de texto",
+      "description": "Campo normal, com dica, com erro e desabilitado.",
+      "nameLabel": "Nome completo",
+      "namePlaceholder": "Como está no seu documento",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "emailHint": "Vamos enviar a confirmação para este e-mail.",
+      "priceLabel": "Preço por dia (R$)",
+      "priceError": "Informe um valor maior que zero.",
+      "disabledLabel": "Cidade",
+      "disabledValue": "São Paulo"
+    },
+    "cards": {
+      "title": "Cartões",
+      "description": "Todo bloco de conteúdo tem quatro estados: carregado, carregando, vazio e com erro.",
+      "loaded": "Carregado",
+      "loading": "Carregando",
+      "empty": "Vazio",
+      "error": "Com erro",
+      "exampleTitle": "Patinete Aro 10, Jardins (exemplo)",
+      "exampleMeta": "4,9 · 350 m de você",
+      "examplePrice": "{price}/dia",
+      "emptyTitle": "Nenhum equipamento por aqui",
+      "emptyText": "Tente buscar em outro bairro ou mude os filtros.",
+      "errorTitle": "Não foi possível carregar",
+      "errorText": "Verifique sua conexão e tente de novo.",
+      "retry": "Tentar de novo"
+    },
+    "badges": {
+      "title": "Etiquetas de status",
+      "description": "Mostram a situação de um anúncio ou de uma reserva.",
+      "approved": "Aprovado",
+      "accepted": "Aceita",
+      "inReview": "Em análise",
+      "new": "Novo",
+      "completed": "Concluída",
+      "rejected": "Recusado"
+    },
+    "toast": {
+      "title": "Aviso rápido",
+      "description": "Aparece no topo da tela por alguns segundos e some sozinho.",
+      "showSuccess": "Mostrar aviso de sucesso",
+      "showError": "Mostrar aviso de erro",
+      "successTitle": "Reserva enviada",
+      "successText": "O Host vai responder em breve.",
+      "errorTitle": "Algo deu errado",
+      "errorText": "Tente de novo em alguns instantes."
+    },
+    "dialog": {
+      "title": "Janela de confirmação",
+      "description": "Pede confirmação antes de uma ação importante. O botão vermelho só aparece quando a ação não pode ser desfeita.",
+      "openNormal": "Abrir confirmação comum",
+      "openIrreversible": "Abrir confirmação irreversível",
+      "normalTitle": "Aceitar esta reserva?",
+      "normalText": "O Rider será avisado e poderá fazer o pagamento.",
+      "irreversibleTitle": "Excluir este anúncio?",
+      "irreversibleText": "Esta ação não pode ser desfeita.",
+      "irreversibleConfirm": "Excluir anúncio",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "header": {
+      "title": "Menu principal com seletor de idioma",
+      "description": "Fica sempre no topo. O seletor PT/EN nasce junto com o menu. No celular, os links do menu vão para a barra inferior.",
+      "visitor": "Visitante (não conectado)",
+      "member": "Conectado"
+    },
+    "bottomNav": {
+      "title": "Barra inferior (celular)",
+      "description": "Aparece só no celular, para quem está conectado, presa na parte de baixo da tela."
+    },
+    "footer": {
+      "title": "Rodapé",
+      "description": "Os links de Termos de Uso e Política de Privacidade entram quando esses textos estiverem prontos."
+    }
+  }
+}

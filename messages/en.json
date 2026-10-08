@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "title": "Hi Scoot | The city moves. Get in the Flow.",
+    "description": "Rent e-scooters and e-bikes from people in your city, or list yours and earn extra income."
+  },
+  "language": {
+    "label": "Language",
+    "pt": "Português",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Hi Scoot, home page",
+    "mainMenu": "Main menu",
+    "explore": "Explore",
+    "reservations": "My bookings",
+    "host": "List",
+    "conversations": "Messages",
+    "profile": "Profile",
+    "exploreShort": "Explore",
+    "reservationsShort": "Bookings",
+    "hostShort": "List",
+    "conversationsShort": "Messages",
+    "profileShort": "Profile",
+    "signIn": "Log in",
+    "signUp": "Sign up"
+  },
+  "footer": {
+    "slogan": "The city moves. Get in the Flow.",
+    "rights": "© {year} Hi Scoot. All rights reserved."
+  },
+  "home": {
+    "title": "The new Hi Scoot website is under construction",
+    "description": "Soon you will be able to rent and list e-scooters and e-bikes here.",
+    "designSystemLink": "See the website building blocks"
+  },
+  "designSystem": {
+    "badge": "Review page",
+    "title": "Hi Scoot website building blocks",
+    "intro": "This page shows every building block that repeats across screens, with all its variations. Check each one and switch the language at the top to see the Portuguese text.",
+    "colors": {
+      "title": "Colors",
+      "description": "A single list of colors that every screen follows. Changing a color here changes it across the whole website.",
+      "official": "Official",
+      "proposal": "Proposal",
+      "names": {
+        "hs-green": "Hi Scoot Green",
+        "hs-blue": "Hi Scoot Blue",
+        "hs-black": "Scoot Black",
+        "hs-white": "Flow White",
+        "hs-pink": "Flow Pink",
+        "hs-purple": "Flow Purple",
+        "danger": "Red (irreversible actions only)",
+        "surface": "Background gray",
+        "line": "Border gray",
+        "muted": "Secondary text gray"
+      }
+    },
+    "type": {
+      "title": "Typeface",
+      "description": "Inter across the whole website, in four main sizes.",
+      "sampleHeading": "The city moves.",
+      "sampleSubheading": "Get in the Flow.",
+      "sampleBody": "Rent an e-scooter near you and pay per day.",
+      "sampleSmall": "Supporting text, for secondary information."
+    },
+    "icons": {
+      "title": "Official icons",
+      "description": "The 19 Hi Scoot icons. When one is missing, we use one from the Lucide library."
+    },
+    "buttons": {
+      "title": "Buttons",
+      "description": "Six button types. Hover and click to see the hover and pressed states.",
+      "normal": "Normal",
+      "disabled": "Disabled",
+      "loading": "Loading",
+      "sizes": "Sizes",
+      "iconOnly": "Icon-only button",
+      "withIcon": "With icon",
+      "variants": {
+        "primary": "Primary (green)",
+        "secondary": "Secondary (blue)",
+        "outline": "Outline",
+        "ghost": "Subtle",
+        "destructive": "Irreversible (red)",
+        "link": "Link"
+      },
+      "size": {
+        "sm": "Small",
+        "default": "Medium",
+        "lg": "Large"
+      }
+    },
+    "fields": {
+      "title": "Text fields",
+      "description": "Normal field, with a hint, with an error and disabled.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "As shown on your ID",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "emailHint": "We will send the confirmation to this email.",
+      "priceLabel": "Price per day (R$)",
+      "priceError": "Enter an amount greater than zero.",
+      "disabledLabel": "City",
+      "disabledValue": "São Paulo"
+    },
+    "cards": {
+      "title": "Cards",
+      "description": "Every content block has four states: loaded, loading, empty and error.",
+      "loaded": "Loaded",
+      "loading": "Loading",
+      "empty": "Empty",
+      "error": "Error",
+      "exampleTitle": "Aro 10 e-scooter, Jardins (example)",
+      "exampleMeta": "4.9 · 350 m from you",
+      "examplePrice": "{price}/day",
+      "emptyTitle": "No equipment around here",
+      "emptyText": "Try another neighborhood or change the filters.",
+      "errorTitle": "Could not load",
+      "errorText": "Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "badges": {
+      "title": "Status labels",
+      "description": "Show the status of a listing or a booking.",
+      "approved": "Approved",
+      "accepted": "Accepted",
+      "inReview": "In review",
+      "new": "New",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "toast": {
+      "title": "Quick notice",
+      "description": "Shows at the top of the screen for a few seconds and disappears on its own.",
+      "showSuccess": "Show success notice",
+      "showError": "Show error notice",
+      "successTitle": "Booking request sent",
+      "successText": "The Host will reply soon.",
+      "errorTitle": "Something went wrong",
+      "errorText": "Please try again in a moment."
+    },
+    "dialog": {
+      "title": "Confirmation window",
+      "description": "Asks for confirmation before an important action. The red button only appears when the action cannot be undone.",
+      "openNormal": "Open standard confirmation",
+      "openIrreversible": "Open irreversible confirmation",
+      "normalTitle": "Accept this booking?",
+      "normalText": "The Rider will be notified and can make the payment.",
+      "irreversibleTitle": "Delete this listing?",
+      "irreversibleText": "This action cannot be undone.",
+      "irreversibleConfirm": "Delete listing",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "header": {
+      "title": "Main menu with language selector",
+      "description": "Always at the top. The PT/EN selector is part of the menu. On mobile, the menu links move to the bottom bar.",
+      "visitor": "Visitor (logged out)",
+      "member": "Logged in"
+    },
+    "bottomNav": {
+      "title": "Bottom bar (mobile)",
+      "description": "Only on mobile, for logged-in people, fixed to the bottom of the screen."
+    },
+    "footer": {
+      "title": "Footer",
+      "description": "Terms of Use and Privacy Policy links will be added once those texts are ready."
+    }
+  }
+}
