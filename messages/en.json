@@ -393,7 +393,9 @@
       "unavailable": "This equipment is not available for booking."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
-    "hostNoReviews": "No reviews as a Host yet"
+    "hostNoReviews": "No reviews as a Host yet",
+    "feeIncluded": "Includes the platform fee ({percent}%)",
+    "platformFee": "Platform fee ({percent}%)"
   },
   "errorPage": {
     "title": "Something went wrong",

@@ -7,7 +7,8 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { ChatIcon, CheckCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { addDays, bookingTotal, countDays, validateBookingDates } from "@/lib/booking";
+import { addDays, countDays, validateBookingDates } from "@/lib/booking";
+import { bookingBreakdown, PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
 import type { Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 import { requestBooking, startConversation, toggleWaitlist, type BookingRequestState } from "./actions";
@@ -82,11 +83,16 @@ export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
   const localError = pickup && dropoff ? validateBookingDates(pickup, dropoff, today) : null;
   const error = localError ?? state.error;
 
+  const breakdown = bookingBreakdown(days, equipment.daily_price);
+
   const header = (
-    <p className="text-hs-black">
-      <span className="text-2xl font-bold text-hs-black">{money(equipment.daily_price)}</span>
-      <span className="text-base text-muted"> {t("perDay")}</span>
-    </p>
+    <div className="flex flex-col gap-0.5">
+      <p className="text-hs-black">
+        <span className="text-2xl font-bold text-hs-black">{money(riderDailyPrice(equipment.daily_price))}</span>
+        <span className="text-base text-muted"> {t("perDay")}</span>
+      </p>
+      <p className="text-xs text-muted">{t("feeIncluded", { percent: PLATFORM_FEE_PERCENT })}</p>
+    </div>
   );
 
   if (isOwner) {
@@ -180,11 +186,15 @@ export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
           <dl className="flex flex-col gap-2 rounded-md bg-surface px-4 py-3 text-sm">
             <div className="flex justify-between gap-3">
               <dt className="text-hs-black">{t("priceTimesDays", { price: money(equipment.daily_price), count: days })}</dt>
-              <dd className="text-hs-black">{money(bookingTotal(days, equipment.daily_price))}</dd>
+              <dd className="text-hs-black">{money(breakdown.subtotal)}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-hs-black">{t("platformFee", { percent: PLATFORM_FEE_PERCENT })}</dt>
+              <dd className="text-hs-black">{money(breakdown.fee)}</dd>
             </div>
             <div className="flex justify-between gap-3 border-t border-line pt-2 font-bold">
               <dt className="text-hs-black">{t("total")}</dt>
-              <dd className="text-hs-black">{money(bookingTotal(days, equipment.daily_price))}</dd>
+              <dd className="text-hs-black">{money(breakdown.total)}</dd>
             </div>
           </dl>
         ) : null}

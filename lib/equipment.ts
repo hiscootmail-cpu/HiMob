@@ -12,7 +12,8 @@ import { exampleEquipment } from "@/lib/mock/equipment";
  * - Endereço exato só aparece depois que a reserva é confirmada.
  * - Aparecem as duas notas: a do equipamento e a do Host.
  * - Título e descrição ficam no idioma em que o Host escreveu (sem tradução).
- * - Preço por dia: cada Host define, dentro de um mínimo e um máximo (valores EM ABERTO).
+ * - Preço por dia: cada Host define o seu. A Hi Scoot só sugere de R$ 30 a R$ 40.
+ *   O Rider vê o preço com a taxa da plataforma (15%) somada: ver lib/pricing.ts.
  */
 
 export const MIN_PHOTOS = 4;

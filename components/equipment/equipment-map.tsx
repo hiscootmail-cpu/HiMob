@@ -10,6 +10,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import type { Equipment } from "@/lib/equipment";
 import type { LatLng } from "@/lib/geo";
+import { riderDailyPrice } from "@/lib/pricing";
 
 type EquipmentMapProps = {
   items: Equipment[];
@@ -92,7 +93,12 @@ export default function EquipmentMap({ items, center, userLocation, highlightedI
         <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userDot} interactive={false} />
       ) : null}
       {items.map((item) => {
-        const price = format.number(item.daily_price, { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+        const price = format.number(riderDailyPrice(item.daily_price), {
+          style: "currency",
+          currency: "BRL",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        });
         return (
           <Marker
             key={item.id}

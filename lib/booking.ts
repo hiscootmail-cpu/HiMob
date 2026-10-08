@@ -41,12 +41,3 @@ export function countDays(pickup: string, dropoff: string): number {
   if (start === null || end === null || end <= start) return 0;
   return Math.round((end - start) / DAY_MS);
 }
-
-/**
- * Total = diárias x preço por dia.
- * EM ABERTO: a taxa de serviço (no PDF, 2 diárias de R$ 45 davam R$ 99) ainda
- * não tem regra, então não entra no cálculo.
- */
-export function bookingTotal(days: number, dailyPrice: number): number {
-  return days * dailyPrice;
-}

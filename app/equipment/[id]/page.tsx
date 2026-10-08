@@ -9,6 +9,7 @@ import { MapPinIcon, StarIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment";
+import { riderDailyPrice } from "@/lib/pricing";
 import { BookingPanel } from "./booking-panel";
 
 export async function generateMetadata({ params }: PageProps<"/equipment/[id]">): Promise<Metadata> {
@@ -36,7 +37,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
   const t = await getTranslations("equipment");
   const tType = await getTranslations("equipmentType");
   const format = await getFormatter();
-  const price = format.number(equipment.daily_price, { style: "currency", currency: "BRL" });
+  const price = format.number(riderDailyPrice(equipment.daily_price), { style: "currency", currency: "BRL" });
 
   // PROVISÓRIO até o login existir: ?preview=owner mostra a tela como o dono do anúncio vê.
   const isOwner = preview === "owner";

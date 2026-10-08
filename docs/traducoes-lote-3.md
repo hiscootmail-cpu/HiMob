@@ -1,6 +1,6 @@
 # Traduções do Lote 3 (Home com busca e mapa, Detalhe do equipamento)
 
-Inglês aprovado em 09/10/2026. As 2 últimas linhas (nota do Host) entraram depois e aguardam revisão. Textos entre chaves, como {price}, {km}, {count} e {year}, são trocados automaticamente pelo valor certo. Os trechos com "plural" escolhem singular ou plural sozinhos (1 diária / 2 diárias).
+Inglês aprovado em 09/10/2026. As 2 últimas linhas (taxa da plataforma) entraram depois e aguardam revisão. Textos entre chaves, como {price}, {km}, {count} e {year}, são trocados automaticamente pelo valor certo. Os trechos com "plural" escolhem singular ou plural sozinhos (1 diária / 2 diárias).
 
 | # | Português | Inglês |
 |---|---|---|
@@ -76,3 +76,5 @@ Inglês aprovado em 09/10/2026. As 2 últimas linhas (nota do Host) entraram dep
 | 70 | Voltar ao início | Back to home |
 | 71 | ({count, plural, one {# avaliação} other {# avaliações}} como Host) | ({count, plural, one {# review} other {# reviews}} as a Host) |
 | 72 | Ainda sem avaliações como Host | No reviews as a Host yet |
+| 73 | Inclui a taxa da plataforma ({percent}%) | Includes the platform fee ({percent}%) |
+| 74 | Taxa da plataforma ({percent}%) | Platform fee ({percent}%) |

@@ -393,7 +393,9 @@
       "unavailable": "Este equipamento não está disponível para reserva."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
-    "hostNoReviews": "Ainda sem avaliações como Host"
+    "hostNoReviews": "Ainda sem avaliações como Host",
+    "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
+    "platformFee": "Taxa da plataforma ({percent}%)"
   },
   "errorPage": {
     "title": "Algo deu errado",

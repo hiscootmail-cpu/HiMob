@@ -7,6 +7,7 @@ import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { StarIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import type { Equipment } from "@/lib/equipment";
+import { riderDailyPrice } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 type EquipmentCardProps = {
@@ -22,7 +23,8 @@ export function EquipmentCard({ item, distanceKm, highlighted = false, onHover }
   const t = useTranslations("explore");
   const tType = useTranslations("equipmentType");
   const format = useFormatter();
-  const price = format.number(item.daily_price, { style: "currency", currency: "BRL" });
+  // Preço por dia que o Rider vê: valor do Host + taxa da plataforma.
+  const price = format.number(riderDailyPrice(item.daily_price), { style: "currency", currency: "BRL" });
 
   return (
     <Link
