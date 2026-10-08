@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-import { Logo } from "@/components/logo";
+import { LogoFull } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 /*
@@ -14,8 +14,8 @@ export function SiteFooter({ className }: { className?: string }) {
   return (
     <footer className={cn("w-full border-t border-line bg-surface text-hs-black", className)}>
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div className="flex flex-col gap-1">
-          <Logo className="text-xl" />
+        <div className="flex items-center gap-4">
+          <LogoFull className="h-24" />
           <p className="text-sm text-muted">{t("slogan")}</p>
         </div>
         <p className="text-sm text-muted">{t("rights", { year: new Date().getFullYear() })}</p>

@@ -11,7 +11,7 @@ import {
 
 /*
  * Itens do menu principal e da barra inferior.
- * PROPOSTA aguardando aprovação: quais itens entram e em que ordem.
+ * Itens e ordem aprovados em 08/10/2026.
  * Os endereços são os já existentes no inventário de ações.
  */
 export type NavItem = {

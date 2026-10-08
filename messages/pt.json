@@ -3,6 +3,10 @@
     "title": "Hi Scoot | A cidade se move. Vem no Flow.",
     "description": "Alugue patinetes e bikes elétricas de pessoas da sua cidade, ou anuncie o seu e ganhe uma renda extra."
   },
+  "brand": {
+    "name": "Hi Scoot",
+    "logoAlt": "Logo da Hi Scoot: o Scoot, um cachorrinho de óculos escuros andando de patinete elétrico"
+  },
   "language": {
     "label": "Idioma",
     "pt": "Português",
@@ -165,6 +169,12 @@
     "footer": {
       "title": "Rodapé",
       "description": "Os links de Termos de Uso e Política de Privacidade entram quando esses textos estiverem prontos."
+    },
+    "logo": {
+      "title": "Logo",
+      "description": "A logo completa vai em espaços maiores, como o rodapé. No menu do topo, o cachorrinho fica pequeno ao lado do nome escrito, para continuar legível.",
+      "full": "Logo completa",
+      "header": "Versão do menu do topo"
     }
   }
 }

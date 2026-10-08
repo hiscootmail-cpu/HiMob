@@ -3,6 +3,10 @@
     "title": "Hi Scoot | The city moves. Get in the Flow.",
     "description": "Rent e-scooters and e-bikes from people in your city, or list yours and earn extra income."
   },
+  "brand": {
+    "name": "Hi Scoot",
+    "logoAlt": "Hi Scoot logo: Scoot, a dog in sunglasses riding an e-scooter"
+  },
   "language": {
     "label": "Language",
     "pt": "Português",
@@ -165,6 +169,12 @@
     "footer": {
       "title": "Footer",
       "description": "Terms of Use and Privacy Policy links will be added once those texts are ready."
+    },
+    "logo": {
+      "title": "Logo",
+      "description": "The full logo goes in larger spaces, such as the footer. In the top menu, the dog is shown small next to the written name so it stays readable.",
+      "full": "Full logo",
+      "header": "Top menu version"
     }
   }
 }

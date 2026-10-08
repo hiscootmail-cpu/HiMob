@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 
 import { BottomNav } from "@/components/bottom-nav";
+import { LogoFull, Logo } from "@/components/logo";
 import { CheckCircleIcon, officialIcons, ScooterIcon, StarIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -26,9 +27,9 @@ const palette = [
   { token: "hs-pink", hex: "#F05AA6", official: true },
   { token: "hs-purple", hex: "#8157E8", official: true },
   { token: "danger", hex: "#E53E3E", official: true },
-  { token: "surface", hex: "#F5F5F5", official: false },
-  { token: "line", hex: "#E5E5E5", official: false },
-  { token: "muted", hex: "#5C5C5C", official: false },
+  { token: "surface", hex: "#F5F5F5", official: true },
+  { token: "line", hex: "#E5E5E5", official: true },
+  { token: "muted", hex: "#5C5C5C", official: true },
 ] as const;
 
 const buttonVariants = ["primary", "secondary", "outline", "ghost", "destructive", "link"] as const;
@@ -72,6 +73,23 @@ export default async function DesignSystemPage() {
         <h1 className="text-3xl font-bold text-hs-black sm:text-4xl">{t("title")}</h1>
         <p className="max-w-3xl text-lg text-muted">{t("intro")}</p>
       </header>
+
+      <Section id="logo" title={t("logo.title")} description={t("logo.description")}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <StateLabel>{t("logo.full")}</StateLabel>
+            <div className="flex items-center justify-center rounded-lg border border-line bg-hs-white p-6">
+              <LogoFull className="h-64" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <StateLabel>{t("logo.header")}</StateLabel>
+            <div className="flex flex-1 items-center justify-center rounded-lg border border-line bg-hs-white p-6">
+              <Logo />
+            </div>
+          </div>
+        </div>
+      </Section>
 
       <Section id="colors" title={t("colors.title")} description={t("colors.description")}>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">

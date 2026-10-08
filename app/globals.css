@@ -8,8 +8,8 @@
  * Paleta oficial: hs-green, hs-blue, hs-black, hs-white, hs-pink, hs-purple.
  * on-green / on-blue: texto escuro sobre botão verde/azul.
  * danger: só para ações irreversíveis (regra 10).
- * Tons neutros e fundos suaves (surface, line, muted, *-soft, on-pink,
- * on-purple): PROPOSTA, aguardando aprovação.
+ * Tons de cinza (surface, line, muted): aprovados em 08/10/2026.
+ * Fundos suaves das etiquetas (*-soft, on-pink, on-purple): derivados da paleta.
  */
 @theme {
   --color-hs-green: #35e878;
