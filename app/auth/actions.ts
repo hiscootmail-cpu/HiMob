@@ -28,7 +28,8 @@ export type AuthFormState = {
     fullName?: FieldErrorKey;
     email?: FieldErrorKey;
     password?: FieldErrorKey;
-    document?: FieldErrorKey;
+    documentFront?: FieldErrorKey;
+    documentBack?: FieldErrorKey;
     terms?: FieldErrorKey;
   };
   /** Valores devolvidos para o campo não ficar vazio depois de um erro. */
@@ -66,22 +67,25 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   const fullName = text(formData, "fullName").trim();
   const email = text(formData, "email").trim();
   const password = text(formData, "password");
-  const document = formData.get("document");
+  const documentFront = formData.get("documentFront");
+  const documentBack = formData.get("documentBack");
   const acceptedTerms = formData.get("terms") === "on";
 
   const fieldErrors = {
     fullName: validateFullName(fullName) ?? undefined,
     email: validateEmail(email) ?? undefined,
     password: validateNewPassword(password) ?? undefined,
-    document: validateDocument(document instanceof File ? document : null) ?? undefined,
+    documentFront: validateDocument(documentFront instanceof File ? documentFront : null) ?? undefined,
+    documentBack: validateDocument(documentBack instanceof File ? documentBack : null) ?? undefined,
     terms: acceptedTerms ? undefined : ("termsRequired" as const),
   };
   if (Object.values(fieldErrors).some(Boolean)) {
     return { fieldErrors, values: { email } };
   }
 
-  // PROVISÓRIO: o documento ainda não é guardado. Quando o Supabase entrar,
-  // ele vai para uma pasta privada que só a equipe de verificação acessa.
+  // PROVISÓRIO: frente e verso ainda não são guardados. Quando o Supabase entrar,
+  // vão para uma pasta privada que só a equipe de verificação acessa, para
+  // conferir se o nome no documento é o mesmo informado no cadastro.
   redirect("/auth/sign-up-success");
 }
 

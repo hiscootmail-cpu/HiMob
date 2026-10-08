@@ -14,9 +14,6 @@ export type DocumentUploadLabels = {
   limits: string;
   change: string;
   remove: string;
-  /** Dicas para uma boa foto do documento. */
-  tips: string[];
-  tipsTitle: string;
 };
 
 type DocumentUploadProps = {
@@ -24,6 +21,8 @@ type DocumentUploadProps = {
   accept: string;
   labels: DocumentUploadLabels;
   error?: string;
+  /** Id de um texto de apoio de fora (ex.: dicas de foto), lido junto com o campo. */
+  describedBy?: string;
   /** Chamado sempre que a pessoa escolhe ou remove um arquivo. */
   onFileChange?: (file: File | null) => void;
   className?: string;
@@ -34,14 +33,13 @@ function formatSize(bytes: number) {
 }
 
 /**
- * Envio de documento (foto ou PDF). Mostra prévia da foto escolhida,
- * permite trocar ou remover, e traz as dicas de foto antes do envio.
+ * Envio de documento (foto ou PDF). Mostra prévia da foto escolhida
+ * e permite trocar ou remover antes do envio.
  * O arquivo é dado pessoal sensível (LGPD): nunca é mostrado a outras pessoas.
  */
-function DocumentUpload({ name, accept, labels, error, onFileChange, className }: DocumentUploadProps) {
+function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange, className }: DocumentUploadProps) {
   const inputId = React.useId();
   const messageId = `${inputId}-message`;
-  const tipsId = `${inputId}-tips`;
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -64,7 +62,7 @@ function DocumentUpload({ name, accept, labels, error, onFileChange, className }
   }
 
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-1.5", className)}>
       <label htmlFor={inputId} className="text-sm font-medium text-hs-black">
         {labels.label}
       </label>
@@ -77,7 +75,7 @@ function DocumentUpload({ name, accept, labels, error, onFileChange, className }
         accept={accept}
         className="sr-only"
         aria-invalid={error ? true : undefined}
-        aria-describedby={[tipsId, error ? messageId : null].filter(Boolean).join(" ")}
+        aria-describedby={[describedBy, error ? messageId : null].filter(Boolean).join(" ") || undefined}
         onChange={(event) => select(event.currentTarget.files?.[0] ?? null)}
       />
 
@@ -132,17 +130,6 @@ function DocumentUpload({ name, accept, labels, error, onFileChange, className }
           <span className="text-xs text-muted">{labels.limits}</span>
         </label>
       )}
-
-      <div id={tipsId} className="rounded-md bg-surface px-3 py-2">
-        <p className="text-xs font-semibold text-hs-black">{labels.tipsTitle}</p>
-        <ul className="mt-1 list-disc pl-4 text-xs text-muted">
-          {labels.tips.map((tip) => (
-            <li key={tip} className="text-muted">
-              {tip}
-            </li>
-          ))}
-        </ul>
-      </div>
 
       {error ? (
         <p id={messageId} role="alert" className="text-sm text-danger">

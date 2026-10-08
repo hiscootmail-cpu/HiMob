@@ -197,7 +197,7 @@
       "invalidCredentials": "E-mail ou senha incorretos. Confira e tente de novo.",
       "nameRequired": "Informe seu nome completo.",
       "nameTooShort": "O nome precisa ter pelo menos {min} letras.",
-      "documentRequired": "Envie a foto ou o PDF do seu documento.",
+      "documentRequired": "Envie a foto ou o PDF deste lado do documento.",
       "documentType": "Formato não aceito. Envie JPG, PNG ou PDF.",
       "documentTooLarge": "Arquivo grande demais. O limite é {max} MB.",
       "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade."
@@ -249,10 +249,20 @@
     },
     "document": {
       "label": "Documento com foto (RG ou CNH)",
-      "choose": "Tirar foto ou escolher arquivo",
+      "purpose": "Envie a frente e o verso. Vamos conferir se o nome no documento é o mesmo informado no cadastro.",
       "limits": "JPG, PNG ou PDF, até {max} MB",
-      "change": "Trocar arquivo",
-      "remove": "Remover arquivo",
+      "front": {
+        "label": "Frente",
+        "choose": "Foto da frente",
+        "change": "Trocar a frente",
+        "remove": "Remover a frente"
+      },
+      "back": {
+        "label": "Verso",
+        "choose": "Foto do verso",
+        "change": "Trocar o verso",
+        "remove": "Remover o verso"
+      },
       "tipsTitle": "Para a foto ser aprovada:",
       "tip1": "Mostre o documento inteiro, com as quatro bordas aparecendo.",
       "tip2": "Evite reflexo e sombra. Não use flash.",

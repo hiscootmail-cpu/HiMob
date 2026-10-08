@@ -5,14 +5,13 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { signUp, type AuthFormState } from "@/app/auth/actions";
+import { IdentityDocumentFields, type DocumentSide } from "@/components/auth/identity-document-fields";
 import { TermsConsent } from "@/components/auth/terms-consent";
 import { useFieldValidation } from "@/components/auth/use-field-validation";
 import { Button } from "@/components/ui/button";
-import { DocumentUpload } from "@/components/ui/document-upload";
 import { PasswordField } from "@/components/ui/password-field";
 import { TextField } from "@/components/ui/text-field";
 import {
-  DOCUMENT_ACCEPT,
   DOCUMENT_MAX_MB,
   NAME_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
@@ -26,7 +25,12 @@ import {
 const initialState: AuthFormState = {};
 
 /** Checagem local do documento e da caixinha, que não têm "sair do campo". */
-type LocalChecks = { submission: unknown; document?: FieldErrorKey | null; terms?: FieldErrorKey | null };
+type LocalChecks = {
+  submission: unknown;
+  front?: FieldErrorKey | null;
+  back?: FieldErrorKey | null;
+  terms?: FieldErrorKey | null;
+};
 
 export function SignUpForm() {
   const t = useTranslations("auth");
@@ -37,8 +41,10 @@ export function SignUpForm() {
   const [checks, setChecks] = useState<LocalChecks>({ submission: state });
 
   const current = checks.submission === state ? checks : { submission: state };
-  const documentError =
-    current.document === undefined ? state.fieldErrors?.document : (current.document ?? undefined);
+  const pick = (local: FieldErrorKey | null | undefined, server: FieldErrorKey | undefined) =>
+    local === undefined ? server : (local ?? undefined);
+  const frontError = pick(current.front, state.fieldErrors?.documentFront);
+  const backError = pick(current.back, state.fieldErrors?.documentBack);
   const termsError = current.terms === undefined ? state.fieldErrors?.terms : (current.terms ?? undefined);
 
   const errorText = (key: FieldErrorKey | undefined) =>
@@ -49,11 +55,16 @@ export function SignUpForm() {
     // o documento escolhido nem o que digitou se algum campo tiver erro.
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const file = formData.get("document");
-    const docError = validateDocument(file instanceof File ? file : null);
-    // Não envia arquivo grande demais: avisa antes, aqui mesmo.
-    if (docError === "documentTooLarge" || docError === "documentType") {
-      setChecks({ ...current, document: docError });
+    // Não envia arquivo grande demais ou de formato errado: avisa antes, aqui mesmo.
+    const blocking = (name: string) => {
+      const file = formData.get(name);
+      const error = validateDocument(file instanceof File ? file : null);
+      return error === "documentTooLarge" || error === "documentType" ? error : undefined;
+    };
+    const front = blocking("documentFront");
+    const back = blocking("documentBack");
+    if (front || back) {
+      setChecks({ ...current, front: front ?? current.front, back: back ?? current.back });
       return;
     }
     startTransition(() => formAction(formData));
@@ -97,20 +108,11 @@ export function SignUpForm() {
         onChange={password.onChange}
       />
 
-      <DocumentUpload
-        name="document"
-        accept={DOCUMENT_ACCEPT}
-        error={errorText(documentError)}
-        onFileChange={(file) => setChecks({ ...current, document: file ? validateDocument(file) : null })}
-        labels={{
-          label: t("document.label"),
-          choose: t("document.choose"),
-          limits: t("document.limits", { max: DOCUMENT_MAX_MB }),
-          change: t("document.change"),
-          remove: t("document.remove"),
-          tipsTitle: t("document.tipsTitle"),
-          tips: [t("document.tip1"), t("document.tip2"), t("document.tip3")],
-        }}
+      <IdentityDocumentFields
+        errors={{ front: errorText(frontError), back: errorText(backError) }}
+        onFileChange={(side: DocumentSide, file) =>
+          setChecks({ ...current, [side]: file ? validateDocument(file) : null })
+        }
       />
 
       <TermsConsent error={errorText(termsError)} onChange={(checked) => setChecks({ ...current, terms: checked ? null : "termsRequired" })} />

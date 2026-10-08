@@ -197,7 +197,7 @@
       "invalidCredentials": "Incorrect email or password. Check them and try again.",
       "nameRequired": "Enter your full name.",
       "nameTooShort": "Your name must have at least {min} letters.",
-      "documentRequired": "Upload a photo or PDF of your ID.",
+      "documentRequired": "Upload a photo or PDF of this side of the document.",
       "documentType": "Format not accepted. Upload JPG, PNG or PDF.",
       "documentTooLarge": "File too large. The limit is {max} MB.",
       "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy."
@@ -249,10 +249,20 @@
     },
     "document": {
       "label": "Photo ID (RG or driver's license)",
-      "choose": "Take a photo or choose a file",
+      "purpose": "Upload the front and the back. We will check that the name on the document matches the name you entered.",
       "limits": "JPG, PNG or PDF, up to {max} MB",
-      "change": "Change file",
-      "remove": "Remove file",
+      "front": {
+        "label": "Front",
+        "choose": "Photo of the front",
+        "change": "Change the front",
+        "remove": "Remove the front"
+      },
+      "back": {
+        "label": "Back",
+        "choose": "Photo of the back",
+        "change": "Change the back",
+        "remove": "Remove the back"
+      },
       "tipsTitle": "For your photo to be approved:",
       "tip1": "Show the whole document, with all four edges visible.",
       "tip2": "Avoid glare and shadows. Do not use flash.",

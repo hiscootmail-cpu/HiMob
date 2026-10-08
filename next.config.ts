@@ -7,8 +7,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      // Documento de até 5 MB no cadastro + folga para o restante do formulário.
-      bodySizeLimit: "6mb",
+      // Frente e verso do documento (até 5 MB cada) + folga para o restante do formulário.
+      bodySizeLimit: "11mb",
     },
   },
   turbopack: {
