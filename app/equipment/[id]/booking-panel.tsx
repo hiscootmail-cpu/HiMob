@@ -39,7 +39,7 @@ function DateField({
   invalid: boolean;
 }) {
   return (
-    <label htmlFor={id} className="flex flex-1 flex-col gap-1 rounded-md border border-line px-3 py-2 focus-within:border-hs-blue focus-within:ring-4 focus-within:ring-hs-blue/25">
+    <label htmlFor={id} className="flex min-w-0 flex-1 flex-col gap-1 rounded-md border border-line px-3 py-2 focus-within:border-hs-blue focus-within:ring-4 focus-within:ring-hs-blue/25">
       <span className="text-xs font-semibold tracking-wide text-hs-black uppercase">{label}</span>
       <input
         id={id}
@@ -49,7 +49,7 @@ function DateField({
         min={min}
         aria-invalid={invalid || undefined}
         onChange={(event) => onChange(event.currentTarget.value)}
-        className="w-full bg-transparent text-base text-hs-black outline-none"
+        className="w-full min-w-0 bg-transparent text-base text-hs-black outline-none"
       />
     </label>
   );
