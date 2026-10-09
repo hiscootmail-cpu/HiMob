@@ -109,3 +109,28 @@
     @apply bg-hs-white font-sans text-hs-black antialiased;
   }
 }
+
+/* Impressão da etiqueta QR (área do Host): só a etiqueta sai no papel. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-label,
+  .print-label * {
+    visibility: visible !important;
+  }
+  /* A janela aberta não pode cortar nem deslocar a etiqueta. */
+  [data-slot="dialog-content"] {
+    overflow: visible !important;
+    max-height: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .print-label {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -48,3 +48,25 @@ export function riderCancelPolicy(booking: Booking, now: Date = new Date()): Can
   const price = bookingPrice(booking);
   return { allowed: true, paid: true, refund: price.subtotal, fee: price.fee, deadline };
 }
+
+export type HostCancelPolicy =
+  | { allowed: true; paid: false }
+  | { allowed: true; paid: true; riderRefund: number; hostFee: number; deadline: Date }
+  | { allowed: false; reason: "deadlinePassed" | "notCancellable"; deadline?: Date };
+
+/**
+ * Cancelamento pelo Host: também até 24 h antes da retirada.
+ * Reserva paga: o Rider recebe tudo de volta (diárias + taxa) e a taxa da
+ * plataforma é cobrada do Host. Antes do pagamento, nada é cobrado.
+ * Pedido novo (pending) não se cancela: o Host recusa.
+ */
+export function hostCancelPolicy(booking: Booking, now: Date = new Date()): HostCancelPolicy {
+  if (booking.status === "accepted") return { allowed: true, paid: false };
+  if (!PAID.has(booking.status)) return { allowed: false, reason: "notCancellable" };
+
+  const deadline = cancelDeadline(booking);
+  if (now.getTime() > deadline.getTime()) return { allowed: false, reason: "deadlinePassed", deadline };
+
+  const price = bookingPrice(booking);
+  return { allowed: true, paid: true, riderRefund: price.total, hostFee: price.fee, deadline };
+}

@@ -7,8 +7,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      // Frente e verso do documento (até 5 MB cada) + folga para o restante do formulário.
-      bodySizeLimit: "11mb",
+      // Maior envio: anúncio com até 10 fotos de até 10 MB cada + o restante do formulário.
+      // PROVISÓRIO: com o Supabase, as fotos vão direto para o armazenamento e este limite volta a cair.
+      bodySizeLimit: "101mb",
     },
   },
   turbopack: {
