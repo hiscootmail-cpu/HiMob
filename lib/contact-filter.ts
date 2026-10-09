@@ -6,7 +6,8 @@
 
 const EMAIL = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 // 8 ou mais dígitos, com espaços, pontos, traços ou parênteses no meio (ex.: (11) 98765-4321).
-const PHONE = /(?:\+?\d[\s().-]*){8,}/g;
+// Mesma regra do banco (public.redact_contacts).
+const PHONE = /\+?\d(?:[\s().-]*\d){7,}/g;
 
 export const HIDDEN_MARK = "•••";
 
@@ -14,9 +15,6 @@ export const HIDDEN_MARK = "•••";
 export const MESSAGE_MAX = 1000;
 
 export function redactContacts(text: string): { text: string; redacted: boolean } {
-  const result = text.replace(EMAIL, HIDDEN_MARK).replace(PHONE, (match) => {
-    const trailing = match.match(/\s+$/)?.[0] ?? "";
-    return HIDDEN_MARK + trailing;
-  });
+  const result = text.replace(EMAIL, HIDDEN_MARK).replace(PHONE, HIDDEN_MARK);
   return { text: result, redacted: result !== text };
 }

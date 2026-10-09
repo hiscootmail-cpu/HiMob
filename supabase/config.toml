@@ -1,0 +1,4 @@
+# Configuração mínima do projeto Supabase da Hi Scoot.
+# As tabelas e regras de segurança ficam em supabase/migrations: quando um arquivo
+# novo chega ao ramo "main", a integração com o GitHub aplica no banco de produção.
+project_id = "HiMob"
