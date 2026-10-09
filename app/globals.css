@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Lista única de cores, cantos e fonte da Hi Scoot.
+ * Toda tela usa só estes nomes. Para trocar a cor da marca, muda aqui.
+ *
+ * Paleta oficial: hs-green, hs-blue, hs-black, hs-white, hs-pink, hs-purple.
+ * on-green / on-blue: texto escuro sobre botão verde/azul.
+ * danger: só para BOTÕES de ações irreversíveis (regra 10).
+ * error / error-line / error-soft: avisos de erro e situações de bloqueio,
+ * no rosa da paleta (não usam o vermelho, que é só para ação irreversível).
+ * Aprovado em 08/10/2026.
+ * Tons de cinza (surface, line, muted): aprovados em 08/10/2026.
+ * Fundos suaves das etiquetas (*-soft, on-pink, on-purple): derivados da paleta.
+ */
+@theme {
+  --color-hs-green: #35e878;
+  --color-hs-blue: #25b9f2;
+  --color-hs-black: #171717;
+  --color-hs-white: #ffffff;
+  --color-hs-pink: #f05aa6;
+  --color-hs-purple: #8157e8;
+
+  --color-on-green: #0b3d1d;
+  --color-on-blue: #042c53;
+  --color-on-pink: #7a1f4f;
+  --color-on-purple: #3b1f86;
+
+  --color-danger: #e53e3e;
+  --color-on-danger: #ffffff;
+
+  --color-error: #7a1f4f;
+  --color-error-line: #f05aa6;
+  --color-error-soft: #fdebf4;
+
+  --color-surface: #f5f5f5;
+  --color-line: #e5e5e5;
+  --color-muted: #5c5c5c;
+
+  --color-green-soft: #e8fbef;
+  --color-blue-soft: #e4f6fd;
+  --color-pink-soft: #fdebf4;
+  --color-purple-soft: #efeafc;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Nomes que as peças do shadcn/ui esperam, apontando para a paleta acima.
+ * Assim, peças novas do shadcn já nascem com as cores da Hi Scoot.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #35e878;
+  --primary-foreground: #0b3d1d;
+  --secondary: #25b9f2;
+  --secondary-foreground: #042c53;
+  --muted: #f5f5f5;
+  --muted-foreground: #5c5c5c;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --destructive: #e53e3e;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #25b9f2;
+  --radius: 12px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-line outline-hs-blue/50;
+  }
+
+  html {
+    @apply bg-hs-white;
+  }
+
+  body {
+    @apply bg-hs-white font-sans text-hs-black antialiased;
+  }
+}
+
+/* Impressão da etiqueta QR (área do Host): só a etiqueta sai no papel. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-label,
+  .print-label * {
+    visibility: visible !important;
+  }
+  /* A janela aberta não pode cortar nem deslocar a etiqueta. */
+  [data-slot="dialog-content"] {
+    overflow: visible !important;
+    max-height: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .print-label {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

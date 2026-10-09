@@ -1,0 +1,1076 @@
+{
+  "meta": {
+    "title": "Hi Scoot | The city moves. Get in the Flow.",
+    "description": "Rent e-scooters and e-bikes from people in your city, or list yours and earn extra income."
+  },
+  "brand": {
+    "name": "Hi Scoot",
+    "logoAlt": "Hi Scoot logo: Scoot, a dog in sunglasses riding an e-scooter"
+  },
+  "language": {
+    "label": "Language",
+    "pt": "Português",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Hi Scoot, home page",
+    "mainMenu": "Main menu",
+    "explore": "Explore",
+    "reservations": "My bookings",
+    "host": "List",
+    "conversations": "Messages",
+    "profile": "Profile",
+    "exploreShort": "Explore",
+    "reservationsShort": "Bookings",
+    "hostShort": "List",
+    "conversationsShort": "Messages",
+    "profileShort": "Profile",
+    "signIn": "Log in",
+    "signUp": "Sign up",
+    "notifications": "Notifications",
+    "notificationsUnread": "Notifications, {count} unread"
+  },
+  "footer": {
+    "slogan": "The city moves. Get in the Flow.",
+    "rights": "© {year} Hi Scoot. All rights reserved."
+  },
+  "designSystem": {
+    "badge": "Review page",
+    "title": "Hi Scoot website building blocks",
+    "intro": "This page shows every building block that repeats across screens, with all its variations. Check each one and switch the language at the top to see the Portuguese text.",
+    "colors": {
+      "title": "Colors",
+      "description": "A single list of colors that every screen follows. Changing a color here changes it across the whole website.",
+      "official": "Official",
+      "proposal": "Proposal",
+      "names": {
+        "hs-green": "Hi Scoot Green",
+        "hs-blue": "Hi Scoot Blue",
+        "hs-black": "Scoot Black",
+        "hs-white": "Flow White",
+        "hs-pink": "Flow Pink",
+        "hs-purple": "Flow Purple",
+        "danger": "Red (irreversible action buttons only)",
+        "surface": "Background gray",
+        "line": "Border gray",
+        "muted": "Secondary text gray",
+        "error": "Dark pink (error messages)"
+      }
+    },
+    "type": {
+      "title": "Typeface",
+      "description": "Inter across the whole website, in four main sizes.",
+      "sampleHeading": "The city moves.",
+      "sampleSubheading": "Get in the Flow.",
+      "sampleBody": "Rent an e-scooter near you and pay per day.",
+      "sampleSmall": "Supporting text, for secondary information."
+    },
+    "icons": {
+      "title": "Official icons",
+      "description": "The 19 Hi Scoot icons. When one is missing, we use one from the Lucide library."
+    },
+    "buttons": {
+      "title": "Buttons",
+      "description": "Six button types. Hover and click to see the hover and pressed states.",
+      "normal": "Normal",
+      "disabled": "Disabled",
+      "loading": "Loading",
+      "sizes": "Sizes",
+      "iconOnly": "Icon-only button",
+      "withIcon": "With icon",
+      "variants": {
+        "primary": "Primary (green)",
+        "secondary": "Secondary (blue)",
+        "outline": "Outline",
+        "ghost": "Subtle",
+        "destructive": "Irreversible (red)",
+        "link": "Link"
+      },
+      "size": {
+        "sm": "Small",
+        "default": "Medium",
+        "lg": "Large"
+      }
+    },
+    "fields": {
+      "title": "Text fields",
+      "description": "Normal field, with a hint, with an error and disabled.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "emailHint": "We will send the confirmation to this email.",
+      "priceLabel": "Price per day (R$)",
+      "priceError": "Enter an amount greater than zero.",
+      "disabledLabel": "City",
+      "disabledValue": "São Paulo"
+    },
+    "cards": {
+      "title": "Cards",
+      "description": "Every content block has four states: loaded, loading, empty and error.",
+      "loaded": "Loaded",
+      "loading": "Loading",
+      "empty": "Empty",
+      "error": "Error",
+      "exampleTitle": "Aro 10 e-scooter, Jardins (example)",
+      "exampleMeta": "4.9 · 350 m from you",
+      "examplePrice": "{price}/day",
+      "emptyTitle": "No equipment around here",
+      "emptyText": "Try another neighborhood or change the filters.",
+      "errorTitle": "Could not load",
+      "errorText": "Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "badges": {
+      "title": "Status labels",
+      "description": "Show the status of a listing or a booking.",
+      "approved": "Approved",
+      "accepted": "Accepted",
+      "inReview": "In review",
+      "new": "New",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "toast": {
+      "title": "Quick notice",
+      "description": "Shows at the top of the screen for a few seconds and disappears on its own.",
+      "showSuccess": "Show success notice",
+      "showError": "Show error notice",
+      "successTitle": "Booking request sent",
+      "successText": "The Host will reply soon.",
+      "errorTitle": "Something went wrong",
+      "errorText": "Please try again in a moment."
+    },
+    "dialog": {
+      "title": "Confirmation window",
+      "description": "Asks for confirmation before an important action. The red button only appears when the action cannot be undone.",
+      "openNormal": "Open standard confirmation",
+      "openIrreversible": "Open irreversible confirmation",
+      "normalTitle": "Accept this booking?",
+      "normalText": "The Rider will be notified and can make the payment.",
+      "irreversibleTitle": "Delete this listing?",
+      "irreversibleText": "This action cannot be undone.",
+      "irreversibleConfirm": "Delete listing",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "header": {
+      "title": "Main menu with language selector",
+      "description": "Always at the top. The PT/EN selector is part of the menu. On mobile, the menu links move to the bottom bar.",
+      "visitor": "Visitor (logged out)",
+      "member": "Logged in"
+    },
+    "bottomNav": {
+      "title": "Bottom bar (mobile)",
+      "description": "Only on mobile, for logged-in people, fixed to the bottom of the screen."
+    },
+    "footer": {
+      "title": "Footer",
+      "description": "Terms of Use and Privacy Policy links will be added once those texts are ready."
+    },
+    "logo": {
+      "title": "Logo",
+      "description": "The full logo goes in larger spaces, such as the footer. In the top menu, the dog is shown small next to the written name so it stays readable.",
+      "full": "Full logo",
+      "header": "Top menu version"
+    }
+  },
+  "auth": {
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "capsLock": "Caps Lock is on.",
+      "passwordRule": "Use at least {min} characters.",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Your full name"
+    },
+    "errors": {
+      "emailRequired": "Enter your email.",
+      "emailInvalid": "Check your email. It must look like name@example.com.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "Your password must have at least {min} characters.",
+      "invalidCredentials": "Incorrect email or password. Check them and try again.",
+      "nameRequired": "Enter your full name.",
+      "nameTooShort": "Your name must have at least {min} letters.",
+      "documentRequired": "Upload a photo or PDF of this side of the document.",
+      "documentType": "Format not accepted. Upload JPG, PNG or PDF.",
+      "documentTooLarge": "File too large. The limit is {max} MB.",
+      "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy."
+    },
+    "login": {
+      "title": "Log in",
+      "description": "Good to see you again. Log in to rent or list.",
+      "forgotPassword": "Forgot my password",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "signUp": {
+      "title": "Sign up",
+      "description": "One account to rent and list e-scooters and e-bikes.",
+      "emailHint": "We will send a confirmation link to this email.",
+      "submit": "Sign up",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "terms": "I have read and accept the <terms>Terms of Use</terms> and the <privacy>Privacy Policy</privacy>."
+    },
+    "signUpSuccess": {
+      "title": "Account created. Confirm your email",
+      "description": "We sent a link to your email. Open the message and tap the link to activate your account.",
+      "spamHint": "Not there after a few minutes? Check your spam or junk folder.",
+      "goToLogin": "Go to Log in",
+      "goHome": "Back to home"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "We could not complete this action. The link may have expired or already been used. Go back to the start and try again.",
+      "goToLogin": "Go to Log in",
+      "goHome": "Back to home"
+    },
+    "forgotPassword": {
+      "title": "Forgot my password",
+      "description": "Enter your account email. We will send you a link to create a new password.",
+      "submit": "Send link",
+      "backToLogin": "Back to Log in",
+      "sentTitle": "Check your email",
+      "sentDescription": "If there is an account with the email {email}, you will receive a link to create a new password.",
+      "sentHint": "The link is valid for a short time. Not there? Check your spam folder."
+    },
+    "updatePassword": {
+      "title": "Create a new password",
+      "description": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "submit": "Save new password"
+    },
+    "document": {
+      "label": "Photo ID (RG or driver's license)",
+      "purpose": "Upload the front and the back. We will check that the name on the document matches the name you entered.",
+      "limits": "JPG, PNG or PDF, up to {max} MB",
+      "front": {
+        "label": "Front",
+        "choose": "Photo of the front",
+        "change": "Change the front",
+        "remove": "Remove the front"
+      },
+      "back": {
+        "label": "Back",
+        "choose": "Photo of the back",
+        "change": "Change the back",
+        "remove": "Remove the back"
+      },
+      "tipsTitle": "For your photo to be approved:",
+      "tip1": "Show the whole document, with all four edges visible.",
+      "tip2": "Avoid glare and shadows. Do not use flash.",
+      "tip3": "Do not cover any part with your fingers.",
+      "socialName": {
+        "title": "Trans person whose ID has not been updated yet?",
+        "text": "Upload your document as usual. If the name does not match, you can send a photo of a handwritten letter with your chosen name (nome social) and CPF, and our team will review it confidentially."
+      }
+    }
+  },
+  "legal": {
+    "close": "Close",
+    "pendingNotice": "Text in preparation.",
+    "terms": {
+      "title": "Terms of Use",
+      "placeholder": "The official Hi Scoot Terms of Use will be published here before launch."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "placeholder": "The official Hi Scoot Privacy Policy, in line with Brazil's LGPD, will be published here before launch."
+    }
+  },
+  "verifyIdentity": {
+    "title": "Identity verification",
+    "goHome": "Back to home",
+    "rejected": {
+      "title": "Upload your document again",
+      "description": "The name on the document did not match the name on your account. Upload the front and the back again.",
+      "reasonLabel": "Reason given by our team",
+      "exampleReason": "(Example) The name on the document is different from the name on your account.",
+      "lastAttempt": "Please note: this is your last attempt. If the name does not match again, your account will be blocked.",
+      "submit": "Upload document again"
+    },
+    "pending": {
+      "title": "Document under review",
+      "description": "We received the front and back of your document. Our team will check the name and let you know as soon as it is done."
+    },
+    "blocked": {
+      "title": "Account blocked",
+      "description": "The name on the document did not match your account in two attempts. For security reasons, this account has been blocked.",
+      "canBrowse": "You can still browse the website, but you cannot rent or list."
+    },
+    "approved": {
+      "title": "Identity verified",
+      "description": "The name on your document matches your account. You are all set to rent and list."
+    },
+    "letter": {
+      "title": "Are you a trans person whose ID does not yet show your chosen name?",
+      "description": "You can ask us to review your account. Upload a photo of a handwritten letter with:",
+      "item1": "Your chosen name (nome social)",
+      "item2": "Your CPF",
+      "fileLabel": "Photo of the letter",
+      "choose": "Photo of the handwritten letter",
+      "change": "Change the photo of the letter",
+      "remove": "Remove the photo of the letter",
+      "privacy": "Only our verification team sees this letter. It is handled confidentially, in line with Brazil's LGPD.",
+      "submit": "Send letter for review",
+      "sentTitle": "Letter received",
+      "sentDescription": "Our team will review your request carefully and confidentially, and let you know as soon as it is done."
+    },
+    "or": "or"
+  },
+  "equipmentType": {
+    "scooter": "E-scooter",
+    "ebike": "E-bike"
+  },
+  "explore": {
+    "title": "Rent near you",
+    "searchLabel": "Search equipment",
+    "searchPlaceholder": "Search e-scooter, e-bike or neighborhood",
+    "typeFilterLabel": "Equipment type",
+    "filterAll": "All",
+    "nearMe": "Near me",
+    "locationFallback": "Showing up to {km} km from downtown São Paulo",
+    "locationGranted": "Showing up to {km} km from you",
+    "locationDenied": "We could not get your location. Showing up to {km} km from downtown São Paulo",
+    "resultCount": "{count, plural, =0 {no results} one {# result} other {# results}}",
+    "listLabel": "Equipment list",
+    "mapLabel": "Equipment map",
+    "mapAttribution": "OpenStreetMap contributors",
+    "pinLabel": "{title}, {price} per day",
+    "seeDetails": "See details",
+    "emptyTitle": "No equipment found",
+    "emptyText": "Try another neighborhood, another word or change the equipment type.",
+    "clearFilters": "Clear search",
+    "showMap": "Show map",
+    "showList": "Show list",
+    "unavailable": "Unavailable",
+    "noReviews": "No reviews yet",
+    "distance": "{km} km",
+    "verified": "verified",
+    "pricePerDay": "{price}/day",
+    "reserve": "Book",
+    "loading": "Loading equipment"
+  },
+  "equipment": {
+    "backToSearch": "Back to search",
+    "unavailable": "Unavailable right now",
+    "reviewCount": "({count, plural, one {# review} other {# reviews}})",
+    "noReviews": "No reviews yet",
+    "hostedBy": "Host: {name}",
+    "verifiedHost": "Identity verified",
+    "hostSince": "Host since {year}",
+    "about": "About this equipment",
+    "whereTitle": "Where to pick up",
+    "whereNote": "The exact address appears after the booking is confirmed.",
+    "bookingLabel": "Booking",
+    "perDay": "per day",
+    "ownerNotice": "This is your listing. Visitors see the dates and the booking button here.",
+    "unavailableNotice": "This equipment is unavailable right now.",
+    "notifyMe": "Notify me when available",
+    "cancelNotify": "Cancel notification",
+    "notifyOn": "We will let you know when it is available again.",
+    "talkToHost": "Message the Host",
+    "chooseDates": "Choose your dates",
+    "pickup": "Pick-up",
+    "return": "Return",
+    "priceTimesDays": "{price} x {count, plural, one {# day} other {# days}}",
+    "total": "Total",
+    "sendRequest": "Send request",
+    "payAfterAccept": "You only pay after the Host accepts.",
+    "requestSentTitle": "Request sent",
+    "requestSentText": "The Host will reply soon. You will be notified when they accept.",
+    "seeMyReservations": "See my bookings",
+    "reserve": "Book",
+    "seeOptions": "See options",
+    "errors": {
+      "pickupRequired": "Choose a pick-up date.",
+      "returnRequired": "Choose a return date.",
+      "pickupInPast": "Pick-up cannot be before today.",
+      "returnBeforePickup": "Return must be at least 1 day after pick-up.",
+      "unavailable": "This equipment is not available for booking.",
+      "datesUnavailable": "Some day in this period isn't free. Choose other dates."
+    },
+    "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
+    "hostNoReviews": "No reviews as a Host yet",
+    "feeIncluded": "Includes the platform fee ({percent}%)",
+    "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider",
+    "hours": "Times set by the Host: pick-up at {pickup} and return by {return}.",
+    "dateRange": "{start} to {end}",
+    "takenDays": "Unavailable days: {days}"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "We could not load this page. Check your connection and try again.",
+    "retry": "Try again"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The address may be wrong, or this listing no longer exists.",
+    "goHome": "Back to home"
+  },
+  "rider": {
+    "status": {
+      "pending": "Waiting for the Host",
+      "accepted": "Accepted, payment due",
+      "confirmed": "Ready for pick-up",
+      "active": "In use",
+      "completed": "Completed",
+      "rejected": "Declined",
+      "cancelled": "Cancelled"
+    },
+    "dates": "{start} to {end}",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "hostLabel": "Host: {name}",
+    "actions": {
+      "pay": "Pay",
+      "confirmPickup": "Confirm pick-up",
+      "confirmReturn": "Confirm return",
+      "review": "Review",
+      "details": "See details",
+      "talkToHost": "Message the Host",
+      "cancel": "Cancel booking",
+      "cancelTitle": "Cancel this booking?",
+      "keep": "Keep booking",
+      "cancelConfirm": "Cancel booking",
+      "cancelled": "Booking cancelled.",
+      "cancelTextUnpaid": "Nothing has been charged yet, so there is no cost. The Host will be notified. This action cannot be undone.",
+      "cancelTextPaid": "You get {refund} back (the daily rate). The platform fee ({fee}) is not refunded. The Host will be notified. This action cannot be undone."
+    },
+    "list": {
+      "title": "My bookings",
+      "emptyTitle": "You have no bookings yet",
+      "emptyText": "Find an e-scooter or e-bike near you.",
+      "explore": "Explore",
+      "ongoing": "Ongoing",
+      "past": "Past",
+      "noOngoing": "No ongoing bookings.",
+      "noPast": "No past bookings."
+    },
+    "steps": {
+      "accepted": "Booking accepted by the Host",
+      "paid": "Payment confirmed",
+      "ready": "Ready for pick-up",
+      "inUse": "In use",
+      "returned": "Returned",
+      "acceptedHint": "Waiting for the Host to accept.",
+      "paidHint": "Pay to confirm the booking.",
+      "readyHint": "On pick-up day, scan the QR code and take a photo of the equipment.",
+      "inUseHint": "When returning, scan the QR code and take a photo of the equipment.",
+      "returnedHint": "Booking completed.",
+      "doneLabel": "completed step",
+      "currentLabel": "current step",
+      "nextLabel": "next step"
+    },
+    "track": {
+      "title": "Track booking",
+      "back": "Back to My bookings",
+      "pendingBanner": "Your request was sent. You will be notified when the Host accepts.",
+      "rejectedBanner": "The Host declined this request. You were not charged.",
+      "cancelledBanner": "This booking was cancelled.",
+      "stepsTitle": "Steps",
+      "whereTitle": "Pick-up and return point",
+      "addressAfterPayment": "The exact address appears after the payment is confirmed.",
+      "cancelTitle": "Cancellation",
+      "cancelFree": "You can cancel at no cost: nothing has been charged yet.",
+      "cancelUntil": "You can cancel until {deadline} (24 hours before pick-up). We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
+      "cancelDeadlinePassed": "The cancellation deadline ended on {deadline} (24 hours before pick-up).",
+      "times": "Pick-up: {pickup} · Return: {return}"
+    },
+    "payment": {
+      "title": "Payment",
+      "back": "Back to the booking",
+      "priceTimesDays": "{price} x {count, plural, one {# day} other {# days}}",
+      "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider",
+      "total": "Total",
+      "notAvailable": "Payment is only available after the Host accepts the booking.",
+      "methodTitle": "How would you like to pay?",
+      "pix": "PIX",
+      "pixHint": "Instant approval",
+      "card": "Credit card",
+      "cardHint": "Visa, Mastercard, Elo and others",
+      "cardSecure": "Card details are entered in Mercado Pago's secure form. Hi Scoot never sees or stores your card number.",
+      "pixInfo": "The PIX QR code and copy-and-paste code are generated by Mercado Pago after you tap Pay.",
+      "pay": "Pay {total}",
+      "splitInfo": "Payment processed by Mercado Pago. The Host's share is transferred automatically.",
+      "errors": {
+        "methodRequired": "Choose PIX or credit card.",
+        "notAllowed": "This booking is not awaiting payment."
+      },
+      "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded."
+    },
+    "confirmed": {
+      "title": "Booking confirmed!",
+      "subtitle": "{title} is waiting for you.",
+      "whereTitle": "Pick-up and return point",
+      "pickup": "Pick-up",
+      "return": "Return",
+      "qrHint": "On pick-up day, open this booking and scan the QR code on the label attached to the equipment.",
+      "track": "Track booking",
+      "talkToHost": "Message the Host"
+    },
+    "qr": {
+      "label": "QR code",
+      "videoLabel": "Camera view to scan the QR code",
+      "stopCamera": "Close camera",
+      "scanned": "QR code scanned",
+      "openCamera": "Scan QR code with the camera",
+      "cameraDenied": "We could not use the camera. Allow camera access in your browser settings or type the code below.",
+      "cameraUnavailable": "This device has no camera available. Type the code below.",
+      "typeCode": "Or type the code written below the QR code on the label",
+      "codePlaceholder": "E.g. HS-4821"
+    },
+    "handoff": {
+      "back": "Back to the booking",
+      "step1": "1. Scan the QR code",
+      "step2": "2. Take a photo of the equipment",
+      "photoLabel": "Photo of the equipment",
+      "photoChoose": "Take photo",
+      "photoLimits": "JPG, PNG, WEBP or HEIC, up to {max} MB",
+      "photoChange": "Change the photo",
+      "photoRemove": "Remove the photo",
+      "errors": {
+        "codeRequired": "Scan the QR code or type the code.",
+        "codeInvalid": "This code does not belong to this booking's equipment. Check the label.",
+        "photoRequired": "Take a photo of the equipment.",
+        "photoType": "Format not accepted. Upload JPG, PNG, WEBP or HEIC.",
+        "photoTooLarge": "Photo too large. The limit is {max} MB.",
+        "wrongStatus": "This step is not available for this booking."
+      },
+      "pickup": {
+        "title": "Pick-up",
+        "notAvailable": "Pick-up is only available after the payment is confirmed.",
+        "qrHelp": "Scan the QR code on the label attached to the equipment.",
+        "photoHelp": "Show the whole equipment to record its condition at pick-up.",
+        "submit": "Confirm pick-up",
+        "doneTitle": "Pick-up confirmed",
+        "doneText": "Have a great ride! When returning, scan the QR code again and take another photo.",
+        "next": "Track booking"
+      },
+      "return": {
+        "title": "Return",
+        "notAvailable": "Return is only available while the equipment is in use.",
+        "qrHelp": "Scan the QR code on the label attached to the equipment again.",
+        "photoHelp": "Show the whole equipment to record its condition at return.",
+        "submit": "Confirm return",
+        "doneTitle": "Return confirmed",
+        "doneText": "Thank you for riding with Hi Scoot. Tell us how it went.",
+        "next": "Review"
+      }
+    },
+    "review": {
+      "title": "Review",
+      "back": "Back to the booking",
+      "heading": "How was it with {name}?",
+      "alreadyReviewed": "You already reviewed this booking. Thank you!",
+      "notAvailable": "Reviews are available after the return.",
+      "equipmentLegend": "Equipment rating",
+      "hostLegend": "Host rating ({name})",
+      "commentLabel": "Comment (optional)",
+      "commentPlaceholder": "Tell us how the rental went",
+      "commentCount": "{count} of {max} characters",
+      "submit": "Send review",
+      "doneTitle": "Review sent",
+      "doneText": "Thank you! Your review helps other people choose.",
+      "exploreMore": "Explore more equipment",
+      "starsLabel": "{count, plural, one {# star} other {# stars}}",
+      "chooseStars": "Tap the stars to rate.",
+      "scale": {
+        "1": "Very bad",
+        "2": "Bad",
+        "3": "Okay",
+        "4": "Good",
+        "5": "Excellent"
+      },
+      "errors": {
+        "ratingRequired": "Choose a rating from 1 to 5 stars."
+      }
+    }
+  },
+  "host": {
+    "tabs": {
+      "label": "Host area",
+      "listings": "My listings",
+      "reservations": "Received bookings"
+    },
+    "new": {
+      "title": "New listing",
+      "back": "Back to My listings",
+      "subtitle": "Fill in your equipment details. The Hi Scoot team checks it before publishing.",
+      "becomeTitle": "Become a Host",
+      "becomeText": "List your e-scooter or e-bike and earn with every day it is rented.",
+      "becomeStep1": "1. Add your equipment with photos, daily price and times.",
+      "becomeStep2": "2. The Hi Scoot team checks and publishes your listing.",
+      "becomeStep3": "3. You accept requests and get paid through Mercado Pago.",
+      "becomeButton": "Become a Host"
+    },
+    "edit": {
+      "title": "Edit listing",
+      "back": "Back to My listings",
+      "rejectedTitle": "Reason for rejection",
+      "ruleTitle": "You can edit once every {days} days",
+      "ruleText": "Your edit goes to the Hi Scoot team for review. Until it is approved, the current listing stays live, unchanged. Existing bookings keep the agreed price.",
+      "blockedTooSoon": "This listing was last sent less than {days} days ago. The next edit opens on {date}.",
+      "blockedInReview": "This listing is being reviewed by the Hi Scoot team. You can edit it after the answer.",
+      "blockedEditInReview": "An edit is already under review. The current listing stays live until the answer."
+    },
+    "form": {
+      "sectionEquipment": "Equipment",
+      "typeLabel": "Type",
+      "types": {
+        "scooter": "E-scooter",
+        "ebike": "E-bike"
+      },
+      "titleLabel": "Listing title",
+      "titlePlaceholder": "E.g.: 10-inch scooter",
+      "titleHint": "Short and clear. It shows in search.",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Range, accessories (helmet, charger), condition…",
+      "descriptionHint": "Write in the language you prefer. The text shows exactly as you write it.",
+      "photosLabel": "Photos",
+      "photosHelp": "Upload {min} to {max} photos (JPG, PNG, WEBP or HEIC, up to {size} MB each). Show the whole equipment, front, side and dashboard. The first photo is the cover.",
+      "photosKeepNote": "If you don't upload new photos, the current photos stay.",
+      "photoAlt": "Photo {number}",
+      "cover": "Cover",
+      "photoRemove": "Remove photo {number}",
+      "photosAdd": "Add",
+      "photosChoose": "Choose photos",
+      "photosCount": "{count} of {max} photos",
+      "sectionPrice": "Daily price",
+      "priceLabel": "How much you want to get per day (R$)",
+      "priceSuggestion": "Hi Scoot suggestion: {min} to {max} per day. You decide.",
+      "riderSees": "Riders see <strong>{price} per day</strong>.",
+      "riderSeesFee": "Includes the {percent}% platform fee ({fee}), charged to the Rider.",
+      "youReceive": "You get {price} per day.",
+      "pricePreviewEmpty": "Enter a value to see what the Rider pays (your value + {percent}% platform fee).",
+      "sectionWhere": "Where and when",
+      "cityLabel": "City",
+      "areaLabel": "Neighborhood",
+      "areaPlaceholder": "E.g.: Pinheiros",
+      "areaHint": "Shown on the listing before booking.",
+      "addressLabel": "Pick-up address",
+      "addressPlaceholder": "Street, number and unit",
+      "addressHint": "Only shown to the Rider after the booking is paid.",
+      "locationLabel": "Map location",
+      "locationHelp": "Use it where the equipment is kept. The map shows only the area, never the exact spot.",
+      "locationUse": "Use my location",
+      "locationUpdate": "Update location",
+      "locationDenied": "We couldn't get your location. Allow location access in your browser and try again.",
+      "locationSaved": "Location saved.",
+      "pickupTimeLabel": "Pick-up time",
+      "returnTimeLabel": "Return time",
+      "timesHint": "Brasília time. Applies to every booking of this equipment.",
+      "submitNew": "Send for review",
+      "submitEdit": "Send edit for review",
+      "reviewNoteNew": "The Hi Scoot team checks the listing before publishing.",
+      "reviewNoteEdit": "The current listing stays live until the edit is approved.",
+      "errors": {
+        "required": "Fill in this field.",
+        "typeRequired": "Choose the equipment type.",
+        "tooLong": "Use at most {max} characters.",
+        "priceInvalid": "Enter a valid value, from R$ 1 to R$ {price}. E.g.: 35 or 35,50.",
+        "locationRequired": "Tap \"Use my location\" to place the equipment on the map.",
+        "photosTooFew": "Upload at least {min} photos.",
+        "photosTooMany": "Upload at most {max} photos.",
+        "photoType": "One photo has an unsupported format. Upload JPG, PNG, WEBP or HEIC.",
+        "photoTooLarge": "One photo is over {size} MB.",
+        "timeInvalid": "Choose a valid time.",
+        "notAllowed": "We couldn't send it now. Go back to My listings and try again.",
+        "summary": "Check the highlighted fields."
+      }
+    },
+    "label": {
+      "open": "QR label",
+      "close": "Close",
+      "title": "Equipment QR label",
+      "text": "Print it and stick it on the equipment. The Rider scans this QR at pick-up and return.",
+      "qrAlt": "Equipment QR code, code {code}",
+      "labelHint": "Pick-up and return: scan the QR on the Hi Scoot website.",
+      "tip1": "Stick it on a flat, visible spot, away from mud.",
+      "tip2": "If you can, cover it with clear tape so it lasts longer.",
+      "tip3": "Don't share the code by message: it belongs on the label only.",
+      "print": "Print label"
+    },
+    "listings": {
+      "title": "My listings",
+      "subtitle": "Your equipment, the team review and the QR label.",
+      "new": "New listing",
+      "emptyTitle": "You have no listings yet",
+      "emptyText": "List your e-scooter or e-bike and start getting requests.",
+      "review": {
+        "pending": "Under review",
+        "approved": "Published",
+        "rejected": "Rejected",
+        "editPending": "Edit under review"
+      },
+      "hours": "Pick-up {pickup} · Return {return}",
+      "price": "You get <strong>{host}</strong> per day · Riders see {rider}",
+      "rejectedReason": "Reason for rejection",
+      "pendingText": "The Hi Scoot team is checking this listing. You'll get a notice with the answer.",
+      "edit": "Edit",
+      "fixAndResend": "Fix and resend",
+      "view": "View listing",
+      "editAllowed": "You can edit once every {days} days.",
+      "editNextDate": "Next edit opens on {date}.",
+      "editInReview": "Edit under review. The current listing stays live until the answer.",
+      "inReviewNote": "You can edit after the review.",
+      "sent": {
+        "newTitle": "Listing sent for review",
+        "newText": "The Hi Scoot team checks it and you'll get a notice with the answer.",
+        "editTitle": "Edit sent for review",
+        "editText": "The current listing stays live until the edit is approved.",
+        "resentTitle": "Listing resent for review",
+        "resentText": "The Hi Scoot team checks your fixes and you'll get a notice with the answer."
+      },
+      "availabilityError": "We couldn't change it now. Try again.",
+      "markedUnavailable": "Listing marked as unavailable.",
+      "markedAvailable": "Listing marked as available.",
+      "isAvailable": "Available for bookings.",
+      "isUnavailable": "Unavailable: gets no new requests.",
+      "markUnavailable": "Mark unavailable",
+      "markAvailable": "Mark available"
+    },
+    "handoff": {
+      "close": "Close",
+      "pickup": {
+        "open": "Confirm pick-up",
+        "title": "Confirm pick-up",
+        "text": "Take a photo of the equipment when handing it to {name}.",
+        "submit": "Confirm pick-up"
+      },
+      "return": {
+        "open": "Confirm return",
+        "title": "Confirm return",
+        "text": "Take a photo of the equipment when {name} returns it. It protects you and the Rider.",
+        "submit": "Confirm return"
+      },
+      "photoLabel": "Equipment photo",
+      "photoChoose": "Take or choose a photo",
+      "photoLimits": "JPG, PNG, WEBP or HEIC, up to {max} MB",
+      "photoChange": "Change photo",
+      "photoRemove": "Remove photo",
+      "errors": {
+        "codeRequired": "Scan the QR code or type the code.",
+        "codeInvalid": "This code isn't from this equipment.",
+        "photoRequired": "Take a photo of the equipment.",
+        "photoType": "Format not accepted. Upload JPG, PNG, WEBP or HEIC.",
+        "photoTooLarge": "Photo too large. The limit is {max} MB.",
+        "wrongStatus": "This step isn't available for this booking."
+      }
+    },
+    "review": {
+      "open": "Rate Rider",
+      "close": "Close",
+      "title": "How was it with {name}?",
+      "text": "Your rating helps other Hosts.",
+      "ratingLegend": "Rider rating",
+      "ratingRequired": "Choose a rating from 1 to 5 stars.",
+      "commentLabel": "Comment (optional)",
+      "commentPlaceholder": "Tell how the rental went",
+      "commentCount": "{count} of {max} characters",
+      "submit": "Send rating"
+    },
+    "actions": {
+      "done": {
+        "accepted": "Request accepted. We told {name} to pay.",
+        "rejected": "Request declined. We told {name}.",
+        "cancelled": "Booking cancelled. We told {name}.",
+        "pickup": "Pick-up confirmed.",
+        "return": "Return confirmed. Your payment is released.",
+        "reviewed": "Rating sent. Thank you!"
+      },
+      "accept": "Accept",
+      "reject": "Decline",
+      "rejectTitle": "Decline this request?",
+      "rejectText": "{name} gets a notice that the request was declined. This can't be undone.",
+      "rejectConfirm": "Decline request",
+      "waitingPayment": "Waiting for the Rider's payment.",
+      "cancel": "Cancel booking",
+      "cancelTitle": "Cancel this booking?",
+      "cancelTextPaid": "The Rider gets a full refund ({refund}). The platform fee ({fee}) is charged to you. This can't be undone.",
+      "cancelTextUnpaid": "The Rider hasn't paid yet, so nothing is charged. This can't be undone.",
+      "keep": "Go back",
+      "cancelConfirm": "Cancel booking",
+      "error": "We couldn't do that now. Refresh the page and try again.",
+      "datesTaken": "Some day in this request is already booked or blocked. Decline the request or unblock the day."
+    },
+    "calendar": {
+      "previous": "Previous month",
+      "next": "Next month",
+      "equipment": "Equipment",
+      "allEquipment": "All",
+      "apply": "Show",
+      "legend": "Legend",
+      "kinds": {
+        "request": "New request",
+        "booked": "Booked",
+        "inUse": "In use",
+        "done": "Completed",
+        "blocked": "Blocked by you"
+      },
+      "block": "Block this day",
+      "unblock": "Unblock this day",
+      "blockedDone": "Day blocked. Nobody can book this day.",
+      "unblockedDone": "Day unblocked. It accepts bookings again.",
+      "blockBooked": "This day is already booked and stays blocked by the booking.",
+      "blockError": "We couldn't change it now. Try again.",
+      "blockedInfo": "Day blocked by you: nobody can book it.",
+      "chooseToBlock": "To block a day, choose the equipment above.",
+      "bookedInfo": "Booked day: it's already blocked for other bookings.",
+      "count": "{count, plural, =0 {free} one {# booking} other {# bookings}}",
+      "free": "No bookings on this day.",
+      "tapDay": "Tap a day to see its bookings."
+    },
+    "reservations": {
+      "title": "Received bookings",
+      "subtitle": "Rider requests for your equipment.",
+      "viewLabel": "View mode",
+      "viewList": "List",
+      "viewCalendar": "Calendar",
+      "status": {
+        "pending": "New request",
+        "accepted": "Accepted, payment due",
+        "confirmed": "Paid, ready for pick-up",
+        "active": "In use",
+        "completed": "Completed",
+        "rejected": "Declined",
+        "cancelled": "Cancelled"
+      },
+      "rider": "Rider: <link>{name}</link>",
+      "when": "{start} to {end}",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "youReceive": "You get {value}",
+      "cancelUntil": "You can cancel until {deadline} (24 hours before pick-up). If you cancel, the Rider gets a full refund and the platform fee is charged to you.",
+      "cancelDeadlinePassed": "The cancellation deadline ended on {deadline} (24 hours before pick-up).",
+      "requests": "New requests",
+      "ongoing": "In progress",
+      "past": "Past",
+      "noRequests": "No new requests.",
+      "noOngoing": "No bookings in progress.",
+      "noPast": "No past bookings.",
+      "emptyTitle": "You haven't received bookings yet",
+      "emptyText": "When a Rider requests your equipment, it shows up here."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "hello": "Hi, {name}!",
+    "subtitle": "See what needs you right now.",
+    "nextTitle": "Next steps",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "allDoneTitle": "All caught up",
+    "allDoneText": "Nothing needs you right now.",
+    "shortcutsTitle": "Shortcuts",
+    "shortcuts": {
+      "explore": "Explore",
+      "reservations": "My bookings",
+      "myListings": "My listings",
+      "becomeHost": "List equipment",
+      "conversations": "Messages"
+    },
+    "cards": {
+      "identityTitle": "Send your ID",
+      "identityText": "You can rent and list only after verification.",
+      "requestsTitle": "{count, plural, one {You have # new request} other {You have # new requests}}",
+      "requestsText": "Accept or decline in Received bookings.",
+      "payTitle": "Pay for your booking",
+      "payText": "The Host accepted: {title}.",
+      "pickupTitle": "Pick-up {day} at {time}",
+      "pickupText": "{title}. Scan the label QR at pick-up.",
+      "handoverTitle": "Hand-over {day} at {time}",
+      "handoverText": "Confirm the hand-over to {name} with a photo: {title}",
+      "reviewTitle": "Rate your rental",
+      "reviewText": "How was {title}?",
+      "messagesTitle": "{count, plural, one {# new message} other {# new messages}}",
+      "messagesText": "Reply in Messages."
+    }
+  },
+  "conversations": {
+    "title": "Messages",
+    "chatTitle": "Chat with {name}",
+    "back": "Back to Messages",
+    "emptyTitle": "No messages yet",
+    "emptyText": "Talk to a Host from the equipment listing.",
+    "explore": "Explore equipment",
+    "about": "About {title}",
+    "aboutYour": "Your listing: {title}",
+    "you": "You",
+    "noMessages": "No messages yet",
+    "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+    "verified": "Verified identity",
+    "contactTitle": "Contact unlocked (booking accepted)",
+    "contactHidden": "For your safety, phone and email stay hidden until the booking is accepted. Arrange everything here.",
+    "messagesWith": "Messages with {name}",
+    "startConversation": "Send the first message to {name}.",
+    "hiddenNote": "contact hidden",
+    "redactedNotice": "We hid the phone or email in your message. It shows after the booking is accepted.",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write a message",
+    "send": "Send",
+    "errors": {
+      "empty": "Write a message.",
+      "tooLong": "Use at most {max} characters.",
+      "notAllowed": "We couldn't send it now. Try again."
+    }
+  },
+  "profile": {
+    "saved": "Profile saved.",
+    "memberSince": "On Hi Scoot since {year}",
+    "verified": "Verified identity",
+    "notVerified": "Identity not verified",
+    "host": "Host",
+    "edit": "Edit profile",
+    "ratingsTitle": "Ratings",
+    "asHost": "As a Host",
+    "asRider": "As a Rider",
+    "reviewsCount": "{count, plural, one {# rating} other {# ratings}}",
+    "noRatingYet": "No ratings yet",
+    "reviewAsHost": "rated as Host",
+    "reviewAsRider": "rated as Rider",
+    "starsOf5": "{count} out of 5 stars",
+    "noReviews": "No comments yet.",
+    "listingsTitle": "Listings",
+    "noListings": "No published listings."
+  },
+  "profileEdit": {
+    "title": "Edit profile",
+    "back": "Back to profile",
+    "subtitle": "Your phone and email never show on your public profile.",
+    "nameLabel": "Full name",
+    "nameLocked": "Your name was checked against your ID. To change it, <link>send a new ID</link>.",
+    "phoneLabel": "Phone",
+    "phoneHint": "With area code. Only shown to the other person after the booking is accepted.",
+    "cityLabel": "City",
+    "save": "Save",
+    "errors": {
+      "phoneRequired": "Enter your phone.",
+      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678.",
+      "cityRequired": "Enter your city.",
+      "cityTooLong": "Use at most {max} characters."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "languageTitle": "Language",
+    "languageHelp": "The whole site switches to the chosen language.",
+    "accountTitle": "Account",
+    "viewProfile": "View my public profile",
+    "editProfile": "Edit profile",
+    "admin": "Admin panel",
+    "signOut": "Sign out",
+    "identity": {
+      "label": "Identity verification",
+      "approved": "Verified",
+      "pending": "Under review",
+      "rejected": "Rejected",
+      "blocked": "Blocked"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "filterLabel": "Filter notifications",
+    "filterAll": "All",
+    "filterAction": "Need me",
+    "emptyTitle": "No notifications",
+    "emptyActionTitle": "Nothing needs you right now",
+    "emptyText": "Notices about bookings, messages and reviews show up here.",
+    "unreadLabel": "Unread",
+    "needsAction": "needs you",
+    "kinds": {
+      "bookingRequest": "{name} requested a booking: {title}",
+      "bookingAccepted": "{name} accepted your request: {title}. Payment due.",
+      "bookingRejected": "Request declined: {title}",
+      "paymentConfirmed": "Payment confirmed: {title}",
+      "pickupReminder": "Reminder: pick-up tomorrow · {title}",
+      "returnConfirmed": "Return confirmed: {title}. Rate your rental.",
+      "reviewReceived": "{name} rated you",
+      "listingApproved": "Listing approved: {title}",
+      "listingRejected": "Listing rejected: {title}. See why.",
+      "documentApproved": "Your identity was verified",
+      "documentRejected": "Your ID was rejected. See why.",
+      "newMessage": "New message from {name}"
+    }
+  },
+  "admin": {
+    "title": "Admin panel",
+    "subtitle": "Listing and sign-up review. Only the Hi Scoot team has access.",
+    "queuesLabel": "Review queues",
+    "tabs": {
+      "listings": "New listings",
+      "edits": "Edits",
+      "identity": "Sign-ups"
+    },
+    "oldestFirst": "The oldest request shows first.",
+    "emptyTitle": "Nothing to review in this queue.",
+    "sent": "Sent {when}",
+    "photos": "{count, plural, one {# photo} other {# photos}}",
+    "hostLabel": "Host:",
+    "verified": "verified identity",
+    "notVerified": "identity not verified",
+    "price": "Host gets {host} per day · Riders see {rider}",
+    "changesTitle": "What changed",
+    "changeField": "Field",
+    "changeBefore": "Before",
+    "changeAfter": "After",
+    "fields": {
+      "daily_price": "Daily price",
+      "description": "Description",
+      "photos": "Photos",
+      "area": "Neighborhood",
+      "times": "Times"
+    },
+    "editStaysLive": "The current listing stays live until the decision.",
+    "identity": {
+      "document": "ID (front and back)",
+      "letter": "Letter with social name and CPF",
+      "rejections": "{count, plural, one {# previous rejection} other {# previous rejections}}",
+      "documentHelp": "Check that the name on the ID matches the sign-up name.",
+      "letterHelp": "Check that the letter is handwritten and has the social name and CPF.",
+      "lastChance": "This would be the 2nd rejection: if you reject, the account is blocked from renting and listing."
+    },
+    "decision": {
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "E.g.: The photos don't show the whole equipment.",
+      "reasonHint": "Required to reject. The person receives this text.",
+      "reject": "Reject",
+      "approve": "Approve",
+      "rejectTitle": "Reject?",
+      "rejectText": "The person gets a notice with the reason and can fix it.",
+      "rejectConfirm": "Reject",
+      "blockTitle": "Reject and block the account?",
+      "blockText": "It's the 2nd rejection: the account is blocked from renting and listing. This can't be undone here.",
+      "blockConfirm": "Reject and block",
+      "cancel": "Go back",
+      "done": {
+        "approved": "Approved. The person gets a notice.",
+        "rejected": "Rejected. The person gets the reason.",
+        "blocked": "Rejected and account blocked. The person gets the reason."
+      },
+      "errors": {
+        "reasonRequired": "Write the reason to reject.",
+        "reasonTooShort": "Explain more: at least {min} characters.",
+        "reasonTooLong": "Use at most {max} characters.",
+        "notAllowed": "You don't have permission to do this."
+      }
+    },
+    "document": {
+      "openDocument": "View submitted ID",
+      "openLetter": "View submitted letter",
+      "close": "Close",
+      "title": "Files from {name}",
+      "privacy": "Sensitive personal data (LGPD): only the verification team sees it. Don't download or share.",
+      "front": "Front",
+      "back": "Back",
+      "letter": "Letter",
+      "example": "Example preview",
+      "checkDocument": "Compare the name on the ID with the sign-up name.",
+      "checkLetter": "The letter must be handwritten, with social name and CPF."
+    }
+  }
+}

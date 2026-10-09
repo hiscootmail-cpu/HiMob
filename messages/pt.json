@@ -1,0 +1,1076 @@
+{
+  "meta": {
+    "title": "Hi Scoot | A cidade se move. Vem no Flow.",
+    "description": "Alugue patinetes e bikes elétricas de pessoas da sua cidade, ou anuncie o seu e ganhe uma renda extra."
+  },
+  "brand": {
+    "name": "Hi Scoot",
+    "logoAlt": "Logo da Hi Scoot: o Scoot, um cachorrinho de óculos escuros andando de patinete elétrico"
+  },
+  "language": {
+    "label": "Idioma",
+    "pt": "Português",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Hi Scoot, página inicial",
+    "mainMenu": "Menu principal",
+    "explore": "Explorar",
+    "reservations": "Minhas reservas",
+    "host": "Anunciar",
+    "conversations": "Conversas",
+    "profile": "Perfil",
+    "exploreShort": "Explorar",
+    "reservationsShort": "Reservas",
+    "hostShort": "Anunciar",
+    "conversationsShort": "Conversas",
+    "profileShort": "Perfil",
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "notifications": "Notificações",
+    "notificationsUnread": "Notificações, {count, plural, one {# não lida} other {# não lidas}}"
+  },
+  "footer": {
+    "slogan": "A cidade se move. Vem no Flow.",
+    "rights": "© {year} Hi Scoot. Todos os direitos reservados."
+  },
+  "designSystem": {
+    "badge": "Página de conferência",
+    "title": "Peças do site Hi Scoot",
+    "intro": "Aqui ficam todas as peças que se repetem nas telas, com todas as variações. Confira cada uma e troque o idioma no topo para ver o texto em inglês.",
+    "colors": {
+      "title": "Cores",
+      "description": "Lista única de cores que todas as telas seguem. Trocar uma cor aqui troca no site inteiro.",
+      "official": "Oficial",
+      "proposal": "Proposta",
+      "names": {
+        "hs-green": "Verde Hi Scoot",
+        "hs-blue": "Azul Hi Scoot",
+        "hs-black": "Preto Scoot",
+        "hs-white": "Branco Flow",
+        "hs-pink": "Rosa Flow",
+        "hs-purple": "Roxo Flow",
+        "danger": "Vermelho (só botões de ação irreversível)",
+        "surface": "Cinza de fundo",
+        "line": "Cinza de borda",
+        "muted": "Cinza de texto secundário",
+        "error": "Rosa-escuro (avisos de erro)"
+      }
+    },
+    "type": {
+      "title": "Fonte",
+      "description": "Inter em todo o site, em quatro tamanhos principais.",
+      "sampleHeading": "A cidade se move.",
+      "sampleSubheading": "Vem no Flow.",
+      "sampleBody": "Alugue um patinete perto de você e pague por diária.",
+      "sampleSmall": "Texto de apoio, para informações secundárias."
+    },
+    "icons": {
+      "title": "Ícones oficiais",
+      "description": "Os 19 ícones da Hi Scoot. Quando faltar um, usamos um da biblioteca Lucide."
+    },
+    "buttons": {
+      "title": "Botões",
+      "description": "Seis tipos de botão. Passe o mouse e clique para ver os estados de passar por cima e pressionado.",
+      "normal": "Normal",
+      "disabled": "Desabilitado",
+      "loading": "Carregando",
+      "sizes": "Tamanhos",
+      "iconOnly": "Botão só com ícone",
+      "withIcon": "Com ícone",
+      "variants": {
+        "primary": "Principal (verde)",
+        "secondary": "Secundário (azul)",
+        "outline": "Contorno",
+        "ghost": "Discreto",
+        "destructive": "Irreversível (vermelho)",
+        "link": "Link"
+      },
+      "size": {
+        "sm": "Pequeno",
+        "default": "Médio",
+        "lg": "Grande"
+      }
+    },
+    "fields": {
+      "title": "Campos de texto",
+      "description": "Campo normal, com dica, com erro e desabilitado.",
+      "nameLabel": "Nome completo",
+      "namePlaceholder": "Seu nome completo",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "emailHint": "Vamos enviar a confirmação para este e-mail.",
+      "priceLabel": "Preço por dia (R$)",
+      "priceError": "Informe um valor maior que zero.",
+      "disabledLabel": "Cidade",
+      "disabledValue": "São Paulo"
+    },
+    "cards": {
+      "title": "Cartões",
+      "description": "Todo bloco de conteúdo tem quatro estados: carregado, carregando, vazio e com erro.",
+      "loaded": "Carregado",
+      "loading": "Carregando",
+      "empty": "Vazio",
+      "error": "Com erro",
+      "exampleTitle": "Patinete Aro 10, Jardins (exemplo)",
+      "exampleMeta": "4,9 · 350 m de você",
+      "examplePrice": "{price}/dia",
+      "emptyTitle": "Nenhum equipamento por aqui",
+      "emptyText": "Tente buscar em outro bairro ou mude os filtros.",
+      "errorTitle": "Não foi possível carregar",
+      "errorText": "Verifique sua conexão e tente de novo.",
+      "retry": "Tentar de novo"
+    },
+    "badges": {
+      "title": "Etiquetas de status",
+      "description": "Mostram a situação de um anúncio ou de uma reserva.",
+      "approved": "Aprovado",
+      "accepted": "Aceita",
+      "inReview": "Em análise",
+      "new": "Novo",
+      "completed": "Concluída",
+      "rejected": "Recusado"
+    },
+    "toast": {
+      "title": "Aviso rápido",
+      "description": "Aparece no topo da tela por alguns segundos e some sozinho.",
+      "showSuccess": "Mostrar aviso de sucesso",
+      "showError": "Mostrar aviso de erro",
+      "successTitle": "Reserva enviada",
+      "successText": "O Host vai responder em breve.",
+      "errorTitle": "Algo deu errado",
+      "errorText": "Tente de novo em alguns instantes."
+    },
+    "dialog": {
+      "title": "Janela de confirmação",
+      "description": "Pede confirmação antes de uma ação importante. O botão vermelho só aparece quando a ação não pode ser desfeita.",
+      "openNormal": "Abrir confirmação comum",
+      "openIrreversible": "Abrir confirmação irreversível",
+      "normalTitle": "Aceitar esta reserva?",
+      "normalText": "O Rider será avisado e poderá fazer o pagamento.",
+      "irreversibleTitle": "Excluir este anúncio?",
+      "irreversibleText": "Esta ação não pode ser desfeita.",
+      "irreversibleConfirm": "Excluir anúncio",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "header": {
+      "title": "Menu principal com seletor de idioma",
+      "description": "Fica sempre no topo. O seletor PT/EN nasce junto com o menu. No celular, os links do menu vão para a barra inferior.",
+      "visitor": "Visitante (não conectado)",
+      "member": "Conectado"
+    },
+    "bottomNav": {
+      "title": "Barra inferior (celular)",
+      "description": "Aparece só no celular, para quem está conectado, presa na parte de baixo da tela."
+    },
+    "footer": {
+      "title": "Rodapé",
+      "description": "Os links de Termos de Uso e Política de Privacidade entram quando esses textos estiverem prontos."
+    },
+    "logo": {
+      "title": "Logo",
+      "description": "A logo completa vai em espaços maiores, como o rodapé. No menu do topo, o cachorrinho fica pequeno ao lado do nome escrito, para continuar legível.",
+      "full": "Logo completa",
+      "header": "Versão do menu do topo"
+    }
+  },
+  "auth": {
+    "fields": {
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "password": "Senha",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Esconder senha",
+      "capsLock": "O Caps Lock está ligado.",
+      "passwordRule": "Use pelo menos {min} caracteres.",
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "Seu nome completo"
+    },
+    "errors": {
+      "emailRequired": "Informe seu e-mail.",
+      "emailInvalid": "Confira o e-mail. Ele precisa ter o formato nome@exemplo.com.",
+      "passwordRequired": "Informe sua senha.",
+      "passwordTooShort": "A senha precisa ter pelo menos {min} caracteres.",
+      "invalidCredentials": "E-mail ou senha incorretos. Confira e tente de novo.",
+      "nameRequired": "Informe seu nome completo.",
+      "nameTooShort": "O nome precisa ter pelo menos {min} letras.",
+      "documentRequired": "Envie a foto ou o PDF deste lado do documento.",
+      "documentType": "Formato não aceito. Envie JPG, PNG ou PDF.",
+      "documentTooLarge": "Arquivo grande demais. O limite é {max} MB.",
+      "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade."
+    },
+    "login": {
+      "title": "Entrar",
+      "description": "Que bom te ver de novo. Entre para alugar ou anunciar.",
+      "forgotPassword": "Esqueci minha senha",
+      "submit": "Entrar",
+      "noAccount": "Ainda não tem conta?",
+      "signUpLink": "Criar conta"
+    },
+    "signUp": {
+      "title": "Criar conta",
+      "description": "Uma conta só para alugar e anunciar patinetes e bikes elétricas.",
+      "emailHint": "Vamos enviar um link de confirmação para este e-mail.",
+      "submit": "Criar conta",
+      "haveAccount": "Já tem conta?",
+      "loginLink": "Entrar",
+      "terms": "Li e aceito os <terms>Termos de Uso</terms> e a <privacy>Política de Privacidade</privacy>."
+    },
+    "signUpSuccess": {
+      "title": "Conta criada. Confirme seu e-mail",
+      "description": "Enviamos um link para o seu e-mail. Abra a mensagem e toque no link para ativar sua conta.",
+      "spamHint": "Não chegou em alguns minutos? Veja a caixa de spam ou lixo eletrônico.",
+      "goToLogin": "Ir para Entrar",
+      "goHome": "Voltar ao início"
+    },
+    "error": {
+      "title": "Algo deu errado",
+      "description": "Não foi possível concluir esta ação. O link pode ter expirado ou já ter sido usado. Volte ao início e tente de novo.",
+      "goToLogin": "Ir para Entrar",
+      "goHome": "Voltar ao início"
+    },
+    "forgotPassword": {
+      "title": "Esqueci minha senha",
+      "description": "Informe o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.",
+      "submit": "Enviar link",
+      "backToLogin": "Voltar para Entrar",
+      "sentTitle": "Confira seu e-mail",
+      "sentDescription": "Se existir uma conta com o e-mail {email}, você vai receber um link para criar uma senha nova.",
+      "sentHint": "O link vale por pouco tempo. Não chegou? Veja a caixa de spam."
+    },
+    "updatePassword": {
+      "title": "Criar senha nova",
+      "description": "Escolha uma senha nova para a sua conta.",
+      "newPassword": "Senha nova",
+      "submit": "Salvar senha nova"
+    },
+    "document": {
+      "label": "Documento com foto (RG ou CNH)",
+      "purpose": "Envie a frente e o verso. Vamos conferir se o nome no documento é o mesmo informado no cadastro.",
+      "limits": "JPG, PNG ou PDF, até {max} MB",
+      "front": {
+        "label": "Frente",
+        "choose": "Foto da frente",
+        "change": "Trocar a frente",
+        "remove": "Remover a frente"
+      },
+      "back": {
+        "label": "Verso",
+        "choose": "Foto do verso",
+        "change": "Trocar o verso",
+        "remove": "Remover o verso"
+      },
+      "tipsTitle": "Para a foto ser aprovada:",
+      "tip1": "Mostre o documento inteiro, com as quatro bordas aparecendo.",
+      "tip2": "Evite reflexo e sombra. Não use flash.",
+      "tip3": "Não cubra nenhuma parte com os dedos.",
+      "socialName": {
+        "title": "Pessoa trans com documento ainda não retificado?",
+        "text": "Envie seu documento normalmente. Se o nome não bater, você pode enviar a foto de uma carta escrita à mão com seu nome social e CPF, e a equipe revisa com sigilo."
+      }
+    }
+  },
+  "legal": {
+    "close": "Fechar",
+    "pendingNotice": "Texto em preparação.",
+    "terms": {
+      "title": "Termos de Uso",
+      "placeholder": "O texto oficial dos Termos de Uso da Hi Scoot será publicado aqui antes do lançamento."
+    },
+    "privacy": {
+      "title": "Política de Privacidade",
+      "placeholder": "O texto oficial da Política de Privacidade da Hi Scoot, de acordo com a LGPD, será publicado aqui antes do lançamento."
+    }
+  },
+  "verifyIdentity": {
+    "title": "Verificação de identidade",
+    "goHome": "Voltar ao início",
+    "rejected": {
+      "title": "Envie o documento de novo",
+      "description": "O nome no documento não bateu com o nome do seu cadastro. Envie de novo a frente e o verso.",
+      "reasonLabel": "Motivo informado pela equipe",
+      "exampleReason": "(Exemplo) O nome no documento está diferente do nome informado no cadastro.",
+      "lastAttempt": "Atenção: esta é a última tentativa. Se o nome não bater de novo, o cadastro será bloqueado.",
+      "submit": "Reenviar documento"
+    },
+    "pending": {
+      "title": "Documento em análise",
+      "description": "Recebemos a frente e o verso do seu documento. A equipe vai conferir o nome e avisar você assim que terminar."
+    },
+    "blocked": {
+      "title": "Cadastro bloqueado",
+      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Por segurança, este cadastro foi bloqueado.",
+      "canBrowse": "Você ainda pode navegar pelo site, mas não pode alugar nem anunciar."
+    },
+    "approved": {
+      "title": "Identidade verificada",
+      "description": "O nome do seu documento confere com o cadastro. Tudo certo para alugar e anunciar."
+    },
+    "letter": {
+      "title": "Você é uma pessoa trans e seu documento ainda não tem seu nome social?",
+      "description": "Você pode pedir a revisão do seu cadastro. Envie a foto de uma carta escrita à mão com:",
+      "item1": "Seu nome social",
+      "item2": "Seu CPF",
+      "fileLabel": "Foto da carta",
+      "choose": "Foto da carta escrita à mão",
+      "change": "Trocar a foto da carta",
+      "remove": "Remover a foto da carta",
+      "privacy": "Só a equipe de verificação vê esta carta. Ela é tratada com sigilo, de acordo com a LGPD.",
+      "submit": "Enviar carta para revisão",
+      "sentTitle": "Carta recebida",
+      "sentDescription": "A equipe vai analisar seu pedido com cuidado e sigilo, e avisar você assim que terminar."
+    },
+    "or": "ou"
+  },
+  "equipmentType": {
+    "scooter": "Patinete elétrico",
+    "ebike": "Bike elétrica"
+  },
+  "explore": {
+    "title": "Alugue perto de você",
+    "searchLabel": "Buscar equipamentos",
+    "searchPlaceholder": "Buscar patinete, bike ou bairro",
+    "typeFilterLabel": "Tipo de equipamento",
+    "filterAll": "Todos",
+    "nearMe": "Perto de mim",
+    "locationFallback": "Mostrando até {km} km do centro de São Paulo",
+    "locationGranted": "Mostrando até {km} km de você",
+    "locationDenied": "Não conseguimos sua localização. Mostrando até {km} km do centro de São Paulo",
+    "resultCount": "{count, plural, =0 {nenhum resultado} one {# resultado} other {# resultados}}",
+    "listLabel": "Lista de equipamentos",
+    "mapLabel": "Mapa de equipamentos",
+    "mapAttribution": "colaboradores do OpenStreetMap",
+    "pinLabel": "{title}, {price} por dia",
+    "seeDetails": "Ver detalhes",
+    "emptyTitle": "Nenhum equipamento encontrado",
+    "emptyText": "Tente outro bairro, outra palavra ou mude o tipo de equipamento.",
+    "clearFilters": "Limpar busca",
+    "showMap": "Ver mapa",
+    "showList": "Ver lista",
+    "unavailable": "Indisponível",
+    "noReviews": "Sem avaliações ainda",
+    "distance": "{km} km",
+    "verified": "verificado",
+    "pricePerDay": "{price}/dia",
+    "reserve": "Reservar",
+    "loading": "Carregando equipamentos"
+  },
+  "equipment": {
+    "backToSearch": "Voltar para a busca",
+    "unavailable": "Indisponível no momento",
+    "reviewCount": "({count, plural, one {# avaliação} other {# avaliações}})",
+    "noReviews": "Sem avaliações ainda",
+    "hostedBy": "Host: {name}",
+    "verifiedHost": "Identidade verificada",
+    "hostSince": "Host desde {year}",
+    "about": "Sobre o equipamento",
+    "whereTitle": "Onde retirar",
+    "whereNote": "O endereço exato aparece depois que a reserva for confirmada.",
+    "bookingLabel": "Reserva",
+    "perDay": "por dia",
+    "ownerNotice": "Este anúncio é seu. Quem visita esta página vê aqui as datas e o botão de reserva.",
+    "unavailableNotice": "Este equipamento está indisponível no momento.",
+    "notifyMe": "Avisar quando disponível",
+    "cancelNotify": "Cancelar aviso",
+    "notifyOn": "Vamos te avisar quando ele voltar a ficar disponível.",
+    "talkToHost": "Falar com o Host",
+    "chooseDates": "Escolha as datas",
+    "pickup": "Retirada",
+    "return": "Devolução",
+    "priceTimesDays": "{price} x {count, plural, one {# diária} other {# diárias}}",
+    "total": "Total",
+    "sendRequest": "Enviar solicitação",
+    "payAfterAccept": "Você só paga depois que o Host aceitar.",
+    "requestSentTitle": "Solicitação enviada",
+    "requestSentText": "O Host vai responder em breve. Você recebe um aviso quando ele aceitar.",
+    "seeMyReservations": "Ver minhas reservas",
+    "reserve": "Reservar",
+    "seeOptions": "Ver opções",
+    "errors": {
+      "pickupRequired": "Escolha a data de retirada.",
+      "returnRequired": "Escolha a data de devolução.",
+      "pickupInPast": "A retirada não pode ser antes de hoje.",
+      "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
+      "unavailable": "Este equipamento não está disponível para reserva.",
+      "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas."
+    },
+    "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
+    "hostNoReviews": "Ainda sem avaliações como Host",
+    "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
+    "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
+    "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}.",
+    "dateRange": "{start} a {end}",
+    "takenDays": "Dias indisponíveis: {days}"
+  },
+  "errorPage": {
+    "title": "Algo deu errado",
+    "description": "Não foi possível carregar esta página. Verifique sua conexão e tente de novo.",
+    "retry": "Tentar de novo"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "O endereço pode estar errado, ou este anúncio não existe mais.",
+    "goHome": "Voltar ao início"
+  },
+  "rider": {
+    "status": {
+      "pending": "Aguardando o Host",
+      "accepted": "Aceita, falta pagar",
+      "confirmed": "Pronta para retirada",
+      "active": "Em uso",
+      "completed": "Concluída",
+      "rejected": "Recusada",
+      "cancelled": "Cancelada"
+    },
+    "dates": "{start} a {end}",
+    "days": "{count, plural, one {# diária} other {# diárias}}",
+    "hostLabel": "Host: {name}",
+    "actions": {
+      "pay": "Pagar",
+      "confirmPickup": "Confirmar retirada",
+      "confirmReturn": "Confirmar devolução",
+      "review": "Avaliar",
+      "details": "Ver detalhes",
+      "talkToHost": "Falar com o Host",
+      "cancel": "Cancelar reserva",
+      "cancelTitle": "Cancelar esta reserva?",
+      "keep": "Manter reserva",
+      "cancelConfirm": "Cancelar reserva",
+      "cancelled": "Reserva cancelada.",
+      "cancelTextUnpaid": "Nada foi cobrado ainda, então não há custo. O Host será avisado. Esta ação não pode ser desfeita.",
+      "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita."
+    },
+    "list": {
+      "title": "Minhas reservas",
+      "emptyTitle": "Você ainda não tem reservas",
+      "emptyText": "Encontre um patinete ou uma bike elétrica perto de você.",
+      "explore": "Explorar",
+      "ongoing": "Em andamento",
+      "past": "Anteriores",
+      "noOngoing": "Nenhuma reserva em andamento.",
+      "noPast": "Nenhuma reserva anterior."
+    },
+    "steps": {
+      "accepted": "Reserva aceita pelo Host",
+      "paid": "Pagamento confirmado",
+      "ready": "Pronto para retirada",
+      "inUse": "Em uso",
+      "returned": "Devolvido",
+      "acceptedHint": "Esperando o Host aceitar.",
+      "paidHint": "Falta pagar para confirmar a reserva.",
+      "readyHint": "No dia da retirada, leia o QR code e tire uma foto do equipamento.",
+      "inUseHint": "Na devolução, leia o QR code e tire uma foto do equipamento.",
+      "returnedHint": "Reserva concluída.",
+      "doneLabel": "etapa concluída",
+      "currentLabel": "etapa atual",
+      "nextLabel": "próxima etapa"
+    },
+    "track": {
+      "title": "Acompanhar reserva",
+      "back": "Voltar para Minhas reservas",
+      "pendingBanner": "Sua solicitação foi enviada. Você recebe um aviso quando o Host aceitar.",
+      "rejectedBanner": "O Host recusou esta solicitação. Nenhum valor foi cobrado.",
+      "cancelledBanner": "Esta reserva foi cancelada.",
+      "stepsTitle": "Etapas",
+      "whereTitle": "Ponto de retirada e devolução",
+      "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado.",
+      "cancelTitle": "Cancelamento",
+      "cancelFree": "Você pode cancelar sem custo: nada foi cobrado ainda.",
+      "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
+      "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
+      "times": "Retirada: {pickup} · Devolução: {return}"
+    },
+    "payment": {
+      "title": "Pagamento",
+      "back": "Voltar para a reserva",
+      "priceTimesDays": "{price} x {count, plural, one {# diária} other {# diárias}}",
+      "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
+      "total": "Total",
+      "notAvailable": "O pagamento só fica disponível depois que o Host aceita a reserva.",
+      "methodTitle": "Como você quer pagar?",
+      "pix": "PIX",
+      "pixHint": "Aprovação na hora",
+      "card": "Cartão de crédito",
+      "cardHint": "Visa, Mastercard, Elo e outros",
+      "cardSecure": "Os dados do cartão são digitados no formulário seguro do Mercado Pago. A Hi Scoot não vê nem guarda o número do seu cartão.",
+      "pixInfo": "O QR code e o código PIX copia e cola são gerados pelo Mercado Pago depois que você tocar em Pagar.",
+      "pay": "Pagar {total}",
+      "splitInfo": "Pagamento processado pelo Mercado Pago. O valor do Host é repassado automaticamente.",
+      "errors": {
+        "methodRequired": "Escolha PIX ou cartão de crédito.",
+        "notAllowed": "Esta reserva não está esperando pagamento."
+      },
+      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida."
+    },
+    "confirmed": {
+      "title": "Reserva confirmada!",
+      "subtitle": "{title} está te esperando.",
+      "whereTitle": "Ponto de retirada e devolução",
+      "pickup": "Retirada",
+      "return": "Devolução",
+      "qrHint": "No dia da retirada, abra esta reserva e leia o QR code da etiqueta colada no equipamento.",
+      "track": "Acompanhar reserva",
+      "talkToHost": "Falar com o Host"
+    },
+    "qr": {
+      "label": "QR code",
+      "videoLabel": "Imagem da câmera para ler o QR code",
+      "stopCamera": "Fechar câmera",
+      "scanned": "QR code lido",
+      "openCamera": "Ler QR code com a câmera",
+      "cameraDenied": "Não conseguimos usar a câmera. Libere a câmera nas configurações do navegador ou digite o código abaixo.",
+      "cameraUnavailable": "Este aparelho não tem câmera disponível. Digite o código abaixo.",
+      "typeCode": "Ou digite o código escrito embaixo do QR code da etiqueta",
+      "codePlaceholder": "Ex.: HS-4821"
+    },
+    "handoff": {
+      "back": "Voltar para a reserva",
+      "step1": "1. Leia o QR code",
+      "step2": "2. Tire uma foto do equipamento",
+      "photoLabel": "Foto do equipamento",
+      "photoChoose": "Tirar foto",
+      "photoLimits": "JPG, PNG, WEBP ou HEIC, até {max} MB",
+      "photoChange": "Trocar a foto",
+      "photoRemove": "Remover a foto",
+      "errors": {
+        "codeRequired": "Leia o QR code ou digite o código.",
+        "codeInvalid": "Este código não é do equipamento desta reserva. Confira a etiqueta.",
+        "photoRequired": "Tire uma foto do equipamento.",
+        "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
+        "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
+        "wrongStatus": "Esta etapa não está disponível para esta reserva."
+      },
+      "pickup": {
+        "title": "Retirada",
+        "notAvailable": "A retirada só fica disponível depois que o pagamento for confirmado.",
+        "qrHelp": "Leia o QR code da etiqueta colada no equipamento.",
+        "photoHelp": "Mostre o equipamento inteiro, para registrar como ele estava na retirada.",
+        "submit": "Confirmar retirada",
+        "doneTitle": "Retirada confirmada",
+        "doneText": "Boa viagem! Na devolução, leia o QR code de novo e tire outra foto.",
+        "next": "Acompanhar reserva"
+      },
+      "return": {
+        "title": "Devolução",
+        "notAvailable": "A devolução só fica disponível enquanto o equipamento está em uso.",
+        "qrHelp": "Leia de novo o QR code da etiqueta colada no equipamento.",
+        "photoHelp": "Mostre o equipamento inteiro, para registrar como ele foi devolvido.",
+        "submit": "Confirmar devolução",
+        "doneTitle": "Devolução confirmada",
+        "doneText": "Obrigado por usar a Hi Scoot. Conte como foi.",
+        "next": "Avaliar"
+      }
+    },
+    "review": {
+      "title": "Avaliação",
+      "back": "Voltar para a reserva",
+      "heading": "Como foi com {name}?",
+      "alreadyReviewed": "Você já avaliou esta reserva. Obrigado!",
+      "notAvailable": "A avaliação fica disponível depois da devolução.",
+      "equipmentLegend": "Nota do equipamento",
+      "hostLegend": "Nota do Host ({name})",
+      "commentLabel": "Comentário (opcional)",
+      "commentPlaceholder": "Conte como foi o aluguel",
+      "commentCount": "{count} de {max} caracteres",
+      "submit": "Enviar avaliação",
+      "doneTitle": "Avaliação enviada",
+      "doneText": "Obrigado! Sua avaliação ajuda outras pessoas a escolher.",
+      "exploreMore": "Explorar mais equipamentos",
+      "starsLabel": "{count, plural, one {# estrela} other {# estrelas}}",
+      "chooseStars": "Toque nas estrelas para dar a nota.",
+      "scale": {
+        "1": "Muito ruim",
+        "2": "Ruim",
+        "3": "Regular",
+        "4": "Bom",
+        "5": "Excelente"
+      },
+      "errors": {
+        "ratingRequired": "Escolha uma nota de 1 a 5 estrelas."
+      }
+    }
+  },
+  "host": {
+    "tabs": {
+      "label": "Área do Host",
+      "listings": "Meus anúncios",
+      "reservations": "Reservas recebidas"
+    },
+    "new": {
+      "title": "Novo anúncio",
+      "back": "Voltar para Meus anúncios",
+      "subtitle": "Preencha os dados do seu equipamento. A equipe Hi Scoot confere antes de publicar.",
+      "becomeTitle": "Quero ser Host",
+      "becomeText": "Anuncie seu patinete ou bike elétrica e ganhe com cada diária.",
+      "becomeStep1": "1. Cadastre o equipamento com fotos, preço por dia e horários.",
+      "becomeStep2": "2. A equipe Hi Scoot confere e publica o anúncio.",
+      "becomeStep3": "3. Você aceita os pedidos e recebe pelo Mercado Pago.",
+      "becomeButton": "Quero ser Host"
+    },
+    "edit": {
+      "title": "Editar anúncio",
+      "back": "Voltar para Meus anúncios",
+      "rejectedTitle": "Motivo da recusa",
+      "ruleTitle": "Você pode editar uma vez a cada {days} dias",
+      "ruleText": "A edição vai para a análise da equipe Hi Scoot. Até ser aprovada, o anúncio atual continua no ar, sem mudança. Reservas já feitas mantêm o preço combinado.",
+      "blockedTooSoon": "O último envio deste anúncio foi há menos de {days} dias. A próxima edição fica liberada em {date}.",
+      "blockedInReview": "Este anúncio está em análise pela equipe Hi Scoot. Você poderá editar depois da resposta.",
+      "blockedEditInReview": "Já existe uma edição em análise. O anúncio atual continua no ar até a resposta."
+    },
+    "form": {
+      "sectionEquipment": "Equipamento",
+      "typeLabel": "Tipo",
+      "types": {
+        "scooter": "Patinete elétrico",
+        "ebike": "Bike elétrica"
+      },
+      "titleLabel": "Título do anúncio",
+      "titlePlaceholder": "Ex.: Patinete Aro 10",
+      "titleHint": "Curto e claro. Aparece na busca.",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "Autonomia, acessórios (capacete, carregador), estado de conservação…",
+      "descriptionHint": "Escreva no idioma que preferir. O texto aparece do jeito que você escrever.",
+      "photosLabel": "Fotos",
+      "photosHelp": "Envie de {min} a {max} fotos (JPG, PNG, WEBP ou HEIC, até {size} MB cada). Mostre o equipamento inteiro, de frente, de lado e o painel. A primeira foto é a capa.",
+      "photosKeepNote": "Se você não enviar fotos novas, as fotos atuais continuam.",
+      "photoAlt": "Foto {number}",
+      "cover": "Capa",
+      "photoRemove": "Remover foto {number}",
+      "photosAdd": "Adicionar",
+      "photosChoose": "Escolher fotos",
+      "photosCount": "{count} de {max} fotos",
+      "sectionPrice": "Preço por dia",
+      "priceLabel": "Quanto você quer receber por dia (R$)",
+      "priceSuggestion": "Sugestão da Hi Scoot: de {min} a {max} por dia. Você decide.",
+      "riderSees": "O Rider vê <strong>{price} por dia</strong>.",
+      "riderSeesFee": "Já inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider.",
+      "youReceive": "Você recebe {price} por dia.",
+      "pricePreviewEmpty": "Digite o valor para ver quanto o Rider paga (seu valor + {percent}% de taxa da plataforma).",
+      "sectionWhere": "Onde e quando",
+      "cityLabel": "Cidade",
+      "areaLabel": "Bairro",
+      "areaPlaceholder": "Ex.: Pinheiros",
+      "areaHint": "Aparece no anúncio antes da reserva.",
+      "addressLabel": "Endereço de retirada",
+      "addressPlaceholder": "Rua, número e complemento",
+      "addressHint": "Só aparece para o Rider depois que a reserva é paga.",
+      "locationLabel": "Localização no mapa",
+      "locationHelp": "Use no local onde o equipamento fica. O mapa mostra só a região, nunca o ponto exato.",
+      "locationUse": "Usar minha localização",
+      "locationUpdate": "Atualizar localização",
+      "locationDenied": "Não conseguimos pegar a sua localização. Permita o acesso à localização no navegador e tente de novo.",
+      "locationSaved": "Localização salva.",
+      "pickupTimeLabel": "Horário de retirada",
+      "returnTimeLabel": "Horário de devolução",
+      "timesHint": "Horário de Brasília. Vale para todas as reservas deste equipamento.",
+      "submitNew": "Enviar para análise",
+      "submitEdit": "Enviar edição para análise",
+      "reviewNoteNew": "A equipe Hi Scoot confere o anúncio antes de publicar.",
+      "reviewNoteEdit": "O anúncio atual continua no ar até a edição ser aprovada.",
+      "errors": {
+        "required": "Preencha este campo.",
+        "typeRequired": "Escolha o tipo do equipamento.",
+        "tooLong": "Use no máximo {max} caracteres.",
+        "priceInvalid": "Digite um valor válido, de R$ 1 a R$ {price}. Ex.: 35 ou 35,50.",
+        "locationRequired": "Toque em \"Usar minha localização\" para marcar o equipamento no mapa.",
+        "photosTooFew": "Envie pelo menos {min} fotos.",
+        "photosTooMany": "Envie no máximo {max} fotos.",
+        "photoType": "Uma das fotos tem formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
+        "photoTooLarge": "Uma das fotos passa de {size} MB.",
+        "timeInvalid": "Escolha um horário válido.",
+        "notAllowed": "Não foi possível enviar agora. Volte para Meus anúncios e tente de novo.",
+        "summary": "Confira os campos marcados."
+      }
+    },
+    "label": {
+      "open": "Etiqueta QR",
+      "close": "Fechar",
+      "title": "Etiqueta QR do equipamento",
+      "text": "Imprima e cole no equipamento. O Rider lê este QR na retirada e na devolução.",
+      "qrAlt": "QR code do equipamento, código {code}",
+      "labelHint": "Retirada e devolução: leia o QR no site Hi Scoot.",
+      "tip1": "Cole num lugar plano e fácil de ver, longe da lama.",
+      "tip2": "Se possível, cubra com fita transparente para durar mais.",
+      "tip3": "Não compartilhe o código por mensagem: ele fica só na etiqueta.",
+      "print": "Imprimir etiqueta"
+    },
+    "listings": {
+      "title": "Meus anúncios",
+      "subtitle": "Seus equipamentos, a análise da equipe e a etiqueta QR.",
+      "new": "Novo anúncio",
+      "emptyTitle": "Você ainda não tem anúncios",
+      "emptyText": "Anuncie seu patinete ou bike elétrica e comece a receber pedidos.",
+      "review": {
+        "pending": "Em análise",
+        "approved": "Publicado",
+        "rejected": "Recusado",
+        "editPending": "Edição em análise"
+      },
+      "hours": "Retirada {pickup} · Devolução {return}",
+      "price": "Você recebe <strong>{host}</strong> por dia · Rider vê {rider}",
+      "rejectedReason": "Motivo da recusa",
+      "pendingText": "A equipe Hi Scoot está conferindo este anúncio. Você recebe um aviso com a resposta.",
+      "edit": "Editar",
+      "fixAndResend": "Corrigir e reenviar",
+      "view": "Ver anúncio",
+      "editAllowed": "Você pode editar uma vez a cada {days} dias.",
+      "editNextDate": "Próxima edição liberada em {date}.",
+      "editInReview": "Edição em análise. O anúncio atual continua no ar até a resposta.",
+      "inReviewNote": "Você poderá editar depois da análise.",
+      "sent": {
+        "newTitle": "Anúncio enviado para análise",
+        "newText": "A equipe Hi Scoot confere e você recebe um aviso com a resposta.",
+        "editTitle": "Edição enviada para análise",
+        "editText": "O anúncio atual continua no ar até a edição ser aprovada.",
+        "resentTitle": "Anúncio reenviado para análise",
+        "resentText": "A equipe Hi Scoot confere as correções e você recebe um aviso com a resposta."
+      },
+      "availabilityError": "Não foi possível mudar agora. Tente de novo.",
+      "markedUnavailable": "Anúncio marcado como indisponível.",
+      "markedAvailable": "Anúncio marcado como disponível.",
+      "isAvailable": "Disponível para reservas.",
+      "isUnavailable": "Indisponível: não recebe pedidos novos.",
+      "markUnavailable": "Marcar indisponível",
+      "markAvailable": "Marcar disponível"
+    },
+    "handoff": {
+      "close": "Fechar",
+      "pickup": {
+        "open": "Confirmar retirada",
+        "title": "Confirmar retirada",
+        "text": "Tire uma foto do equipamento na hora da entrega para {name}.",
+        "submit": "Confirmar retirada"
+      },
+      "return": {
+        "open": "Confirmar devolução",
+        "title": "Confirmar devolução",
+        "text": "Tire uma foto do equipamento na hora em que {name} devolver. Ela protege você e o Rider.",
+        "submit": "Confirmar devolução"
+      },
+      "photoLabel": "Foto do equipamento",
+      "photoChoose": "Tirar ou escolher foto",
+      "photoLimits": "JPG, PNG, WEBP ou HEIC, até {max} MB",
+      "photoChange": "Trocar foto",
+      "photoRemove": "Remover foto",
+      "errors": {
+        "codeRequired": "Leia o QR code ou digite o código.",
+        "codeInvalid": "Este código não é deste equipamento.",
+        "photoRequired": "Tire uma foto do equipamento.",
+        "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
+        "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
+        "wrongStatus": "Esta etapa não está disponível para esta reserva."
+      }
+    },
+    "review": {
+      "open": "Avaliar Rider",
+      "close": "Fechar",
+      "title": "Como foi com {name}?",
+      "text": "Sua avaliação ajuda outros Hosts.",
+      "ratingLegend": "Nota do Rider",
+      "ratingRequired": "Escolha uma nota de 1 a 5 estrelas.",
+      "commentLabel": "Comentário (opcional)",
+      "commentPlaceholder": "Conte como foi o aluguel",
+      "commentCount": "{count} de {max} caracteres",
+      "submit": "Enviar avaliação"
+    },
+    "actions": {
+      "done": {
+        "accepted": "Pedido aceito. Avisamos {name} para pagar.",
+        "rejected": "Pedido recusado. Avisamos {name}.",
+        "cancelled": "Reserva cancelada. Avisamos {name}.",
+        "pickup": "Retirada confirmada.",
+        "return": "Devolução confirmada. O pagamento é liberado para você.",
+        "reviewed": "Avaliação enviada. Obrigado!"
+      },
+      "accept": "Aceitar",
+      "reject": "Recusar",
+      "rejectTitle": "Recusar este pedido?",
+      "rejectText": "{name} recebe um aviso de que o pedido foi recusado. Não dá para desfazer.",
+      "rejectConfirm": "Recusar pedido",
+      "waitingPayment": "Aguardando o pagamento do Rider.",
+      "cancel": "Cancelar reserva",
+      "cancelTitle": "Cancelar esta reserva?",
+      "cancelTextPaid": "O Rider recebe tudo de volta ({refund}). A taxa da plataforma ({fee}) é cobrada de você. Não dá para desfazer.",
+      "cancelTextUnpaid": "O Rider ainda não pagou, então nada é cobrado. Não dá para desfazer.",
+      "keep": "Voltar",
+      "cancelConfirm": "Cancelar reserva",
+      "error": "Não foi possível fazer isso agora. Atualize a página e tente de novo.",
+      "datesTaken": "Algum dia deste pedido já está reservado ou bloqueado. Recuse o pedido ou desbloqueie o dia."
+    },
+    "calendar": {
+      "previous": "Mês anterior",
+      "next": "Próximo mês",
+      "equipment": "Equipamento",
+      "allEquipment": "Todos",
+      "apply": "Ver",
+      "legend": "Legenda",
+      "kinds": {
+        "request": "Pedido novo",
+        "booked": "Reservado",
+        "inUse": "Em uso",
+        "done": "Concluído",
+        "blocked": "Bloqueado por você"
+      },
+      "block": "Bloquear este dia",
+      "unblock": "Desbloquear este dia",
+      "blockedDone": "Dia bloqueado. Ninguém pode reservar este dia.",
+      "unblockedDone": "Dia desbloqueado. Ele volta a aceitar reservas.",
+      "blockBooked": "Este dia já está reservado e fica bloqueado pela reserva.",
+      "blockError": "Não foi possível mudar agora. Tente de novo.",
+      "blockedInfo": "Dia bloqueado por você: ninguém pode reservar.",
+      "chooseToBlock": "Para bloquear um dia, escolha o equipamento acima.",
+      "bookedInfo": "Dia reservado: já fica bloqueado para outras reservas.",
+      "count": "{count, plural, =0 {livre} one {# reserva} other {# reservas}}",
+      "free": "Nenhuma reserva neste dia.",
+      "tapDay": "Toque num dia para ver as reservas."
+    },
+    "reservations": {
+      "title": "Reservas recebidas",
+      "subtitle": "Pedidos dos Riders para os seus equipamentos.",
+      "viewLabel": "Modo de ver",
+      "viewList": "Lista",
+      "viewCalendar": "Calendário",
+      "status": {
+        "pending": "Pedido novo",
+        "accepted": "Aceita, falta pagar",
+        "confirmed": "Paga, pronta para retirada",
+        "active": "Em uso",
+        "completed": "Concluída",
+        "rejected": "Recusada",
+        "cancelled": "Cancelada"
+      },
+      "rider": "Rider: <link>{name}</link>",
+      "when": "{start} até {end}",
+      "days": "{count, plural, one {# diária} other {# diárias}}",
+      "youReceive": "Você recebe {value}",
+      "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Se cancelar, o Rider recebe tudo de volta e a taxa da plataforma é cobrada de você.",
+      "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
+      "requests": "Pedidos novos",
+      "ongoing": "Em andamento",
+      "past": "Anteriores",
+      "noRequests": "Nenhum pedido novo.",
+      "noOngoing": "Nenhuma reserva em andamento.",
+      "noPast": "Nenhuma reserva anterior.",
+      "emptyTitle": "Você ainda não recebeu reservas",
+      "emptyText": "Quando um Rider pedir um equipamento seu, o pedido aparece aqui."
+    }
+  },
+  "dashboard": {
+    "title": "Painel",
+    "hello": "Olá, {name}!",
+    "subtitle": "Veja o que precisa de você agora.",
+    "nextTitle": "Próximos passos",
+    "today": "hoje",
+    "tomorrow": "amanhã",
+    "allDoneTitle": "Tudo em dia",
+    "allDoneText": "Nada precisa de você agora.",
+    "shortcutsTitle": "Atalhos",
+    "shortcuts": {
+      "explore": "Explorar",
+      "reservations": "Minhas reservas",
+      "myListings": "Meus anúncios",
+      "becomeHost": "Anunciar",
+      "conversations": "Conversas"
+    },
+    "cards": {
+      "identityTitle": "Envie seu documento",
+      "identityText": "Você só aluga e anuncia depois da verificação.",
+      "requestsTitle": "{count, plural, one {Você tem # pedido novo} other {Você tem # pedidos novos}}",
+      "requestsText": "Aceite ou recuse em Reservas recebidas.",
+      "payTitle": "Pague sua reserva",
+      "payText": "O Host aceitou: {title}.",
+      "pickupTitle": "Retirada {day} às {time}",
+      "pickupText": "{title}. Leia o QR da etiqueta na retirada.",
+      "handoverTitle": "Entrega {day} às {time}",
+      "handoverText": "Confirme com foto a entrega para {name}: {title}",
+      "reviewTitle": "Avalie seu aluguel",
+      "reviewText": "Como foi com {title}?",
+      "messagesTitle": "{count, plural, one {# mensagem nova} other {# mensagens novas}}",
+      "messagesText": "Responda em Conversas."
+    }
+  },
+  "conversations": {
+    "title": "Conversas",
+    "chatTitle": "Conversa com {name}",
+    "back": "Voltar para Conversas",
+    "emptyTitle": "Nenhuma conversa ainda",
+    "emptyText": "Fale com um Host pelo anúncio do equipamento.",
+    "explore": "Explorar equipamentos",
+    "about": "Sobre {title}",
+    "aboutYour": "Seu anúncio: {title}",
+    "you": "Você",
+    "noMessages": "Nenhuma mensagem ainda",
+    "unread": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}",
+    "verified": "Identidade verificada",
+    "contactTitle": "Contato liberado (reserva aceita)",
+    "contactHidden": "Para sua segurança, telefone e e-mail ficam ocultos até a reserva ser aceita. Combine tudo por aqui.",
+    "messagesWith": "Mensagens com {name}",
+    "startConversation": "Mande a primeira mensagem para {name}.",
+    "hiddenNote": "contato oculto",
+    "redactedNotice": "Escondemos o telefone ou e-mail da sua mensagem. Ele aparece depois que a reserva for aceita.",
+    "messageLabel": "Mensagem",
+    "messagePlaceholder": "Escreva uma mensagem",
+    "send": "Enviar",
+    "errors": {
+      "empty": "Escreva uma mensagem.",
+      "tooLong": "Use no máximo {max} caracteres.",
+      "notAllowed": "Não foi possível enviar agora. Tente de novo."
+    }
+  },
+  "profile": {
+    "saved": "Perfil salvo.",
+    "memberSince": "Na Hi Scoot desde {year}",
+    "verified": "Identidade verificada",
+    "notVerified": "Identidade não verificada",
+    "host": "Host",
+    "edit": "Editar perfil",
+    "ratingsTitle": "Avaliações",
+    "asHost": "Como Host",
+    "asRider": "Como Rider",
+    "reviewsCount": "{count, plural, one {# avaliação} other {# avaliações}}",
+    "noRatingYet": "Sem avaliações ainda",
+    "reviewAsHost": "avaliou como Host",
+    "reviewAsRider": "avaliou como Rider",
+    "starsOf5": "{count} de 5 estrelas",
+    "noReviews": "Ainda não há comentários.",
+    "listingsTitle": "Anúncios",
+    "noListings": "Nenhum anúncio publicado."
+  },
+  "profileEdit": {
+    "title": "Editar perfil",
+    "back": "Voltar para o perfil",
+    "subtitle": "Telefone e e-mail nunca aparecem no seu perfil público.",
+    "nameLabel": "Nome completo",
+    "nameLocked": "Seu nome já foi conferido com o documento. Para trocar, <link>envie um documento novo</link>.",
+    "phoneLabel": "Telefone",
+    "phoneHint": "Com DDD. Só aparece para a outra pessoa depois da reserva aceita.",
+    "cityLabel": "Cidade",
+    "save": "Salvar",
+    "errors": {
+      "phoneRequired": "Informe seu telefone.",
+      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678.",
+      "cityRequired": "Informe sua cidade.",
+      "cityTooLong": "Use no máximo {max} caracteres."
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "languageTitle": "Idioma",
+    "languageHelp": "O site inteiro muda para o idioma escolhido.",
+    "accountTitle": "Conta",
+    "viewProfile": "Ver meu perfil público",
+    "editProfile": "Editar perfil",
+    "admin": "Painel do administrador",
+    "signOut": "Sair",
+    "identity": {
+      "label": "Verificação de identidade",
+      "approved": "Verificada",
+      "pending": "Em análise",
+      "rejected": "Recusada",
+      "blocked": "Bloqueada"
+    }
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar todas como lidas",
+    "filterLabel": "Filtrar notificações",
+    "filterAll": "Todas",
+    "filterAction": "Precisam de mim",
+    "emptyTitle": "Nenhuma notificação",
+    "emptyActionTitle": "Nada precisa de você agora",
+    "emptyText": "Os avisos de reservas, mensagens e análises aparecem aqui.",
+    "unreadLabel": "Não lida",
+    "needsAction": "precisa de você",
+    "kinds": {
+      "bookingRequest": "{name} pediu uma reserva: {title}",
+      "bookingAccepted": "{name} aceitou seu pedido: {title}. Falta pagar.",
+      "bookingRejected": "Pedido recusado: {title}",
+      "paymentConfirmed": "Pagamento confirmado: {title}",
+      "pickupReminder": "Lembrete: retirada amanhã · {title}",
+      "returnConfirmed": "Devolução confirmada: {title}. Avalie seu aluguel.",
+      "reviewReceived": "{name} avaliou você",
+      "listingApproved": "Anúncio aprovado: {title}",
+      "listingRejected": "Anúncio recusado: {title}. Veja o motivo.",
+      "documentApproved": "Sua identidade foi verificada",
+      "documentRejected": "Seu documento foi recusado. Veja o motivo.",
+      "newMessage": "Nova mensagem de {name}"
+    }
+  },
+  "admin": {
+    "title": "Painel do administrador",
+    "subtitle": "Análise de anúncios e cadastros. Só a equipe Hi Scoot acessa.",
+    "queuesLabel": "Filas de análise",
+    "tabs": {
+      "listings": "Anúncios novos",
+      "edits": "Edições",
+      "identity": "Cadastros"
+    },
+    "oldestFirst": "O pedido mais antigo aparece primeiro.",
+    "emptyTitle": "Nada para analisar nesta fila.",
+    "sent": "Enviado {when}",
+    "photos": "{count, plural, one {# foto} other {# fotos}}",
+    "hostLabel": "Host:",
+    "verified": "identidade verificada",
+    "notVerified": "identidade não verificada",
+    "price": "Host recebe {host} por dia · Rider vê {rider}",
+    "changesTitle": "O que mudou",
+    "changeField": "Campo",
+    "changeBefore": "Antes",
+    "changeAfter": "Depois",
+    "fields": {
+      "daily_price": "Preço por dia",
+      "description": "Descrição",
+      "photos": "Fotos",
+      "area": "Bairro",
+      "times": "Horários"
+    },
+    "editStaysLive": "O anúncio atual continua no ar até a decisão.",
+    "identity": {
+      "document": "Documento (frente e verso)",
+      "letter": "Carta com nome social e CPF",
+      "rejections": "{count, plural, one {# recusa anterior} other {# recusas anteriores}}",
+      "documentHelp": "Confira se o nome do documento é o mesmo do cadastro.",
+      "letterHelp": "Confira se a carta é escrita à mão e tem o nome social e o CPF.",
+      "lastChance": "Esta seria a 2ª recusa: se recusar, o cadastro é bloqueado para alugar e anunciar."
+    },
+    "decision": {
+      "reasonLabel": "Motivo",
+      "reasonPlaceholder": "Ex.: As fotos não mostram o equipamento inteiro.",
+      "reasonHint": "Obrigatório para recusar. A pessoa recebe este texto.",
+      "reject": "Recusar",
+      "approve": "Aprovar",
+      "rejectTitle": "Recusar?",
+      "rejectText": "A pessoa recebe um aviso com o motivo e pode corrigir.",
+      "rejectConfirm": "Recusar",
+      "blockTitle": "Recusar e bloquear o cadastro?",
+      "blockText": "É a 2ª recusa: o cadastro fica bloqueado para alugar e anunciar. Não dá para desfazer por aqui.",
+      "blockConfirm": "Recusar e bloquear",
+      "cancel": "Voltar",
+      "done": {
+        "approved": "Aprovado. A pessoa recebe um aviso.",
+        "rejected": "Recusado. A pessoa recebe o motivo.",
+        "blocked": "Recusado e cadastro bloqueado. A pessoa recebe o motivo."
+      },
+      "errors": {
+        "reasonRequired": "Escreva o motivo para recusar.",
+        "reasonTooShort": "Explique melhor: pelo menos {min} caracteres.",
+        "reasonTooLong": "Use no máximo {max} caracteres.",
+        "notAllowed": "Você não tem permissão para fazer isso."
+      }
+    },
+    "document": {
+      "openDocument": "Ver documento enviado",
+      "openLetter": "Ver carta enviada",
+      "close": "Fechar",
+      "title": "Arquivos de {name}",
+      "privacy": "Dado pessoal sensível (LGPD): só a equipe de verificação vê. Não baixe nem compartilhe.",
+      "front": "Frente",
+      "back": "Verso",
+      "letter": "Carta",
+      "example": "Prévia de exemplo",
+      "checkDocument": "Compare o nome do documento com o nome do cadastro.",
+      "checkLetter": "A carta precisa ser escrita à mão, com nome social e CPF."
+    }
+  }
+}
