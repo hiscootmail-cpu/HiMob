@@ -32,7 +32,7 @@ async function ListingItem({ item }: { item: AdminListing }) {
   return (
     <li className="flex flex-col gap-4 rounded-lg border border-line bg-hs-white p-4">
       <div className="flex gap-4">
-        <EquipmentPhoto type={item.type} className="size-20 shrink-0 rounded-md" />
+        <EquipmentPhoto type={item.type} src={item.photos?.[0]} className="size-20 shrink-0 rounded-md" />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <p className="text-xs text-muted">
             {t("sent", { when: format.relativeTime(new Date(item.sent_at), new Date()) })}
@@ -78,7 +78,21 @@ async function ListingItem({ item }: { item: AdminListing }) {
           <p className="text-xs text-muted">{t("editStaysLive")}</p>
         </div>
       ) : null}
-      <DecisionForm id={item.id} action={decideListing.bind(null, item.id)} />
+      {item.photos?.length ? (
+        <ul className="flex gap-2 overflow-x-auto pb-1" aria-label={t("photosLabel")}>
+          {item.photos.map((src, index) => (
+            <li key={src} className="shrink-0">
+              <a href={src} target="_blank" rel="noreferrer" className="block rounded-md outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40">
+                <EquipmentPhoto type={item.type} src={src} alt={t("photoAlt", { number: index + 1 })} className="h-20 w-28 rounded-md" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <DecisionForm
+        id={item.edit_id ? `edit-${item.edit_id}` : item.id}
+        action={decideListing.bind(null, item.edit_id ? `edit:${item.edit_id}` : item.id)}
+      />
     </li>
   );
 }
@@ -159,7 +173,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                       ) : null}
                     </div>
                   </div>
-                  <DocumentDialog kind={item.kind} name={item.full_name} />
+                  <DocumentDialog kind={item.kind} name={item.full_name} files={item.files} />
                 </div>
                 <p className="text-sm text-hs-black">
                   {item.kind === "letter" ? t("identity.letterHelp") : t("identity.documentHelp")}
@@ -175,7 +189,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
       ) : (
         <ul className="flex flex-col gap-4">
           {(tab === "listings" ? newListings : edits).map((item) => (
-            <ListingItem key={item.id} item={item} />
+            <ListingItem key={item.edit_id ?? item.id} item={item} />
           ))}
         </ul>
       )}

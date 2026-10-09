@@ -1,4 +1,5 @@
-import { listEquipment, type Equipment } from "@/lib/equipment";
+import { type Equipment } from "@/lib/equipment";
+import { listEquipment } from "@/lib/equipment-db";
 import { exampleProfiles } from "@/lib/mock/profiles";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";

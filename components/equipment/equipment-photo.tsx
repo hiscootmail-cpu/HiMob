@@ -5,11 +5,28 @@ import type { EquipmentType } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 
 /*
- * Espaço da foto do equipamento.
- * EM ABERTO: o anúncio ainda não tem campo de foto definido. Até lá, mostra
- * o ícone do tipo (patinete: ícone oficial; bike elétrica: Lucide, sem oficial).
+ * Foto do equipamento. Sem foto (dados de exemplo), mostra o ícone do tipo
+ * (patinete: ícone oficial; bike elétrica: Lucide, sem oficial).
  */
-export function EquipmentPhoto({ type, className }: { type: EquipmentType; className?: string }) {
+export function EquipmentPhoto({
+  type,
+  src,
+  alt = "",
+  className,
+}: {
+  type: EquipmentType;
+  /** Endereço público da foto (pasta "equipment-photos"). */
+  src?: string;
+  alt?: string;
+  className?: string;
+}) {
+  if (src) {
+    return (
+      // Fotos vêm do armazenamento da Supabase; tamanhos variados, por isso <img>.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt={alt} loading="lazy" className={cn("bg-green-soft object-cover", className)} />
+    );
+  }
   return (
     <div
       aria-hidden

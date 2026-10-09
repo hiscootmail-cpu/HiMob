@@ -10,9 +10,12 @@ import { QrLabelDialog } from "@/components/host/qr-label-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { todayInSaoPaulo } from "@/lib/booking";
-import { EDIT_INTERVAL_DAYS, getEquipment } from "@/lib/equipment";
+import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
+import { getEquipment } from "@/lib/equipment-db";
 import { editPolicy, listHostListings, type HostListing } from "@/lib/host";
 import { riderDailyPrice } from "@/lib/pricing";
+import { requireUser } from "@/lib/session";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("host.listings");
@@ -45,7 +48,7 @@ async function ListingCard({ listing, today }: { listing: HostListing; today: st
   return (
     <li className="flex flex-col gap-4 rounded-lg border border-line bg-hs-white p-4">
       <div className="flex gap-4">
-        <EquipmentPhoto type={listing.type} className="size-20 shrink-0 rounded-md sm:size-24" />
+        <EquipmentPhoto type={listing.type} src={listing.photos[0]} className="size-20 shrink-0 rounded-md sm:size-24" />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex flex-wrap gap-1.5">
             <Badge tone={reviewTone[listing.review_status]}>{t(`review.${listing.review_status}`)}</Badge>
@@ -107,6 +110,8 @@ async function ListingCard({ listing, today }: { listing: HostListing; today: st
 
 /** Meus anúncios (Host). */
 export default async function HostListingsPage({ searchParams }: PageProps<"/host/equipment">) {
+  // Com a Supabase, só quem entrou na conta (na demonstração, a tela abre direto).
+  if (supabaseConfigured()) await requireUser();
   const t = await getTranslations("host.listings");
   const { sent, preview } = await searchParams;
   // PROVISÓRIO até o login existir: ?preview=empty mostra a tela sem anúncios.

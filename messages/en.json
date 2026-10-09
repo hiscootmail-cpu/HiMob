@@ -408,7 +408,9 @@
     "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider",
     "hours": "Times set by the Host: pick-up at {pickup} and return by {return}.",
     "dateRange": "{start} to {end}",
-    "takenDays": "Unavailable days: {days}"
+    "takenDays": "Unavailable days: {days}",
+    "photoAlt": "Photo {number} of {title}",
+    "morePhotos": "More photos"
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -687,7 +689,11 @@
         "photoTooLarge": "One photo is over {size} MB.",
         "timeInvalid": "Choose a valid time.",
         "notAllowed": "We couldn't send it now. Go back to My listings and try again.",
-        "summary": "Check the highlighted fields."
+        "summary": "Check the highlighted fields.",
+        "uploadFailed": "We couldn’t upload the photos. Check your connection and try again.",
+        "tooSoon": "You already sent this listing in the last 30 days.",
+        "inReview": "This listing is under review.",
+        "editInReview": "An edit is already under review."
       }
     },
     "label": {
@@ -1030,7 +1036,12 @@
       "description": "Description",
       "photos": "Photos",
       "area": "Neighborhood",
-      "times": "Times"
+      "times": "Times",
+      "title": "Title",
+      "type": "Type",
+      "city": "City",
+      "pickup_address": "Pick-up address",
+      "location": "Map location"
     },
     "editStaysLive": "The current listing stays live until the decision.",
     "identity": {
@@ -1078,6 +1089,8 @@
       "example": "Example preview",
       "checkDocument": "Compare the name on the ID with the sign-up name.",
       "checkLetter": "The letter must be handwritten, with social name and CPF."
-    }
+    },
+    "photosLabel": "Listing photos",
+    "photoAlt": "Listing photo {number}"
   }
 }

@@ -1,16 +1,19 @@
 "use client";
 
-import { startTransition, useActionState, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { signUp, type AuthFormState } from "@/app/auth/actions";
+import { finishSignupDocuments, signUp, type AuthFormState } from "@/app/auth/actions";
 import { IdentityDocumentFields, type DocumentSide } from "@/components/auth/identity-document-fields";
 import { TermsConsent } from "@/components/auth/terms-consent";
 import { useFieldValidation } from "@/components/auth/use-field-validation";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/ui/password-field";
 import { TextField } from "@/components/ui/text-field";
+import { createClient } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import {
   DOCUMENT_MAX_MB,
   NAME_MIN_LENGTH,
@@ -39,6 +42,30 @@ export function SignUpForm() {
   const email = useFieldValidation(validateEmail, state.fieldErrors?.email, state);
   const password = useFieldValidation(validateNewPassword, state.fieldErrors?.password, state);
   const [checks, setChecks] = useState<LocalChecks>({ submission: state });
+  const router = useRouter();
+  // Arquivos escolhidos: com a Supabase, vão direto do navegador para a pasta privada.
+  const files = useRef<{ front?: File; back?: File }>({});
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    const upload = state.upload;
+    const { front, back } = files.current;
+    if (!upload || !front || !back) return;
+    let cancelled = false;
+    (async () => {
+      const bucket = createClient().storage.from("identity-documents");
+      const [a, b] = await Promise.all([
+        bucket.uploadToSignedUrl(upload.front.path, upload.front.token, front, { contentType: front.type }),
+        bucket.uploadToSignedUrl(upload.back.path, upload.back.token, back, { contentType: back.type }),
+      ]);
+      if (!a.error && !b.error) await finishSignupDocuments(upload.front.path, upload.back.path);
+      // Mesmo se o envio falhar, a conta existe: o documento é pedido no primeiro acesso.
+      if (!cancelled) router.push("/auth/sign-up-success");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [state.upload, router]);
 
   const current = checks.submission === state ? checks : { submission: state };
   const pick = (local: FieldErrorKey | null | undefined, server: FieldErrorKey | undefined) =>
@@ -66,6 +93,18 @@ export function SignUpForm() {
     if (front || back) {
       setChecks({ ...current, front: front ?? current.front, back: back ?? current.back });
       return;
+    }
+    if (supabaseConfigured()) {
+      // Só os dados do arquivo vão para o servidor do site (que tem limite de tamanho).
+      for (const name of ["documentFront", "documentBack"] as const) {
+        const file = formData.get(name);
+        if (file instanceof File && file.size > 0) {
+          files.current[name === "documentFront" ? "front" : "back"] = file;
+          formData.set(`${name}Meta`, JSON.stringify({ type: file.type, size: file.size }));
+        }
+        formData.delete(name);
+      }
+      setUploading(true);
     }
     startTransition(() => formAction(formData));
   }
@@ -122,7 +161,7 @@ export function SignUpForm() {
           {t(`errors.${state.error}`)}
         </p>
       ) : null}
-      <Button type="submit" size="lg" loading={pending} className="w-full">
+      <Button type="submit" size="lg" loading={pending || (uploading && Boolean(state.upload))} className="w-full">
         {t("signUp.submit")}
       </Button>
 

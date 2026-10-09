@@ -7,6 +7,8 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { IdentityDocumentFields, type DocumentSide } from "@/components/auth/identity-document-fields";
 import { Button } from "@/components/ui/button";
 import { DOCUMENT_MAX_MB, validateDocument, type FieldErrorKey } from "@/lib/validation";
+import { uploadOwnFiles } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { resubmitDocument, type ResubmitState } from "./actions";
 import { LetterForm } from "./letter-form";
 import { PendingCard } from "./status-cards";
@@ -24,6 +26,8 @@ export function ResubmitForm({ reason, firstTime = false }: { reason?: string; f
   const tAuth = useTranslations("auth");
   const [state, formAction, pending] = useActionState(resubmitDocument, initialState);
   const [checks, setChecks] = useState<LocalChecks>({ submission: state });
+  const [uploading, setUploading] = useState(false);
+  const [uploadFailed, setUploadFailed] = useState(false);
 
   if (state.done) return <PendingCard />;
 
@@ -33,18 +37,37 @@ export function ResubmitForm({ reason, firstTime = false }: { reason?: string; f
   const errorText = (key: FieldErrorKey | undefined) =>
     key ? tAuth(`errors.${key}`, { min: 0, max: DOCUMENT_MAX_MB }) : undefined;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const direct = supabaseConfigured();
     const blocking = (name: string) => {
       const file = formData.get(name);
       const error = validateDocument(file instanceof File ? file : null);
-      return error === "documentTooLarge" || error === "documentType" ? error : undefined;
+      // Com envio direto, o navegador também confere se os dois lados foram escolhidos.
+      return error === "documentTooLarge" || error === "documentType" || (error && direct) ? error : undefined;
     };
     const front = blocking("documentFront");
     const back = blocking("documentBack");
     if (front || back) {
       setChecks({ ...current, front: front ?? current.front, back: back ?? current.back });
+      return;
+    }
+    if (direct) {
+      // Frente e verso vão direto do navegador para a pasta privada da pessoa.
+      setUploadFailed(false);
+      setUploading(true);
+      const [frontPath] = (await uploadOwnFiles("identity-documents", "frente", [formData.get("documentFront") as File])) ?? [];
+      const [backPath] = frontPath ? ((await uploadOwnFiles("identity-documents", "verso", [formData.get("documentBack") as File])) ?? []) : [];
+      setUploading(false);
+      if (!frontPath || !backPath) {
+        setUploadFailed(true);
+        return;
+      }
+      const data = new FormData();
+      data.set("front_path", frontPath);
+      data.set("back_path", backPath);
+      startTransition(() => formAction(data));
       return;
     }
     startTransition(() => formAction(formData));
@@ -78,12 +101,12 @@ export function ResubmitForm({ reason, firstTime = false }: { reason?: string; f
             setChecks({ ...current, [side]: file ? validateDocument(file) : null })
           }
         />
-        {state.error ? (
+        {state.error || uploadFailed ? (
           <p role="alert" className="text-sm text-error">
             {tAuth("errors.unexpected")}
           </p>
         ) : null}
-        <Button type="submit" size="lg" loading={pending} className="w-full">
+        <Button type="submit" size="lg" loading={pending || uploading} className="w-full">
           {firstTime ? t("first.submit") : t("rejected.submit")}
         </Button>
       </form>

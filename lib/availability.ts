@@ -3,6 +3,8 @@ import type { BookingStatus } from "@/lib/bookings";
 import { exampleBlockedDays } from "@/lib/mock/availability";
 import { exampleBookings } from "@/lib/mock/bookings";
 import { exampleHostBookings } from "@/lib/mock/host";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /*
  * Dias livres de cada equipamento (decisão de 09/10/2026).
@@ -30,6 +32,12 @@ export type Unavailable = {
  * e a tabela de dias bloqueados do equipamento.
  */
 export async function unavailableDays(equipmentId: string): Promise<Unavailable> {
+  if (supabaseConfigured()) {
+    // O banco junta dias reservados e bloqueados (função "unavailable_days").
+    const supabase = await createClient();
+    const { data } = await supabase.rpc("unavailable_days", { eq: equipmentId });
+    return { booked: ((data ?? []) as { day: string }[]).map((d) => d.day), blocked: [] };
+  }
   const booked = new Set<string>();
   for (const booking of [...exampleBookings, ...exampleHostBookings]) {
     if (booking.equipment.id !== equipmentId || !BLOCKING_STATUSES.includes(booking.status)) continue;

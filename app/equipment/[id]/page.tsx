@@ -9,7 +9,7 @@ import { MapPinIcon, StarIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { unavailableDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
-import { getEquipment } from "@/lib/equipment";
+import { getEquipment } from "@/lib/equipment-db";
 import { riderDailyPrice } from "@/lib/pricing";
 import { BookingPanel } from "./booking-panel";
 
@@ -56,7 +56,32 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
         {t("backToSearch")}
       </Link>
 
-      <EquipmentPhoto type={equipment.type} className="h-56 w-full rounded-lg md:h-80" />
+      {equipment.photos.length ? (
+        <div className="flex flex-col gap-2">
+          <EquipmentPhoto
+            type={equipment.type}
+            src={equipment.photos[0]}
+            alt={t("photoAlt", { number: 1, title: equipment.title })}
+            className="h-56 w-full rounded-lg md:h-96"
+          />
+          {equipment.photos.length > 1 ? (
+            <ul className="flex gap-2 overflow-x-auto pb-1" aria-label={t("morePhotos")}>
+              {equipment.photos.slice(1).map((src, index) => (
+                <li key={src} className="shrink-0">
+                  <EquipmentPhoto
+                    type={equipment.type}
+                    src={src}
+                    alt={t("photoAlt", { number: index + 2, title: equipment.title })}
+                    className="h-24 w-32 rounded-md md:h-28 md:w-40"
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : (
+        <EquipmentPhoto type={equipment.type} className="h-56 w-full rounded-lg md:h-80" />
+      )}
 
       <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_360px]">
         <div className="flex flex-col gap-6">

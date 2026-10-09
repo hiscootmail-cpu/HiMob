@@ -2,6 +2,9 @@ import { addDays } from "@/lib/booking";
 import type { Booking } from "@/lib/bookings";
 import { EDIT_INTERVAL_DAYS, type Equipment } from "@/lib/equipment";
 import { exampleHostBookings, exampleHostListings } from "@/lib/mock/host";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { equipmentPhotoUrl } from "@/lib/supabase/photos";
+import { createClient } from "@/lib/supabase/server";
 
 /*
  * Área do Host (Lote 5).
@@ -17,8 +20,8 @@ import { exampleHostBookings, exampleHostListings } from "@/lib/mock/host";
  *   continua no ar, sem mudança.
  * - O QR fica numa etiqueta colada no equipamento; o Host imprime aqui.
  *
- * PROVISÓRIO (a confirmar quando o banco for desenhado): os nomes dos campos
- * de análise abaixo ainda não existem no banco.
+ * Os campos abaixo vêm das tabelas equipment, equipment_private e
+ * equipment_edits (supabase/migrations).
  */
 
 export type ListingReview = "pending" | "approved" | "rejected";
@@ -65,22 +68,95 @@ export type HostBooking = Booking & {
   host_reviewed: boolean;
 };
 
+type HostRow = {
+  id: string;
+  host_id: string;
+  type: HostListing["type"];
+  title: string;
+  description: string;
+  daily_price: number;
+  city: string;
+  area: string;
+  latitude: number | null;
+  longitude: number | null;
+  pickup_time: string;
+  return_time: string;
+  is_available: boolean;
+  review_status: ListingReview;
+  review_reason: string | null;
+  last_sent_at: string;
+  equipment_private: { pickup_address: string; latitude: number; longitude: number; label_code: string } | null;
+  equipment_photos: { path: string; position: number }[];
+  equipment_edits: { status: string }[];
+};
+
+/** Anúncios do Host conectado, lidos do banco (com os dados privados que só ele vê). */
+async function realHostListings(id?: string): Promise<HostListing[]> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+  let query = supabase
+    .from("equipment")
+    .select(
+      "id, host_id, type, title, description, daily_price, city, area, latitude, longitude, pickup_time, return_time, is_available, review_status, review_reason, last_sent_at, equipment_private(pickup_address, latitude, longitude, label_code), equipment_photos(path, position), equipment_edits(status)",
+    )
+    .eq("host_id", user.id)
+    .order("created_at", { ascending: false });
+  if (id) query = query.eq("id", id);
+  const { data } = await query;
+
+  return ((data ?? []) as unknown as HostRow[]).map((row) => ({
+    id: row.id,
+    host_id: row.host_id,
+    type: row.type,
+    title: row.title,
+    description: row.description,
+    daily_price: Number(row.daily_price),
+    city: row.city,
+    area: row.area,
+    // O Host vê o ponto exato do próprio anúncio.
+    latitude: row.equipment_private?.latitude ?? row.latitude ?? 0,
+    longitude: row.equipment_private?.longitude ?? row.longitude ?? 0,
+    photos: [...row.equipment_photos].sort((a, b) => a.position - b.position).map((p) => equipmentPhotoUrl(p.path)),
+    is_available: row.is_available,
+    pickup_time: row.pickup_time.slice(0, 5),
+    return_time: row.return_time.slice(0, 5),
+    rating: null,
+    host: { id: row.host_id, full_name: "", verified: true, host_since: new Date().getFullYear(), rating: null },
+    review_status: row.review_status,
+    review_reason: row.review_reason,
+    last_sent_at: new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(row.last_sent_at)),
+    edit_in_review: row.equipment_edits.some((e) => e.status === "pending"),
+    pickup_address: row.equipment_private?.pickup_address ?? "",
+    label_code: row.equipment_private?.label_code ?? "",
+  }));
+}
+
 /*
- * PROVISÓRIO: devolve os exemplos. Quando o Supabase entrar, busca só os
- * anúncios e as reservas do Host conectado, no servidor.
+ * Com a Supabase: os anúncios do Host conectado (o banco não entrega os de
+ * outras pessoas). Sem a Supabase (demonstração): os exemplos.
+ * Reservas recebidas passam a vir do banco na etapa 4; até lá, ficam vazias
+ * quando o site está ligado à Supabase.
  */
 export async function listHostListings(): Promise<HostListing[]> {
-  return exampleHostListings;
+  return supabaseConfigured() ? realHostListings() : exampleHostListings;
 }
 
 export async function getHostListing(id: string): Promise<HostListing | null> {
+  if (supabaseConfigured()) {
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+    return (await realHostListings(id))[0] ?? null;
+  }
   return exampleHostListings.find((item) => item.id === id) ?? null;
 }
 
 export async function listHostBookings(): Promise<HostBooking[]> {
-  return exampleHostBookings;
+  return supabaseConfigured() ? [] : exampleHostBookings;
 }
 
 export async function getHostBooking(id: string): Promise<HostBooking | null> {
+  if (supabaseConfigured()) return null;
   return exampleHostBookings.find((item) => item.id === id) ?? null;
 }

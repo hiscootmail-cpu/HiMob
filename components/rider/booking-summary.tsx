@@ -29,7 +29,7 @@ export function BookingSummary({
 
   return (
     <div className={cn("flex gap-4", className)}>
-      <EquipmentPhoto type={booking.equipment.type} className="size-20 shrink-0 rounded-md" />
+      <EquipmentPhoto type={booking.equipment.type} src={booking.equipment.photos[0]} className="size-20 shrink-0 rounded-md" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         {showStatus ? <BookingStatusBadge status={booking.status} /> : null}
         <p className="line-clamp-2 text-base font-semibold text-hs-black">{booking.equipment.title}</p>

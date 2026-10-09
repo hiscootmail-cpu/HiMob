@@ -7,6 +7,8 @@ import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { Button } from "@/components/ui/button";
 import { listRiderBookings, ONGOING, type Booking } from "@/lib/bookings";
+import { requireUser } from "@/lib/session";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rider.list");
@@ -28,6 +30,8 @@ function BookingList({ items }: { items: Booking[] }) {
 
 /** Minhas reservas (Rider): em andamento e anteriores. */
 export default async function RiderReservationsPage() {
+  // Com a Supabase, só quem entrou na conta (na demonstração, a tela abre direto).
+  if (supabaseConfigured()) await requireUser();
   const t = await getTranslations("rider.list");
   const bookings = await listRiderBookings();
   const ongoing = bookings.filter((b) => ONGOING.includes(b.status));
