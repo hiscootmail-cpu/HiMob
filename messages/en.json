@@ -26,7 +26,9 @@
     "conversationsShort": "Messages",
     "profileShort": "Profile",
     "signIn": "Log in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "notifications": "Notifications",
+    "notificationsUnread": "Notifications, {count} unread"
   },
   "footer": {
     "slogan": "The city moves. Get in the Flow.",
@@ -852,6 +854,223 @@
       "noPast": "No past bookings.",
       "emptyTitle": "You haven't received bookings yet",
       "emptyText": "When a Rider requests your equipment, it shows up here."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "hello": "Hi, {name}!",
+    "subtitle": "See what needs you right now.",
+    "nextTitle": "Next steps",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "allDoneTitle": "All caught up",
+    "allDoneText": "Nothing needs you right now.",
+    "shortcutsTitle": "Shortcuts",
+    "shortcuts": {
+      "explore": "Explore",
+      "reservations": "My bookings",
+      "myListings": "My listings",
+      "becomeHost": "List equipment",
+      "conversations": "Messages"
+    },
+    "cards": {
+      "identityTitle": "Send your ID",
+      "identityText": "You can rent and list only after verification.",
+      "requestsTitle": "{count, plural, one {You have # new request} other {You have # new requests}}",
+      "requestsText": "Accept or decline in Received bookings.",
+      "payTitle": "Pay for your booking",
+      "payText": "The Host accepted: {title}.",
+      "pickupTitle": "Pick-up {day} at {time}",
+      "pickupText": "{title}. Scan the label QR at pick-up.",
+      "handoverTitle": "Hand-over {day} at {time}",
+      "handoverText": "Confirm the hand-over to {name} with a photo: {title}",
+      "reviewTitle": "Rate your rental",
+      "reviewText": "How was {title}?",
+      "messagesTitle": "{count, plural, one {# new message} other {# new messages}}",
+      "messagesText": "Reply in Messages."
+    }
+  },
+  "conversations": {
+    "title": "Messages",
+    "chatTitle": "Chat with {name}",
+    "back": "Back to Messages",
+    "emptyTitle": "No messages yet",
+    "emptyText": "Talk to a Host from the equipment listing.",
+    "explore": "Explore equipment",
+    "about": "About {title}",
+    "aboutYour": "Your listing: {title}",
+    "you": "You",
+    "noMessages": "No messages yet",
+    "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+    "verified": "Verified identity",
+    "contactTitle": "Contact unlocked (booking accepted)",
+    "contactHidden": "For your safety, phone and email stay hidden until the booking is accepted. Arrange everything here.",
+    "messagesWith": "Messages with {name}",
+    "startConversation": "Send the first message to {name}.",
+    "hiddenNote": "contact hidden",
+    "redactedNotice": "We hid the phone or email in your message. It shows after the booking is accepted.",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write a message",
+    "send": "Send",
+    "errors": {
+      "empty": "Write a message.",
+      "tooLong": "Use at most {max} characters.",
+      "notAllowed": "We couldn't send it now. Try again."
+    }
+  },
+  "profile": {
+    "saved": "Profile saved.",
+    "memberSince": "On Hi Scoot since {year}",
+    "verified": "Verified identity",
+    "notVerified": "Identity not verified",
+    "host": "Host",
+    "edit": "Edit profile",
+    "ratingsTitle": "Ratings",
+    "asHost": "As a Host",
+    "asRider": "As a Rider",
+    "reviewsCount": "{count, plural, one {# rating} other {# ratings}}",
+    "noRatingYet": "No ratings yet",
+    "reviewAsHost": "rated as Host",
+    "reviewAsRider": "rated as Rider",
+    "starsOf5": "{count} out of 5 stars",
+    "noReviews": "No comments yet.",
+    "listingsTitle": "Listings",
+    "noListings": "No published listings."
+  },
+  "profileEdit": {
+    "title": "Edit profile",
+    "back": "Back to profile",
+    "subtitle": "Your phone and email never show on your public profile.",
+    "nameLabel": "Full name",
+    "nameLocked": "Your name was checked against your ID. To change it, <link>send a new ID</link>.",
+    "phoneLabel": "Phone",
+    "phoneHint": "With area code. Only shown to the other person after the booking is accepted.",
+    "cityLabel": "City",
+    "save": "Save",
+    "errors": {
+      "phoneRequired": "Enter your phone.",
+      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678.",
+      "cityRequired": "Enter your city.",
+      "cityTooLong": "Use at most {max} characters."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "languageTitle": "Language",
+    "languageHelp": "The whole site switches to the chosen language.",
+    "accountTitle": "Account",
+    "viewProfile": "View my public profile",
+    "editProfile": "Edit profile",
+    "admin": "Admin panel",
+    "signOut": "Sign out",
+    "identity": {
+      "label": "Identity verification",
+      "approved": "Verified",
+      "pending": "Under review",
+      "rejected": "Rejected",
+      "blocked": "Blocked"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "filterLabel": "Filter notifications",
+    "filterAll": "All",
+    "filterAction": "Need me",
+    "emptyTitle": "No notifications",
+    "emptyActionTitle": "Nothing needs you right now",
+    "emptyText": "Notices about bookings, messages and reviews show up here.",
+    "unreadLabel": "Unread",
+    "needsAction": "needs you",
+    "kinds": {
+      "bookingRequest": "{name} requested a booking: {title}",
+      "bookingAccepted": "{name} accepted your request: {title}. Payment due.",
+      "bookingRejected": "Request declined: {title}",
+      "paymentConfirmed": "Payment confirmed: {title}",
+      "pickupReminder": "Reminder: pick-up tomorrow · {title}",
+      "returnConfirmed": "Return confirmed: {title}. Rate your rental.",
+      "reviewReceived": "{name} rated you",
+      "listingApproved": "Listing approved: {title}",
+      "listingRejected": "Listing rejected: {title}. See why.",
+      "documentApproved": "Your identity was verified",
+      "documentRejected": "Your ID was rejected. See why.",
+      "newMessage": "New message from {name}"
+    }
+  },
+  "admin": {
+    "title": "Admin panel",
+    "subtitle": "Listing and sign-up review. Only the Hi Scoot team has access.",
+    "queuesLabel": "Review queues",
+    "tabs": {
+      "listings": "New listings",
+      "edits": "Edits",
+      "identity": "Sign-ups"
+    },
+    "oldestFirst": "The oldest request shows first.",
+    "emptyTitle": "Nothing to review in this queue.",
+    "sent": "Sent {when}",
+    "photos": "{count, plural, one {# photo} other {# photos}}",
+    "hostLabel": "Host:",
+    "verified": "verified identity",
+    "notVerified": "identity not verified",
+    "price": "Host gets {host} per day · Riders see {rider}",
+    "changesTitle": "What changed",
+    "changeField": "Field",
+    "changeBefore": "Before",
+    "changeAfter": "After",
+    "fields": {
+      "daily_price": "Daily price",
+      "description": "Description",
+      "photos": "Photos",
+      "area": "Neighborhood",
+      "times": "Times"
+    },
+    "editStaysLive": "The current listing stays live until the decision.",
+    "identity": {
+      "document": "ID (front and back)",
+      "letter": "Letter with social name and CPF",
+      "rejections": "{count, plural, one {# previous rejection} other {# previous rejections}}",
+      "documentHelp": "Check that the name on the ID matches the sign-up name.",
+      "letterHelp": "Check that the letter is handwritten and has the social name and CPF.",
+      "lastChance": "This would be the 2nd rejection: if you reject, the account is blocked from renting and listing."
+    },
+    "decision": {
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "E.g.: The photos don't show the whole equipment.",
+      "reasonHint": "Required to reject. The person receives this text.",
+      "reject": "Reject",
+      "approve": "Approve",
+      "rejectTitle": "Reject?",
+      "rejectText": "The person gets a notice with the reason and can fix it.",
+      "rejectConfirm": "Reject",
+      "blockTitle": "Reject and block the account?",
+      "blockText": "It's the 2nd rejection: the account is blocked from renting and listing. This can't be undone here.",
+      "blockConfirm": "Reject and block",
+      "cancel": "Go back",
+      "done": {
+        "approved": "Approved. The person gets a notice.",
+        "rejected": "Rejected. The person gets the reason.",
+        "blocked": "Rejected and account blocked. The person gets the reason."
+      },
+      "errors": {
+        "reasonRequired": "Write the reason to reject.",
+        "reasonTooShort": "Explain more: at least {min} characters.",
+        "reasonTooLong": "Use at most {max} characters.",
+        "notAllowed": "You don't have permission to do this."
+      }
+    },
+    "document": {
+      "openDocument": "View submitted ID",
+      "openLetter": "View submitted letter",
+      "close": "Close",
+      "title": "Files from {name}",
+      "privacy": "Sensitive personal data (LGPD): only the verification team sees it. Don't download or share.",
+      "front": "Front",
+      "back": "Back",
+      "letter": "Letter",
+      "example": "Example preview",
+      "checkDocument": "Compare the name on the ID with the sign-up name.",
+      "checkLetter": "The letter must be handwritten, with social name and CPF."
     }
   }
 }

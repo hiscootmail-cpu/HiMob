@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { BellIcon } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { isActive, navItems } from "@/components/navigation";
@@ -13,13 +14,15 @@ import { cn } from "@/lib/utils";
 type SiteHeaderProps = {
   /** Pessoa conectada? Muda os botões do lado direito. */
   signedIn: boolean;
+  /** Avisos ainda não lidos (sininho, só para quem está conectado). */
+  unreadCount?: number;
   /** Na página de conferência o menu não fica preso no topo. */
   sticky?: boolean;
   className?: string;
 };
 
 /** Menu principal com o seletor de idioma PT/EN: uma peça só. */
-export function SiteHeader({ signedIn, sticky = true, className }: SiteHeaderProps) {
+export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className }: SiteHeaderProps) {
   const t = useTranslations("nav");
   const pathname = usePathname();
 
@@ -70,6 +73,28 @@ export function SiteHeader({ signedIn, sticky = true, className }: SiteHeaderPro
         )}
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
+          {signedIn ? (
+            // Sininho ao lado do seletor PT/EN (decisão de 09/10/2026); o seletor não muda.
+            <Link
+              href="/notifications"
+              aria-label={unreadCount ? t("notificationsUnread", { count: unreadCount }) : t("notifications")}
+              aria-current={isActive(pathname, "/notifications") ? "page" : undefined}
+              className={cn(
+                "relative flex size-10 items-center justify-center rounded-full text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+                isActive(pathname, "/notifications") && "bg-green-soft",
+              )}
+            >
+              <BellIcon className="size-6" />
+              {unreadCount ? (
+                <span
+                  aria-hidden
+                  className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-hs-black px-1 text-xs font-bold text-hs-white"
+                >
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              ) : null}
+            </Link>
+          ) : null}
           <LanguageSwitcher />
           {signedIn ? null : (
             <>

@@ -7,6 +7,7 @@ import { BottomNav } from "@/components/bottom-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
+import { unreadCount } from "@/lib/notifications";
 import { isSignedIn } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import "./globals.css";
@@ -35,12 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
   const signedIn = await isSignedIn();
+  const unread = signedIn ? await unreadCount() : 0;
 
   return (
     <html lang={locale === "pt" ? "pt-BR" : "en"} className={cn(inter.variable, "h-full")}>
       <body className="flex min-h-full flex-col bg-hs-white text-hs-black">
         <NextIntlClientProvider>
-          <SiteHeader signedIn={signedIn} />
+          <SiteHeader signedIn={signedIn} unreadCount={unread} />
           <main className={cn("flex flex-1 flex-col", signedIn && "pb-16 md:pb-0")}>{children}</main>
           <SiteFooter className={cn(signedIn && "pb-16 md:pb-0")} />
           {signedIn ? <BottomNav /> : null}

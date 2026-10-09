@@ -1,6 +1,9 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { DEMO_SESSION_COOKIE } from "@/lib/session";
 
 import {
   validateDocument,
@@ -60,6 +63,8 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
     return { error: "invalidCredentials", values: { email } };
   }
 
+  // PROVISÓRIO: sessão de demonstração (ver lib/session.ts).
+  (await cookies()).set(DEMO_SESSION_COOKIE, "1", { httpOnly: true, sameSite: "lax", path: "/" });
   redirect("/dashboard");
 }
 
@@ -112,4 +117,10 @@ export async function updatePassword(
   if (passwordError) return { fieldErrors: { password: passwordError } };
 
   redirect("/dashboard");
+}
+
+/** Sair: desconecta e volta para a tela de entrada (inventário de ações: Logout). */
+export async function signOut() {
+  (await cookies()).delete(DEMO_SESSION_COOKIE);
+  redirect("/auth/login");
 }

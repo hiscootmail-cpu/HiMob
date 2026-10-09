@@ -263,7 +263,7 @@ export default async function DesignSystemPage() {
           <div className="flex flex-col gap-2">
             <StateLabel>{t("header.member")}</StateLabel>
             <div className="overflow-hidden rounded-lg border border-line">
-              <SiteHeader signedIn sticky={false} className="border-b-0" />
+              <SiteHeader signedIn unreadCount={3} sticky={false} className="border-b-0" />
             </div>
           </div>
         </div>

@@ -61,3 +61,13 @@ export function validateDocument(file: { size: number; type: string } | null | u
   if (file.size > DOCUMENT_MAX_BYTES) return "documentTooLarge";
   return null;
 }
+
+/** Cidade no perfil: até 60 letras. */
+export const CITY_MAX = 60;
+
+/** Telefone brasileiro: DDD + número, 10 ou 11 dígitos. */
+export function validatePhone(phone: string): "phoneRequired" | "phoneInvalid" | null {
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return "phoneRequired";
+  return /^\d{10,11}$/.test(digits) ? null : "phoneInvalid";
+}
