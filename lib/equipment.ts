@@ -1,4 +1,3 @@
-import { exampleEquipment } from "@/lib/mock/equipment";
 
 /*
  * Formato de um equipamento anunciado, como as telas recebem.
@@ -54,7 +53,7 @@ export type Equipment = {
   city: string;
   /** Bairro mostrado antes da reserva (o endereço exato só depois da confirmação). */
   area: string;
-  /** Endereços das fotos (de 4 a 10). Vazio nos exemplos: as fotos chegam com o Lote 5. */
+  /** Endereços públicos das fotos (de 4 a 10). Vazio nos exemplos. */
   photos: string[];
   latitude: number;
   longitude: number;
@@ -72,17 +71,10 @@ export type Equipment = {
 /** Centro de São Paulo: usado quando a pessoa não compartilha a localização. */
 export const FALLBACK_LOCATION = { latitude: -23.5614, longitude: -46.6559 };
 
+/*
+ * A busca dos anúncios no banco fica em lib/equipment-db.ts (só no servidor),
+ * porque este arquivo também é usado por telas que rodam no navegador.
+ */
+
 /** Raio da busca por proximidade, em km (inventário de ações). */
 export const SEARCH_RADIUS_KM = 5;
-
-/*
- * PROVISÓRIO: devolve os exemplos. Quando o Supabase entrar, estas funções
- * buscam só anúncios aprovados, no servidor.
- */
-export async function listEquipment(): Promise<Equipment[]> {
-  return exampleEquipment;
-}
-
-export async function getEquipment(id: string): Promise<Equipment | null> {
-  return exampleEquipment.find((item) => item.id === id) ?? null;
-}

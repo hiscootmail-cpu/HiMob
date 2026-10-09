@@ -13,6 +13,8 @@ import { hostCancelPolicy } from "@/lib/cancellation";
 import { unavailableDays } from "@/lib/availability";
 import { listHostBookings, listHostListings, type HostBooking } from "@/lib/host";
 import { cn } from "@/lib/utils";
+import { requireUser } from "@/lib/session";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("host.reservations");
@@ -43,7 +45,7 @@ async function HostBookingCard({ booking }: { booking: HostBooking }) {
   return (
     <li id={booking.id} className="flex scroll-mt-24 flex-col gap-4 rounded-lg border border-line bg-hs-white p-4">
       <div className="flex gap-4">
-        <EquipmentPhoto type={booking.equipment.type} className="size-20 shrink-0 rounded-md" />
+        <EquipmentPhoto type={booking.equipment.type} src={booking.equipment.photos[0]} className="size-20 shrink-0 rounded-md" />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <Badge tone={tones[booking.status]}>{t(`status.${booking.status}`)}</Badge>
           <p className="line-clamp-2 text-base font-semibold text-hs-black">{booking.equipment.title}</p>
@@ -107,6 +109,8 @@ const listingsFilter = (value: string | undefined) => (value && /^[\w-]+$/.test(
 
 /** Reservas recebidas (Host): pedidos novos, em andamento, anteriores e calendário. */
 export default async function HostReservationsPage({ searchParams }: PageProps<"/host/reservations">) {
+  // Com a Supabase, só quem entrou na conta (na demonstração, a tela abre direto).
+  if (supabaseConfigured()) await requireUser();
   const t = await getTranslations("host.reservations");
   const params = await searchParams;
   const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : undefined);

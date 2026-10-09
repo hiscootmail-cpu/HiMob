@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { DocumentUpload } from "@/components/ui/document-upload";
+import { uploadOwnFiles } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { DOCUMENT_ACCEPT, DOCUMENT_MAX_MB, validateDocument, type FieldErrorKey } from "@/lib/validation";
 import { submitSocialNameLetter, type LetterState } from "./actions";
 
@@ -19,6 +21,8 @@ export function LetterForm() {
   const tAuth = useTranslations("auth");
   const [state, formAction, pending] = useActionState(submitSocialNameLetter, initialState);
   const [local, setLocal] = useState<{ submission: unknown; error: FieldErrorKey | null } | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadFailed, setUploadFailed] = useState(false);
 
   if (state.done) {
     return (
@@ -32,13 +36,28 @@ export function LetterForm() {
   const current = local?.submission === state ? local : null;
   const errorKey = current ? (current.error ?? undefined) : state.fieldErrors?.letter;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const file = formData.get("letter");
     const error = validateDocument(file instanceof File ? file : null);
-    if (error === "documentTooLarge" || error === "documentType") {
+    if (error === "documentTooLarge" || error === "documentType" || (error && supabaseConfigured())) {
       setLocal({ submission: state, error });
+      return;
+    }
+    if (supabaseConfigured()) {
+      // A foto vai direto do navegador para a pasta privada da pessoa.
+      setUploadFailed(false);
+      setUploading(true);
+      const paths = await uploadOwnFiles("identity-documents", "carta", [file as File]);
+      setUploading(false);
+      if (!paths) {
+        setUploadFailed(true);
+        return;
+      }
+      const data = new FormData();
+      data.set("letter_path", paths[0]);
+      startTransition(() => formAction(data));
       return;
     }
     startTransition(() => formAction(formData));
@@ -72,12 +91,12 @@ export function LetterForm() {
         }}
       />
       <p className="text-xs text-muted">{t("privacy")}</p>
-      {state.error ? (
+      {state.error || uploadFailed ? (
         <p role="alert" className="text-sm text-error">
           {tAuth("errors.unexpected")}
         </p>
       ) : null}
-      <Button type="submit" variant="secondary" loading={pending} className="w-full">
+      <Button type="submit" variant="secondary" loading={pending || uploading} className="w-full">
         {t("submit")}
       </Button>
     </form>

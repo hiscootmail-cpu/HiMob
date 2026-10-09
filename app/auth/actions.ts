@@ -42,16 +42,14 @@ export type AuthFormState = {
   values?: { email?: string };
   /** Pedido concluído (usado em "Esqueci a senha"). */
   done?: boolean;
+  /** Cadastro com a Supabase: onde o navegador envia frente e verso do documento. */
+  upload?: { front: { path: string; token: string }; back: { path: string; token: string } };
 };
 
 /** Endereço do site, para os links dos e-mails de confirmação e de senha nova. */
 async function siteOrigin() {
   const list = await headers();
   return list.get("origin") ?? `https://${list.get("host")}`;
-}
-
-function extension(file: File) {
-  return file.type === "application/pdf" ? "pdf" : file.type === "image/png" ? "png" : "jpg";
 }
 
 function text(formData: FormData, name: string) {
@@ -96,16 +94,31 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   const fullName = text(formData, "fullName").trim();
   const email = text(formData, "email").trim();
   const password = text(formData, "password");
-  const documentFront = formData.get("documentFront");
-  const documentBack = formData.get("documentBack");
+  // Com a Supabase, o navegador manda só os dados do arquivo (tipo e tamanho);
+  // o arquivo em si vai direto para a pasta privada, sem passar por aqui.
+  const meta = (name: string): { type: string; size: number } | null => {
+    const raw = formData.get(`${name}Meta`);
+    if (typeof raw !== "string") {
+      const file = formData.get(name);
+      return file instanceof File ? file : null;
+    }
+    try {
+      const parsed = JSON.parse(raw) as { type?: unknown; size?: unknown };
+      return { type: String(parsed.type ?? ""), size: Number(parsed.size ?? 0) };
+    } catch {
+      return null;
+    }
+  };
+  const documentFront = meta("documentFront");
+  const documentBack = meta("documentBack");
   const acceptedTerms = formData.get("terms") === "on";
 
   const fieldErrors = {
     fullName: validateFullName(fullName) ?? undefined,
     email: validateEmail(email) ?? undefined,
     password: validateNewPassword(password) ?? undefined,
-    documentFront: validateDocument(documentFront instanceof File ? documentFront : null) ?? undefined,
-    documentBack: validateDocument(documentBack instanceof File ? documentBack : null) ?? undefined,
+    documentFront: validateDocument(documentFront) ?? undefined,
+    documentBack: validateDocument(documentBack) ?? undefined,
     terms: acceptedTerms ? undefined : ("termsRequired" as const),
   };
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -125,25 +138,28 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
     if (error && error.code !== "user_already_exists") return { error: "unexpected", values: { email } };
 
     // Frente e verso vão para a pasta privada que só a equipe de verificação lê,
-    // para conferir se o nome do documento é o mesmo do cadastro.
-    // Antes de a pessoa confirmar o e-mail ela ainda não tem sessão: nesse caso
-    // o servidor guarda com a chave da equipe. Sem essa chave, o documento é
-    // pedido de novo no primeiro acesso (Verificação de identidade).
+    // para conferir se o nome do documento é o mesmo do cadastro. Antes de
+    // confirmar o e-mail a pessoa ainda não tem sessão: o servidor gera, com a
+    // chave da equipe, um link de envio de uso único para cada lado. Sem essa
+    // chave, o documento é pedido no primeiro acesso (Verificação de identidade).
     const userId = data.user?.identities?.length ? data.user.id : null;
-    const uploader = data.session ? supabase : createSecretClient();
-    if (userId && uploader && documentFront instanceof File && documentBack instanceof File) {
+    const admin = createSecretClient();
+    if (userId && admin && documentFront && documentBack) {
       const stamp = Date.now();
-      const front = `${userId}/cadastro-frente-${stamp}.${extension(documentFront)}`;
-      const back = `${userId}/cadastro-verso-${stamp}.${extension(documentBack)}`;
-      const bucket = uploader.storage.from("identity-documents");
-      const [up1, up2] = await Promise.all([
-        bucket.upload(front, documentFront, { contentType: documentFront.type }),
-        bucket.upload(back, documentBack, { contentType: documentBack.type }),
+      const ext = (type: string) => (type === "application/pdf" ? "pdf" : type === "image/png" ? "png" : "jpg");
+      const bucket = admin.storage.from("identity-documents");
+      const [front, back] = await Promise.all([
+        bucket.createSignedUploadUrl(`${userId}/cadastro-frente-${stamp}.${ext(documentFront.type)}`),
+        bucket.createSignedUploadUrl(`${userId}/cadastro-verso-${stamp}.${ext(documentBack.type)}`),
       ]);
-      if (!up1.error && !up2.error) {
-        await uploader
-          .from("identity_submissions")
-          .insert({ user_id: userId, kind: "document", front_path: front, back_path: back });
+      if (front.data && back.data) {
+        return {
+          values: { email },
+          upload: {
+            front: { path: front.data.path, token: front.data.token },
+            back: { path: back.data.path, token: back.data.token },
+          },
+        };
       }
     }
     // Mesma resposta para e-mail novo ou já cadastrado (não revela quem tem conta).
@@ -151,6 +167,27 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   }
 
   redirect("/auth/sign-up-success");
+}
+
+/**
+ * Depois que o navegador enviou frente e verso (links de uso único), registra o
+ * pedido de análise. Confere que os dois arquivos existem na pasta da pessoa e
+ * que ela ainda não tem nenhum envio.
+ */
+export async function finishSignupDocuments(frontPath: string, backPath: string): Promise<void> {
+  const admin = createSecretClient();
+  if (!admin) return;
+  const [folder, frontName] = frontPath.split("/");
+  const [backFolder, backName] = backPath.split("/");
+  if (!/^[0-9a-f-]{36}$/i.test(folder) || backFolder !== folder || !frontName?.startsWith("cadastro-frente-") || !backName?.startsWith("cadastro-verso-")) return;
+
+  const { data: files } = await admin.storage.from("identity-documents").list(folder);
+  const names = new Set((files ?? []).map((f) => f.name));
+  if (!names.has(frontName) || !names.has(backName)) return;
+
+  const { count } = await admin.from("identity_submissions").select("id", { count: "exact", head: true }).eq("user_id", folder);
+  if (count) return;
+  await admin.from("identity_submissions").insert({ user_id: folder, kind: "document", front_path: frontPath, back_path: backPath });
 }
 
 export async function requestPasswordReset(

@@ -1,6 +1,8 @@
 import { redactContacts } from "@/lib/contact-filter";
-import { getEquipment, type EquipmentType } from "@/lib/equipment";
+import { type EquipmentType } from "@/lib/equipment";
+import { getEquipment } from "@/lib/equipment-db";
 import { exampleConversations } from "@/lib/mock/conversations";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { publicName } from "@/lib/utils";
 
 /*
@@ -51,6 +53,8 @@ function protect(conversation: Conversation): Conversation {
  * pessoa conectada participa (o banco recusa as outras).
  */
 export async function listConversations(): Promise<Conversation[]> {
+  // Com a Supabase, as conversas passam a vir do banco na etapa 5.
+  if (supabaseConfigured()) return [];
   return exampleConversations
     .map(protect)
     .sort((a, b) => (b.messages.at(-1)?.sent_at ?? "").localeCompare(a.messages.at(-1)?.sent_at ?? ""));
@@ -61,7 +65,7 @@ export async function listConversations(): Promise<Conversation[]> {
  * reaproveita a conversa sobre ele ou começa uma nova, vazia.
  */
 export async function getConversation(id: string): Promise<Conversation | null> {
-  const found = exampleConversations.find((c) => c.id === id || (c.my_role === "rider" && c.equipment.id === id));
+  const found = supabaseConfigured() ? undefined : exampleConversations.find((c) => c.id === id || (c.my_role === "rider" && c.equipment.id === id));
   if (found) return protect(found);
 
   const equipment = await getEquipment(id);

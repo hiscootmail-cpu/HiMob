@@ -23,6 +23,8 @@ import {
   type ListingField,
 } from "@/lib/listing";
 import { PLATFORM_FEE_PERCENT, SUGGESTED_DAILY_PRICE, riderDailyPrice } from "@/lib/pricing";
+import { uploadOwnFiles } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
 
 export type ListingDefaults = {
@@ -62,6 +64,8 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
   const [coords, setCoords] = useState(defaults ? { lat: defaults.latitude, lng: defaults.longitude } : null);
   const [location, setLocation] = useState<LocationStatus>(defaults ? "saved" : "idle");
   const [local, setLocal] = useState<{ submission: unknown; errors: ListingErrors }>({ submission: state, errors: {} });
+  const [uploading, setUploading] = useState(false);
+  const [uploadFailed, setUploadFailed] = useState(false);
 
   const errors = local.submission === state ? local.errors : (state.errors ?? {});
   const clear = (field: ListingField) => {
@@ -97,7 +101,7 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
     );
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     // Envio manual: o formulário não é limpo e as fotos escolhidas continuam.
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -109,6 +113,20 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
     if (Object.keys(found).length) {
       requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"], [data-invalid="true"]')?.focus());
       return;
+    }
+    if (supabaseConfigured() && photos.length) {
+      // Fotos vão direto do navegador para a pasta do Host na Supabase
+      // (o servidor do site tem limite de tamanho de envio).
+      setUploadFailed(false);
+      setUploading(true);
+      const paths = await uploadOwnFiles("equipment-photos", "anuncio", photos);
+      setUploading(false);
+      if (!paths) {
+        setUploadFailed(true);
+        return;
+      }
+      formData.delete("photos");
+      formData.set("photo_paths", JSON.stringify(paths));
     }
     startTransition(() => submit(formData));
   }
@@ -348,9 +366,9 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
         <p className="text-sm text-muted">{t("timesHint")}</p>
       </section>
 
-      {state.error ? (
+      {state.error || uploadFailed ? (
         <p role="alert" className="text-sm text-error">
-          {t("errors.notAllowed")}
+          {uploadFailed ? t("errors.uploadFailed") : t(`errors.${state.error ?? "notAllowed"}`)}
         </p>
       ) : Object.values(errors).some(Boolean) ? (
         <p role="alert" className="text-sm text-error">
@@ -359,7 +377,7 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
       ) : null}
 
       <div className="flex flex-col gap-2">
-        <Button type="submit" size="lg" loading={pending} className="w-full sm:w-fit sm:self-end">
+        <Button type="submit" size="lg" loading={pending || uploading} className="w-full sm:w-fit sm:self-end">
           {mode === "edit" ? t("submitEdit") : t("submitNew")}
         </Button>
         <p className="text-sm text-muted sm:text-right">{mode === "edit" ? t("reviewNoteEdit") : t("reviewNoteNew")}</p>

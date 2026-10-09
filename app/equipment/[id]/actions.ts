@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { unavailableDays } from "@/lib/availability";
 import { firstConflict, todayInSaoPaulo, validateBookingDates, type BookingDatesError } from "@/lib/booking";
-import { getEquipment } from "@/lib/equipment";
+import { getEquipment } from "@/lib/equipment-db";
 
 /*
  * PROVISÓRIO: nada é gravado ainda. As ações conferem os dados e simulam a

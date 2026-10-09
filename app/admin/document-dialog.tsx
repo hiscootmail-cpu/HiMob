@@ -11,9 +11,18 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
  * equipe abre. PROVISÓRIO: ainda sem arquivo de verdade; com o Supabase, o
  * servidor gera um link que vale poucos minutos e só para a equipe.
  */
-export function DocumentDialog({ kind, name }: { kind: "document" | "letter"; name: string }) {
+export function DocumentDialog({
+  kind,
+  name,
+  files,
+}: {
+  kind: "document" | "letter";
+  name: string;
+  /** Links temporários para os arquivos (com a Supabase). */
+  files?: { part: "front" | "back" | "letter"; url: string }[];
+}) {
   const t = useTranslations("admin.document");
-  const parts = kind === "document" ? [t("front"), t("back")] : [t("letter")];
+  const parts: ("front" | "back" | "letter")[] = kind === "document" ? ["front", "back"] : ["letter"];
 
   return (
     <Dialog>
@@ -27,14 +36,25 @@ export function DocumentDialog({ kind, name }: { kind: "document" | "letter"; na
         <DialogTitle>{t("title", { name })}</DialogTitle>
         <DialogDescription>{t("privacy")}</DialogDescription>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {parts.map((part) => (
-            <figure key={part} className="flex flex-col gap-1.5">
-              <div className="flex aspect-[3/2] items-center justify-center rounded-md border border-dashed border-line bg-surface text-sm text-muted">
-                {t("example")}
-              </div>
-              <figcaption className="text-sm font-medium text-hs-black">{part}</figcaption>
-            </figure>
-          ))}
+          {parts.map((part) => {
+            const url = files?.find((f) => f.part === part)?.url;
+            return (
+              <figure key={part} className="flex flex-col gap-1.5">
+                {url ? (
+                  <a href={url} target="_blank" rel="noreferrer" className="block rounded-md outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40">
+                    {/* Link temporário (5 minutos). PDF abre em outra aba. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={t(part)} className="aspect-[3/2] w-full rounded-md border border-line bg-surface object-contain" />
+                  </a>
+                ) : (
+                  <div className="flex aspect-[3/2] items-center justify-center rounded-md border border-dashed border-line bg-surface text-sm text-muted">
+                    {t("example")}
+                  </div>
+                )}
+                <figcaption className="text-sm font-medium text-hs-black">{t(part)}</figcaption>
+              </figure>
+            );
+          })}
         </div>
         <p className="text-sm text-hs-black">{kind === "document" ? t("checkDocument") : t("checkLetter")}</p>
       </DialogContent>

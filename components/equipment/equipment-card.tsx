@@ -38,7 +38,7 @@ export function EquipmentCard({ item, distanceKm, highlighted = false, onHover }
         highlighted ? "border-hs-black" : "border-line hover:border-hs-black/40",
       )}
     >
-      <EquipmentPhoto type={item.type} className="size-24 shrink-0 rounded-md sm:size-28" />
+      <EquipmentPhoto type={item.type} src={item.photos[0]} className="size-24 shrink-0 rounded-md sm:size-28" />
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex items-start justify-between gap-2">

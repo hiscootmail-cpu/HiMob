@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { ExploreSkeleton } from "@/components/explore/explore-skeleton";
 import { ExploreView } from "@/components/explore/explore-view";
-import { listEquipment } from "@/lib/equipment";
+import { listEquipment } from "@/lib/equipment-db";
 
 async function ExploreData() {
   const items = await listEquipment();

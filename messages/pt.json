@@ -408,7 +408,9 @@
     "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
     "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}.",
     "dateRange": "{start} a {end}",
-    "takenDays": "Dias indisponíveis: {days}"
+    "takenDays": "Dias indisponíveis: {days}",
+    "photoAlt": "Foto {number} de {title}",
+    "morePhotos": "Mais fotos"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -687,7 +689,11 @@
         "photoTooLarge": "Uma das fotos passa de {size} MB.",
         "timeInvalid": "Escolha um horário válido.",
         "notAllowed": "Não foi possível enviar agora. Volte para Meus anúncios e tente de novo.",
-        "summary": "Confira os campos marcados."
+        "summary": "Confira os campos marcados.",
+        "uploadFailed": "Não foi possível enviar as fotos. Confira a internet e tente de novo.",
+        "tooSoon": "Você já enviou este anúncio nos últimos 30 dias.",
+        "inReview": "Este anúncio está em análise.",
+        "editInReview": "Já existe uma edição em análise."
       }
     },
     "label": {
@@ -1030,7 +1036,12 @@
       "description": "Descrição",
       "photos": "Fotos",
       "area": "Bairro",
-      "times": "Horários"
+      "times": "Horários",
+      "title": "Título",
+      "type": "Tipo",
+      "city": "Cidade",
+      "pickup_address": "Endereço de retirada",
+      "location": "Localização no mapa"
     },
     "editStaysLive": "O anúncio atual continua no ar até a decisão.",
     "identity": {
@@ -1078,6 +1089,8 @@
       "example": "Prévia de exemplo",
       "checkDocument": "Compare o nome do documento com o nome do cadastro.",
       "checkLetter": "A carta precisa ser escrita à mão, com nome social e CPF."
-    }
+    },
+    "photosLabel": "Fotos do anúncio",
+    "photoAlt": "Foto {number} do anúncio"
   }
 }
