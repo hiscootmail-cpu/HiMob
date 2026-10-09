@@ -23,6 +23,8 @@ type DocumentUploadProps = {
   error?: string;
   /** Id de um texto de apoio de fora (ex.: dicas de foto), lido junto com o campo. */
   describedBy?: string;
+  /** No celular, abre direto a câmera ("environment" = câmera traseira). */
+  capture?: "environment" | "user";
   /** Chamado sempre que a pessoa escolhe ou remove um arquivo. */
   onFileChange?: (file: File | null) => void;
   className?: string;
@@ -37,7 +39,16 @@ function formatSize(bytes: number) {
  * e permite trocar ou remover antes do envio.
  * O arquivo é dado pessoal sensível (LGPD): nunca é mostrado a outras pessoas.
  */
-function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange, className }: DocumentUploadProps) {
+function DocumentUpload({
+  name,
+  accept,
+  labels,
+  error,
+  describedBy,
+  capture,
+  onFileChange,
+  className,
+}: DocumentUploadProps) {
   const inputId = React.useId();
   const messageId = `${inputId}-message`;
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -73,6 +84,7 @@ function DocumentUpload({ name, accept, labels, error, describedBy, onFileChange
         name={name}
         type="file"
         accept={accept}
+        capture={capture}
         className="sr-only"
         aria-invalid={error ? true : undefined}
         aria-describedby={[describedBy, error ? messageId : null].filter(Boolean).join(" ") || undefined}

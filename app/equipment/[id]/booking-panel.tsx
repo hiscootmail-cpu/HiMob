@@ -185,13 +185,14 @@ export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
         {days > 0 && !localError ? (
           <dl className="flex flex-col gap-2 rounded-md bg-surface px-4 py-3 text-sm">
             <div className="flex justify-between gap-3">
-              <dt className="text-hs-black">{t("priceTimesDays", { price: money(equipment.daily_price), count: days })}</dt>
-              <dd className="text-hs-black">{money(breakdown.subtotal)}</dd>
+              <dt className="text-hs-black">
+                {t("priceTimesDays", { price: money(riderDailyPrice(equipment.daily_price)), count: days })}
+              </dt>
+              <dd className="text-hs-black">{money(breakdown.total)}</dd>
             </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-hs-black">{t("platformFee", { percent: PLATFORM_FEE_PERCENT })}</dt>
-              <dd className="text-hs-black">{money(breakdown.fee)}</dd>
-            </div>
+            <p className="text-xs text-muted">
+              {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(breakdown.fee) })}
+            </p>
             <div className="flex justify-between gap-3 border-t border-line pt-2 font-bold">
               <dt className="text-hs-black">{t("total")}</dt>
               <dd className="text-hs-black">{money(breakdown.total)}</dd>

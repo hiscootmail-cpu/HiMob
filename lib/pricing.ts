@@ -6,7 +6,8 @@
  * - Taxa da plataforma: 15% sobre o valor do Host.
  * - Para o Rider, o preço por dia já aparece com os 15% somados
  *   (Host define R$ 30 → Rider vê R$ 34,50 por dia).
- * - Na reserva aparece a conta separada: diárias + taxa de 15% = total.
+ * - Na reserva: "R$ 51,75 x 2 diárias = R$ 103,50" e, na linha de baixo,
+ *   "Inclui 15% de taxa da plataforma (R$ 13,50), cobrada do Rider".
  *
  * Tudo é calculado em centavos para não errar arredondamento.
  * O servidor sempre refaz esta conta; o valor nunca vem do navegador.
@@ -36,7 +37,11 @@ export type BookingBreakdown = {
 };
 
 export function bookingBreakdown(days: number, hostDailyPrice: number): BookingBreakdown {
-  const subtotalCents = Math.max(0, days) * toCents(hostDailyPrice);
-  const fee = feeCents(subtotalCents);
-  return { subtotal: toReais(subtotalCents), fee: toReais(fee), total: toReais(subtotalCents + fee) };
+  // O total é diárias x preço que o Rider vê (já com a taxa), para bater com o
+  // número mostrado por dia. A taxa é a diferença para o valor do Host.
+  const n = Math.max(0, days);
+  const hostCents = toCents(hostDailyPrice);
+  const subtotalCents = n * hostCents;
+  const totalCents = n * (hostCents + feeCents(hostCents));
+  return { subtotal: toReais(subtotalCents), fee: toReais(totalCents - subtotalCents), total: toReais(totalCents) };
 }

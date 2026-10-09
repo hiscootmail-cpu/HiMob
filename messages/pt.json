@@ -395,7 +395,7 @@
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
     "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
-    "platformFee": "Taxa da plataforma ({percent}%)"
+    "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -406,5 +406,176 @@
     "title": "Página não encontrada",
     "description": "O endereço pode estar errado, ou este anúncio não existe mais.",
     "goHome": "Voltar ao início"
+  },
+  "rider": {
+    "status": {
+      "pending": "Aguardando o Host",
+      "accepted": "Aceita, falta pagar",
+      "confirmed": "Pronta para retirada",
+      "active": "Em uso",
+      "completed": "Concluída",
+      "rejected": "Recusada",
+      "cancelled": "Cancelada"
+    },
+    "dates": "{start} a {end}",
+    "days": "{count, plural, one {# diária} other {# diárias}}",
+    "hostLabel": "Host: {name}",
+    "actions": {
+      "pay": "Pagar",
+      "confirmPickup": "Confirmar retirada",
+      "confirmReturn": "Confirmar devolução",
+      "review": "Avaliar",
+      "details": "Ver detalhes",
+      "talkToHost": "Falar com o Host",
+      "cancel": "Cancelar reserva",
+      "cancelTitle": "Cancelar esta reserva?",
+      "cancelText": "Esta ação não pode ser desfeita. O Host será avisado.",
+      "keep": "Manter reserva",
+      "cancelConfirm": "Cancelar reserva",
+      "cancelled": "Reserva cancelada."
+    },
+    "list": {
+      "title": "Minhas reservas",
+      "emptyTitle": "Você ainda não tem reservas",
+      "emptyText": "Encontre um patinete ou uma bike elétrica perto de você.",
+      "explore": "Explorar",
+      "ongoing": "Em andamento",
+      "past": "Anteriores",
+      "noOngoing": "Nenhuma reserva em andamento.",
+      "noPast": "Nenhuma reserva anterior."
+    },
+    "steps": {
+      "accepted": "Reserva aceita pelo Host",
+      "paid": "Pagamento confirmado",
+      "ready": "Pronto para retirada",
+      "inUse": "Em uso",
+      "returned": "Devolvido",
+      "acceptedHint": "Esperando o Host aceitar.",
+      "paidHint": "Falta pagar para confirmar a reserva.",
+      "readyHint": "No dia da retirada, leia o QR code e tire uma foto do equipamento.",
+      "inUseHint": "Na devolução, leia o QR code e tire uma foto do equipamento.",
+      "returnedHint": "Reserva concluída.",
+      "doneLabel": "etapa concluída",
+      "currentLabel": "etapa atual",
+      "nextLabel": "próxima etapa"
+    },
+    "track": {
+      "title": "Acompanhar reserva",
+      "back": "Voltar para Minhas reservas",
+      "pendingBanner": "Sua solicitação foi enviada. Você recebe um aviso quando o Host aceitar.",
+      "rejectedBanner": "O Host recusou esta solicitação. Nenhum valor foi cobrado.",
+      "cancelledBanner": "Esta reserva foi cancelada.",
+      "stepsTitle": "Etapas",
+      "whereTitle": "Ponto de retirada e devolução",
+      "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado."
+    },
+    "payment": {
+      "title": "Pagamento",
+      "back": "Voltar para a reserva",
+      "priceTimesDays": "{price} x {count, plural, one {# diária} other {# diárias}}",
+      "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
+      "total": "Total",
+      "notAvailable": "O pagamento só fica disponível depois que o Host aceita a reserva.",
+      "methodTitle": "Como você quer pagar?",
+      "pix": "PIX",
+      "pixHint": "Aprovação na hora",
+      "card": "Cartão de crédito",
+      "cardHint": "Visa, Mastercard, Elo e outros",
+      "cardSecure": "Os dados do cartão são digitados no formulário seguro do Mercado Pago. A Hi Scoot não vê nem guarda o número do seu cartão.",
+      "pixInfo": "O QR code e o código PIX copia e cola são gerados pelo Mercado Pago depois que você tocar em Pagar.",
+      "pay": "Pagar {total}",
+      "splitInfo": "Pagamento processado pelo Mercado Pago. O valor do Host é repassado automaticamente.",
+      "errors": {
+        "methodRequired": "Escolha PIX ou cartão de crédito.",
+        "notAllowed": "Esta reserva não está esperando pagamento."
+      }
+    },
+    "confirmed": {
+      "title": "Reserva confirmada!",
+      "subtitle": "{title} está te esperando.",
+      "whereTitle": "Ponto de retirada e devolução",
+      "pickup": "Retirada",
+      "return": "Devolução",
+      "qrHint": "No dia da retirada, abra esta reserva e leia o QR code do equipamento.",
+      "track": "Acompanhar reserva",
+      "talkToHost": "Falar com o Host"
+    },
+    "qr": {
+      "label": "QR code",
+      "videoLabel": "Imagem da câmera para ler o QR code",
+      "stopCamera": "Fechar câmera",
+      "scanned": "QR code lido",
+      "openCamera": "Ler QR code com a câmera",
+      "cameraDenied": "Não conseguimos usar a câmera. Libere a câmera nas configurações do navegador ou digite o código abaixo.",
+      "cameraUnavailable": "Este aparelho não tem câmera disponível. Digite o código abaixo.",
+      "typeCode": "Ou digite o código que aparece embaixo do QR code",
+      "codePlaceholder": "Ex.: RV-1003-R"
+    },
+    "handoff": {
+      "back": "Voltar para a reserva",
+      "step1": "1. Leia o QR code",
+      "step2": "2. Tire uma foto do equipamento",
+      "photoLabel": "Foto do equipamento",
+      "photoChoose": "Tirar foto",
+      "photoLimits": "JPG, PNG, WEBP ou HEIC, até {max} MB",
+      "photoChange": "Trocar a foto",
+      "photoRemove": "Remover a foto",
+      "errors": {
+        "codeRequired": "Leia o QR code ou digite o código.",
+        "codeInvalid": "Este código não é desta reserva. Confira com o Host.",
+        "photoRequired": "Tire uma foto do equipamento.",
+        "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
+        "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
+        "wrongStatus": "Esta etapa não está disponível para esta reserva."
+      },
+      "pickup": {
+        "title": "Retirada",
+        "notAvailable": "A retirada só fica disponível depois que o pagamento for confirmado.",
+        "qrHelp": "Peça ao Host o QR code de retirada desta reserva.",
+        "photoHelp": "Mostre o equipamento inteiro, para registrar como ele estava na retirada.",
+        "submit": "Confirmar retirada",
+        "doneTitle": "Retirada confirmada",
+        "doneText": "Boa viagem! Na devolução, leia o QR code de novo e tire outra foto.",
+        "next": "Acompanhar reserva"
+      },
+      "return": {
+        "title": "Devolução",
+        "notAvailable": "A devolução só fica disponível enquanto o equipamento está em uso.",
+        "qrHelp": "Peça ao Host o QR code de devolução desta reserva.",
+        "photoHelp": "Mostre o equipamento inteiro, para registrar como ele foi devolvido.",
+        "submit": "Confirmar devolução",
+        "doneTitle": "Devolução confirmada",
+        "doneText": "Obrigado por usar a Hi Scoot. Conte como foi.",
+        "next": "Avaliar"
+      }
+    },
+    "review": {
+      "title": "Avaliação",
+      "back": "Voltar para a reserva",
+      "heading": "Como foi com {name}?",
+      "alreadyReviewed": "Você já avaliou esta reserva. Obrigado!",
+      "notAvailable": "A avaliação fica disponível depois da devolução.",
+      "equipmentLegend": "Nota do equipamento",
+      "hostLegend": "Nota do Host ({name})",
+      "commentLabel": "Comentário (opcional)",
+      "commentPlaceholder": "Conte como foi o aluguel",
+      "commentCount": "{count} de {max} caracteres",
+      "submit": "Enviar avaliação",
+      "doneTitle": "Avaliação enviada",
+      "doneText": "Obrigado! Sua avaliação ajuda outras pessoas a escolher.",
+      "exploreMore": "Explorar mais equipamentos",
+      "starsLabel": "{count, plural, one {# estrela} other {# estrelas}}",
+      "chooseStars": "Toque nas estrelas para dar a nota.",
+      "scale": {
+        "1": "Muito ruim",
+        "2": "Ruim",
+        "3": "Regular",
+        "4": "Bom",
+        "5": "Excelente"
+      },
+      "errors": {
+        "ratingRequired": "Escolha uma nota de 1 a 5 estrelas."
+      }
+    }
   }
 }
