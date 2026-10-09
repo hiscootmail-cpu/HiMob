@@ -429,10 +429,11 @@
       "talkToHost": "Falar com o Host",
       "cancel": "Cancelar reserva",
       "cancelTitle": "Cancelar esta reserva?",
-      "cancelText": "Esta ação não pode ser desfeita. O Host será avisado.",
       "keep": "Manter reserva",
       "cancelConfirm": "Cancelar reserva",
-      "cancelled": "Reserva cancelada."
+      "cancelled": "Reserva cancelada.",
+      "cancelTextUnpaid": "Nada foi cobrado ainda, então não há custo. O Host será avisado. Esta ação não pode ser desfeita.",
+      "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita."
     },
     "list": {
       "title": "Minhas reservas",
@@ -467,7 +468,11 @@
       "cancelledBanner": "Esta reserva foi cancelada.",
       "stepsTitle": "Etapas",
       "whereTitle": "Ponto de retirada e devolução",
-      "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado."
+      "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado.",
+      "cancelTitle": "Cancelamento",
+      "cancelFree": "Você pode cancelar sem custo: nada foi cobrado ainda.",
+      "cancelUntil": "Você pode cancelar até o fim do dia {date}. Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
+      "cancelDeadlinePassed": "O prazo para cancelar terminou no dia {date} (24 horas antes da retirada)."
     },
     "payment": {
       "title": "Pagamento",
@@ -488,7 +493,8 @@
       "errors": {
         "methodRequired": "Escolha PIX ou cartão de crédito.",
         "notAllowed": "Esta reserva não está esperando pagamento."
-      }
+      },
+      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida."
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -496,7 +502,7 @@
       "whereTitle": "Ponto de retirada e devolução",
       "pickup": "Retirada",
       "return": "Devolução",
-      "qrHint": "No dia da retirada, abra esta reserva e leia o QR code do equipamento.",
+      "qrHint": "No dia da retirada, abra esta reserva e leia o QR code da etiqueta colada no equipamento.",
       "track": "Acompanhar reserva",
       "talkToHost": "Falar com o Host"
     },
@@ -508,8 +514,8 @@
       "openCamera": "Ler QR code com a câmera",
       "cameraDenied": "Não conseguimos usar a câmera. Libere a câmera nas configurações do navegador ou digite o código abaixo.",
       "cameraUnavailable": "Este aparelho não tem câmera disponível. Digite o código abaixo.",
-      "typeCode": "Ou digite o código que aparece embaixo do QR code",
-      "codePlaceholder": "Ex.: RV-1003-R"
+      "typeCode": "Ou digite o código escrito embaixo do QR code da etiqueta",
+      "codePlaceholder": "Ex.: HS-4821"
     },
     "handoff": {
       "back": "Voltar para a reserva",
@@ -522,7 +528,7 @@
       "photoRemove": "Remover a foto",
       "errors": {
         "codeRequired": "Leia o QR code ou digite o código.",
-        "codeInvalid": "Este código não é desta reserva. Confira com o Host.",
+        "codeInvalid": "Este código não é do equipamento desta reserva. Confira a etiqueta.",
         "photoRequired": "Tire uma foto do equipamento.",
         "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
         "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
@@ -531,7 +537,7 @@
       "pickup": {
         "title": "Retirada",
         "notAvailable": "A retirada só fica disponível depois que o pagamento for confirmado.",
-        "qrHelp": "Peça ao Host o QR code de retirada desta reserva.",
+        "qrHelp": "Leia o QR code da etiqueta colada no equipamento.",
         "photoHelp": "Mostre o equipamento inteiro, para registrar como ele estava na retirada.",
         "submit": "Confirmar retirada",
         "doneTitle": "Retirada confirmada",
@@ -541,7 +547,7 @@
       "return": {
         "title": "Devolução",
         "notAvailable": "A devolução só fica disponível enquanto o equipamento está em uso.",
-        "qrHelp": "Peça ao Host o QR code de devolução desta reserva.",
+        "qrHelp": "Leia de novo o QR code da etiqueta colada no equipamento.",
         "photoHelp": "Mostre o equipamento inteiro, para registrar como ele foi devolvido.",
         "submit": "Confirmar devolução",
         "doneTitle": "Devolução confirmada",

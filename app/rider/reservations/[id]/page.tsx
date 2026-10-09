@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 
 import { MapPinIcon } from "@/components/icons";
 import { BackLink } from "@/components/rider/back-link";
@@ -8,6 +8,7 @@ import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSteps } from "@/components/rider/booking-steps";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { getRiderBooking } from "@/lib/bookings";
+import { riderCancelPolicy } from "@/lib/cancellation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rider.track");
@@ -20,6 +21,18 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
   const booking = await getRiderBooking(id);
   if (!booking) notFound();
   const t = await getTranslations("rider.track");
+  const format = await getFormatter();
+  const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
+  const longDate = (date: string) =>
+    format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
+  const policy = riderCancelPolicy(booking);
+  const cancelInfo = policy.allowed
+    ? policy.paid
+      ? t("cancelUntil", { date: longDate(policy.lastDay), refund: money(policy.refund), fee: money(policy.fee) })
+      : t("cancelFree")
+    : policy.reason === "deadlinePassed" && policy.lastDay
+      ? t("cancelDeadlinePassed", { date: longDate(policy.lastDay) })
+      : null;
 
   const banner =
     booking.status === "pending"
@@ -70,6 +83,15 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
           </>
         )}
       </section>
+
+      {cancelInfo ? (
+        <section aria-labelledby="cancel-title" className="flex flex-col gap-1 rounded-lg bg-surface p-4">
+          <h2 id="cancel-title" className="text-sm font-semibold text-hs-black">
+            {t("cancelTitle")}
+          </h2>
+          <p className="text-sm text-hs-black">{cancelInfo}</p>
+        </section>
+      ) : null}
 
       <BookingActions booking={booking} showDetails={false} />
     </div>

@@ -2,10 +2,13 @@
  * Retirada e devolução confirmadas por QR code + foto (regra 8, decisão de 08/10/2026).
  *
  * O Rider lê o QR code (ou digita o código escrito embaixo dele) e envia uma
- * foto do equipamento. O servidor confere se o código é o desta reserva.
+ * foto do equipamento. O servidor confere se o código é o do equipamento desta reserva.
  *
- * EM ABERTO: onde fica o QR (no celular do Host, gerado para cada reserva, ou
- * numa etiqueta no equipamento). A leitura pelo Rider funciona igual nos dois casos.
+ * Decisão de 09/10/2026: o QR fica numa ETIQUETA COLADA NO EQUIPAMENTO, com o
+ * código escrito embaixo. O mesmo QR serve para a retirada e para a devolução.
+ * O Host baixa e imprime a etiqueta na área dele (Lote 5).
+ * Como a etiqueta é fixa, a foto do equipamento e a confirmação do Host na
+ * área dele (inventário: "Confirmar retirada/devolução com foto") completam a prova.
  */
 
 export type HandoffKind = "pickup" | "return";
@@ -21,9 +24,20 @@ export function normalizeCode(code: string) {
   return code.trim().toUpperCase().replace(/\s+/g, "");
 }
 
-/** PROVISÓRIO: código de exemplo. O servidor real gera um código secreto por reserva. */
-export function exampleHandoffCode(bookingId: string, kind: HandoffKind) {
-  return `${bookingId.toUpperCase()}-${kind === "pickup" ? "R" : "D"}`;
+/**
+ * PROVISÓRIO: códigos de exemplo das etiquetas. O código real é gerado pelo
+ * servidor quando o anúncio é publicado e só fica no servidor e na etiqueta.
+ */
+const exampleEquipmentCodes: Record<string, string> = {
+  "eq-aro10-jardins": "HS-4821",
+  "eq-bike-vila-nova": "HS-7305",
+  "eq-pro-pinheiros": "HS-1946",
+  "eq-dobravel-paulista": "HS-6630",
+  "eq-leve-vila-madalena": "HS-2517",
+};
+
+export function exampleEquipmentCode(equipmentId: string) {
+  return exampleEquipmentCodes[equipmentId] ?? null;
 }
 
 export function validatePhoto(file: { size: number; type: string } | null | undefined): HandoffError | null {

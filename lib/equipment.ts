@@ -14,7 +14,12 @@ import { exampleEquipment } from "@/lib/mock/equipment";
  * - Título e descrição ficam no idioma em que o Host escreveu (sem tradução).
  * - Preço por dia: cada Host define o seu. A Hi Scoot só sugere de R$ 30 a R$ 40.
  *   O Rider vê o preço com a taxa da plataforma (15%) somada: ver lib/pricing.ts.
+ * - Anúncio publicado pode ser editado (preço, fotos, descrição, bairro) no
+ *   máximo UMA vez a cada 30 dias (EDIT_INTERVAL_DAYS). Reservas já feitas
+ *   mantêm o preço do dia da reserva.
  */
+
+export const EDIT_INTERVAL_DAYS = 30;
 
 export const MIN_PHOTOS = 4;
 export const MAX_PHOTOS = 10;

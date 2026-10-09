@@ -46,6 +46,8 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
         </div>
       </dl>
 
+      <p className="rounded-md border border-line px-4 py-3 text-sm text-hs-black">{t("cancelPolicy")}</p>
+
       {booking.status === "accepted" ? (
         <PaymentForm bookingId={booking.id} total={price.total} />
       ) : (

@@ -2,8 +2,9 @@
 
 import { redirect } from "next/navigation";
 
-import { canCancel, getRiderBooking, REVIEW_COMMENT_MAX } from "@/lib/bookings";
-import { exampleHandoffCode, normalizeCode, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
+import { getRiderBooking, REVIEW_COMMENT_MAX } from "@/lib/bookings";
+import { riderCancelPolicy } from "@/lib/cancellation";
+import { exampleEquipmentCode, normalizeCode, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 
 /*
  * PROVISÓRIO: nada é gravado e nenhum pagamento é cobrado ainda.
@@ -16,7 +17,8 @@ export type CancelState = { done?: boolean; error?: "notAllowed" };
 
 export async function cancelBooking(bookingId: string): Promise<CancelState> {
   const booking = await getRiderBooking(bookingId);
-  if (!booking || !canCancel(booking.status)) return { error: "notAllowed" };
+  // Regra conferida no servidor: até 24 h antes da retirada (lib/cancellation.ts).
+  if (!booking || !riderCancelPolicy(booking).allowed) return { error: "notAllowed" };
   return { done: true };
 }
 
@@ -55,7 +57,7 @@ export async function confirmHandoff(
   const code = normalizeCode(String(formData.get("code") ?? ""));
   const photo = formData.get("photo");
   const errors = {
-    code: !code ? ("codeRequired" as const) : code !== exampleHandoffCode(bookingId, kind) ? ("codeInvalid" as const) : undefined,
+    code: !code ? ("codeRequired" as const) : code !== exampleEquipmentCode(booking.equipment.id) ? ("codeInvalid" as const) : undefined,
     photo: validatePhoto(photo instanceof File ? photo : null) ?? undefined,
   };
   if (errors.code || errors.photo) return { errors };

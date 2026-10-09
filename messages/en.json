@@ -429,10 +429,11 @@
       "talkToHost": "Message the Host",
       "cancel": "Cancel booking",
       "cancelTitle": "Cancel this booking?",
-      "cancelText": "This action cannot be undone. The Host will be notified.",
       "keep": "Keep booking",
       "cancelConfirm": "Cancel booking",
-      "cancelled": "Booking cancelled."
+      "cancelled": "Booking cancelled.",
+      "cancelTextUnpaid": "Nothing has been charged yet, so there is no cost. The Host will be notified. This action cannot be undone.",
+      "cancelTextPaid": "You get {refund} back (the daily rate). The platform fee ({fee}) is not refunded. The Host will be notified. This action cannot be undone."
     },
     "list": {
       "title": "My bookings",
@@ -467,7 +468,11 @@
       "cancelledBanner": "This booking was cancelled.",
       "stepsTitle": "Steps",
       "whereTitle": "Pick-up and return point",
-      "addressAfterPayment": "The exact address appears after the payment is confirmed."
+      "addressAfterPayment": "The exact address appears after the payment is confirmed.",
+      "cancelTitle": "Cancellation",
+      "cancelFree": "You can cancel at no cost: nothing has been charged yet.",
+      "cancelUntil": "You can cancel until the end of {date}. We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
+      "cancelDeadlinePassed": "The cancellation deadline ended on {date} (24 hours before pick-up)."
     },
     "payment": {
       "title": "Payment",
@@ -488,7 +493,8 @@
       "errors": {
         "methodRequired": "Choose PIX or credit card.",
         "notAllowed": "This booking is not awaiting payment."
-      }
+      },
+      "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded."
     },
     "confirmed": {
       "title": "Booking confirmed!",
@@ -496,7 +502,7 @@
       "whereTitle": "Pick-up and return point",
       "pickup": "Pick-up",
       "return": "Return",
-      "qrHint": "On pick-up day, open this booking and scan the equipment's QR code.",
+      "qrHint": "On pick-up day, open this booking and scan the QR code on the label attached to the equipment.",
       "track": "Track booking",
       "talkToHost": "Message the Host"
     },
@@ -508,8 +514,8 @@
       "openCamera": "Scan QR code with the camera",
       "cameraDenied": "We could not use the camera. Allow camera access in your browser settings or type the code below.",
       "cameraUnavailable": "This device has no camera available. Type the code below.",
-      "typeCode": "Or type the code shown below the QR code",
-      "codePlaceholder": "E.g. RV-1003-R"
+      "typeCode": "Or type the code written below the QR code on the label",
+      "codePlaceholder": "E.g. HS-4821"
     },
     "handoff": {
       "back": "Back to the booking",
@@ -522,7 +528,7 @@
       "photoRemove": "Remove the photo",
       "errors": {
         "codeRequired": "Scan the QR code or type the code.",
-        "codeInvalid": "This code is not for this booking. Check with the Host.",
+        "codeInvalid": "This code does not belong to this booking's equipment. Check the label.",
         "photoRequired": "Take a photo of the equipment.",
         "photoType": "Format not accepted. Upload JPG, PNG, WEBP or HEIC.",
         "photoTooLarge": "Photo too large. The limit is {max} MB.",
@@ -531,7 +537,7 @@
       "pickup": {
         "title": "Pick-up",
         "notAvailable": "Pick-up is only available after the payment is confirmed.",
-        "qrHelp": "Ask the Host for this booking's pick-up QR code.",
+        "qrHelp": "Scan the QR code on the label attached to the equipment.",
         "photoHelp": "Show the whole equipment to record its condition at pick-up.",
         "submit": "Confirm pick-up",
         "doneTitle": "Pick-up confirmed",
@@ -541,7 +547,7 @@
       "return": {
         "title": "Return",
         "notAvailable": "Return is only available while the equipment is in use.",
-        "qrHelp": "Ask the Host for this booking's return QR code.",
+        "qrHelp": "Scan the QR code on the label attached to the equipment again.",
         "photoHelp": "Show the whole equipment to record its condition at return.",
         "submit": "Confirm return",
         "doneTitle": "Return confirmed",

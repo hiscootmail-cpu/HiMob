@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { cancelBooking, type CancelState } from "@/app/rider/reservations/actions";
 import { ChatIcon, QrCodeIcon, StarIcon, WalletIcon } from "@/components/icons";
@@ -17,7 +17,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { canCancel, type Booking } from "@/lib/bookings";
+import type { Booking } from "@/lib/bookings";
+import { riderCancelPolicy, type CancelPolicy } from "@/lib/cancellation";
 import { cn } from "@/lib/utils";
 
 /** Botão principal de cada situação (inventário de ações + pagamento do PDF). */
@@ -68,8 +69,10 @@ function PrimaryAction({ booking }: { booking: Booking }) {
 }
 
 /** Cancelar: ação irreversível, por isso pede confirmação e usa o vermelho. */
-function CancelButton({ booking }: { booking: Booking }) {
+function CancelButton({ booking, policy }: { booking: Booking; policy: Extract<CancelPolicy, { allowed: true }> }) {
   const t = useTranslations("rider.actions");
+  const format = useFormatter();
+  const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const [state, action, pending] = useActionState(cancelBooking.bind(null, booking.id), {} as CancelState);
 
   if (state.done) {
@@ -89,7 +92,11 @@ function CancelButton({ booking }: { booking: Booking }) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogTitle>{t("cancelTitle")}</AlertDialogTitle>
-        <AlertDialogDescription>{t("cancelText")}</AlertDialogDescription>
+        <AlertDialogDescription>
+          {policy.paid
+            ? t("cancelTextPaid", { refund: money(policy.refund), fee: money(policy.fee) })
+            : t("cancelTextUnpaid")}
+        </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
           <form action={action}>
@@ -114,6 +121,8 @@ export function BookingActions({
   className?: string;
 }) {
   const t = useTranslations("rider.actions");
+  // O servidor confere de novo a regra antes de cancelar (lib/cancellation.ts).
+  const policy = riderCancelPolicy(booking);
 
   return (
     <div
@@ -136,7 +145,7 @@ export function BookingActions({
           </Link>
         </Button>
       )}
-      {canCancel(booking.status) ? <CancelButton booking={booking} /> : null}
+      {policy.allowed ? <CancelButton booking={booking} policy={policy} /> : null}
     </div>
   );
 }

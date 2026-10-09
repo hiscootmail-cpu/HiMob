@@ -14,7 +14,7 @@ import { bookingBreakdown, type BookingBreakdown } from "@/lib/pricing";
  * - rejected   Host recusou
  * - cancelled  cancelada
  *
- * EM ABERTO (decisão adiada): regra de cancelamento e reembolso.
+ * Cancelamento e reembolso: ver lib/cancellation.ts (decisão de 09/10/2026).
  */
 
 export type BookingStatus = "pending" | "accepted" | "confirmed" | "active" | "completed" | "rejected" | "cancelled";
@@ -41,9 +41,6 @@ export const REVIEW_COMMENT_MAX = 500;
 
 /** Situações em que a reserva ainda está acontecendo. */
 export const ONGOING: BookingStatus[] = ["pending", "accepted", "confirmed", "active"];
-
-/** Pode cancelar (inventário de ações: pending e accepted). */
-export const canCancel = (status: BookingStatus) => status === "pending" || status === "accepted";
 
 export function bookingPrice(booking: Booking): BookingBreakdown {
   return bookingBreakdown(booking.days, booking.host_daily_price);

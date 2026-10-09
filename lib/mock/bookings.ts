@@ -54,6 +54,18 @@ export const exampleBookings: Booking[] = [
     rider_reviewed: false,
   },
   {
+    id: "rv-1008",
+    equipment: byId("eq-aro10-jardins"),
+    rider_id: RIDER,
+    start_date: addDays(today, 5),
+    end_date: addDays(today, 7),
+    days: 2,
+    host_daily_price: 45,
+    status: "confirmed",
+    pickup_address: "Rua Oscar Freire, 300 (exemplo), Jardins, São Paulo",
+    rider_reviewed: false,
+  },
+  {
     id: "rv-1004",
     equipment: byId("eq-dobravel-paulista"),
     rider_id: RIDER,
