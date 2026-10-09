@@ -166,7 +166,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [pending, startDecision] = useTransition();
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<"datesTaken" | "error" | null>(null);
   // O servidor confere de novo a regra antes de cancelar.
   const cancel = hostCancelPolicy(booking);
 
@@ -183,7 +183,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
     startDecision(async () => {
       const result = await decideBooking(booking.id, decision);
       if (result.done) setOutcome(result.done);
-      else setError(true);
+      else setError(result.error === "datesTaken" ? "datesTaken" : "error");
     });
 
   const cancelDialog = cancel.allowed ? (
@@ -206,7 +206,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
               startDecision(async () => {
                 const result = await hostCancelBooking(booking.id);
                 if (result.done) setOutcome("cancelled");
-                else setError(true);
+                else setError("error");
               })
             }
           >
@@ -274,7 +274,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
 
       {error ? (
         <p role="alert" className="text-sm text-error">
-          {t("error")}
+          {t(error)}
         </p>
       ) : null}
     </div>

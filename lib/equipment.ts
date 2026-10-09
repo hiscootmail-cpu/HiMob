@@ -16,9 +16,11 @@ import { exampleEquipment } from "@/lib/mock/equipment";
  *   O Rider vê o preço com a taxa da plataforma (15%) somada: ver lib/pricing.ts.
  * - O Host define o horário de retirada e o de devolução do equipamento.
  *   (Futuro, fora do MVP: pontos 24 horas para retirar e devolver a qualquer hora.)
- * - Anúncio publicado pode ser editado (preço, fotos, descrição, bairro) no
- *   máximo UMA vez a cada 30 dias (EDIT_INTERVAL_DAYS). Reservas já feitas
- *   mantêm o preço do dia da reserva.
+ * - Anúncio (publicado ou recusado) pode ser editado no máximo UMA vez a cada
+ *   30 dias desde o último envio (EDIT_INTERVAL_DAYS); a edição volta para a
+ *   análise. Reservas já feitas mantêm o preço do dia da reserva.
+ * - Dias já reservados e dias bloqueados pelo Host não podem ser reservados
+ *   (ver lib/availability.ts).
  */
 
 export const EDIT_INTERVAL_DAYS = 30;

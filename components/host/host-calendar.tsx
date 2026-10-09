@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 
+import { DayBlockButton } from "@/components/host/day-block-button";
+import { BLOCKING_STATUSES } from "@/lib/availability";
 import { addDays } from "@/lib/booking";
 import type { BookingStatus } from "@/lib/bookings";
 import type { HostBooking, HostListing } from "@/lib/host";
@@ -9,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 /*
  * Calendário do Host: mostra, mês a mês, os dias ocupados por reservas.
- * Feito só com as reservas que já existem (sem tabela nova).
- * Bloquear dias à mão (calendário dia a dia) continua adiado: exige tabela nova.
+ * Com um equipamento escolhido, o Host bloqueia ou desbloqueia dias (decisão
+ * de 09/10/2026). Dias já reservados ficam bloqueados sozinhos.
  * O dia escolhido vai no endereço (?day=), então funciona sem JavaScript.
  */
 
@@ -25,6 +27,7 @@ const legendClass = {
   booked: "border-hs-green",
   inUse: "border-hs-purple",
   done: "border-muted",
+  blocked: "border-hs-black",
 } as const;
 
 const kindClass = {
@@ -32,6 +35,7 @@ const kindClass = {
   booked: "bg-green-soft text-on-green",
   inUse: "bg-purple-soft text-on-purple",
   done: "bg-surface text-muted",
+  blocked: "bg-line text-hs-black line-through",
 } as const;
 
 type CalendarProps = {
@@ -42,6 +46,8 @@ type CalendarProps = {
   today: string;
   equipmentId?: string;
   selectedDay?: string;
+  /** Dias bloqueados pelo Host no equipamento escolhido. */
+  blockedDays?: string[];
 };
 
 function monthDays(month: string) {
@@ -61,7 +67,7 @@ function shiftMonth(month: string, delta: number) {
 /** A reserva ocupa o dia? Da retirada até a devolução, incluindo os dois dias. */
 const occupies = (booking: HostBooking, day: string) => booking.start_date <= day && day <= booking.end_date;
 
-export async function HostCalendar({ bookings, listings, month, today, equipmentId, selectedDay }: CalendarProps) {
+export async function HostCalendar({ bookings, listings, month, today, equipmentId, selectedDay, blockedDays = [] }: CalendarProps) {
   const t = await getTranslations("host.calendar");
   const format = await getFormatter();
   const { first, total, weekday } = monthDays(month);
@@ -80,6 +86,8 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
   const dayLabel = (day: string) =>
     format.dateTime(new Date(`${day}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
   const selected = selectedDay ? shown.filter((b) => occupies(b, selectedDay)) : [];
+  const blockedSet = new Set(blockedDays);
+  const selectedBooked = selected.some((b) => BLOCKING_STATUSES.includes(b.status));
 
   return (
     <section aria-labelledby="calendar-title" className="flex flex-col gap-4">
@@ -135,7 +143,7 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
       </div>
 
       <ul className="flex flex-wrap gap-3 text-xs text-hs-black" aria-label={t("legend")}>
-        {(["request", "booked", "inUse", "done"] as const).map((kind) => (
+        {(["request", "booked", "inUse", "done", "blocked"] as const).map((kind) => (
           <li key={kind} className="flex items-center gap-1.5">
             <span className={cn("size-3.5 rounded-full border-2", kindClass[kind], legendClass[kind])} aria-hidden />
             {t(`kinds.${kind}`)}
@@ -156,7 +164,7 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
           ))}
           {days.map((day) => {
             const items = shown.filter((b) => occupies(b, day));
-            const top = items[0] ? kindOf(items[0].status) : null;
+            const top = items[0] ? kindOf(items[0].status) : blockedSet.has(day) ? "blocked" : null;
             const isToday = day === today;
             const isSelected = day === selectedDay;
             return (
@@ -202,7 +210,14 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-muted">{t("free")}</p>
+            <p className="text-sm text-muted">{blockedSet.has(selectedDay) ? t("blockedInfo") : t("free")}</p>
+          )}
+          {selectedDay < today ? null : !equipmentId ? (
+            <p className="text-sm text-muted">{t("chooseToBlock")}</p>
+          ) : selectedBooked ? (
+            <p className="text-sm text-muted">{t("bookedInfo")}</p>
+          ) : (
+            <DayBlockButton equipmentId={equipmentId} day={selectedDay} blocked={blockedSet.has(selectedDay)} />
           )}
         </div>
       ) : (

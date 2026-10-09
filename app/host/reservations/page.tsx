@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { bookingPrice, type BookingStatus } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
+import { unavailableDays } from "@/lib/availability";
 import { listHostBookings, listHostListings, type HostBooking } from "@/lib/host";
 import { cn } from "@/lib/utils";
 
@@ -101,6 +102,9 @@ function Section({ id, title, items, empty }: { id: string; title: string; items
   );
 }
 
+/** Só aceita o id de um equipamento (o servidor confere o dono ao bloquear). */
+const listingsFilter = (value: string | undefined) => (value && /^[\w-]+$/.test(value) ? value : undefined);
+
 /** Reservas recebidas (Host): pedidos novos, em andamento, anteriores e calendário. */
 export default async function HostReservationsPage({ searchParams }: PageProps<"/host/reservations">) {
   const t = await getTranslations("host.reservations");
@@ -111,7 +115,12 @@ export default async function HostReservationsPage({ searchParams }: PageProps<"
   const month = /^\d{4}-\d{2}$/.test(one(params.month) ?? "") ? one(params.month)! : today.slice(0, 7);
   const day = /^\d{4}-\d{2}-\d{2}$/.test(one(params.day) ?? "") ? one(params.day) : undefined;
 
-  const [bookings, listings] = await Promise.all([listHostBookings(), listHostListings()]);
+  const equipmentId = listingsFilter(one(params.equipment));
+  const [bookings, listings, unavailable] = await Promise.all([
+    listHostBookings(),
+    listHostListings(),
+    equipmentId ? unavailableDays(equipmentId) : null,
+  ]);
   const requests = bookings.filter((b) => b.status === "pending");
   const ongoing = bookings.filter((b) => ["accepted", "confirmed", "active"].includes(b.status));
   const past = bookings.filter((b) => ["completed", "rejected", "cancelled"].includes(b.status));
@@ -148,8 +157,9 @@ export default async function HostReservationsPage({ searchParams }: PageProps<"
           listings={listings}
           month={month}
           today={today}
-          equipmentId={one(params.equipment) || undefined}
+          equipmentId={equipmentId}
           selectedDay={day}
+          blockedDays={unavailable?.blocked}
         />
       ) : bookings.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-line px-6 py-12 text-center">

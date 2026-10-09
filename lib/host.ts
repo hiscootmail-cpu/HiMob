@@ -10,7 +10,9 @@ import { exampleHostBookings, exampleHostListings } from "@/lib/mock/host";
  * Inventário do painel do administrador: "Anúncios pendentes: Motivo + Rejeitar / Aprovar".
  *
  * Decisões de 09/10/2026:
- * - Anúncio publicado pode ser editado no máximo UMA vez a cada 30 dias.
+ * - Anúncio pode ser editado no máximo UMA vez a cada 30 dias, contados do
+ *   último envio (criação ou edição). Vale também para anúncio recusado:
+ *   o Host não reenvia na hora (decisão de 09/10/2026).
  * - A edição volta para a análise da equipe. Enquanto isso, o anúncio antigo
  *   continua no ar, sem mudança.
  * - O QR fica numa etiqueta colada no equipamento; o Host imprime aqui.
@@ -26,8 +28,8 @@ export type HostListing = Equipment & {
   review_status: ListingReview;
   /** Motivo escrito pela equipe quando recusa. */
   review_reason: string | null;
-  /** Data da última edição enviada (AAAA-MM-DD). Conta os 30 dias a partir dela. */
-  last_edit_at: string | null;
+  /** Data do último envio para análise, criação ou edição (AAAA-MM-DD). Conta os 30 dias a partir dela. */
+  last_sent_at: string | null;
   /** Existe uma edição esperando a análise? (O anúncio antigo segue no ar.) */
   edit_in_review: boolean;
   /** Endereço exato de retirada: o Rider só vê depois do pagamento. */
@@ -43,15 +45,14 @@ export type EditPolicy =
 /**
  * Pode editar agora?
  * - Em análise (anúncio novo): ainda não.
- * - Recusado: pode corrigir e reenviar (ainda não foi publicado).
- * - Publicado: uma vez a cada 30 dias, e só se não houver outra edição em análise.
+ * - Publicado ou recusado: uma vez a cada 30 dias desde o último envio,
+ *   e só se não houver outra edição em análise.
  */
 export function editPolicy(listing: HostListing, today: string): EditPolicy {
   if (listing.review_status === "pending") return { allowed: false, reason: "inReview" };
-  if (listing.review_status === "rejected") return { allowed: true };
   if (listing.edit_in_review) return { allowed: false, reason: "editInReview" };
-  if (listing.last_edit_at) {
-    const nextDate = addDays(listing.last_edit_at, EDIT_INTERVAL_DAYS);
+  if (listing.last_sent_at) {
+    const nextDate = addDays(listing.last_sent_at, EDIT_INTERVAL_DAYS);
     if (today < nextDate) return { allowed: false, reason: "tooSoon", nextDate };
   }
   return { allowed: true };

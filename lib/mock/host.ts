@@ -25,8 +25,8 @@ export const exampleHostListings: HostListing[] = [
     ...aro10,
     review_status: "approved",
     review_reason: null,
-    // Editado há 10 dias: a próxima edição só daqui a 20 dias.
-    last_edit_at: addDays(today, -10),
+    // Último envio há 10 dias: a próxima edição só daqui a 20 dias.
+    last_sent_at: addDays(today, -10),
     edit_in_review: false,
     pickup_address: "Rua Oscar Freire, 300 (exemplo), Jardins, São Paulo",
     label_code: "HS-4821",
@@ -35,7 +35,7 @@ export const exampleHostListings: HostListing[] = [
     ...pro,
     review_status: "approved",
     review_reason: null,
-    last_edit_at: null,
+    last_sent_at: addDays(today, -60),
     edit_in_review: false,
     pickup_address: "Rua dos Pinheiros, 500 (exemplo), Pinheiros, São Paulo",
     label_code: "HS-1946",
@@ -54,7 +54,7 @@ export const exampleHostListings: HostListing[] = [
     rating: { average: 4.8, count: 6 },
     review_status: "approved",
     review_reason: null,
-    last_edit_at: addDays(today, -40),
+    last_sent_at: addDays(today, -40),
     // Uma edição foi enviada e espera a análise: o anúncio antigo segue no ar.
     edit_in_review: true,
     pickup_address: "Avenida Ibirapuera, 2000 (exemplo), Moema, São Paulo",
@@ -72,7 +72,7 @@ export const exampleHostListings: HostListing[] = [
     rating: null,
     review_status: "pending",
     review_reason: null,
-    last_edit_at: null,
+    last_sent_at: addDays(today, -2),
     edit_in_review: false,
     pickup_address: "Rua Joaquim Floriano, 50 (exemplo), Itaim Bibi, São Paulo",
     label_code: "HS-5590",
@@ -88,8 +88,9 @@ export const exampleHostListings: HostListing[] = [
     longitude: -46.6425,
     rating: null,
     review_status: "rejected",
+    // Recusado: também espera os 30 dias desde o último envio para reenviar.
     review_reason: "As fotos não mostram o equipamento inteiro. Envie fotos de frente, de lado e do painel.",
-    last_edit_at: null,
+    last_sent_at: addDays(today, -5),
     edit_in_review: false,
     pickup_address: "Praça da República, 10 (exemplo), República, São Paulo",
     label_code: "HS-8813",

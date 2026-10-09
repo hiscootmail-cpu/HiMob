@@ -390,13 +390,16 @@
       "returnRequired": "Choose a return date.",
       "pickupInPast": "Pick-up cannot be before today.",
       "returnBeforePickup": "Return must be at least 1 day after pick-up.",
-      "unavailable": "This equipment is not available for booking."
+      "unavailable": "This equipment is not available for booking.",
+      "datesUnavailable": "Some day in this period isn't free. Choose other dates."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
     "feeIncluded": "Includes the platform fee ({percent}%)",
     "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider",
-    "hours": "Times set by the Host: pick-up at {pickup} and return by {return}."
+    "hours": "Times set by the Host: pick-up at {pickup} and return by {return}.",
+    "dateRange": "{start} to {end}",
+    "takenDays": "Unavailable days: {days}"
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -609,7 +612,7 @@
       "rejectedTitle": "Reason for rejection",
       "ruleTitle": "You can edit once every {days} days",
       "ruleText": "Your edit goes to the Hi Scoot team for review. Until it is approved, the current listing stays live, unchanged. Existing bookings keep the agreed price.",
-      "blockedTooSoon": "You already edited this listing in the last {days} days. The next edit opens on {date}.",
+      "blockedTooSoon": "This listing was last sent less than {days} days ago. The next edit opens on {date}.",
       "blockedInReview": "This listing is being reviewed by the Hi Scoot team. You can edit it after the answer.",
       "blockedEditInReview": "An edit is already under review. The current listing stays live until the answer."
     },
@@ -790,7 +793,8 @@
       "cancelTextUnpaid": "The Rider hasn't paid yet, so nothing is charged. This can't be undone.",
       "keep": "Go back",
       "cancelConfirm": "Cancel booking",
-      "error": "We couldn't do that now. Refresh the page and try again."
+      "error": "We couldn't do that now. Refresh the page and try again.",
+      "datesTaken": "Some day in this request is already booked or blocked. Decline the request or unblock the day."
     },
     "calendar": {
       "previous": "Previous month",
@@ -803,8 +807,18 @@
         "request": "New request",
         "booked": "Booked",
         "inUse": "In use",
-        "done": "Completed"
+        "done": "Completed",
+        "blocked": "Blocked by you"
       },
+      "block": "Block this day",
+      "unblock": "Unblock this day",
+      "blockedDone": "Day blocked. Nobody can book this day.",
+      "unblockedDone": "Day unblocked. It accepts bookings again.",
+      "blockBooked": "This day is already booked and stays blocked by the booking.",
+      "blockError": "We couldn't change it now. Try again.",
+      "blockedInfo": "Day blocked by you: nobody can book it.",
+      "chooseToBlock": "To block a day, choose the equipment above.",
+      "bookedInfo": "Booked day: it's already blocked for other bookings.",
       "count": "{count, plural, =0 {free} one {# booking} other {# bookings}}",
       "free": "No bookings on this day.",
       "tapDay": "Tap a day to see its bookings."

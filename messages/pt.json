@@ -390,13 +390,16 @@
       "returnRequired": "Escolha a data de devolução.",
       "pickupInPast": "A retirada não pode ser antes de hoje.",
       "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
-      "unavailable": "Este equipamento não está disponível para reserva."
+      "unavailable": "Este equipamento não está disponível para reserva.",
+      "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
     "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
     "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
-    "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}."
+    "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}.",
+    "dateRange": "{start} a {end}",
+    "takenDays": "Dias indisponíveis: {days}"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -609,7 +612,7 @@
       "rejectedTitle": "Motivo da recusa",
       "ruleTitle": "Você pode editar uma vez a cada {days} dias",
       "ruleText": "A edição vai para a análise da equipe Hi Scoot. Até ser aprovada, o anúncio atual continua no ar, sem mudança. Reservas já feitas mantêm o preço combinado.",
-      "blockedTooSoon": "Você já editou este anúncio nos últimos {days} dias. A próxima edição fica liberada em {date}.",
+      "blockedTooSoon": "O último envio deste anúncio foi há menos de {days} dias. A próxima edição fica liberada em {date}.",
       "blockedInReview": "Este anúncio está em análise pela equipe Hi Scoot. Você poderá editar depois da resposta.",
       "blockedEditInReview": "Já existe uma edição em análise. O anúncio atual continua no ar até a resposta."
     },
@@ -790,7 +793,8 @@
       "cancelTextUnpaid": "O Rider ainda não pagou, então nada é cobrado. Não dá para desfazer.",
       "keep": "Voltar",
       "cancelConfirm": "Cancelar reserva",
-      "error": "Não foi possível fazer isso agora. Atualize a página e tente de novo."
+      "error": "Não foi possível fazer isso agora. Atualize a página e tente de novo.",
+      "datesTaken": "Algum dia deste pedido já está reservado ou bloqueado. Recuse o pedido ou desbloqueie o dia."
     },
     "calendar": {
       "previous": "Mês anterior",
@@ -803,8 +807,18 @@
         "request": "Pedido novo",
         "booked": "Reservado",
         "inUse": "Em uso",
-        "done": "Concluído"
+        "done": "Concluído",
+        "blocked": "Bloqueado por você"
       },
+      "block": "Bloquear este dia",
+      "unblock": "Desbloquear este dia",
+      "blockedDone": "Dia bloqueado. Ninguém pode reservar este dia.",
+      "unblockedDone": "Dia desbloqueado. Ele volta a aceitar reservas.",
+      "blockBooked": "Este dia já está reservado e fica bloqueado pela reserva.",
+      "blockError": "Não foi possível mudar agora. Tente de novo.",
+      "blockedInfo": "Dia bloqueado por você: ninguém pode reservar.",
+      "chooseToBlock": "Para bloquear um dia, escolha o equipamento acima.",
+      "bookedInfo": "Dia reservado: já fica bloqueado para outras reservas.",
       "count": "{count, plural, =0 {livre} one {# reserva} other {# reservas}}",
       "free": "Nenhuma reserva neste dia.",
       "tapDay": "Toque num dia para ver as reservas."

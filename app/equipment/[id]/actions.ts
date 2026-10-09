@@ -2,18 +2,19 @@
 
 import { redirect } from "next/navigation";
 
-import { todayInSaoPaulo, validateBookingDates, type BookingDatesError } from "@/lib/booking";
+import { unavailableDays } from "@/lib/availability";
+import { firstConflict, todayInSaoPaulo, validateBookingDates, type BookingDatesError } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment";
 
 /*
  * PROVISÓRIO: nada é gravado ainda. As ações conferem os dados e simulam a
  * resposta. Quando o Supabase entrar, o servidor também confere se a pessoa
  * está conectada, se não é dona do anúncio, se o cadastro não está bloqueado
- * e se as datas não batem com outra reserva do mesmo equipamento.
+ * Dias já reservados e dias bloqueados pelo Host já são recusados aqui.
  */
 
 export type BookingRequestState = {
-  error?: BookingDatesError | "unavailable";
+  error?: BookingDatesError | "unavailable" | "datesUnavailable";
   done?: boolean;
 };
 
@@ -29,6 +30,9 @@ export async function requestBooking(
   const dropoff = String(formData.get("return") ?? "");
   const error = validateBookingDates(pickup, dropoff, todayInSaoPaulo());
   if (error) return { error };
+
+  const { booked, blocked } = await unavailableDays(equipmentId);
+  if (firstConflict(pickup, dropoff, [...booked, ...blocked])) return { error: "datesUnavailable" };
 
   // O valor é sempre recalculado no servidor (diárias x daily_price), nunca vem do navegador.
   return { done: true };

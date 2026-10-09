@@ -7,7 +7,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { ChatIcon, CheckCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { addDays, countDays, validateBookingDates } from "@/lib/booking";
+import { addDays, countDays, firstConflict, toRanges, validateBookingDates } from "@/lib/booking";
 import { bookingBreakdown, PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
 import type { Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,8 @@ type BookingPanelProps = {
   today: string;
   /** A pessoa que está vendo é a dona do anúncio? */
   isOwner: boolean;
+  /** Dias de hoje em diante já reservados ou bloqueados pelo Host (AAAA-MM-DD). */
+  unavailable: string[];
 };
 
 function DateField({
@@ -67,7 +69,7 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
 }
 
 /** Quadro de reserva: preço por dia, datas, total e ações (inventário de ações). */
-export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
+export function BookingPanel({ equipment, today, isOwner, unavailable }: BookingPanelProps) {
   const t = useTranslations("equipment");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
@@ -80,7 +82,15 @@ export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
   });
 
   const days = countDays(pickup, dropoff);
-  const localError = pickup && dropoff ? validateBookingDates(pickup, dropoff, today) : null;
+  const localError = pickup && dropoff
+    ? (validateBookingDates(pickup, dropoff, today) ??
+      (firstConflict(pickup, dropoff, unavailable) ? ("datesUnavailable" as const) : null))
+    : null;
+  const shortDate = (date: string) =>
+    format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "short", timeZone: "UTC" });
+  const takenRanges = toRanges(unavailable).map(({ start, end }) =>
+    start === end ? shortDate(start) : t("dateRange", { start: shortDate(start), end: shortDate(end) }),
+  );
   const error = localError ?? state.error;
 
   const breakdown = bookingBreakdown(days, equipment.daily_price);
@@ -175,6 +185,11 @@ export function BookingPanel({ equipment, today, isOwner }: BookingPanelProps) {
               onChange={setDropoff}
             />
           </div>
+          {takenRanges.length ? (
+            <p className={cn("text-sm", error === "datesUnavailable" ? "text-hs-black" : "text-muted")}>
+              {t("takenDays", { days: takenRanges.join(", ") })}
+            </p>
+          ) : null}
           {error ? (
             <p role="alert" className="text-sm text-error">
               {t(`errors.${error}`)}

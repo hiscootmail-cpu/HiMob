@@ -41,3 +41,27 @@ export function countDays(pickup: string, dropoff: string): number {
   if (start === null || end === null || end <= start) return 0;
   return Math.round((end - start) / DAY_MS);
 }
+
+/** Todos os dias de start a end (AAAA-MM-DD), incluindo os dois. */
+export function daysBetween(start: string, end: string): string[] {
+  const days: string[] = [];
+  for (let day = start; day <= end && days.length < 366; day = addDays(day, 1)) days.push(day);
+  return days;
+}
+
+/** Primeiro dia do período (retirada até devolução) que não está livre, ou null. */
+export function firstConflict(pickup: string, dropoff: string, unavailable: Iterable<string>): string | null {
+  const taken = new Set(unavailable);
+  return daysBetween(pickup, dropoff).find((day) => taken.has(day)) ?? null;
+}
+
+/** Junta dias seguidos em períodos: ["10","11","12","20"] → [{10..12}, {20..20}]. */
+export function toRanges(days: string[]): { start: string; end: string }[] {
+  const ranges: { start: string; end: string }[] = [];
+  for (const day of [...days].sort()) {
+    const last = ranges.at(-1);
+    if (last && addDays(last.end, 1) === day) last.end = day;
+    else ranges.push({ start: day, end: day });
+  }
+  return ranges;
+}

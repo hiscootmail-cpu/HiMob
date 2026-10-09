@@ -1,21 +1,30 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
+import { BLOCKING_STATUSES, setBlockedDay, unavailableDays } from "@/lib/availability";
+import { firstConflict, todayInSaoPaulo } from "@/lib/booking";
 import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
-import { getHostBooking } from "@/lib/host";
+import { getHostBooking, getHostListing, listHostBookings } from "@/lib/host";
 
 /*
  * PROVISÓRIO: nada é gravado e nenhum valor é cobrado ou devolvido ainda.
  * As ações conferem os dados no servidor e simulam a resposta.
  */
 
-export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" };
+export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" };
 
 /** Pedido novo: Aceitar ou Recusar. */
 export async function decideBooking(bookingId: string, decision: "accept" | "reject"): Promise<DecisionState> {
   const booking = await getHostBooking(bookingId);
   if (!booking || booking.status !== "pending") return { error: "notAllowed" };
+  if (decision === "accept") {
+    // Não aceita pedido em dias que já foram reservados ou bloqueados.
+    const { booked, blocked } = await unavailableDays(booking.equipment.id);
+    if (firstConflict(booking.start_date, booking.end_date, [...booked, ...blocked])) return { error: "datesTaken" };
+  }
   return { done: decision === "accept" ? "accepted" : "rejected" };
 }
 
@@ -62,4 +71,28 @@ export async function reviewRider(bookingId: string, _prev: RiderReviewState, fo
   };
   if (errors.rating || errors.comment) return { errors };
   return { done: true };
+}
+
+export type BlockDayState = { blocked?: boolean; error?: "notAllowed" | "booked" };
+
+/**
+ * Bloquear ou desbloquear um dia no calendário (decisão de 09/10/2026).
+ * Só anúncio publicado, só de hoje em diante, e dia já reservado não muda
+ * (ele já está bloqueado pela reserva).
+ */
+export async function toggleBlockedDay(equipmentId: string, day: string, blocked: boolean): Promise<BlockDayState> {
+  const listing = await getHostListing(equipmentId);
+  if (!listing || listing.review_status !== "approved") return { error: "notAllowed" };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || day < todayInSaoPaulo()) return { error: "notAllowed" };
+
+  const bookings = await listHostBookings();
+  const isBooked = bookings.some(
+    (b) => b.equipment.id === equipmentId && BLOCKING_STATUSES.includes(b.status) && b.start_date <= day && day <= b.end_date,
+  );
+  if (isBooked) return { error: "booked" };
+
+  const result = await setBlockedDay(equipmentId, day, blocked);
+  revalidatePath("/host/reservations");
+  revalidatePath(`/equipment/${equipmentId}`);
+  return { blocked: result };
 }
