@@ -198,7 +198,9 @@
       "documentRequired": "Upload a photo or PDF of this side of the document.",
       "documentType": "Format not accepted. Upload JPG, PNG or PDF.",
       "documentTooLarge": "File too large. The limit is {max} MB.",
-      "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy."
+      "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy.",
+      "emailNotConfirmed": "Your email isn’t confirmed yet. Open the link we sent and try again.",
+      "unexpected": "We couldn’t finish this now. Try again in a few minutes."
     },
     "login": {
       "title": "Log in",
@@ -321,7 +323,12 @@
       "sentTitle": "Letter received",
       "sentDescription": "Our team will review your request carefully and confidentially, and let you know as soon as it is done."
     },
-    "or": "or"
+    "or": "or",
+    "first": {
+      "title": "Send your ID",
+      "description": "To rent and list, our team checks that the name on your ID matches your sign-up. Send the front and back.",
+      "submit": "Send ID"
+    }
   },
   "equipmentType": {
     "scooter": "E-scooter",

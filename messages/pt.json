@@ -198,7 +198,9 @@
       "documentRequired": "Envie a foto ou o PDF deste lado do documento.",
       "documentType": "Formato não aceito. Envie JPG, PNG ou PDF.",
       "documentTooLarge": "Arquivo grande demais. O limite é {max} MB.",
-      "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade."
+      "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade.",
+      "emailNotConfirmed": "Falta confirmar seu e-mail. Abra o link que enviamos e tente de novo.",
+      "unexpected": "Não foi possível concluir agora. Tente de novo em alguns minutos."
     },
     "login": {
       "title": "Entrar",
@@ -321,7 +323,12 @@
       "sentTitle": "Carta recebida",
       "sentDescription": "A equipe vai analisar seu pedido com cuidado e sigilo, e avisar você assim que terminar."
     },
-    "or": "ou"
+    "or": "ou",
+    "first": {
+      "title": "Envie seu documento",
+      "description": "Para alugar e anunciar, a equipe confere se o nome do documento é o mesmo do cadastro. Envie a frente e o verso.",
+      "submit": "Enviar documento"
+    }
   },
   "equipmentType": {
     "scooter": "Patinete elétrico",

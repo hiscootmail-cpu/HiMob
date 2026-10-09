@@ -71,6 +71,11 @@ export function ProfileForm({ defaults, nameLocked }: ProfileFormProps) {
         defaultValue={values.city}
         error={state.errors?.city ? t(`errors.${state.errors.city}`, { max: CITY_MAX }) : undefined}
       />
+      {state.error ? (
+        <p role="alert" className="text-sm text-error">
+          {tAuth("unexpected")}
+        </p>
+      ) : null}
       <Button type="submit" size="lg" loading={pending} className="w-full sm:w-fit sm:self-end">
         {t("save")}
       </Button>

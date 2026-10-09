@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /*
  * PROVISÓRIO: nada é gravado ainda. As ações conferem os dados no servidor e
@@ -15,6 +17,10 @@ import { readListingForm, validateListing, type ListingErrors } from "@/lib/list
 
 /** "Quero ser Host": self-service, um clique (inventário de ações). */
 export async function becomeHost() {
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    await supabase.rpc("become_host");
+  }
   redirect("/host/equipment/new");
 }
 

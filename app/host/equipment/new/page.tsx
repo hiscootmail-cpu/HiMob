@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { becomeHost, createListing } from "@/app/host/equipment/actions";
@@ -6,6 +7,8 @@ import { KeyIcon } from "@/components/icons";
 import { ListingForm } from "@/components/host/listing-form";
 import { BackLink } from "@/components/rider/back-link";
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/session";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("host.new");
@@ -15,10 +18,17 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Criar anúncio. Quem ainda não é Host vê primeiro o "Quero ser Host". */
 export default async function NewListingPage({ searchParams }: PageProps<"/host/equipment/new">) {
   const t = await getTranslations("host.new");
-  // PROVISÓRIO até o login existir: ?preview=new-host mostra a tela de quem ainda não é Host.
   const { preview } = await searchParams;
+  // Com a Supabase, vale a conta de verdade; na demonstração, ?preview=new-host
+  // mostra a tela de quem ainda não é Host.
+  let notHost = preview === "new-host";
+  if (supabaseConfigured()) {
+    const user = await getCurrentUser();
+    if (!user) redirect("/auth/login");
+    notHost = !user.is_host;
+  }
 
-  if (preview === "new-host") {
+  if (notHost) {
     return (
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-4 rounded-lg border border-line bg-hs-white p-6 text-center sm:p-8">

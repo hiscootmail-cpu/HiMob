@@ -117,6 +117,11 @@ export function SignUpForm() {
 
       <TermsConsent error={errorText(termsError)} onChange={(checked) => setChecks({ ...current, terms: checked ? null : "termsRequired" })} />
 
+      {state.error ? (
+        <p role="alert" className="text-sm text-error">
+          {t(`errors.${state.error}`)}
+        </p>
+      ) : null}
       <Button type="submit" size="lg" loading={pending} className="w-full">
         {t("signUp.submit")}
       </Button>
