@@ -2,12 +2,15 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import type { IdentityStatus } from "@/lib/identity";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /*
- * PROVISÓRIO até o Supabase entrar: sessão de DEMONSTRAÇÃO.
- * Entrar com a conta de teste grava um cookie simples; "Sair" apaga.
- * Com o Supabase, quem diz se a pessoa está conectada é o login de verdade,
- * conferido no servidor a cada pedido.
+ * Quem está conectado.
+ * - Com a Supabase configurada (arquivo de chaves): login de verdade,
+ *   conferido no servidor a cada pedido, e dados lidos do banco.
+ * - Sem a Supabase: sessão de DEMONSTRAÇÃO. Entrar com a conta de teste grava
+ *   um cookie simples; "Sair" apaga.
  */
 
 export const DEMO_SESSION_COOKIE = "hs_demo_session";
@@ -38,12 +41,37 @@ const demoUser: CurrentUser = {
 };
 
 export async function isSignedIn(): Promise<boolean> {
-  const store = await cookies();
-  return store.get(DEMO_SESSION_COOKIE)?.value === "1";
+  return (await getCurrentUser()) !== null;
 }
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  return (await isSignedIn()) ? demoUser : null;
+  if (!supabaseConfigured()) {
+    const store = await cookies();
+    return store.get(DEMO_SESSION_COOKIE)?.value === "1" ? demoUser : null;
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  // As regras do banco só entregam a linha da própria pessoa.
+  const [{ data: profile }, { data: secret }] = await Promise.all([
+    supabase.from("profiles").select("city, is_host, identity_status").eq("id", user.id).maybeSingle(),
+    supabase.from("profile_private").select("full_name, phone, is_admin").eq("id", user.id).maybeSingle(),
+  ]);
+
+  return {
+    id: user.id,
+    email: user.email ?? "",
+    full_name: secret?.full_name ?? "",
+    phone: secret?.phone ?? "",
+    city: profile?.city ?? "",
+    is_host: profile?.is_host ?? false,
+    is_admin: secret?.is_admin ?? false,
+    identity: (profile?.identity_status as IdentityStatus | undefined) ?? "pending",
+  };
 }
 
 /** Telas só para quem está conectado: sem sessão, vai para a tela de entrada. */

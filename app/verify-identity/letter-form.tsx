@@ -72,6 +72,11 @@ export function LetterForm() {
         }}
       />
       <p className="text-xs text-muted">{t("privacy")}</p>
+      {state.error ? (
+        <p role="alert" className="text-sm text-error">
+          {tAuth("errors.unexpected")}
+        </p>
+      ) : null}
       <Button type="submit" variant="secondary" loading={pending} className="w-full">
         {t("submit")}
       </Button>

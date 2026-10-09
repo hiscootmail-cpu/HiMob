@@ -15,8 +15,11 @@ const initialState: ResubmitState = {};
 
 type LocalChecks = { submission: unknown; front?: FieldErrorKey | null; back?: FieldErrorKey | null };
 
-/** Reenvio de frente e verso depois da primeira recusa. */
-export function ResubmitForm({ reason }: { reason?: string }) {
+/**
+ * Envio de frente e verso: primeiro envio (quando o cadastro não guardou o
+ * documento) ou reenvio depois da primeira recusa.
+ */
+export function ResubmitForm({ reason, firstTime = false }: { reason?: string; firstTime?: boolean }) {
   const t = useTranslations("verifyIdentity");
   const tAuth = useTranslations("auth");
   const [state, formAction, pending] = useActionState(resubmitDocument, initialState);
@@ -48,7 +51,10 @@ export function ResubmitForm({ reason }: { reason?: string }) {
   }
 
   return (
-    <AuthCard title={t("rejected.title")} description={t("rejected.description")}>
+    <AuthCard
+      title={firstTime ? t("first.title") : t("rejected.title")}
+      description={firstTime ? t("first.description") : t("rejected.description")}
+    >
       {reason ? (
         <div className="rounded-md border border-line bg-surface px-4 py-3">
           <p className="text-xs font-semibold tracking-wide text-muted uppercase">{t("rejected.reasonLabel")}</p>
@@ -56,9 +62,11 @@ export function ResubmitForm({ reason }: { reason?: string }) {
         </div>
       ) : null}
 
-      <p role="note" className="rounded-md border border-hs-pink/40 bg-pink-soft px-4 py-3 text-sm font-medium text-on-pink">
-        {t("rejected.lastAttempt")}
-      </p>
+      {firstTime ? null : (
+        <p role="note" className="rounded-md border border-hs-pink/40 bg-pink-soft px-4 py-3 text-sm font-medium text-on-pink">
+          {t("rejected.lastAttempt")}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         <IdentityDocumentFields
@@ -70,18 +78,27 @@ export function ResubmitForm({ reason }: { reason?: string }) {
             setChecks({ ...current, [side]: file ? validateDocument(file) : null })
           }
         />
+        {state.error ? (
+          <p role="alert" className="text-sm text-error">
+            {tAuth("errors.unexpected")}
+          </p>
+        ) : null}
         <Button type="submit" size="lg" loading={pending} className="w-full">
-          {t("rejected.submit")}
+          {firstTime ? t("first.submit") : t("rejected.submit")}
         </Button>
       </form>
 
       {/* Carta já na 1ª recusa: a pessoa trans não precisa passar pelo bloqueio (aprovado em 08/10/2026). */}
-      <div className="flex items-center gap-3" aria-hidden>
-        <span className="h-px flex-1 bg-line" />
-        <span className="text-xs font-semibold text-muted uppercase">{t("or")}</span>
-        <span className="h-px flex-1 bg-line" />
-      </div>
-      <LetterForm />
+      {firstTime ? null : (
+        <>
+          <div className="flex items-center gap-3" aria-hidden>
+            <span className="h-px flex-1 bg-line" />
+            <span className="text-xs font-semibold text-muted uppercase">{t("or")}</span>
+            <span className="h-px flex-1 bg-line" />
+          </div>
+          <LetterForm />
+        </>
+      )}
     </AuthCard>
   );
 }
