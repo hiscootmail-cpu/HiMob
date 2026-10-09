@@ -29,6 +29,9 @@ export type Booking = {
   days: number;
   /** Valor do Host por dia no momento da reserva (o preço do anúncio pode mudar depois). */
   host_daily_price: number;
+  /** Horários do anúncio no momento da reserva (HH:MM, horário de Brasília). */
+  pickup_time: string;
+  return_time: string;
   status: BookingStatus;
   /** Endereço exato de retirada: só existe para o Rider depois do pagamento confirmado. */
   pickup_address: string | null;

@@ -14,6 +14,8 @@ import { exampleEquipment } from "@/lib/mock/equipment";
  * - Título e descrição ficam no idioma em que o Host escreveu (sem tradução).
  * - Preço por dia: cada Host define o seu. A Hi Scoot só sugere de R$ 30 a R$ 40.
  *   O Rider vê o preço com a taxa da plataforma (15%) somada: ver lib/pricing.ts.
+ * - O Host define o horário de retirada e o de devolução do equipamento.
+ *   (Futuro, fora do MVP: pontos 24 horas para retirar e devolver a qualquer hora.)
  * - Anúncio publicado pode ser editado (preço, fotos, descrição, bairro) no
  *   máximo UMA vez a cada 30 dias (EDIT_INTERVAL_DAYS). Reservas já feitas
  *   mantêm o preço do dia da reserva.
@@ -56,6 +58,10 @@ export type Equipment = {
   longitude: number;
   /** O Host pode marcar como indisponível em "Meus anúncios". */
   is_available: boolean;
+  /** Horário de retirada definido pelo Host (HH:MM, horário de Brasília). */
+  pickup_time: string;
+  /** Horário de devolução definido pelo Host (HH:MM, horário de Brasília). */
+  return_time: string;
   /** Nota do equipamento, calculada a partir das avaliações. */
   rating: { average: number; count: number } | null;
   host: EquipmentHost;

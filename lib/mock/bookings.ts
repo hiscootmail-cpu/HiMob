@@ -16,7 +16,13 @@ const byId = (id: string) => {
 const today = todayInSaoPaulo();
 const RIDER = "rider-exemplo";
 
-export const exampleBookings: Booking[] = [
+const withTimes = (booking: Booking): Booking => ({
+  ...booking,
+  pickup_time: booking.equipment.pickup_time,
+  return_time: booking.equipment.return_time,
+});
+
+export const exampleBookings: Booking[] = (<Booking[]>[
   {
     id: "rv-1001",
     equipment: byId("eq-pro-pinheiros"),
@@ -24,6 +30,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, 6),
     end_date: addDays(today, 8),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 55,
     status: "pending",
     pickup_address: null,
@@ -36,6 +44,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, 3),
     end_date: addDays(today, 5),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 45,
     status: "accepted",
     pickup_address: null,
@@ -48,6 +58,8 @@ export const exampleBookings: Booking[] = [
     start_date: today,
     end_date: addDays(today, 1),
     days: 1,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 60,
     status: "confirmed",
     pickup_address: "Rua Joaquim Floriano, 100 (exemplo), Vila Nova Conceição, São Paulo",
@@ -60,6 +72,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, 5),
     end_date: addDays(today, 7),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 45,
     status: "confirmed",
     pickup_address: "Rua Oscar Freire, 300 (exemplo), Jardins, São Paulo",
@@ -72,6 +86,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, -1),
     end_date: addDays(today, 1),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 50,
     status: "active",
     pickup_address: "Avenida Paulista, 1000 (exemplo), Bela Vista, São Paulo",
@@ -84,6 +100,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, -12),
     end_date: addDays(today, -10),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 35,
     status: "completed",
     pickup_address: "Rua Aspicuelta, 200 (exemplo), Vila Madalena, São Paulo",
@@ -96,6 +114,8 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, -30),
     end_date: addDays(today, -29),
     days: 1,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 45,
     status: "completed",
     pickup_address: "Rua Oscar Freire, 300 (exemplo), Jardins, São Paulo",
@@ -108,9 +128,11 @@ export const exampleBookings: Booking[] = [
     start_date: addDays(today, -20),
     end_date: addDays(today, -18),
     days: 2,
+    pickup_time: "",
+    return_time: "",
     host_daily_price: 55,
     status: "rejected",
     pickup_address: null,
     rider_reviewed: false,
   },
-];
+]).map(withTimes);

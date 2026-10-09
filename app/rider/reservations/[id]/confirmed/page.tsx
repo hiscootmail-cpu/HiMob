@@ -45,11 +45,15 @@ export default async function ConfirmedPage({ params }: PageProps<"/rider/reserv
           <div className="grid grid-cols-2 gap-3 border-t border-line pt-3 text-sm">
             <div className="flex flex-col">
               <span className="text-xs font-semibold tracking-wide text-muted uppercase">{t("pickup")}</span>
-              <span className="text-hs-black">{longDate(booking.start_date)}</span>
+              <span className="text-hs-black">
+                {longDate(booking.start_date)}, {booking.pickup_time}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="text-xs font-semibold tracking-wide text-muted uppercase">{t("return")}</span>
-              <span className="text-hs-black">{longDate(booking.end_date)}</span>
+              <span className="text-hs-black">
+                {longDate(booking.end_date)}, {booking.return_time}
+              </span>
             </div>
           </div>
         </div>

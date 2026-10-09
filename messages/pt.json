@@ -395,7 +395,8 @@
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
     "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
-    "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider"
+    "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
+    "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}."
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -471,8 +472,9 @@
       "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado.",
       "cancelTitle": "Cancelamento",
       "cancelFree": "Você pode cancelar sem custo: nada foi cobrado ainda.",
-      "cancelUntil": "Você pode cancelar até o fim do dia {date}. Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
-      "cancelDeadlinePassed": "O prazo para cancelar terminou no dia {date} (24 horas antes da retirada)."
+      "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
+      "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
+      "times": "Retirada: {pickup} · Devolução: {return}"
     },
     "payment": {
       "title": "Pagamento",

@@ -118,6 +118,9 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
             <p className="text-base text-hs-black">
               {equipment.area}, {equipment.city}
             </p>
+            <p className="text-sm text-hs-black">
+              {t("hours", { pickup: equipment.pickup_time, return: equipment.return_time })}
+            </p>
             <p className="text-sm text-muted">{t("whereNote")}</p>
           </section>
         </div>

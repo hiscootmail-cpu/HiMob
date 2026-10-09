@@ -395,7 +395,8 @@
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
     "feeIncluded": "Includes the platform fee ({percent}%)",
-    "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider"
+    "feeIncludedLine": "Includes a {percent}% platform fee ({fee}), charged to the Rider",
+    "hours": "Times set by the Host: pick-up at {pickup} and return by {return}."
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -471,8 +472,9 @@
       "addressAfterPayment": "The exact address appears after the payment is confirmed.",
       "cancelTitle": "Cancellation",
       "cancelFree": "You can cancel at no cost: nothing has been charged yet.",
-      "cancelUntil": "You can cancel until the end of {date}. We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
-      "cancelDeadlinePassed": "The cancellation deadline ended on {date} (24 hours before pick-up)."
+      "cancelUntil": "You can cancel until {deadline} (24 hours before pick-up). We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
+      "cancelDeadlinePassed": "The cancellation deadline ended on {deadline} (24 hours before pick-up).",
+      "times": "Pick-up: {pickup} · Return: {return}"
     },
     "payment": {
       "title": "Payment",

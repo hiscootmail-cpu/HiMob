@@ -25,13 +25,15 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const longDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
+  const moment = (date: Date) =>
+    format.dateTime(date, { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
   const policy = riderCancelPolicy(booking);
   const cancelInfo = policy.allowed
     ? policy.paid
-      ? t("cancelUntil", { date: longDate(policy.lastDay), refund: money(policy.refund), fee: money(policy.fee) })
+      ? t("cancelUntil", { deadline: moment(policy.deadline), refund: money(policy.refund), fee: money(policy.fee) })
       : t("cancelFree")
-    : policy.reason === "deadlinePassed" && policy.lastDay
-      ? t("cancelDeadlinePassed", { date: longDate(policy.lastDay) })
+    : policy.reason === "deadlinePassed" && policy.deadline
+      ? t("cancelDeadlinePassed", { deadline: moment(policy.deadline) })
       : null;
 
   const banner =
@@ -72,6 +74,12 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
           <MapPinIcon className="size-5" />
           {t("whereTitle")}
         </h2>
+        <p className="text-sm text-hs-black">
+          {t("times", {
+            pickup: `${longDate(booking.start_date)}, ${booking.pickup_time}`,
+            return: `${longDate(booking.end_date)}, ${booking.return_time}`,
+          })}
+        </p>
         {booking.pickup_address ? (
           <p className="text-base text-hs-black">{booking.pickup_address}</p>
         ) : (
