@@ -28,8 +28,10 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { DocumentUpload } from "@/components/ui/document-upload";
 import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
-import { PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
+import { HANDOFF_BUCKET, PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import type { HostBooking } from "@/lib/host";
+import { uploadOwnFiles } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 type Outcome = "accepted" | "rejected" | "cancelled" | "pickup" | "return" | "reviewed";
 
@@ -47,15 +49,29 @@ function HandoffDialog({ booking, kind, onDone }: { booking: HostBooking; kind: 
   const [local, setLocal] = useState<{ submission: unknown; error?: HandoffError | null }>({ submission: state });
   const current = local.submission === state ? local : { submission: state };
   const error = current.error === undefined ? state.error : (current.error ?? undefined);
+  const [uploading, setUploading] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const photo = formData.get("photo");
-    const problem = validatePhoto(photo instanceof File ? photo : null);
-    if (problem) {
-      setLocal({ submission: state, error: problem });
+    const file = photo instanceof File ? photo : null;
+    const problem = validatePhoto(file);
+    if (problem || !file) {
+      setLocal({ submission: state, error: problem ?? "photoRequired" });
       return;
+    }
+    if (supabaseConfigured()) {
+      // A foto vai direto do celular para a pasta privada; o servidor recebe só o caminho.
+      setUploading(true);
+      const paths = await uploadOwnFiles(HANDOFF_BUCKET, `${booking.id}-${kind}`, [file]);
+      setUploading(false);
+      if (!paths) {
+        setLocal({ submission: state, error: "uploadFailed" });
+        return;
+      }
+      formData.delete("photo");
+      formData.set("photo_path", paths[0]);
     }
     startTransition(() => action(formData));
   }
@@ -86,7 +102,7 @@ function HandoffDialog({ booking, kind, onDone }: { booking: HostBooking; kind: 
               remove: t("photoRemove"),
             }}
           />
-          <Button type="submit" loading={pending} className="w-full">
+          <Button type="submit" loading={pending || uploading} className="w-full">
             {t(`${kind}.submit`)}
           </Button>
         </form>

@@ -1,4 +1,5 @@
 import { addDays } from "@/lib/booking";
+import { realBookings } from "@/lib/bookings-db";
 import type { Booking } from "@/lib/bookings";
 import { EDIT_INTERVAL_DAYS, type Equipment } from "@/lib/equipment";
 import { exampleHostBookings, exampleHostListings } from "@/lib/mock/host";
@@ -137,8 +138,7 @@ async function realHostListings(id?: string): Promise<HostListing[]> {
 /*
  * Com a Supabase: os anúncios do Host conectado (o banco não entrega os de
  * outras pessoas). Sem a Supabase (demonstração): os exemplos.
- * Reservas recebidas passam a vir do banco na etapa 4; até lá, ficam vazias
- * quando o site está ligado à Supabase.
+ * Reservas recebidas: as do banco em que a pessoa conectada é o Host.
  */
 export async function listHostListings(): Promise<HostListing[]> {
   return supabaseConfigured() ? realHostListings() : exampleHostListings;
@@ -153,10 +153,10 @@ export async function getHostListing(id: string): Promise<HostListing | null> {
 }
 
 export async function listHostBookings(): Promise<HostBooking[]> {
-  return supabaseConfigured() ? [] : exampleHostBookings;
+  return supabaseConfigured() ? realBookings("host") : exampleHostBookings;
 }
 
 export async function getHostBooking(id: string): Promise<HostBooking | null> {
-  if (supabaseConfigured()) return null;
+  if (supabaseConfigured()) return (await realBookings("host", id))[0] ?? null;
   return exampleHostBookings.find((item) => item.id === id) ?? null;
 }

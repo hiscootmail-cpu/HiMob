@@ -5,7 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 
 import { CheckCircleIcon, MapPinIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { getRiderBooking } from "@/lib/bookings";
+import { getRiderBooking } from "@/lib/bookings-db";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rider.confirmed");

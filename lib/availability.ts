@@ -28,15 +28,19 @@ export type Unavailable = {
 };
 
 /*
- * PROVISÓRIO: lê os exemplos. Com o Supabase, uma consulta junta as reservas
- * e a tabela de dias bloqueados do equipamento.
+ * Com a Supabase: o banco junta dias reservados e bloqueados (função
+ * "unavailable_days"). Sem a Supabase (demonstração): lê os exemplos.
  */
 export async function unavailableDays(equipmentId: string): Promise<Unavailable> {
   if (supabaseConfigured()) {
-    // O banco junta dias reservados e bloqueados (função "unavailable_days").
+    if (!/^[0-9a-f-]{36}$/i.test(equipmentId)) return { booked: [], blocked: [] };
     const supabase = await createClient();
     const { data } = await supabase.rpc("unavailable_days", { eq: equipmentId });
-    return { booked: ((data ?? []) as { day: string }[]).map((d) => d.day), blocked: [] };
+    const rows = (data ?? []) as { day: string; kind: "booked" | "blocked" }[];
+    return {
+      booked: rows.filter((d) => d.kind === "booked").map((d) => d.day),
+      blocked: rows.filter((d) => d.kind === "blocked").map((d) => d.day),
+    };
   }
   const booked = new Set<string>();
   for (const booking of [...exampleBookings, ...exampleHostBookings]) {
@@ -47,8 +51,18 @@ export async function unavailableDays(equipmentId: string): Promise<Unavailable>
   return { booked: [...booked].sort(), blocked: blocked.sort() };
 }
 
-/** Bloquear ou desbloquear um dia (Host). Devolve se o dia ficou bloqueado. */
-export async function setBlockedDay(equipmentId: string, day: string, blocked: boolean): Promise<boolean> {
+/**
+ * Bloquear ou desbloquear um dia (Host). Devolve se o dia ficou bloqueado,
+ * ou null se o banco recusou (o banco confere o dono e se o dia já está reservado).
+ */
+export async function setBlockedDay(equipmentId: string, day: string, blocked: boolean): Promise<boolean | null> {
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = blocked
+      ? await supabase.from("blocked_days").upsert({ equipment_id: equipmentId, day }, { ignoreDuplicates: true })
+      : await supabase.from("blocked_days").delete().eq("equipment_id", equipmentId).eq("day", day);
+    return error ? null : blocked;
+  }
   const days = exampleBlockedDays.get(equipmentId) ?? new Set<string>();
   if (blocked) days.add(day);
   else days.delete(day);

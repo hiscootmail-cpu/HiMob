@@ -6,7 +6,8 @@ import { CalendarIcon } from "@/components/icons";
 import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { Button } from "@/components/ui/button";
-import { listRiderBookings, ONGOING, type Booking } from "@/lib/bookings";
+import { ONGOING, type Booking } from "@/lib/bookings";
+import { listRiderBookings } from "@/lib/bookings-db";
 import { requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 

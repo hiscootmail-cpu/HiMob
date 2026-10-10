@@ -4,7 +4,8 @@ import { getFormatter, getTranslations } from "next-intl/server";
 
 import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
-import { bookingPrice, getRiderBooking } from "@/lib/bookings";
+import { bookingPrice } from "@/lib/bookings";
+import { getRiderBooking } from "@/lib/bookings-db";
 import { PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
 import { PaymentForm } from "./payment-form";
 

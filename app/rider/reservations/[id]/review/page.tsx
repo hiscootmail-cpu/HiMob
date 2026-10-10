@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
-import { getRiderBooking } from "@/lib/bookings";
+import { getRiderBooking } from "@/lib/bookings-db";
 import { ReviewForm } from "./review-form";
 
 export async function generateMetadata(): Promise<Metadata> {
