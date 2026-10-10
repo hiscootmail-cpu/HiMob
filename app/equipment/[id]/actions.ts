@@ -59,8 +59,22 @@ export async function requestBooking(
 
 export type WaitlistState = { onWaitlist: boolean };
 
-/** "Avisar quando disponível" e "Cancelar aviso" alternam a mesma lista de espera. */
-export async function toggleWaitlist(_equipmentId: string, prev: WaitlistState): Promise<WaitlistState> {
+/**
+ * "Avisar quando disponível" e "Cancelar aviso" alternam a mesma lista de espera.
+ * Quando o Host marca disponível de novo, o banco avisa e tira a pessoa da lista.
+ */
+export async function toggleWaitlist(equipmentId: string, prev: WaitlistState): Promise<WaitlistState> {
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
+    const { error } = prev.onWaitlist
+      ? await supabase.from("waitlist").delete().eq("equipment_id", equipmentId).eq("user_id", user.id)
+      : await supabase.from("waitlist").insert({ equipment_id: equipmentId, user_id: user.id });
+    if (error) return prev;
+  }
   return { onWaitlist: !prev.onWaitlist };
 }
 

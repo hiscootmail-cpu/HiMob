@@ -11,7 +11,24 @@ import { unavailableDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment-db";
 import { riderDailyPrice } from "@/lib/pricing";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 import { BookingPanel } from "./booking-panel";
+
+/** Com a Supabase: a pessoa conectada é a dona do anúncio? Já está na lista de espera? */
+async function viewerState(equipmentId: string, hostId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { isOwner: false, onWaitlist: false };
+  const { count } = await supabase
+    .from("waitlist")
+    .select("equipment_id", { count: "exact", head: true })
+    .eq("equipment_id", equipmentId)
+    .eq("user_id", user.id);
+  return { isOwner: user.id === hostId, onWaitlist: Boolean(count) };
+}
 
 export async function generateMetadata({ params }: PageProps<"/equipment/[id]">): Promise<Metadata> {
   const { id } = await params;
@@ -40,8 +57,10 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
   const format = await getFormatter();
   const price = format.number(riderDailyPrice(equipment.daily_price), { style: "currency", currency: "BRL" });
 
-  // PROVISÓRIO até o login existir: ?preview=owner mostra a tela como o dono do anúncio vê.
-  const isOwner = preview === "owner";
+  // Na demonstração, ?preview=owner mostra a tela como o dono do anúncio vê.
+  const { isOwner, onWaitlist } = supabaseConfigured()
+    ? await viewerState(equipment.id, equipment.host_id)
+    : { isOwner: preview === "owner", onWaitlist: false };
   const today = todayInSaoPaulo();
   const { booked, blocked } = await unavailableDays(equipment.id);
   const unavailable = [...booked, ...blocked].filter((day) => day >= today).sort();
@@ -156,7 +175,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
 
         <aside id="reservar" aria-label={t("bookingLabel")} className="scroll-mt-20">
           <div className="rounded-lg border border-line bg-hs-white p-5 shadow-sm md:sticky md:top-20">
-            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} unavailable={unavailable} />
+            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} unavailable={unavailable} onWaitlist={onWaitlist} />
           </div>
         </aside>
       </div>

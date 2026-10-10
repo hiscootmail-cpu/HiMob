@@ -20,6 +20,7 @@ export const notificationKinds = [
   "documentApproved",
   "documentRejected",
   "newMessage",
+  "equipmentAvailable",
 ] as const;
 
 export type NotificationKind = (typeof notificationKinds)[number];
