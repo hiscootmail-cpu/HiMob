@@ -22,3 +22,5 @@ Etapa 4 (reservas): rode todas as migrações, em ordem, e depois
 `docs/banco/testes-etapa-4.sql` num banco novo.
 Etapa 5 (conversas, avaliações e avisos): `docs/banco/testes-etapa-5.sql`, também
 depois de todas as migrações.
+Aviso de disponível e confirmação dupla: `docs/banco/testes-aviso-disponivel.sql` e
+`docs/banco/testes-confirmacao-dupla.sql`, também depois de todas as migrações.

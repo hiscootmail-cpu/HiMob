@@ -39,6 +39,8 @@ const icons: Record<NotificationKind, React.ComponentType<IconProps>> = {
   documentRejected: VerifiedBadgeIcon,
   newMessage: ChatIcon,
   equipmentAvailable: CalendarIcon,
+  pickupWaiting: QrCodeIcon,
+  returnWaiting: QrCodeIcon,
 };
 
 /** Notificações: "Todas" ou "Precisam de mim". Cada aviso leva à tela certa. */

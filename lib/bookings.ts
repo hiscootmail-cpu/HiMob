@@ -38,7 +38,15 @@ export type Booking = {
   rider_reviewed: boolean;
   /** Motivo curto escrito pelo Host ao recusar (decisão de 10/10/2026). */
   reject_reason?: string | null;
+  /**
+   * Quem já confirmou a retirada e a devolução. A reserva só segue quando os
+   * dois confirmam (decisão de 10/10/2026); sem isso, a equipe verifica em 2 horas.
+   */
+  confirmed?: Record<"pickup" | "return", { rider: boolean; host: boolean }>;
 };
+
+/** Prazo para a outra pessoa confirmar antes de a equipe Hi Scoot verificar. */
+export const HANDOFF_WAIT_HOURS = 2;
 
 /** Motivo da recusa: curto (decisão de 10/10/2026). */
 export const REJECT_REASON = { min: 5, max: 100 } as const;

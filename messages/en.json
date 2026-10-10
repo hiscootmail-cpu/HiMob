@@ -573,7 +573,9 @@
         "doneTitle": "Return confirmed",
         "doneText": "Thank you for riding with Hi Scoot. Tell us how it went.",
         "next": "Review"
-      }
+      },
+      "waitingTitle": "You've confirmed",
+      "waitingText": "Now {name} needs to confirm. If they don't within {hours} hours, the Hi Scoot team will check."
     },
     "review": {
       "title": "Review",
@@ -799,7 +801,9 @@
         "cancelled": "Booking cancelled. We told {name}.",
         "pickup": "Pick-up confirmed.",
         "return": "Return confirmed. Your payment is released.",
-        "reviewed": "Rating sent. Thank you!"
+        "reviewed": "Rating sent. Thank you!",
+        "pickupWaiting": "You confirmed the pickup. {name} still needs to confirm. If they don't within {hours} hours, the Hi Scoot team will check.",
+        "returnWaiting": "You confirmed the return. {name} still needs to confirm. If they don't within {hours} hours, the Hi Scoot team will check."
       },
       "accept": "Accept",
       "reject": "Decline",
@@ -1020,7 +1024,9 @@
       "documentApproved": "Your identity was verified",
       "documentRejected": "Your ID was rejected. See why.",
       "newMessage": "New message from {name}",
-      "equipmentAvailable": "Available again: {title}"
+      "equipmentAvailable": "Available again: {title}",
+      "pickupWaiting": "{name} confirmed the pickup. Your turn.",
+      "returnWaiting": "{name} confirmed the return. Your turn."
     }
   },
   "admin": {
@@ -1030,7 +1036,8 @@
     "tabs": {
       "listings": "New listings",
       "edits": "Edits",
-      "identity": "Sign-ups"
+      "identity": "Sign-ups",
+      "handoffs": "Pickups and returns"
     },
     "oldestFirst": "The oldest request shows first.",
     "emptyTitle": "Nothing to review in this queue.",
@@ -1104,6 +1111,20 @@
       "checkLetter": "The letter must be handwritten, with social name and CPF."
     },
     "photosLabel": "Listing photos",
-    "photoAlt": "Listing photo {number}"
+    "photoAlt": "Listing photo {number}",
+    "handoff": {
+      "pickup": "Pickup",
+      "return": "Return",
+      "people": "Rider <riderLink>{rider}</riderLink> · Host <hostLink>{host}</hostLink>",
+      "dates": "Booking: {start} to {end}",
+      "status": "{confirmed} confirmed {when}. {missing} still needs to confirm.",
+      "photo": "See photo sent by {name}",
+      "help": "Talk to both people before confirming. The team's confirmation counts in place of whoever didn't confirm.",
+      "reasonPlaceholder": "E.g.: Confirmed by phone with both people.",
+      "reasonHint": "Required. Both people in the booking can see this text.",
+      "confirm": "Confirm on behalf of the platform",
+      "done": "Confirmed by the platform. The booking moved to the next step.",
+      "reasonRequired": "Write the reason to confirm."
+    }
   }
 }

@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/server";
 const SELECT = `
   id, rider_id, host_id, start_date, end_date, host_daily_price, pickup_time, return_time,
   status, rider_reviewed, host_reviewed, reject_reason,
+  handoffs(kind, by_role),
   equipment(id, host_id, type, title, description, daily_price, city, area, latitude, longitude,
             pickup_time, return_time, is_available, equipment_photos(path, position)),
   host:profiles!bookings_host_id_fkey(display_name, identity_status, host_since),
@@ -36,6 +37,7 @@ type Row = {
   rider_reviewed: boolean;
   host_reviewed: boolean;
   reject_reason: string | null;
+  handoffs: { kind: "pickup" | "return"; by_role: "rider" | "host" }[];
   equipment: {
     id: string;
     host_id: string;
@@ -58,6 +60,9 @@ type Row = {
 
 const hhmm = (time: string) => time.slice(0, 5);
 
+const has = (row: Row, kind: "pickup" | "return", role: "rider" | "host") =>
+  (row.handoffs ?? []).some((h) => h.kind === kind && h.by_role === role);
+
 function fromRow(row: Row): HostBooking {
   const e = row.equipment;
   return {
@@ -74,6 +79,10 @@ function fromRow(row: Row): HostBooking {
     rider_reviewed: row.rider_reviewed,
     host_reviewed: row.host_reviewed,
     reject_reason: row.reject_reason,
+    confirmed: {
+      pickup: { rider: has(row, "pickup", "rider"), host: has(row, "pickup", "host") },
+      return: { rider: has(row, "return", "rider"), host: has(row, "return", "host") },
+    },
     rider: {
       id: row.rider_id,
       full_name: row.rider?.display_name ?? "",

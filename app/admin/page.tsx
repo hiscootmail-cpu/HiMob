@@ -6,10 +6,11 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { decideIdentity, decideListing } from "@/app/admin/actions";
 import { DecisionForm } from "@/app/admin/decision-form";
 import { DocumentDialog } from "@/app/admin/document-dialog";
+import { HandoffForm } from "@/app/admin/handoff-form";
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { CheckCircleIcon, ShieldAdminIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
-import { listIdentityQueue, listListingQueue, type AdminListing } from "@/lib/admin";
+import { listHandoffQueue, listIdentityQueue, listListingQueue, type AdminHandoff, type AdminListing } from "@/lib/admin";
 import { MAX_DOCUMENT_REJECTIONS } from "@/lib/identity";
 import { riderDailyPrice } from "@/lib/pricing";
 import { getCurrentUser } from "@/lib/session";
@@ -20,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title") };
 }
 
-const TABS = ["listings", "edits", "identity"] as const;
+const TABS = ["listings", "edits", "identity", "handoffs"] as const;
 type Tab = (typeof TABS)[number];
 
 async function ListingItem({ item }: { item: AdminListing }) {
@@ -97,6 +98,70 @@ async function ListingItem({ item }: { item: AdminListing }) {
   );
 }
 
+/** Retirada ou devolução em que só uma pessoa confirmou há mais de 2 horas. */
+async function HandoffItem({ item }: { item: AdminHandoff }) {
+  const t = await getTranslations("admin");
+  const format = await getFormatter();
+  const when = (value: string) =>
+    format.dateTime(new Date(`${value.replace(" ", "T")}:00-03:00`), {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "America/Sao_Paulo",
+    });
+  const confirmed = item.confirmed_by === "rider" ? item.rider : item.host;
+  const missing = item.confirmed_by === "rider" ? item.host : item.rider;
+
+  return (
+    <li className="flex flex-col gap-4 rounded-lg border border-line bg-hs-white p-4">
+      <div className="flex gap-4">
+        <EquipmentPhoto type={item.equipment.type} className="size-20 shrink-0 rounded-md" />
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <Badge tone={item.kind === "pickup" ? "info" : "highlight"}>{t(`handoff.${item.kind}`)}</Badge>
+          <p className="text-base font-semibold text-hs-black">{item.equipment.title}</p>
+          <p className="text-sm text-hs-black">
+            {t.rich("handoff.people", {
+              rider: item.rider.name,
+              host: item.host.name,
+              riderLink: (chunks) => (
+                <Link href={`/profile/${item.rider.id}`} className="font-semibold underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+              hostLink: (chunks) => (
+                <Link href={`/profile/${item.host.id}`} className="font-semibold underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
+          <p className="text-sm text-muted">{t("handoff.dates", { start: when(item.start), end: when(item.end) })}</p>
+        </div>
+      </div>
+      <p className="rounded-md bg-surface p-3 text-sm text-hs-black">
+        {t("handoff.status", {
+          confirmed: confirmed.name,
+          when: format.relativeTime(new Date(item.confirmed_at), new Date()),
+          missing: missing.name,
+        })}
+      </p>
+      {item.photo ? (
+        <a
+          href={item.photo}
+          target="_blank"
+          rel="noreferrer"
+          className="w-fit text-sm font-semibold text-hs-black underline underline-offset-2 outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+        >
+          {t("handoff.photo", { name: confirmed.name })}
+        </a>
+      ) : null}
+      <p className="text-sm text-hs-black">{t("handoff.help")}</p>
+      <HandoffForm bookingId={item.booking_id} kind={item.kind} />
+    </li>
+  );
+}
+
 /** Painel do administrador: só a equipe entra (o servidor confere). */
 export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
   const user = await getCurrentUser();
@@ -107,10 +172,19 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
   const format = await getFormatter();
   const { tab: rawTab } = await searchParams;
   const tab: Tab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "listings";
-  const [listingQueue, identityQueue] = await Promise.all([listListingQueue(), listIdentityQueue()]);
+  const [listingQueue, identityQueue, handoffQueue] = await Promise.all([
+    listListingQueue(),
+    listIdentityQueue(),
+    listHandoffQueue(),
+  ]);
   const newListings = listingQueue.filter((l) => l.kind === "new");
   const edits = listingQueue.filter((l) => l.kind === "edit");
-  const counts: Record<Tab, number> = { listings: newListings.length, edits: edits.length, identity: identityQueue.length };
+  const counts: Record<Tab, number> = {
+    listings: newListings.length,
+    edits: edits.length,
+    identity: identityQueue.length,
+    handoffs: handoffQueue.length,
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -152,6 +226,12 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
           <CheckCircleIcon className="size-10 text-on-green" />
           <p className="text-base font-semibold text-hs-black">{t("emptyTitle")}</p>
         </div>
+      ) : tab === "handoffs" ? (
+        <ul className="flex flex-col gap-4">
+          {handoffQueue.map((item) => (
+            <HandoffItem key={`${item.booking_id}-${item.kind}`} item={item} />
+          ))}
+        </ul>
       ) : tab === "identity" ? (
         <ul className="flex flex-col gap-4">
           {identityQueue.map((item) => {

@@ -1,4 +1,4 @@
-import type { AdminIdentity, AdminListing } from "@/lib/admin";
+import type { AdminHandoff, AdminIdentity, AdminListing } from "@/lib/admin";
 
 /* FILAS DE EXEMPLO do painel do administrador, só para conferir a tela. */
 
@@ -54,4 +54,18 @@ export const exampleIdentityQueue: AdminIdentity[] = [
   { id: "id-01", user_id: "rider-joao", full_name: "João Vitor Almeida", sent_at: ago(30), kind: "document", rejections: 0 },
   { id: "id-02", user_id: "rider-carla", full_name: "Carla Dias", sent_at: ago(12), kind: "document", rejections: 1 },
   { id: "id-03", user_id: "rider-pedro", full_name: "Pedro Alves", sent_at: ago(6), kind: "letter", rejections: 1 },
+];
+
+export const exampleHandoffQueue: AdminHandoff[] = [
+  {
+    booking_id: "hb-2004",
+    kind: "pickup",
+    equipment: { title: "Patinete Aro 10", type: "scooter" },
+    rider: { id: "rider-ana", name: "Ana P." },
+    host: { id: "host-rafael", name: "Rafael S." },
+    confirmed_by: "host",
+    confirmed_at: ago(3),
+    start: "2026-10-10 09:00",
+    end: "2026-10-11 18:00",
+  },
 ];

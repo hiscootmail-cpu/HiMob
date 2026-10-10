@@ -1,4 +1,4 @@
-import { exampleIdentityQueue, exampleListingQueue } from "@/lib/mock/admin";
+import { exampleHandoffQueue, exampleIdentityQueue, exampleListingQueue } from "@/lib/mock/admin";
 import type { EquipmentType } from "@/lib/equipment";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { equipmentPhotoUrl } from "@/lib/supabase/photos";
@@ -212,4 +212,65 @@ export async function listIdentityQueue(): Promise<AdminIdentity[]> {
       };
     }),
   );
+}
+
+/**
+ * Retirada ou devolução em que só uma pessoa confirmou há mais de 2 horas
+ * (decisão de 10/10/2026). A equipe fala com as duas e pode "Confirmar pela
+ * plataforma", com motivo obrigatório.
+ */
+export type AdminHandoff = {
+  booking_id: string;
+  kind: "pickup" | "return";
+  equipment: { title: string; type: EquipmentType };
+  rider: { id: string; name: string };
+  host: { id: string; name: string };
+  /** Quem já confirmou. */
+  confirmed_by: "rider" | "host";
+  /** Data e hora da confirmação (ISO). */
+  confirmed_at: string;
+  /** Retirada e devolução da reserva (AAAA-MM-DD e HH:MM). */
+  start: string;
+  end: string;
+  /** Link temporário (5 minutos) da foto enviada. */
+  photo?: string;
+};
+
+type HandoffRow = {
+  booking_id: string;
+  kind: "pickup" | "return";
+  equipment_title: string;
+  equipment_type: EquipmentType;
+  rider_id: string;
+  rider_name: string;
+  host_id: string;
+  host_name: string;
+  confirmed_by: "rider" | "host";
+  confirmed_at: string;
+  photo_path: string;
+  start_date: string;
+  end_date: string;
+  pickup_time: string;
+  return_time: string;
+};
+
+export async function listHandoffQueue(): Promise<AdminHandoff[]> {
+  if (!supabaseConfigured()) return exampleHandoffQueue;
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("handoff_queue");
+  const rows = (data ?? []) as HandoffRow[];
+  if (!rows.length) return [];
+  const { data: signed } = await supabase.storage.from("handoff-photos").createSignedUrls(rows.map((r) => r.photo_path), 300);
+  return rows.map((r, i) => ({
+    booking_id: r.booking_id,
+    kind: r.kind,
+    equipment: { title: r.equipment_title, type: r.equipment_type },
+    rider: { id: r.rider_id, name: r.rider_name },
+    host: { id: r.host_id, name: r.host_name },
+    confirmed_by: r.confirmed_by,
+    confirmed_at: r.confirmed_at,
+    start: `${r.start_date} ${r.pickup_time.slice(0, 5)}`,
+    end: `${r.end_date} ${r.return_time.slice(0, 5)}`,
+    photo: signed?.[i]?.signedUrl ?? undefined,
+  }));
 }
