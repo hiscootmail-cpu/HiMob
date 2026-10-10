@@ -1019,7 +1019,8 @@
       "listingRejected": "Listing rejected: {title}. See why.",
       "documentApproved": "Your identity was verified",
       "documentRejected": "Your ID was rejected. See why.",
-      "newMessage": "New message from {name}"
+      "newMessage": "New message from {name}",
+      "equipmentAvailable": "Available again: {title}"
     }
   },
   "admin": {

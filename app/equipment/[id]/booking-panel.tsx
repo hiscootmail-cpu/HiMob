@@ -21,6 +21,8 @@ type BookingPanelProps = {
   isOwner: boolean;
   /** Dias de hoje em diante já reservados ou bloqueados pelo Host (AAAA-MM-DD). */
   unavailable: string[];
+  /** A pessoa já pediu "Avisar quando disponível"? */
+  onWaitlist?: boolean;
 };
 
 function DateField({
@@ -69,7 +71,7 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
 }
 
 /** Quadro de reserva: preço por dia, datas, total e ações (inventário de ações). */
-export function BookingPanel({ equipment, today, isOwner, unavailable }: BookingPanelProps) {
+export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false }: BookingPanelProps) {
   const t = useTranslations("equipment");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
@@ -78,7 +80,7 @@ export function BookingPanel({ equipment, today, isOwner, unavailable }: Booking
   const [dropoff, setDropoff] = useState("");
   const [state, formAction, pending] = useActionState(requestBooking.bind(null, equipment.id), {} as BookingRequestState);
   const [waitlist, waitlistAction, waitlistPending] = useActionState(toggleWaitlist.bind(null, equipment.id), {
-    onWaitlist: false,
+    onWaitlist,
   });
 
   const days = countDays(pickup, dropoff);

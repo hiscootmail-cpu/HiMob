@@ -1019,7 +1019,8 @@
       "listingRejected": "Anúncio recusado: {title}. Veja o motivo.",
       "documentApproved": "Sua identidade foi verificada",
       "documentRejected": "Seu documento foi recusado. Veja o motivo.",
-      "newMessage": "Nova mensagem de {name}"
+      "newMessage": "Nova mensagem de {name}",
+      "equipmentAvailable": "Disponível de novo: {title}"
     }
   },
   "admin": {
