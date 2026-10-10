@@ -52,13 +52,20 @@ async function getRealProfile(id: string): Promise<{ profile: PublicProfile; lis
     .maybeSingle();
   if (!row) return null;
 
-  const { data: reviews } = await supabase
-    .from("reviews")
-    .select("id, rating, comment, target_role, created_at, author:profiles!reviews_author_id_fkey(display_name)")
-    .eq("target_id", id)
-    .order("created_at", { ascending: false })
-    .limit(20);
+  const [{ data: reviews }, { data: ratings }, listings] = await Promise.all([
+    supabase
+      .from("reviews")
+      .select("id, rating, comment, target_role, created_at, author:profiles!reviews_author_id_fkey(display_name)")
+      .eq("target_id", id)
+      .neq("comment", "")
+      .order("created_at", { ascending: false })
+      .limit(20),
+    // As notas usam todas as avaliações; os comentários mostram as 20 mais recentes.
+    supabase.from("reviews").select("rating, target_role").eq("target_id", id),
+    row.is_host ? listEquipment().then((all) => all.filter((e) => e.host_id === id)) : Promise.resolve([]),
+  ]);
   const list = reviews ?? [];
+  const all = ratings ?? [];
 
   return {
     profile: {
@@ -68,11 +75,9 @@ async function getRealProfile(id: string): Promise<{ profile: PublicProfile; lis
       member_since: new Date(row.created_at).getFullYear(),
       verified: row.identity_status === "approved",
       is_host: row.is_host,
-      host_rating: rating(list.filter((r) => r.target_role === "host").map((r) => r.rating)),
-      rider_rating: rating(list.filter((r) => r.target_role === "rider").map((r) => r.rating)),
-      reviews: list
-        .filter((r) => r.comment)
-        .map((r) => ({
+      host_rating: rating(all.filter((r) => r.target_role === "host").map((r) => r.rating)),
+      rider_rating: rating(all.filter((r) => r.target_role === "rider").map((r) => r.rating)),
+      reviews: list.map((r) => ({
           id: r.id,
           author: (r.author as unknown as { display_name: string } | null)?.display_name ?? "",
           as: r.target_role === "host" ? ("host" as const) : ("rider" as const),
@@ -81,8 +86,7 @@ async function getRealProfile(id: string): Promise<{ profile: PublicProfile; lis
           date: String(r.created_at).slice(0, 10),
         })),
     },
-    // Os anúncios passam a vir do banco na etapa 3.
-    listings: [],
+    listings,
   };
 }
 

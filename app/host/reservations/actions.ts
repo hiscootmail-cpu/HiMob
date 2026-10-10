@@ -115,6 +115,12 @@ export async function reviewRider(bookingId: string, _prev: RiderReviewState, fo
     comment: comment.length > REVIEW_COMMENT_MAX ? ("commentTooLong" as const) : undefined,
   };
   if (errors.rating || errors.comment) return { errors };
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("submit_review", { p_booking: bookingId, p_rating: rating, p_comment: comment });
+    if (error) return { done: false };
+    revalidatePath("/host/reservations");
+  }
   return { done: true };
 }
 
