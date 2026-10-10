@@ -8,6 +8,8 @@ import { sendMessage, type SendState } from "@/app/conversations/actions";
 import { Button } from "@/components/ui/button";
 import type { Message } from "@/lib/conversations";
 import { HIDDEN_MARK, MESSAGE_MAX } from "@/lib/contact-filter";
+import { createClient } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
 
 type ChatViewProps = {
@@ -16,19 +18,26 @@ type ChatViewProps = {
   otherName: string;
   /** Sem reserva aceita: telefone e e-mail aparecem como "•••". */
   contactsHidden: boolean;
+  /** Com a Supabase: id da conversa no banco (null se ainda não existe) e da pessoa conectada. */
+  liveId?: string | null;
+  myId?: string;
 };
 
+type Row = { id: string; sender_id: string; body: string; created_at: string };
+
 /** Mensagens e campo de envio. Enter envia; Shift + Enter pula linha. */
-export function ChatView({ conversationId, initialMessages, otherName, contactsHidden }: ChatViewProps) {
+export function ChatView({ conversationId, initialMessages, otherName, contactsHidden, liveId = null, myId }: ChatViewProps) {
   const t = useTranslations("conversations");
   const format = useFormatter();
   const [sent, setSent] = useState<Message[]>([]);
   const [body, setBody] = useState("");
   const [lastRedacted, setLastRedacted] = useState(false);
+  const [realId, setRealId] = useState<string | null>(liveId);
   const formRef = useRef<HTMLFormElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const [state, action, pending] = useActionState(async (prev: SendState, formData: FormData) => {
     const result = await sendMessage(conversationId, prev, formData);
+    if (result.conversationId) setRealId(result.conversationId);
     if (result.message) {
       setSent((list) => [...list, result.message!]);
       setBody("");
@@ -37,7 +46,28 @@ export function ChatView({ conversationId, initialMessages, otherName, contactsH
     return result;
   }, {} as SendState);
 
-  const messages = [...initialMessages, ...sent];
+  // Sem repetir: a mensagem enviada também volta pelo tempo real.
+  const messages = [...initialMessages, ...sent].filter((m, i, all) => all.findIndex((x) => x.id === m.id) === i);
+
+  // Tempo real: mensagens novas desta conversa chegam sozinhas (só para as duas pessoas).
+  useEffect(() => {
+    if (!supabaseConfigured() || !realId) return;
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`conversa-${realId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${realId}` },
+        (payload) => {
+          const row = payload.new as Row;
+          setSent((list) => [...list, { id: row.id, mine: row.sender_id === myId, body: row.body, sent_at: row.created_at }]);
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [realId, myId]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });

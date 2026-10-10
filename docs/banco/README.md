@@ -18,5 +18,7 @@ psql -d hs -v ON_ERROR_STOP=1 -f docs/banco/testes-seguranca-etapa-1.sql
 Chaves e senhas NUNCA entram no repositório: ficam em `.env.local` (fora do Git) e nas
 configurações da hospedagem.
 
-Etapa 4 (reservas): rode as migrações 1, 3 e 4, nessa ordem, e depois
-`docs/banco/testes-etapa-4.sql` num banco novo (50 testes).
+Etapa 4 (reservas): rode todas as migrações, em ordem, e depois
+`docs/banco/testes-etapa-4.sql` num banco novo.
+Etapa 5 (conversas, avaliações e avisos): `docs/banco/testes-etapa-5.sql`, também
+depois de todas as migrações.

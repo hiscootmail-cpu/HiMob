@@ -488,7 +488,8 @@
       "cancelFree": "Você pode cancelar sem custo: nada foi cobrado ainda.",
       "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
       "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
-      "times": "Retirada: {pickup} · Devolução: {return}"
+      "times": "Retirada: {pickup} · Devolução: {return}",
+      "rejectedReason": "Motivo do Host: {reason}"
     },
     "payment": {
       "title": "Pagamento",
@@ -813,7 +814,14 @@
       "keep": "Voltar",
       "cancelConfirm": "Cancelar reserva",
       "error": "Não foi possível fazer isso agora. Atualize a página e tente de novo.",
-      "datesTaken": "Algum dia deste pedido já está reservado ou bloqueado. Recuse o pedido ou desbloqueie o dia."
+      "datesTaken": "Algum dia deste pedido já está reservado ou bloqueado. Recuse o pedido ou desbloqueie o dia.",
+      "rejectReasonLabel": "Motivo (o Rider vê)",
+      "rejectReasonPlaceholder": "Ex.: Vou usar o equipamento nesses dias",
+      "rejectReasonCount": "{count}/{max}",
+      "rejectSuggestions": "Sugestões",
+      "suggestUse": "Vou usar o equipamento",
+      "suggestMaintenance": "Equipamento em manutenção",
+      "reasonRequired": "Escreva um motivo curto, de {min} a {max} letras."
     },
     "calendar": {
       "previous": "Mês anterior",

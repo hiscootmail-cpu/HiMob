@@ -125,5 +125,16 @@ export async function submitReview(bookingId: string, _prev: ReviewState, formDa
   };
   if (errors.equipment || errors.host || errors.comment) return { errors };
 
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("submit_review", {
+      p_booking: bookingId,
+      p_rating: rating("hostRating"),
+      p_equipment_rating: rating("equipmentRating"),
+      p_comment: comment,
+    });
+    if (error) return { done: false };
+    revalidatePath("/rider/reservations");
+  }
   return { done: true };
 }

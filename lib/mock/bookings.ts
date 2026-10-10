@@ -134,5 +134,6 @@ export const exampleBookings: Booking[] = (<Booking[]>[
     status: "rejected",
     pickup_address: null,
     rider_reviewed: false,
+    reject_reason: "Equipamento em manutenção.",
   },
 ]).map(withTimes);

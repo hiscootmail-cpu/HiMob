@@ -8,7 +8,7 @@ import { ChatView } from "@/app/conversations/[id]/chat-view";
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { VerifiedBadgeIcon } from "@/components/icons";
 import { BackLink } from "@/components/rider/back-link";
-import { getConversation } from "@/lib/conversations";
+import { getConversation, markConversationRead } from "@/lib/conversations";
 import { requireUser } from "@/lib/session";
 
 export async function generateMetadata({ params }: PageProps<"/conversations/[id]">): Promise<Metadata> {
@@ -20,10 +20,11 @@ export async function generateMetadata({ params }: PageProps<"/conversations/[id
 
 /** Chat: mensagens + Enviar. Contato da outra pessoa só com reserva aceita. */
 export default async function ChatPage({ params }: PageProps<"/conversations/[id]">) {
-  await requireUser();
+  const user = await requireUser();
   const { id } = await params;
   const conversation = await getConversation(id);
   if (!conversation) notFound();
+  if (!conversation.is_new) await markConversationRead(conversation.id);
   const t = await getTranslations("conversations");
 
   return (
@@ -72,6 +73,8 @@ export default async function ChatPage({ params }: PageProps<"/conversations/[id
         initialMessages={conversation.messages}
         otherName={conversation.other.name}
         contactsHidden={!conversation.has_accepted_booking}
+        liveId={conversation.is_new ? null : conversation.id}
+        myId={user.id}
       />
     </div>
   );

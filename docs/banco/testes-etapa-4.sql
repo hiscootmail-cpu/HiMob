@@ -1,5 +1,5 @@
 \set ON_ERROR_STOP 1
--- Testes da etapa 4 (reservas). Rodam depois das migrações 1, 3 e 4, num banco novo.
+-- Testes da etapa 4 (reservas). Rodam depois de todas as migrações, num banco novo.
 set client_min_messages = warning;
 create or replace function pg_temp.as_user(u text) returns void language plpgsql as $$
 begin
@@ -76,10 +76,14 @@ select pg_temp.ok(public.decide_booking((select id from ids where name = 'b1'), 
 select pg_temp.fails($$select public.decide_booking((select id from ids where name = 'b2'), true)$$, 'dates_taken', 'Host não aceita pedido em dias já reservados');
 select pg_temp.fails($$insert into public.blocked_days values ('10000000-0000-0000-0000-000000000001', public.today_sp() + 6)$$, 'booked', 'Host não bloqueia dia já reservado');
 select pg_temp.ok((select count(*) from public.unavailable_days('10000000-0000-0000-0000-000000000001') where kind = 'booked') = 3, 'dias da reserva aceita ficam reservados (retirada até devolução)');
-select pg_temp.ok(public.decide_booking((select id from ids where name = 'b2'), false) = 'rejected', 'Host recusa o outro pedido');
+select pg_temp.fails($$select public.decide_booking((select id from ids where name = 'b2'), false)$$, 'reason_required', 'recusar exige motivo');
+select pg_temp.fails($$select public.decide_booking((select id from ids where name = 'b2'), false, '  ok  ')$$, 'reason_required', 'motivo curto demais é recusado');
+select pg_temp.fails($$update public.bookings set reject_reason = 'Outro motivo'$$, '42501', 'Host não muda o motivo direto na tabela');
+select pg_temp.ok(public.decide_booking((select id from ids where name = 'b2'), false, 'Equipamento em manutenção') = 'rejected', 'Host recusa o outro pedido com motivo');
 
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 select pg_temp.ok((select kind from public.notifications) = 'bookingRejected', 'Rider recusado recebe aviso');
+select pg_temp.ok((select reject_reason from public.bookings) = 'Equipamento em manutenção', 'Rider vê o motivo da recusa');
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 7, public.today_sp() + 9)$$, 'dates_unavailable', 'novo pedido em dias reservados é recusado');
 
 -- Pagamento de teste

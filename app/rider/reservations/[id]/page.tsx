@@ -55,9 +55,12 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
       </div>
 
       {banner ? (
-        <p role="status" className="rounded-md bg-surface px-4 py-3 text-sm text-hs-black">
-          {banner}
-        </p>
+        <div role="status" className="flex flex-col gap-1 rounded-md bg-surface px-4 py-3 text-sm text-hs-black">
+          <p>{banner}</p>
+          {booking.status === "rejected" && booking.reject_reason ? (
+            <p className="font-medium">{t("rejectedReason", { reason: booking.reject_reason })}</p>
+          ) : null}
+        </div>
       ) : null}
 
       {booking.status === "rejected" || booking.status === "cancelled" ? null : (

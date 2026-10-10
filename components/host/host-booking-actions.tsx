@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DocumentUpload } from "@/components/ui/document-upload";
-import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
+import { REJECT_REASON, REVIEW_COMMENT_MAX, validRejectReason } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { HANDOFF_BUCKET, PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import type { HostBooking } from "@/lib/host";
@@ -175,6 +175,84 @@ function ReviewDialog({ booking, onDone }: { booking: HostBooking; onDone: () =>
   );
 }
 
+/** Recusar pedido: pede um motivo curto, que o Rider vê (decisão de 10/10/2026). */
+function RejectDialog({ name, disabled, onConfirm }: { name: string; disabled: boolean; onConfirm: (reason: string) => void }) {
+  const t = useTranslations("host.actions");
+  const [reason, setReason] = useState("");
+  const [showError, setShowError] = useState(false);
+  const suggestions = [t("suggestUse"), t("suggestMaintenance")];
+
+  return (
+    <AlertDialog onOpenChange={() => setShowError(false)}>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" disabled={disabled}>
+          {t("reject")}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogTitle>{t("rejectTitle")}</AlertDialogTitle>
+        <AlertDialogDescription>{t("rejectText", { name })}</AlertDialogDescription>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-hs-black">{t("rejectSuggestions")}</span>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map((text) => (
+              <button
+                key={text}
+                type="button"
+                onClick={() => {
+                  setReason(text);
+                  setShowError(false);
+                }}
+                className="cursor-pointer rounded-full border border-line bg-hs-white px-3 py-1.5 text-sm text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+        </div>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-hs-black">{t("rejectReasonLabel")}</span>
+          <input
+            type="text"
+            value={reason}
+            maxLength={REJECT_REASON.max}
+            aria-invalid={showError || undefined}
+            onChange={(event) => {
+              setReason(event.currentTarget.value);
+              setShowError(false);
+            }}
+            placeholder={t("rejectReasonPlaceholder")}
+            className="h-11 w-full rounded-md border border-line bg-hs-white px-4 text-base text-hs-black outline-none placeholder:text-muted focus-visible:border-hs-blue focus-visible:ring-4 focus-visible:ring-hs-blue/25 aria-invalid:border-error-line"
+          />
+          <span className="flex justify-between gap-3 text-xs">
+            <span role="alert" className="text-error">
+              {showError ? t("reasonRequired", { min: REJECT_REASON.min, max: REJECT_REASON.max }) : null}
+            </span>
+            <span className="text-muted">{t("rejectReasonCount", { count: reason.length, max: REJECT_REASON.max })}</span>
+          </span>
+        </label>
+        <AlertDialogFooter>
+          <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
+          <AlertDialogAction
+            destructive
+            onClick={(event) => {
+              // Sem motivo válido, o quadro fica aberto e mostra o erro.
+              if (!validRejectReason(reason)) {
+                event.preventDefault();
+                setShowError(true);
+                return;
+              }
+              onConfirm(reason.trim());
+            }}
+          >
+            {t("rejectConfirm")}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 /** Ações do Host em cada reserva recebida (inventário de ações + regra de cancelamento). */
 export function HostBookingActions({ booking }: { booking: HostBooking }) {
   const t = useTranslations("host.actions");
@@ -195,9 +273,9 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
     );
   }
 
-  const decide = (decision: "accept" | "reject") =>
+  const decide = (decision: "accept" | "reject", reason?: string) =>
     startDecision(async () => {
-      const result = await decideBooking(booking.id, decision);
+      const result = await decideBooking(booking.id, decision, reason);
       if (result.done) setOutcome(result.done);
       else setError(result.error === "datesTaken" ? "datesTaken" : "error");
     });
@@ -242,23 +320,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
           <Button loading={pending} onClick={() => decide("accept")}>
             {t("accept")}
           </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" disabled={pending}>
-                {t("reject")}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogTitle>{t("rejectTitle")}</AlertDialogTitle>
-              <AlertDialogDescription>{t("rejectText", { name: booking.rider.full_name })}</AlertDialogDescription>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t("keep")}</AlertDialogCancel>
-                <AlertDialogAction destructive onClick={() => decide("reject")}>
-                  {t("rejectConfirm")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <RejectDialog name={booking.rider.full_name} disabled={pending} onConfirm={(reason) => decide("reject", reason)} />
         </div>
       ) : null}
 

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { BLOCKING_STATUSES, setBlockedDay, unavailableDays } from "@/lib/availability";
 import { firstConflict, todayInSaoPaulo } from "@/lib/booking";
-import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
+import { REVIEW_COMMENT_MAX, validRejectReason } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import { getHostBooking, getHostListing, listHostBookings } from "@/lib/host";
@@ -28,12 +28,13 @@ async function ownPhotoPath(formData: FormData): Promise<string | null> {
   return user && path.startsWith(`${user.id}/`) ? path : null;
 }
 
-export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" };
+export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" | "reasonRequired" };
 
-/** Pedido novo: Aceitar ou Recusar. */
-export async function decideBooking(bookingId: string, decision: "accept" | "reject"): Promise<DecisionState> {
+/** Pedido novo: Aceitar ou Recusar (recusar pede um motivo curto, que o Rider vê). */
+export async function decideBooking(bookingId: string, decision: "accept" | "reject", reason = ""): Promise<DecisionState> {
   const booking = await getHostBooking(bookingId);
   if (!booking || booking.status !== "pending") return { error: "notAllowed" };
+  if (decision === "reject" && !validRejectReason(reason)) return { error: "reasonRequired" };
   if (decision === "accept") {
     // Não aceita pedido em dias que já foram reservados ou bloqueados.
     const { booked, blocked } = await unavailableDays(booking.equipment.id);
@@ -41,8 +42,15 @@ export async function decideBooking(bookingId: string, decision: "accept" | "rej
   }
   if (supabaseConfigured()) {
     const supabase = await createClient();
-    const { error } = await supabase.rpc("decide_booking", { p_id: bookingId, p_accept: decision === "accept" });
-    if (error) return { error: error.message === "dates_taken" ? "datesTaken" : "notAllowed" };
+    const { error } = await supabase.rpc("decide_booking", {
+      p_id: bookingId,
+      p_accept: decision === "accept",
+      p_reason: decision === "reject" ? reason.trim() : null,
+    });
+    if (error) {
+      const known = { dates_taken: "datesTaken", reason_required: "reasonRequired" } as const;
+      return { error: known[error.message as keyof typeof known] ?? "notAllowed" };
+    }
     revalidatePath("/host/reservations");
   }
   return { done: decision === "accept" ? "accepted" : "rejected" };
@@ -107,6 +115,12 @@ export async function reviewRider(bookingId: string, _prev: RiderReviewState, fo
     comment: comment.length > REVIEW_COMMENT_MAX ? ("commentTooLong" as const) : undefined,
   };
   if (errors.rating || errors.comment) return { errors };
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("submit_review", { p_booking: bookingId, p_rating: rating, p_comment: comment });
+    if (error) return { done: false };
+    revalidatePath("/host/reservations");
+  }
   return { done: true };
 }
 

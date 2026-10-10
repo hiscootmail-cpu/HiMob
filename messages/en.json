@@ -488,7 +488,8 @@
       "cancelFree": "You can cancel at no cost: nothing has been charged yet.",
       "cancelUntil": "You can cancel until {deadline} (24 hours before pick-up). We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
       "cancelDeadlinePassed": "The cancellation deadline ended on {deadline} (24 hours before pick-up).",
-      "times": "Pick-up: {pickup} · Return: {return}"
+      "times": "Pick-up: {pickup} · Return: {return}",
+      "rejectedReason": "Host's reason: {reason}"
     },
     "payment": {
       "title": "Payment",
@@ -813,7 +814,14 @@
       "keep": "Go back",
       "cancelConfirm": "Cancel booking",
       "error": "We couldn't do that now. Refresh the page and try again.",
-      "datesTaken": "Some day in this request is already booked or blocked. Decline the request or unblock the day."
+      "datesTaken": "Some day in this request is already booked or blocked. Decline the request or unblock the day.",
+      "rejectReasonLabel": "Reason (the Rider sees it)",
+      "rejectReasonPlaceholder": "E.g.: I'll be using the equipment on those days",
+      "rejectReasonCount": "{count}/{max}",
+      "rejectSuggestions": "Suggestions",
+      "suggestUse": "I'll be using the equipment",
+      "suggestMaintenance": "Equipment under maintenance",
+      "reasonRequired": "Write a short reason, {min} to {max} characters."
     },
     "calendar": {
       "previous": "Previous month",

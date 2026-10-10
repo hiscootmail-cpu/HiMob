@@ -36,7 +36,17 @@ export type Booking = {
   pickup_address: string | null;
   /** O Rider já avaliou esta reserva? */
   rider_reviewed: boolean;
+  /** Motivo curto escrito pelo Host ao recusar (decisão de 10/10/2026). */
+  reject_reason?: string | null;
 };
+
+/** Motivo da recusa: curto (decisão de 10/10/2026). */
+export const REJECT_REASON = { min: 5, max: 100 } as const;
+
+export function validRejectReason(reason: string) {
+  const length = reason.trim().length;
+  return length >= REJECT_REASON.min && length <= REJECT_REASON.max;
+}
 
 /** Tamanho máximo do comentário da avaliação. */
 export const REVIEW_COMMENT_MAX = 500;
