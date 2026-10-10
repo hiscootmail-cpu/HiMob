@@ -1,6 +1,6 @@
 "use server";
 
-import { listIdentityQueue, listListingQueue, validateReason } from "@/lib/admin";
+import { listHandoffQueue, listIdentityQueue, listListingQueue, validateReason } from "@/lib/admin";
 import { MAX_DOCUMENT_REJECTIONS } from "@/lib/identity";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
@@ -70,4 +70,26 @@ export async function decideIdentity(id: string, decision: "approve" | "reject",
   // Carta recusada não conta como nova recusa de documento.
   if (item.kind === "document" && item.rejections + 1 >= MAX_DOCUMENT_REJECTIONS) return { done: "blocked" };
   return { done: "rejected" };
+}
+
+export type HandoffDecisionState = { done?: boolean; error?: DecisionState["error"] };
+
+/** "Confirmar pela plataforma" (retirada ou devolução em que só um lado confirmou). Motivo obrigatório. */
+export async function confirmHandoffByPlatform(
+  bookingId: string,
+  kind: "pickup" | "return",
+  _prev: HandoffDecisionState,
+  formData: FormData,
+): Promise<HandoffDecisionState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const reason = String(formData.get("reason") ?? "");
+  const problem = validateReason(reason);
+  if (problem) return { error: problem };
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("admin_confirm_handoff", { p_booking: bookingId, p_kind: kind, p_reason: reason });
+    return error ? { error: dbError(error.message) } : { done: true };
+  }
+  const item = (await listHandoffQueue()).find((h) => h.booking_id === bookingId && h.kind === kind);
+  return item ? { done: true } : { error: "notAllowed" };
 }

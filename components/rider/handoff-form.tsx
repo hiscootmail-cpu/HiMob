@@ -8,15 +8,21 @@ import { confirmHandoff, type HandoffState } from "@/app/rider/reservations/acti
 import { CameraIcon, CheckCircleIcon } from "@/components/icons";
 import { QrReader } from "@/components/rider/qr-reader";
 import { Button } from "@/components/ui/button";
+import { HANDOFF_WAIT_HOURS } from "@/lib/bookings";
 import { DocumentUpload } from "@/components/ui/document-upload";
 import { HANDOFF_BUCKET, PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import { uploadOwnFiles } from "@/lib/supabase/client";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
-type HandoffFormProps = { bookingId: string; kind: HandoffKind };
+type HandoffFormProps = {
+  bookingId: string;
+  kind: HandoffKind;
+  /** Nome do Host: a reserva só segue quando ele também confirmar. */
+  otherName: string;
+};
 
 /** Confirmar retirada ou devolução: QR code + foto do equipamento (regra 8). */
-export function HandoffForm({ bookingId, kind }: HandoffFormProps) {
+export function HandoffForm({ bookingId, kind, otherName }: HandoffFormProps) {
   const t = useTranslations("rider.handoff");
   const [state, action, pending] = useActionState(confirmHandoff.bind(null, bookingId, kind), {} as HandoffState);
   const [local, setLocal] = useState<{ submission: unknown; code?: HandoffError | null; photo?: HandoffError | null }>({
@@ -25,6 +31,21 @@ export function HandoffForm({ bookingId, kind }: HandoffFormProps) {
   const [uploading, setUploading] = useState(false);
   // Foto já enviada: se só o código estiver errado, não envia de novo.
   const uploaded = useRef<{ file: File; path: string } | null>(null);
+
+  if (state.done && state.waiting) {
+    return (
+      <div className="flex flex-col items-center gap-4 rounded-lg border border-line bg-hs-white p-6 text-center">
+        <span className="flex size-16 items-center justify-center rounded-full bg-blue-soft">
+          <CheckCircleIcon className="size-9 text-on-blue" />
+        </span>
+        <h2 className="text-xl font-bold text-hs-black">{t("waitingTitle")}</h2>
+        <p className="text-base text-muted">{t("waitingText", { name: otherName, hours: HANDOFF_WAIT_HOURS })}</p>
+        <Button asChild size="lg" className="w-full">
+          <Link href={`/rider/reservations/${bookingId}`}>{t("pickup.next")}</Link>
+        </Button>
+      </div>
+    );
+  }
 
   if (state.done) {
     return (

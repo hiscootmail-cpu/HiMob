@@ -26,22 +26,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DocumentUpload } from "@/components/ui/document-upload";
-import { REJECT_REASON, REVIEW_COMMENT_MAX, validRejectReason } from "@/lib/bookings";
+import { HANDOFF_WAIT_HOURS, REJECT_REASON, REVIEW_COMMENT_MAX, validRejectReason } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { HANDOFF_BUCKET, PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import type { HostBooking } from "@/lib/host";
 import { uploadOwnFiles } from "@/lib/supabase/client";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
-type Outcome = "accepted" | "rejected" | "cancelled" | "pickup" | "return" | "reviewed";
+type Outcome = "accepted" | "rejected" | "cancelled" | "pickup" | "return" | "pickupWaiting" | "returnWaiting" | "reviewed";
 
 /** Confirmar retirada ou devolução: foto obrigatória do equipamento. */
-function HandoffDialog({ booking, kind, onDone }: { booking: HostBooking; kind: HandoffKind; onDone: () => void }) {
+function HandoffDialog({
+  booking,
+  kind,
+  onDone,
+}: {
+  booking: HostBooking;
+  kind: HandoffKind;
+  /** waiting: já confirmei, falta o Rider. */
+  onDone: (waiting: boolean) => void;
+}) {
   const t = useTranslations("host.handoff");
   const [state, action, pending] = useActionState(
     async (prev: HostHandoffState, formData: FormData) => {
       const result = await hostConfirmHandoff(booking.id, kind, prev, formData);
-      if (result.done) onDone();
+      if (result.done) onDone(Boolean(result.waiting));
       return result;
     },
     {} as HostHandoffState,
@@ -268,7 +277,7 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
     return (
       <p role="status" className="flex items-center gap-2 text-sm font-medium text-hs-black">
         <CheckCircleIcon className="size-5 text-on-green" />
-        {t(`done.${outcome}`, { name: booking.rider.full_name })}
+        {t(`done.${outcome}`, { name: booking.rider.full_name, hours: HANDOFF_WAIT_HOURS })}
       </p>
     );
   }
@@ -331,16 +340,20 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
         </>
       ) : null}
 
-      {booking.status === "confirmed" ? (
+      {booking.status === "confirmed" && booking.confirmed?.pickup.host ? (
+        <p className="text-sm text-muted">{t("done.pickupWaiting", { name: booking.rider.full_name, hours: HANDOFF_WAIT_HOURS })}</p>
+      ) : booking.status === "confirmed" ? (
         <div className={row}>
-          <HandoffDialog booking={booking} kind="pickup" onDone={() => setOutcome("pickup")} />
+          <HandoffDialog booking={booking} kind="pickup" onDone={(waiting) => setOutcome(waiting ? "pickupWaiting" : "pickup")} />
           {cancelDialog}
         </div>
       ) : null}
 
-      {booking.status === "active" ? (
+      {booking.status === "active" && booking.confirmed?.return.host ? (
+        <p className="text-sm text-muted">{t("done.returnWaiting", { name: booking.rider.full_name, hours: HANDOFF_WAIT_HOURS })}</p>
+      ) : booking.status === "active" ? (
         <div className={row}>
-          <HandoffDialog booking={booking} kind="return" onDone={() => setOutcome("return")} />
+          <HandoffDialog booking={booking} kind="return" onDone={(waiting) => setOutcome(waiting ? "returnWaiting" : "return")} />
         </div>
       ) : null}
 

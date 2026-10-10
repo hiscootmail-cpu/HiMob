@@ -58,7 +58,12 @@ export async function payBooking(bookingId: string, _prev: PaymentState, formDat
   redirect(`/rider/reservations/${bookingId}/confirmed`);
 }
 
-export type HandoffState = { errors?: { code?: HandoffError; photo?: HandoffError }; done?: boolean };
+export type HandoffState = {
+  errors?: { code?: HandoffError; photo?: HandoffError };
+  done?: boolean;
+  /** Já confirmei, mas falta o Host confirmar (decisão de 10/10/2026). */
+  waiting?: boolean;
+};
 
 /** Confirmar retirada ou devolução: código do QR + foto do equipamento. */
 export async function confirmHandoff(
@@ -83,14 +88,14 @@ export async function confirmHandoff(
     } = await supabase.auth.getUser();
     const path = String(formData.get("photo_path") ?? "");
     if (!user || !path.startsWith(`${user.id}/`)) return { errors: { photo: "photoRequired" } };
-    const { error } = await supabase.rpc("confirm_handoff", { p_id: bookingId, p_kind: kind, p_photo: path, p_code: code });
+    const { data, error } = await supabase.rpc("confirm_handoff", { p_id: bookingId, p_kind: kind, p_photo: path, p_code: code });
     if (error) {
       if (error.message === "code_invalid") return { errors: { code: "codeInvalid" } };
       if (error.message === "photo_required") return { errors: { photo: "photoRequired" } };
       return { errors: { code: "wrongStatus" } };
     }
     revalidatePath("/rider/reservations");
-    return { done: true };
+    return { done: true, waiting: data === "waiting" };
   }
 
   const photo = formData.get("photo");

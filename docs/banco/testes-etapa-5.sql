@@ -92,9 +92,17 @@ select pg_temp.fails($$select public.submit_review((select id from ids where nam
 reset role;
 insert into storage.objects (bucket_id, name, owner) values
   ('handoff-photos', '00000000-0000-0000-0000-00000000000a/r.jpg', '00000000-0000-0000-0000-00000000000a'),
-  ('handoff-photos', '00000000-0000-0000-0000-00000000000a/d.jpg', '00000000-0000-0000-0000-00000000000a');
+  ('handoff-photos', '00000000-0000-0000-0000-00000000000a/d.jpg', '00000000-0000-0000-0000-00000000000a'),
+  ('handoff-photos', '00000000-0000-0000-0000-00000000000b/r.jpg', '00000000-0000-0000-0000-00000000000b'),
+  ('handoff-photos', '00000000-0000-0000-0000-00000000000b/d.jpg', '00000000-0000-0000-0000-00000000000b');
+insert into ids select 'label', null;
+update ids set name = (select label_code from public.equipment_private) where name = 'label';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000a/r.jpg');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/r.jpg', (select name from ids where name like 'HS-%'));
+select public.confirm_handoff((select id from ids where name = 'b1'), 'return', '00000000-0000-0000-0000-00000000000b/d.jpg', (select name from ids where name like 'HS-%'));
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.confirm_handoff((select id from ids where name = 'b1'), 'return', '00000000-0000-0000-0000-00000000000a/d.jpg');
 
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');

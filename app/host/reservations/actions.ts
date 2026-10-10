@@ -71,7 +71,12 @@ export async function hostCancelBooking(bookingId: string): Promise<HostCancelSt
   return { done: true };
 }
 
-export type HostHandoffState = { error?: HandoffError; done?: boolean };
+export type HostHandoffState = {
+  error?: HandoffError;
+  done?: boolean;
+  /** Já confirmei, mas falta o Rider confirmar (decisão de 10/10/2026). */
+  waiting?: boolean;
+};
 
 /** Confirmar retirada ou devolução com foto obrigatória (inventário de ações). */
 export async function hostConfirmHandoff(
@@ -89,10 +94,10 @@ export async function hostConfirmHandoff(
     const path = await ownPhotoPath(formData);
     if (!path) return { error: "photoRequired" };
     const supabase = await createClient();
-    const { error } = await supabase.rpc("confirm_handoff", { p_id: bookingId, p_kind: kind, p_photo: path });
+    const { data, error } = await supabase.rpc("confirm_handoff", { p_id: bookingId, p_kind: kind, p_photo: path });
     if (error) return { error: error.message === "wrong_status" ? "wrongStatus" : "photoRequired" };
     revalidatePath("/host/reservations");
-    return { done: true };
+    return { done: true, waiting: data === "waiting" };
   }
 
   const photo = formData.get("photo");

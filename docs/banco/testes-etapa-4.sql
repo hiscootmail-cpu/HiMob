@@ -96,10 +96,12 @@ select pg_temp.ok((select status from public.bookings) = 'confirmed', 'pagamento
 select pg_temp.ok(public.pickup_address((select id from ids where name = 'b1')) = 'Rua A, 1', 'Rider vê o endereço depois de pagar');
 select pg_temp.fails($$select public.pay_booking_test((select id from ids where name = 'b1'))$$, 'not_allowed', 'não paga duas vezes');
 
--- Retirada: código da etiqueta + foto
+-- Retirada: Rider (código da etiqueta + foto) e Host (foto). Os dois precisam confirmar.
 reset role;
 insert into storage.objects (bucket_id, name, owner) values
   ('handoff-photos', '00000000-0000-0000-0000-00000000000b/ret.jpg', '00000000-0000-0000-0000-00000000000b'),
+  ('handoff-photos', '00000000-0000-0000-0000-00000000000b/dev.jpg', '00000000-0000-0000-0000-00000000000b'),
+  ('handoff-photos', '00000000-0000-0000-0000-00000000000a/ret.jpg', '00000000-0000-0000-0000-00000000000a'),
   ('handoff-photos', '00000000-0000-0000-0000-00000000000a/dev.jpg', '00000000-0000-0000-0000-00000000000a');
 insert into ids select 'label', null;
 update ids set name = (select label_code from public.equipment_private) where name = 'label';
@@ -108,17 +110,29 @@ select pg_temp.fails($$select public.confirm_handoff((select id from ids where n
 select pg_temp.fails($$select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/ret.jpg', 'HS-000000')$$, 'code_invalid', 'código errado da etiqueta é recusado');
 select pg_temp.fails($$select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/nao-existe.jpg', (select name from ids where name like 'HS-%'))$$, 'photo_required', 'foto que não foi enviada é recusada');
 select pg_temp.fails($$select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000a/dev.jpg', (select name from ids where name like 'HS-%'))$$, 'photo_required', 'Rider não usa foto da pasta de outra pessoa');
-select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/ret.jpg', lower((select name from ids where name like 'HS-%')));
-select pg_temp.ok((select status from public.bookings) = 'active', 'retirada confirmada: reserva em uso (código aceito em minúsculas)');
+select pg_temp.ok(public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/ret.jpg', lower((select name from ids where name like 'HS-%'))) = 'waiting', 'Rider confirma a retirada (código aceito em minúsculas) e espera o Host');
+select pg_temp.ok((select status from public.bookings) = 'confirmed', 'só o Rider confirmou: a reserva ainda não está em uso');
+select pg_temp.ok(public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000b/ret.jpg', (select name from ids where name like 'HS-%')) = 'waiting', 'confirmar de novo não muda nada');
+
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
+select pg_temp.ok((select count(*) from public.notifications where kind = 'pickupWaiting' and name = 'Ana L.') = 1, 'Host recebe um aviso só: falta ele confirmar a retirada');
+select pg_temp.fails($$select public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', null)$$, 'photo_required', 'Host precisa de foto para confirmar');
+select pg_temp.ok(public.confirm_handoff((select id from ids where name = 'b1'), 'pickup', '00000000-0000-0000-0000-00000000000a/ret.jpg') = 'done', 'Host confirma a retirada');
+select pg_temp.ok((select status from public.bookings where id = (select id from ids where name = 'b1')) = 'active', 'os dois confirmaram: reserva em uso');
+
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.fails($$select public.cancel_booking((select id from ids where name = 'b1'))$$, 'not_allowed', 'reserva em uso não se cancela');
 
--- Devolução pelo Host, com foto
+-- Devolução: Host primeiro, depois o Rider
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
-select pg_temp.fails($$select public.confirm_handoff((select id from ids where name = 'b1'), 'return', null)$$, 'photo_required', 'Host precisa de foto para confirmar');
-select public.confirm_handoff((select id from ids where name = 'b1'), 'return', '00000000-0000-0000-0000-00000000000a/dev.jpg');
-select pg_temp.ok((select status from public.bookings where id = (select id from ids where name = 'b1')) = 'completed', 'devolução confirmada: reserva concluída');
+select pg_temp.ok(public.confirm_handoff((select id from ids where name = 'b1'), 'return', '00000000-0000-0000-0000-00000000000a/dev.jpg') = 'waiting', 'Host confirma a devolução e espera o Rider');
 select pg_temp.ok((select count(*) from storage.objects where name like '00000000-0000-0000-0000-00000000000b/%') = 1, 'Host vê a foto de retirada do Rider desta reserva');
-select pg_temp.ok((select count(*) from public.notifications where kind = 'returnConfirmed') = 1, 'Host recebe aviso de devolução');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.ok((select href from public.notifications where kind = 'returnWaiting') like '/rider/reservations/%/return', 'Rider recebe aviso que leva à tela de devolução');
+select pg_temp.ok(public.confirm_handoff((select id from ids where name = 'b1'), 'return', '00000000-0000-0000-0000-00000000000b/dev.jpg', (select name from ids where name like 'HS-%')) = 'done', 'Rider confirma a devolução');
+select pg_temp.ok((select status from public.bookings where id = (select id from ids where name = 'b1')) = 'completed', 'os dois confirmaram: reserva concluída');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
+select pg_temp.ok((select count(*) from public.notifications where kind = 'returnConfirmed') = 1, 'Host recebe aviso de devolução concluída');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 select pg_temp.ok((select count(*) from storage.objects where bucket_id = 'handoff-photos') = 0, 'outras pessoas não veem as fotos');
 select pg_temp.ok((select count(*) from public.handoffs) = 0, 'outras pessoas não veem as confirmações');

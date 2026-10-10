@@ -573,7 +573,9 @@
         "doneTitle": "Devolução confirmada",
         "doneText": "Obrigado por usar a Hi Scoot. Conte como foi.",
         "next": "Avaliar"
-      }
+      },
+      "waitingTitle": "Você confirmou",
+      "waitingText": "Agora falta {name} confirmar. Se não confirmar em {hours} horas, a equipe Hi Scoot verifica."
     },
     "review": {
       "title": "Avaliação",
@@ -799,7 +801,9 @@
         "cancelled": "Reserva cancelada. Avisamos {name}.",
         "pickup": "Retirada confirmada.",
         "return": "Devolução confirmada. O pagamento é liberado para você.",
-        "reviewed": "Avaliação enviada. Obrigado!"
+        "reviewed": "Avaliação enviada. Obrigado!",
+        "pickupWaiting": "Você confirmou a retirada. Falta {name} confirmar. Se não confirmar em {hours} horas, a equipe Hi Scoot verifica.",
+        "returnWaiting": "Você confirmou a devolução. Falta {name} confirmar. Se não confirmar em {hours} horas, a equipe Hi Scoot verifica."
       },
       "accept": "Aceitar",
       "reject": "Recusar",
@@ -1020,7 +1024,9 @@
       "documentApproved": "Sua identidade foi verificada",
       "documentRejected": "Seu documento foi recusado. Veja o motivo.",
       "newMessage": "Nova mensagem de {name}",
-      "equipmentAvailable": "Disponível de novo: {title}"
+      "equipmentAvailable": "Disponível de novo: {title}",
+      "pickupWaiting": "{name} confirmou a retirada. Falta você.",
+      "returnWaiting": "{name} confirmou a devolução. Falta você."
     }
   },
   "admin": {
@@ -1030,7 +1036,8 @@
     "tabs": {
       "listings": "Anúncios novos",
       "edits": "Edições",
-      "identity": "Cadastros"
+      "identity": "Cadastros",
+      "handoffs": "Retiradas e devoluções"
     },
     "oldestFirst": "O pedido mais antigo aparece primeiro.",
     "emptyTitle": "Nada para analisar nesta fila.",
@@ -1104,6 +1111,20 @@
       "checkLetter": "A carta precisa ser escrita à mão, com nome social e CPF."
     },
     "photosLabel": "Fotos do anúncio",
-    "photoAlt": "Foto {number} do anúncio"
+    "photoAlt": "Foto {number} do anúncio",
+    "handoff": {
+      "pickup": "Retirada",
+      "return": "Devolução",
+      "people": "Rider <riderLink>{rider}</riderLink> · Host <hostLink>{host}</hostLink>",
+      "dates": "Reserva: {start} até {end}",
+      "status": "{confirmed} confirmou {when}. Falta {missing} confirmar.",
+      "photo": "Ver foto enviada por {name}",
+      "help": "Fale com as duas pessoas antes de confirmar. A confirmação da equipe vale no lugar de quem não confirmou.",
+      "reasonPlaceholder": "Ex.: Confirmado por telefone com as duas pessoas.",
+      "reasonHint": "Obrigatório. As duas pessoas da reserva podem ver este texto.",
+      "confirm": "Confirmar pela plataforma",
+      "done": "Confirmado pela plataforma. A reserva seguiu para a próxima etapa.",
+      "reasonRequired": "Escreva o motivo para confirmar."
+    }
   }
 }
