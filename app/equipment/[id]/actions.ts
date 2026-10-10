@@ -5,11 +5,14 @@ import { redirect } from "next/navigation";
 import { unavailableDays } from "@/lib/availability";
 import { firstConflict, todayInSaoPaulo, validateBookingDates, type BookingDatesError } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment-db";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /*
- * PROVISÓRIO: nada é gravado ainda. As ações conferem os dados e simulam a
- * resposta. Quando o Supabase entrar, o servidor também confere se a pessoa
- * está conectada, se não é dona do anúncio, se o cadastro não está bloqueado
+ * Pedido de reserva. Com a Supabase, a função do banco confere de novo se a
+ * pessoa está conectada, se não é dona do anúncio, se o cadastro não está
+ * bloqueado e se os dias estão livres, e guarda o preço do anúncio.
+ * Sem a Supabase (demonstração): confere os dados e simula a resposta.
  * Dias já reservados e dias bloqueados pelo Host já são recusados aqui.
  */
 
@@ -35,6 +38,22 @@ export async function requestBooking(
   if (firstConflict(pickup, dropoff, [...booked, ...blocked])) return { error: "datesUnavailable" };
 
   // O valor é sempre recalculado no servidor (diárias x daily_price), nunca vem do navegador.
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
+    const { error } = await supabase.rpc("request_booking", { p_equipment: equipmentId, p_start: pickup, p_end: dropoff });
+    if (error) {
+      const known = {
+        dates_unavailable: "datesUnavailable",
+        pickup_in_past: "pickupInPast",
+        return_before_pickup: "returnBeforePickup",
+      } as const;
+      return { error: known[error.message as keyof typeof known] ?? "unavailable" };
+    }
+  }
   return { done: true };
 }
 

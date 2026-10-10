@@ -18,7 +18,14 @@ export const PHOTO_MAX_BYTES = PHOTO_MAX_MB * 1024 * 1024;
 export const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"] as const;
 export const PHOTO_ACCEPT = "image/jpeg,image/png,image/webp,image/heic";
 
-export type HandoffError = "codeRequired" | "codeInvalid" | "photoRequired" | "photoType" | "photoTooLarge" | "wrongStatus";
+export type HandoffError =
+  | "codeRequired"
+  | "codeInvalid"
+  | "photoRequired"
+  | "photoType"
+  | "photoTooLarge"
+  | "wrongStatus"
+  | "uploadFailed";
 
 export function normalizeCode(code: string) {
   return code.trim().toUpperCase().replace(/\s+/g, "");
@@ -46,3 +53,6 @@ export function validatePhoto(file: { size: number; type: string } | null | unde
   if (file.size > PHOTO_MAX_BYTES) return "photoTooLarge";
   return null;
 }
+
+/** Fotos de retirada e devolução vão direto do navegador para a pasta privada da pessoa. */
+export const HANDOFF_BUCKET = "handoff-photos";

@@ -1,6 +1,4 @@
 import type { Equipment } from "@/lib/equipment";
-import { exampleBookings } from "@/lib/mock/bookings";
-import { supabaseConfigured } from "@/lib/supabase/config";
 import { bookingBreakdown, type BookingBreakdown } from "@/lib/pricing";
 
 /*
@@ -50,16 +48,4 @@ export function bookingPrice(booking: Booking): BookingBreakdown {
   return bookingBreakdown(booking.days, booking.host_daily_price);
 }
 
-/*
- * Sem a Supabase (demonstração): devolve os exemplos.
- * Com a Supabase: as reservas passam a vir do banco na etapa 4; até lá, a
- * lista fica vazia (nunca mistura exemplo com conta de verdade).
- */
-export async function listRiderBookings(): Promise<Booking[]> {
-  return supabaseConfigured() ? [] : exampleBookings;
-}
-
-export async function getRiderBooking(id: string): Promise<Booking | null> {
-  if (supabaseConfigured()) return null;
-  return exampleBookings.find((booking) => booking.id === id) ?? null;
-}
+// Leitura das reservas (banco ou exemplos): lib/bookings-db.ts (só no servidor).

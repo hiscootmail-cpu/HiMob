@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useState } from "react";
+import { startTransition, useActionState, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -9,7 +9,9 @@ import { CameraIcon, CheckCircleIcon } from "@/components/icons";
 import { QrReader } from "@/components/rider/qr-reader";
 import { Button } from "@/components/ui/button";
 import { DocumentUpload } from "@/components/ui/document-upload";
-import { PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
+import { HANDOFF_BUCKET, PHOTO_ACCEPT, PHOTO_MAX_MB, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
+import { uploadOwnFiles } from "@/lib/supabase/client";
+import { supabaseConfigured } from "@/lib/supabase/config";
 
 type HandoffFormProps = { bookingId: string; kind: HandoffKind };
 
@@ -20,6 +22,9 @@ export function HandoffForm({ bookingId, kind }: HandoffFormProps) {
   const [local, setLocal] = useState<{ submission: unknown; code?: HandoffError | null; photo?: HandoffError | null }>({
     submission: state,
   });
+  const [uploading, setUploading] = useState(false);
+  // Foto já enviada: se só o código estiver errado, não envia de novo.
+  const uploaded = useRef<{ file: File; path: string } | null>(null);
 
   if (state.done) {
     return (
@@ -45,15 +50,35 @@ export function HandoffForm({ bookingId, kind }: HandoffFormProps) {
   const photoError = pick(current.photo, state.errors?.photo);
   const errorText = (key: HandoffError | undefined) => (key ? t(`errors.${key}`, { max: PHOTO_MAX_MB }) : undefined);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     // Envio manual: não limpa o formulário, para não perder a foto se o código estiver errado.
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const photo = formData.get("photo");
-    const photoProblem = validatePhoto(photo instanceof File ? photo : null);
+    const file = photo instanceof File ? photo : null;
+    const photoProblem = validatePhoto(file);
     if (photoProblem === "photoTooLarge" || photoProblem === "photoType") {
       setLocal({ ...current, photo: photoProblem });
       return;
+    }
+    if (supabaseConfigured()) {
+      // A foto vai direto do celular para a pasta privada; o servidor recebe só o caminho.
+      if (photoProblem || !file) {
+        setLocal({ ...current, photo: "photoRequired" });
+        return;
+      }
+      if (uploaded.current?.file !== file) {
+        setUploading(true);
+        const paths = await uploadOwnFiles(HANDOFF_BUCKET, `${bookingId}-${kind}`, [file]);
+        setUploading(false);
+        if (!paths) {
+          setLocal({ ...current, photo: "uploadFailed" });
+          return;
+        }
+        uploaded.current = { file, path: paths[0] };
+      }
+      formData.delete("photo");
+      formData.set("photo_path", uploaded.current.path);
     }
     startTransition(() => action(formData));
   }
@@ -92,7 +117,7 @@ export function HandoffForm({ bookingId, kind }: HandoffFormProps) {
         />
       </section>
 
-      <Button type="submit" size="lg" loading={pending} className="w-full">
+      <Button type="submit" size="lg" loading={pending || uploading} className="w-full">
         {t(`${kind}.submit`)}
       </Button>
     </form>

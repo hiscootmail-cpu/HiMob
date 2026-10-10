@@ -7,7 +7,7 @@ import { BackLink } from "@/components/rider/back-link";
 import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSteps } from "@/components/rider/booking-steps";
 import { BookingSummary } from "@/components/rider/booking-summary";
-import { getRiderBooking } from "@/lib/bookings";
+import { getRiderBooking } from "@/lib/bookings-db";
 import { riderCancelPolicy } from "@/lib/cancellation";
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -510,7 +510,9 @@
         "methodRequired": "Escolha PIX ou cartão de crédito.",
         "notAllowed": "Esta reserva não está esperando pagamento."
       },
-      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida."
+      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida.",
+      "testNotice": "Pagamento de teste: nenhum valor é cobrado. O pagamento de verdade (Mercado Pago) entra em breve.",
+      "payTest": "Pagar {total} (teste)"
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -548,7 +550,8 @@
         "photoRequired": "Tire uma foto do equipamento.",
         "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
         "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
-        "wrongStatus": "Esta etapa não está disponível para esta reserva."
+        "wrongStatus": "Esta etapa não está disponível para esta reserva.",
+        "uploadFailed": "Não conseguimos enviar a foto. Confira a internet e tente de novo."
       },
       "pickup": {
         "title": "Retirada",
@@ -772,7 +775,8 @@
         "photoRequired": "Tire uma foto do equipamento.",
         "photoType": "Formato não aceito. Envie JPG, PNG, WEBP ou HEIC.",
         "photoTooLarge": "Foto grande demais. O limite é {max} MB.",
-        "wrongStatus": "Esta etapa não está disponível para esta reserva."
+        "wrongStatus": "Esta etapa não está disponível para esta reserva.",
+        "uploadFailed": "Não conseguimos enviar a foto. Confira a internet e tente de novo."
       }
     },
     "review": {

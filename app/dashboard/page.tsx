@@ -16,7 +16,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { addDays, todayInSaoPaulo } from "@/lib/booking";
-import { listRiderBookings } from "@/lib/bookings";
+import { listRiderBookings } from "@/lib/bookings-db";
 import { listConversations } from "@/lib/conversations";
 import { listHostBookings } from "@/lib/host";
 import { requireUser } from "@/lib/session";

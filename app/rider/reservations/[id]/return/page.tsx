@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { HandoffForm } from "@/components/rider/handoff-form";
-import { getRiderBooking } from "@/lib/bookings";
+import { getRiderBooking } from "@/lib/bookings-db";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rider.handoff.return");

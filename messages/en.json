@@ -510,7 +510,9 @@
         "methodRequired": "Choose PIX or credit card.",
         "notAllowed": "This booking is not awaiting payment."
       },
-      "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded."
+      "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded.",
+      "testNotice": "Test payment: nothing is charged. Real payment (Mercado Pago) is coming soon.",
+      "payTest": "Pay {total} (test)"
     },
     "confirmed": {
       "title": "Booking confirmed!",
@@ -548,7 +550,8 @@
         "photoRequired": "Take a photo of the equipment.",
         "photoType": "Format not accepted. Upload JPG, PNG, WEBP or HEIC.",
         "photoTooLarge": "Photo too large. The limit is {max} MB.",
-        "wrongStatus": "This step is not available for this booking."
+        "wrongStatus": "This step is not available for this booking.",
+        "uploadFailed": "We couldn't upload the photo. Check your connection and try again."
       },
       "pickup": {
         "title": "Pick-up",
@@ -772,7 +775,8 @@
         "photoRequired": "Take a photo of the equipment.",
         "photoType": "Format not accepted. Upload JPG, PNG, WEBP or HEIC.",
         "photoTooLarge": "Photo too large. The limit is {max} MB.",
-        "wrongStatus": "This step isn't available for this booking."
+        "wrongStatus": "This step isn't available for this booking.",
+        "uploadFailed": "We couldn't upload the photo. Check your connection and try again."
       }
     },
     "review": {

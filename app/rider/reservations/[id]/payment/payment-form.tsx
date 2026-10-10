@@ -7,6 +7,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { payBooking, type PaymentMethod, type PaymentState } from "@/app/rider/reservations/actions";
 import { QrCodeIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { supabaseConfigured } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
 
 type PaymentFormProps = {
@@ -24,6 +25,8 @@ export function PaymentForm({ bookingId, total }: PaymentFormProps) {
   const format = useFormatter();
   const [method, setMethod] = useState<PaymentMethod>("pix");
   const [state, action, pending] = useActionState(payBooking.bind(null, bookingId), {} as PaymentState);
+  // PROVISÓRIO (decisão de 10/10/2026): com o banco ligado, o pagamento é de teste até o Mercado Pago entrar.
+  const testMode = supabaseConfigured();
 
   const options: { value: PaymentMethod; title: string; hint: string; icon: React.ReactNode }[] = [
     { value: "pix", title: t("pix"), hint: t("pixHint"), icon: <QrCodeIcon className="size-6" /> },
@@ -80,8 +83,14 @@ export function PaymentForm({ bookingId, total }: PaymentFormProps) {
         </p>
       ) : null}
 
+      {testMode ? (
+        <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
+          {t("testNotice")}
+        </p>
+      ) : null}
+
       <Button type="submit" size="lg" loading={pending} className="w-full">
-        {t("pay", { total: format.number(total, { style: "currency", currency: "BRL" }) })}
+        {t(testMode ? "payTest" : "pay", { total: format.number(total, { style: "currency", currency: "BRL" }) })}
       </Button>
       <p className="text-center text-xs text-muted">{t("splitInfo")}</p>
     </form>

@@ -8,11 +8,25 @@ import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import { getHostBooking, getHostListing, listHostBookings } from "@/lib/host";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /*
- * PROVISÓRIO: nada é gravado e nenhum valor é cobrado ou devolvido ainda.
- * As ações conferem os dados no servidor e simulam a resposta.
+ * Com a Supabase: as funções do banco conferem de novo o dono e as regras
+ * antes de gravar (etapa 4). Nenhum valor é cobrado ou devolvido ainda
+ * (entra com o Mercado Pago).
+ * Sem a Supabase (demonstração): conferem os dados e simulam a resposta.
  */
+
+/** Caminho de foto enviado pelo navegador: só da pasta da própria pessoa. */
+async function ownPhotoPath(formData: FormData): Promise<string | null> {
+  const path = String(formData.get("photo_path") ?? "");
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user && path.startsWith(`${user.id}/`) ? path : null;
+}
 
 export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" };
 
@@ -25,6 +39,12 @@ export async function decideBooking(bookingId: string, decision: "accept" | "rej
     const { booked, blocked } = await unavailableDays(booking.equipment.id);
     if (firstConflict(booking.start_date, booking.end_date, [...booked, ...blocked])) return { error: "datesTaken" };
   }
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("decide_booking", { p_id: bookingId, p_accept: decision === "accept" });
+    if (error) return { error: error.message === "dates_taken" ? "datesTaken" : "notAllowed" };
+    revalidatePath("/host/reservations");
+  }
   return { done: decision === "accept" ? "accepted" : "rejected" };
 }
 
@@ -34,6 +54,12 @@ export type HostCancelState = { done?: boolean; error?: "notAllowed" };
 export async function hostCancelBooking(bookingId: string): Promise<HostCancelState> {
   const booking = await getHostBooking(bookingId);
   if (!booking || !hostCancelPolicy(booking).allowed) return { error: "notAllowed" };
+  if (supabaseConfigured()) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("cancel_booking", { p_id: bookingId });
+    if (error) return { error: "notAllowed" };
+    revalidatePath("/host/reservations");
+  }
   return { done: true };
 }
 
@@ -49,6 +75,17 @@ export async function hostConfirmHandoff(
   const booking = await getHostBooking(bookingId);
   const expected = kind === "pickup" ? "confirmed" : "active";
   if (!booking || booking.status !== expected) return { error: "wrongStatus" };
+
+  if (supabaseConfigured()) {
+    // A foto já foi enviada pelo navegador direto para a pasta da pessoa.
+    const path = await ownPhotoPath(formData);
+    if (!path) return { error: "photoRequired" };
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("confirm_handoff", { p_id: bookingId, p_kind: kind, p_photo: path });
+    if (error) return { error: error.message === "wrong_status" ? "wrongStatus" : "photoRequired" };
+    revalidatePath("/host/reservations");
+    return { done: true };
+  }
 
   const photo = formData.get("photo");
   const error = validatePhoto(photo instanceof File ? photo : null);
@@ -92,6 +129,7 @@ export async function toggleBlockedDay(equipmentId: string, day: string, blocked
   if (isBooked) return { error: "booked" };
 
   const result = await setBlockedDay(equipmentId, day, blocked);
+  if (result === null) return { error: "notAllowed" };
   revalidatePath("/host/reservations");
   revalidatePath(`/equipment/${equipmentId}`);
   return { blocked: result };
