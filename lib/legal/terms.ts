@@ -32,16 +32,16 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "3. Cadastro e verificação de identidade",
         paragraphs: [
-          "Para usar a plataforma, você precisa ter pelo menos 18 (dezoito) anos e informar dados verdadeiros e atualizados: nome completo, e-mail, telefone com DDD e um documento oficial com foto (frente e verso).",
+          "Para usar a plataforma, você precisa ter pelo menos 18 (dezoito) anos e informar dados verdadeiros e atualizados: nome completo, e-mail e telefone com DDD. Para alugar ou anunciar, também é preciso enviar um documento oficial com foto (frente e verso).",
           "A equipe Hi Scoot confere se o nome do documento é o mesmo do cadastro. Pessoas trans com documento ainda não retificado podem enviar uma carta escrita à mão com o nome social e o CPF, analisada com sigilo.",
-          "Depois do cadastro, é preciso conectar uma conta Mercado Pago. Para o Host, é por ela que chega o valor das reservas. Para o Rider, a conexão serve para identificar a conta; a Hi Scoot não movimenta o saldo de ninguém.",
+          "Para anunciar equipamentos, o Host precisa conectar uma conta Mercado Pago: é por ela que chega o valor das reservas. Quem só paga (Rider ou comprador da loja) não precisa de conta no Mercado Pago. A Hi Scoot não movimenta o saldo de ninguém.",
           "Você é responsável por manter sua senha em segredo e por tudo o que for feito com a sua conta.",
         ],
       },
       {
         title: "4. Por que pedimos seus dados: segurança de todos",
         paragraphs: [
-          "Para a segurança de quem usa a plataforma e da sociedade, é necessário fornecer os dados de identificação pedidos no cadastro. Como a Hi Scoot faz a gestão da conexão entre as pessoas, precisa saber quem está de cada lado de cada aluguel.",
+          "Para a segurança de quem usa a plataforma e da sociedade, é necessário fornecer os dados de identificação pedidos pela plataforma. Como a Hi Scoot faz a gestão da conexão entre as pessoas, precisa saber quem está de cada lado de cada aluguel.",
           "Cada pessoa é responsável pelos próprios atos. Mesmo assim, acidentes podem acontecer, e a identificação imediata de quem estava usando o equipamento pode ser importante para o bem-estar dessa pessoa, por exemplo para avisar familiares ou ajudar no atendimento de emergência.",
           "Esse tratamento de dados tem base na Lei Geral de Proteção de Dados (Lei nº 13.709/2018), em especial na proteção da vida e da incolumidade física (art. 7º, VII), na execução do contrato (art. 7º, V) e no cumprimento de obrigações legais (art. 7º, II). Os detalhes estão na Política de Privacidade.",
         ],
@@ -158,16 +158,16 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "3. Sign-up and identity verification",
         paragraphs: [
-          "To use the platform, you must be at least 18 (eighteen) years old and provide true, up-to-date information: full name, email, phone number with area code and an official photo ID (front and back).",
+          "To use the platform, you must be at least 18 (eighteen) years old and provide true, up-to-date information: full name, email and phone number with area code. To rent or list equipment, you must also send an official photo ID (front and back).",
           "The Hi Scoot team checks that the name on the ID matches the account. Trans people whose documents have not yet been updated may send a handwritten letter with their social name and CPF, reviewed confidentially.",
-          "After signing up, you must connect a Mercado Pago account. For Hosts, this is where booking payments arrive. For Riders, the connection identifies the account; Hi Scoot never moves anyone's balance.",
+          "To list equipment, Hosts must connect a Mercado Pago account: this is where booking payments arrive. People who only pay (Riders or store buyers) do not need a Mercado Pago account. Hi Scoot never moves anyone's balance.",
           "You are responsible for keeping your password secret and for everything done with your account.",
         ],
       },
       {
         title: "4. Why we ask for your data: everyone's safety",
         paragraphs: [
-          "For the safety of the people who use the platform and of society, providing the identification data requested at sign-up is required. Because Hi Scoot manages the connection between people, it needs to know who is on each side of every rental.",
+          "For the safety of the people who use the platform and of society, providing the identification data requested by the platform is required. Because Hi Scoot manages the connection between people, it needs to know who is on each side of every rental.",
           "Each person is responsible for their own actions. Even so, accidents can happen, and immediately identifying who was using the equipment can be important for that person's well-being, for example to notify family members or to help emergency care.",
           "This data processing is based on the Brazilian General Data Protection Law (Law No. 13,709/2018, LGPD), in particular the protection of life and physical safety (art. 7, VII), the performance of the contract (art. 7, V) and compliance with legal obligations (art. 7, II). Details are in the Privacy Policy.",
         ],

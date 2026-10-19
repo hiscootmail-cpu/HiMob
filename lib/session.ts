@@ -94,3 +94,21 @@ export async function requireUser(options: { mercadoPago?: boolean } = {}): Prom
   }
   return user;
 }
+
+/**
+ * Documento só na hora de alugar ou anunciar (decisão de 20/10/2026): o
+ * cadastro não pede documento. Diz o que falta para a pessoa poder alugar e
+ * anunciar: "send" (ainda não enviou, ou precisa reenviar), "review" (enviado,
+ * esperando a equipe) ou null (aprovada).
+ */
+export async function identityStep(user: Pick<CurrentUser, "id" | "identity">): Promise<"send" | "review" | null> {
+  if (user.identity === "approved") return null;
+  if (!supabaseConfigured()) return "send";
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("identity_submissions")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("status", "pending");
+  return count ? "review" : "send";
+}

@@ -21,19 +21,21 @@ async function viewerState(equipmentId: string, hostId: string) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { isOwner: false, onWaitlist: false, needsVerification: false };
-  const [{ count }, { data: profile }] = await Promise.all([
+  if (!user) return { isOwner: false, onWaitlist: false, verification: null };
+  const [{ count }, { data: profile }, { count: waiting }] = await Promise.all([
     supabase
       .from("waitlist")
       .select("equipment_id", { count: "exact", head: true })
       .eq("equipment_id", equipmentId)
       .eq("user_id", user.id),
     supabase.from("profiles").select("identity_status").eq("id", user.id).maybeSingle(),
+    supabase.from("identity_submissions").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "pending"),
   ]);
   return {
     isOwner: user.id === hostId,
     onWaitlist: Boolean(count),
-    needsVerification: profile?.identity_status !== "approved",
+    // Documento só na hora de alugar (decisão de 20/10/2026): "send" = ainda não enviou; "review" = em análise.
+    verification: profile?.identity_status === "approved" ? null : waiting ? ("review" as const) : ("send" as const),
   };
 }
 
@@ -77,9 +79,9 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
   const price = format.number(riderDailyPrice(equipment.daily_price), { style: "currency", currency: "BRL" });
 
   // Na demonstração, ?preview=owner mostra a tela como o dono do anúncio vê.
-  const { isOwner, onWaitlist, needsVerification } = supabaseConfigured()
+  const { isOwner, onWaitlist, verification } = supabaseConfigured()
     ? await viewerState(equipment.id, equipment.host_id)
-    : { isOwner: preview === "owner", onWaitlist: false, needsVerification: false };
+    : { isOwner: preview === "owner", onWaitlist: false, verification: null };
   const today = todayInSaoPaulo();
   const { booked, blocked } = await unavailableDays(equipment.id);
   const unavailable = [...booked, ...blocked].filter((day) => day >= today).sort();
@@ -194,7 +196,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
 
         <aside id="reservar" aria-label={t("bookingLabel")} className="scroll-mt-20">
           <div className="rounded-lg border border-line bg-hs-white p-5 shadow-sm md:sticky md:top-20">
-            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} unavailable={unavailable} onWaitlist={onWaitlist} needsVerification={needsVerification} />
+            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} unavailable={unavailable} onWaitlist={onWaitlist} verification={verification} />
           </div>
         </aside>
       </div>

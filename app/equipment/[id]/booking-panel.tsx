@@ -23,8 +23,11 @@ type BookingPanelProps = {
   unavailable: string[];
   /** A pessoa já pediu "Avisar quando disponível"? */
   onWaitlist?: boolean;
-  /** Documento ainda em análise: só vê e conversa; reserva depois da aprovação (decisão de 19/10/2026). */
-  needsVerification?: boolean;
+  /**
+   * Documento só na hora de alugar (decisões de 19 e 20/10/2026): "send" = ainda
+   * não enviou; "review" = em análise. Até a aprovação, só vê e conversa.
+   */
+  verification?: "send" | "review" | null;
 };
 
 function DateField({
@@ -73,7 +76,7 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
 }
 
 /** Quadro de reserva: preço por dia, datas, total e ações (inventário de ações). */
-export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false, needsVerification = false }: BookingPanelProps) {
+export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false, verification = null }: BookingPanelProps) {
   const t = useTranslations("equipment");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
@@ -219,9 +222,9 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
           </dl>
         ) : null}
 
-        {needsVerification ? (
+        {verification ? (
           <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
-            {t.rich("verifyToBook", {
+            {t.rich(verification === "send" ? "verifyToSend" : "verifyToBook", {
               link: (chunks) => (
                 <Link href="/verify-identity" className="font-semibold underline underline-offset-2">
                   {chunks}
@@ -234,7 +237,7 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
           type="submit"
           size="lg"
           loading={pending}
-          disabled={needsVerification || !pickup || !dropoff || Boolean(localError)}
+          disabled={Boolean(verification) || !pickup || !dropoff || Boolean(localError)}
           className="w-full"
         >
           {t("sendRequest")}

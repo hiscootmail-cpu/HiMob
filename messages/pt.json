@@ -401,7 +401,7 @@
       "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
       "unavailable": "Este equipamento não está disponível para reserva.",
       "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas.",
-      "identityRequired": "Sua identidade ainda está em verificação. A reserva fica liberada assim que a equipe aprovar."
+      "identityRequired": "Para alugar, a equipe precisa aprovar seu documento. Envie em Verificação de identidade."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
@@ -412,7 +412,8 @@
     "takenDays": "Dias indisponíveis: {days}",
     "photoAlt": "Foto {number} de {title}",
     "morePhotos": "Mais fotos",
-    "verifyToBook": "Seu documento está em análise. Você pode ver os equipamentos e conversar com o Host; a reserva fica liberada assim que a equipe aprovar. <link>Ver verificação</link>"
+    "verifyToBook": "Seu documento está em análise. Você pode ver os equipamentos e conversar com o Host; a reserva fica liberada assim que a equipe aprovar. <link>Ver verificação</link>",
+    "verifyToSend": "Para alugar, envie a foto do seu documento (frente e verso). A equipe confere e libera a reserva. Você já pode ver os equipamentos e conversar com o Host. <link>Enviar documento</link>"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -643,7 +644,10 @@
       "becomeButton": "Quero ser Host",
       "verifyTitle": "Falta verificar sua identidade",
       "verifyText": "Para anunciar, a equipe Hi Scoot precisa aprovar o seu documento. Enquanto isso, você pode explorar os equipamentos.",
-      "verifyButton": "Ver verificação de identidade"
+      "verifyButton": "Ver verificação de identidade",
+      "verifySendTitle": "Envie seu documento para anunciar",
+      "verifySendText": "Para anunciar, envie a foto do seu documento (frente e verso). A equipe Hi Scoot confere e libera o cadastro do equipamento.",
+      "verifySendButton": "Enviar documento"
     },
     "edit": {
       "title": "Editar anúncio",
@@ -926,7 +930,7 @@
     },
     "cards": {
       "identityTitle": "Envie seu documento",
-      "identityText": "Você só aluga e anuncia depois da verificação.",
+      "identityText": "Pedido só na hora de alugar ou anunciar.",
       "requestsTitle": "{count, plural, one {Você tem # pedido novo} other {Você tem # pedidos novos}}",
       "requestsText": "Aceite ou recuse em Reservas recebidas.",
       "payTitle": "Pague sua reserva",
@@ -943,7 +947,7 @@
       "phoneText": "O telefone agora é obrigatório. Ele só aparece para a outra pessoa depois de uma reserva aceita."
     },
     "mpConnected": "Conta Mercado Pago conectada.",
-    "welcome": "Conta criada! Enquanto a equipe confere seu documento, você já pode explorar os equipamentos."
+    "welcome": "Conta criada! Você já pode explorar os equipamentos. O documento só é pedido quando você for alugar ou anunciar."
   },
   "conversations": {
     "title": "Conversas",
