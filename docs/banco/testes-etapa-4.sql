@@ -24,6 +24,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
  ('00000000-0000-0000-0000-00000000000d', 'joao@exemplo.com', '{"full_name":"João Victor"}'),
  ('00000000-0000-0000-0000-00000000000c', 'equipe@hiscoot.com.br', '{"full_name":"Equipe Hi Scoot"}');
 update public.profile_private set is_admin = true where id = '00000000-0000-0000-0000-00000000000c';
+-- Pessoas de teste já com a identidade verificada (só aluga e anuncia quem foi aprovado).
+update public.profiles set identity_status = 'approved';
 
 -- Anúncio aprovado do Host
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');

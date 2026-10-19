@@ -22,6 +22,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
  ('00000000-0000-0000-0000-00000000000b', 'ana@exemplo.com', '{"full_name":"Ana Paula Lima","phone":"11955550102"}'),
  ('00000000-0000-0000-0000-00000000000c', 'equipe@hiscoot.com.br', '{"full_name":"Equipe Hi Scoot"}');
 update public.profile_private set is_admin = true where id = '00000000-0000-0000-0000-00000000000c';
+-- Pessoas de teste já com a identidade verificada (só aluga e anuncia quem foi aprovado).
+update public.profiles set identity_status = 'approved';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.become_host();
 insert into public.equipment (id, host_id, type, title, description, daily_price, city, area, pickup_time, return_time)

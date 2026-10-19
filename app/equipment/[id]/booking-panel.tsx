@@ -23,6 +23,8 @@ type BookingPanelProps = {
   unavailable: string[];
   /** A pessoa já pediu "Avisar quando disponível"? */
   onWaitlist?: boolean;
+  /** Documento ainda em análise: só vê e conversa; reserva depois da aprovação (decisão de 19/10/2026). */
+  needsVerification?: boolean;
 };
 
 function DateField({
@@ -71,7 +73,7 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
 }
 
 /** Quadro de reserva: preço por dia, datas, total e ações (inventário de ações). */
-export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false }: BookingPanelProps) {
+export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false, needsVerification = false }: BookingPanelProps) {
   const t = useTranslations("equipment");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
@@ -217,7 +219,24 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
           </dl>
         ) : null}
 
-        <Button type="submit" size="lg" loading={pending} disabled={!pickup || !dropoff || Boolean(localError)} className="w-full">
+        {needsVerification ? (
+          <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
+            {t.rich("verifyToBook", {
+              link: (chunks) => (
+                <Link href="/verify-identity" className="font-semibold underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
+        ) : null}
+        <Button
+          type="submit"
+          size="lg"
+          loading={pending}
+          disabled={needsVerification || !pickup || !dropoff || Boolean(localError)}
+          className="w-full"
+        >
           {t("sendRequest")}
         </Button>
         <p className={cn("text-center text-xs text-muted")}>{t("payAfterAccept")}</p>
