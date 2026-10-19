@@ -185,7 +185,9 @@
       "capsLock": "Caps Lock is on.",
       "passwordRule": "Use at least {min} characters.",
       "fullName": "Full name",
-      "fullNamePlaceholder": "Your full name"
+      "fullNamePlaceholder": "Your full name",
+      "phone": "Phone",
+      "phoneHint": "With area code. Only shown to the other person after the booking is accepted."
     },
     "errors": {
       "emailRequired": "Enter your email.",
@@ -200,7 +202,9 @@
       "documentTooLarge": "File too large. The limit is {max} MB.",
       "termsRequired": "To create your account, accept the Terms of Use and the Privacy Policy.",
       "emailNotConfirmed": "Your email isn’t confirmed yet. Open the link we sent and try again.",
-      "unexpected": "We couldn’t finish this now. Try again in a few minutes."
+      "unexpected": "We couldn’t finish this now. Try again in a few minutes.",
+      "phoneRequired": "Enter your phone.",
+      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678."
     },
     "login": {
       "title": "Log in",

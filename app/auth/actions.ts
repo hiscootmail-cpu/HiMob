@@ -13,6 +13,7 @@ import {
   validateFullName,
   validateNewPassword,
   validatePasswordPresent,
+  validatePhone,
   type FieldErrorKey,
 } from "@/lib/validation";
 
@@ -33,6 +34,7 @@ export type AuthFormState = {
   fieldErrors?: {
     fullName?: FieldErrorKey;
     email?: FieldErrorKey;
+    phone?: FieldErrorKey;
     password?: FieldErrorKey;
     documentFront?: FieldErrorKey;
     documentBack?: FieldErrorKey;
@@ -109,6 +111,8 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
       return null;
     }
   };
+  // Telefone obrigatório (decisão de 19/10/2026): só aparece para a outra pessoa depois da reserva aceita.
+  const phone = text(formData, "phone").trim();
   const documentFront = meta("documentFront");
   const documentBack = meta("documentBack");
   const acceptedTerms = formData.get("terms") === "on";
@@ -116,6 +120,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   const fieldErrors = {
     fullName: validateFullName(fullName) ?? undefined,
     email: validateEmail(email) ?? undefined,
+    phone: validatePhone(phone) ?? undefined,
     password: validateNewPassword(password) ?? undefined,
     documentFront: validateDocument(documentFront) ?? undefined,
     documentBack: validateDocument(documentBack) ?? undefined,
@@ -131,7 +136,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { full_name: fullName, phone },
         emailRedirectTo: `${await siteOrigin()}/auth/confirm?next=/dashboard`,
       },
     });
