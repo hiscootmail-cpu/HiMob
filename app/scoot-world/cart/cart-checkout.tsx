@@ -7,7 +7,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { cartProducts, placeOrder, quoteShipping, type CartProduct } from "@/app/scoot-world/cart/actions";
-import { useCart } from "@/components/scoot-world/cart-store";
+import { unitsOf, useCart } from "@/components/scoot-world/cart-store";
 import { ProductPhoto } from "@/components/scoot-world/product-photo";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
@@ -41,7 +41,7 @@ export function CartCheckout({ ready, prefill }: Props) {
   const [pending, start] = useTransition();
 
   // Busca preço e estoque atuais dos produtos do carrinho (de novo quando o carrinho muda).
-  const ids = cart.lines.map((l) => l.id).join(",");
+  const ids = [...new Set(cart.lines.map((l) => l.id))].join(",");
   const [refetch, setRefetch] = useState(0);
   useEffect(() => {
     if (!ids) return;
@@ -69,15 +69,17 @@ export function CartCheckout({ ready, prefill }: Props) {
   }, [regionKey, buyer.state, buyer.city]);
   const shippingPrice = shipping?.key === regionKey ? shipping.price : undefined;
 
+  // Uma linha por produto e tamanho; o estoque é conferido somando os tamanhos.
   const rows = useMemo(
     () =>
-      (products ?? [])
-        .map((p) => ({ product: p, quantity: cart.lines.find((l) => l.id === p.id)?.quantity ?? 0 }))
-        .filter((r) => r.quantity > 0),
+      cart.lines.flatMap((line) => {
+        const product = (products ?? []).find((p) => p.id === line.id);
+        return product ? [{ product, line, quantity: line.quantity, units: unitsOf(cart.lines, product.id) }] : [];
+      }),
     [products, cart.lines],
   );
   const subtotal = rows.reduce((sum, r) => sum + r.product.price * r.quantity, 0);
-  const overStock = rows.some((r) => r.quantity > r.product.stock);
+  const overStock = rows.some((r) => r.units > r.product.stock);
 
   if (products === null) return <div className="h-40 animate-pulse rounded-lg bg-surface" />;
 
@@ -127,19 +129,22 @@ export function CartCheckout({ ready, prefill }: Props) {
         <section aria-labelledby="cart-items" className="flex flex-col gap-3">
           <h2 id="cart-items" className="text-lg font-bold text-hs-black">{t("itemsTitle")}</h2>
           <ul className="flex flex-col gap-3">
-            {rows.map(({ product, quantity }) => {
-              const max = Math.min(product.stock, WORLD_LIMITS.perItem);
+            {rows.map(({ product, line, quantity, units }) => {
+              const room = Math.min(product.stock, WORLD_LIMITS.perItem) - units;
               return (
-                <li key={product.id} className="flex gap-4 rounded-lg border border-line bg-hs-white p-3">
+                <li key={`${product.id}-${line.size ?? ""}`} className="flex gap-4 rounded-lg border border-line bg-hs-white p-3">
                   <ProductPhoto src={product.photo} className="size-20 shrink-0 rounded-md" />
                   <div className="flex min-w-0 flex-1 flex-col gap-2">
                     <div className="flex items-start justify-between gap-2">
-                      <Link href={`/scoot-world/store/${product.id}`} className="text-sm font-semibold text-hs-black hover:underline">
-                        {product.name}
-                      </Link>
+                      <span className="flex flex-col">
+                        <Link href={`/scoot-world/store/${product.id}`} className="text-sm font-semibold text-hs-black hover:underline">
+                          {product.name}
+                        </Link>
+                        {line.size ? <span className="text-sm text-muted">{t("sizeLabel", { size: line.size })}</span> : null}
+                      </span>
                       <button
                         type="button"
-                        onClick={() => cart.remove(product.id)}
+                        onClick={() => cart.remove(line)}
                         aria-label={t("remove", { name: product.name })}
                         className="flex size-9 shrink-0 items-center justify-center rounded-full text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
                       >
@@ -150,7 +155,7 @@ export function CartCheckout({ ready, prefill }: Props) {
                       <div className="flex items-center rounded-full border border-line" role="group" aria-label={t("quantityOf", { name: product.name })}>
                         <button
                           type="button"
-                          onClick={() => cart.setQuantity(product.id, quantity - 1)}
+                          onClick={() => cart.setQuantity(line, quantity - 1)}
                           disabled={quantity <= 1}
                           aria-label={t("less")}
                           className="flex size-9 items-center justify-center rounded-full text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40 disabled:opacity-40"
@@ -160,8 +165,8 @@ export function CartCheckout({ ready, prefill }: Props) {
                         <span className="w-7 text-center text-sm font-semibold text-hs-black">{quantity}</span>
                         <button
                           type="button"
-                          onClick={() => cart.setQuantity(product.id, quantity + 1)}
-                          disabled={quantity >= max}
+                          onClick={() => cart.setQuantity(line, quantity + 1)}
+                          disabled={room <= 0}
                           aria-label={t("more")}
                           className="flex size-9 items-center justify-center rounded-full text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40 disabled:opacity-40"
                         >
@@ -170,7 +175,7 @@ export function CartCheckout({ ready, prefill }: Props) {
                       </div>
                       <span className="text-base font-bold text-hs-black">{money(product.price * quantity)}</span>
                     </div>
-                    {quantity > product.stock ? (
+                    {units > product.stock ? (
                       <p role="alert" className="text-sm text-error">
                         {product.stock > 0 ? t("onlyLeft", { count: product.stock }) : t("nowSoldOut")}
                       </p>

@@ -1220,7 +1220,9 @@
       "maxInCart": "Você já pôs no carrinho o máximo disponível.",
       "inCart": "{count, plural, one {# no carrinho.} other {# no carrinho.}}",
       "seeCart": "Ver carrinho",
-      "pixOnly": "Pagamento por PIX. Entrega com frete para o seu endereço."
+      "pixOnly": "Pagamento por PIX. Entrega com frete para o seu endereço.",
+      "size": "Tamanho",
+      "sizeRequired": "Escolha o tamanho."
     },
     "tv": {
       "title": "HiTV",
@@ -1301,8 +1303,10 @@
         "outOfStock": "Um item acabou de esgotar ou tem menos unidades. Confira o carrinho.",
         "noShipping": "Ainda não entregamos nessa região.",
         "invalid": "Não deu para fechar o pedido. Confira os dados e tente de novo.",
-        "paymentFailed": "Não deu para gerar o PIX. Tente de novo em instantes."
-      }
+        "paymentFailed": "Não deu para gerar o PIX. Tente de novo em instantes.",
+        "size": "Escolha de novo o tamanho de um item (a lista de tamanhos mudou)."
+      },
+      "sizeLabel": "Tamanho {size}"
     },
     "order": {
       "title": "Pedido",
@@ -1337,7 +1341,8 @@
       "subtotal": "Produtos",
       "shipping": "Frete",
       "total": "Total",
-      "addressTitle": "Entrega"
+      "addressTitle": "Entrega",
+      "size": "Tamanho {size}"
     }
   },
   "adminWorld": {
@@ -1380,7 +1385,8 @@
       "regionTaken": "Essa região já tem frete. Apague a antiga para trocar o valor.",
       "tracking": "Escreva o código de rastreio (3 a 60 letras).",
       "reason": "Escreva o motivo (5 a 200 letras).",
-      "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo."
+      "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo.",
+      "sizes": "Até 10 tamanhos, cada um com até 10 letras."
     },
     "store": {
       "addTitle": "Novo produto",
@@ -1395,7 +1401,11 @@
       "stockHint": "Quantas unidades tem para vender.",
       "stockSave": "Salvar estoque",
       "stockShown": "{count, plural, one {# em estoque} other {# em estoque}}",
-      "soldOut": "Esgotado"
+      "soldOut": "Esgotado",
+      "sizes": "Tamanhos (opcional)",
+      "sizesHint": "Separe por vírgula. Vazio: produto sem tamanho. O estoque é um só para todos.",
+      "sizesSave": "Salvar tamanhos",
+      "noSizes": "Sem tamanho"
     },
     "tv": {
       "addTitle": "Novo vídeo da HiTV",
@@ -1458,7 +1468,8 @@
       "refundConfirm": "Cancelar e devolver",
       "refunded": "Pedido cancelado e dinheiro devolvido.",
       "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo.",
-      "refundError": "Não deu para cancelar. Confira o motivo e tente de novo."
+      "refundError": "Não deu para cancelar. Confira o motivo e tente de novo.",
+      "size": "Tamanho {size}"
     }
   }
 }

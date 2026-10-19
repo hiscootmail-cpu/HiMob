@@ -1220,7 +1220,9 @@
       "maxInCart": "You already have the most available in your cart.",
       "inCart": "{count} in your cart.",
       "seeCart": "See cart",
-      "pixOnly": "Payment by PIX. Delivered by shipping to your address."
+      "pixOnly": "Payment by PIX. Delivered by shipping to your address.",
+      "size": "Size",
+      "sizeRequired": "Choose a size."
     },
     "tv": {
       "title": "HiTV",
@@ -1301,8 +1303,10 @@
         "outOfStock": "An item just sold out or has fewer units. Check your cart.",
         "noShipping": "We do not deliver to this region yet.",
         "invalid": "Could not place the order. Check your details and try again.",
-        "paymentFailed": "Could not create the PIX. Try again in a moment."
-      }
+        "paymentFailed": "Could not create the PIX. Try again in a moment.",
+        "size": "Choose the size of an item again (the size list changed)."
+      },
+      "sizeLabel": "Size {size}"
     },
     "order": {
       "title": "Order",
@@ -1337,7 +1341,8 @@
       "subtotal": "Products",
       "shipping": "Shipping",
       "total": "Total",
-      "addressTitle": "Delivery"
+      "addressTitle": "Delivery",
+      "size": "Size {size}"
     }
   },
   "adminWorld": {
@@ -1380,7 +1385,8 @@
       "regionTaken": "This region already has a rate. Delete the old one to change it.",
       "tracking": "Write the tracking code (3 to 60 characters).",
       "reason": "Write the reason (5 to 200 characters).",
-      "refundFailed": "Mercado Pago did not return the money. Try again."
+      "refundFailed": "Mercado Pago did not return the money. Try again.",
+      "sizes": "Up to 10 sizes, each up to 10 characters."
     },
     "store": {
       "addTitle": "New product",
@@ -1395,7 +1401,11 @@
       "stockHint": "How many units there are to sell.",
       "stockSave": "Save stock",
       "stockShown": "{count} in stock",
-      "soldOut": "Sold out"
+      "soldOut": "Sold out",
+      "sizes": "Sizes (optional)",
+      "sizesHint": "Separate with commas. Empty: no sizes. Stock is shared by all sizes.",
+      "sizesSave": "Save sizes",
+      "noSizes": "No sizes"
     },
     "tv": {
       "addTitle": "New HiTV video",
@@ -1458,7 +1468,8 @@
       "refundConfirm": "Cancel and refund",
       "refunded": "Order cancelled and money refunded.",
       "refundFailed": "Mercado Pago did not return the money. Try again.",
-      "refundError": "Could not cancel. Check the reason and try again."
+      "refundError": "Could not cancel. Check the reason and try again.",
+      "size": "Size {size}"
     }
   }
 }

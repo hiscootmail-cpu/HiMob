@@ -89,5 +89,20 @@ select pg_temp.fails($$select public.refund_world_order((select id from o2), 'Na
 select public.refund_world_order((select id from o2), 'Pessoa desistiu da compra');
 select pg_temp.ok((select status from public.world_orders where id = (select id from o2)) = 'refunded' and (select stock from public.world_products where name = 'Capacete') = 1, 'Devolvido: estoque volta');
 select pg_temp.fails($$update public.world_orders set total = 1$$, '42501', 'Nem a equipe muda valores do pedido direto');
+-- Tamanhos (21/10/2026): a pessoa escolhe; o estoque é um só
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+insert into public.world_products (id, name, price, stock, sizes) values
+  ('50000000-0000-0000-0000-000000000003', 'Camiseta Good Vibes Only', 180, 50, '{P,M,G,GG,XXG}');
+select pg_temp.as_server();
+create temp table o3 as select * from public.create_world_order('[{"product_id":"50000000-0000-0000-0000-000000000003","quantity":2,"size":"M"},{"product_id":"50000000-0000-0000-0000-000000000003","quantity":1,"size":"XXG"}]', (select b from buyer));
+select pg_temp.ok((select total from o3) = 555, 'Camiseta: 3 x 180 + frete 15');
+select pg_temp.ok((select stock from public.world_products where name = 'Camiseta Good Vibes Only') = 47, 'Estoque único desce 3 (dois tamanhos)');
+select pg_temp.ok((select string_agg(size || ':' || quantity, ',' order by size) from public.world_order_items where order_id = (select id from o3)) = 'M:2,XXG:1', 'Pedido guarda cada tamanho com a quantidade');
+select pg_temp.fails($$select * from public.create_world_order('[{"product_id":"50000000-0000-0000-0000-000000000003","quantity":1}]', (select b from buyer))$$, 'size_required', 'Camiseta sem tamanho: não vende');
+select pg_temp.fails($$select * from public.create_world_order('[{"product_id":"50000000-0000-0000-0000-000000000003","quantity":1,"size":"XG"}]', (select b from buyer))$$, 'size_required', 'Tamanho fora da lista: não vende');
+reset role;
+update public.world_products set stock = 3 where name = 'Capacete';
+select pg_temp.as_server();
+select pg_temp.fails($$select * from public.create_world_order('[{"product_id":"50000000-0000-0000-0000-000000000001","quantity":1,"size":"M"}]', (select b from buyer))$$, 'invalid_items', 'Produto sem tamanhos não aceita tamanho');
 reset role;
 \echo 'Loja: todos os testes passaram'

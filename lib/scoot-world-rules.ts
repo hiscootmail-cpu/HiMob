@@ -16,6 +16,8 @@ export type WorldProduct = {
   active: boolean;
   /** Unidades à venda (itens limitados, por temporada). 0 = esgotado. */
   stock: number;
+  /** Tamanhos que a pessoa escolhe (ex.: P, M, G). Vazio = sem tamanho. O estoque é um só. */
+  sizes: string[];
 };
 
 export type WorldVideo = {
@@ -51,6 +53,9 @@ export const WORLD_LIMITS = {
   /** Até 10 unidades de cada produto por pedido. */
   perItem: 10,
   shippingPrice: 10000,
+  /** Até 10 tamanhos por produto, cada um com até 10 letras. */
+  sizes: 10,
+  sizeLength: 10,
   videoTitle: { min: 2, max: 100 },
   placeName: { min: 2, max: 80 },
   placeAddress: { min: 5, max: 200 },
@@ -116,7 +121,18 @@ export const BR_STATES = [
 
 export type ShippingRate = { id: string; state: string; city: string | null; price: number };
 
-export type CartLine = { id: string; quantity: number };
+export type CartLine = { id: string; quantity: number; size?: string };
+
+/** Mesma linha do carrinho: mesmo produto e mesmo tamanho. */
+export const sameLine = (a: Pick<CartLine, "id" | "size">, b: Pick<CartLine, "id" | "size">) =>
+  a.id === b.id && (a.size ?? "") === (b.size ?? "");
+
+/** "P, M, G" ou "P M G" → ["P", "M", "G"] (sem repetir). null se algum tamanho for inválido. */
+export function parseSizes(input: string): string[] | null {
+  const list = [...new Set(input.split(/[,;\s]+/).map((v) => v.trim().toUpperCase()).filter(Boolean))];
+  if (list.length > WORLD_LIMITS.sizes || list.some((v) => v.length > WORLD_LIMITS.sizeLength)) return null;
+  return list;
+}
 
 export type OrderStatus = "pending" | "paid" | "shipped" | "canceled" | "refunded";
 
@@ -144,7 +160,7 @@ export type StoreOrder = {
   pix_qr_base64: string | null;
   expires_at: string;
   created_at: string;
-  items: { name: string; price: number; quantity: number }[];
+  items: { name: string; price: number; quantity: number; size: string | null }[];
 };
 
 export type CheckoutField =

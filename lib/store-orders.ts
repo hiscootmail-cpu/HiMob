@@ -30,12 +30,14 @@ export function storeCheckoutReady(): boolean {
 
 export type PlaceOrderResult =
   | { ok: true; id: string; token: string }
-  | { ok: false; error: "unavailable" | "outOfStock" | "noShipping" | "invalid" | "paymentFailed" };
+  | { ok: false; error: "unavailable" | "outOfStock" | "noShipping" | "invalid" | "paymentFailed" | "size" };
 
 const DEMO_ID = "demo";
 
 const dbError = (message: string): Extract<PlaceOrderResult, { ok: false }>["error"] =>
-  message.includes("out_of_stock")
+  message.includes("size_required")
+    ? "size"
+    : message.includes("out_of_stock")
     ? "outOfStock"
     : message.includes("no_shipping")
       ? "noShipping"
@@ -49,7 +51,7 @@ export async function placeStoreOrder(lines: CartLine[], buyer: BuyerData, buyer
   if (!admin || !storeCheckoutReady()) return { ok: false, error: "unavailable" };
 
   const { data, error } = await admin.rpc("create_world_order", {
-    p_items: lines.map((l) => ({ product_id: l.id, quantity: l.quantity })),
+    p_items: lines.map((l) => ({ product_id: l.id, quantity: l.quantity, size: l.size ?? null })),
     p_buyer: buyer,
     p_buyer_id: buyerId,
   });
@@ -123,7 +125,7 @@ function demoOrder(): StoreOrder {
     pix_qr_base64: null,
     expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     created_at: new Date().toISOString(),
-    items: [{ name: product.name, price: product.price, quantity: 1 }],
+    items: [{ name: product.name, price: product.price, quantity: 1, size: product.sizes[0] ?? null }],
   };
 }
 

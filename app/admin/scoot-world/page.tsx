@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 
-import { ItemControls, PlaceForm, ProductForm, RefundForm, ShipForm, ShippingForm, StockForm, VideoForm } from "@/app/admin/scoot-world/world-forms";
+import { ItemControls, PlaceForm, ProductForm, RefundForm, ShipForm, ShippingForm, SizesForm, StockForm, VideoForm } from "@/app/admin/scoot-world/world-forms";
 import { MapPinIcon } from "@/components/icons";
 import { BackLink } from "@/components/rider/back-link";
 import { ProductPhoto } from "@/components/scoot-world/product-photo";
@@ -47,8 +47,9 @@ async function OrderItem({ order }: { order: StoreOrder }) {
       </div>
       <ul className="flex flex-col gap-1 text-sm text-hs-black">
         {order.items.map((item) => (
-          <li key={item.name}>
-            {item.quantity} x {item.name} · {money(item.price * item.quantity)}
+          <li key={`${item.name}-${item.size ?? ""}`}>
+            {item.quantity} x {item.name}
+            {item.size ? <span className="font-semibold"> · {t("size", { size: item.size })}</span> : null} · {money(item.price * item.quantity)}
           </li>
         ))}
       </ul>
@@ -176,6 +177,7 @@ export default async function AdminWorldPage({ searchParams }: PageProps<"/admin
                       {item.stock > 0 ? t("store.stockShown", { count: item.stock }) : t("store.soldOut")}
                     </p>
                     <StockForm id={item.id} stock={item.stock} />
+                    <SizesForm id={item.id} sizes={item.sizes} />
                     <ItemControls table="world_products" id={item.id} name={item.name} active={item.active} />
                   </div>
                 </li>

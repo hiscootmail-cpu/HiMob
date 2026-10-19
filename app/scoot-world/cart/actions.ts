@@ -13,7 +13,7 @@ import { exampleShippingRates } from "@/lib/mock/scoot-world";
  * sem conta. Preço, estoque e frete vêm sempre do banco, nunca do navegador.
  */
 
-export type CartProduct = { id: string; name: string; price: number; stock: number; photo?: string };
+export type CartProduct = { id: string; name: string; price: number; stock: number; sizes: string[]; photo?: string };
 
 /** Dados atuais dos produtos do carrinho (os escondidos ou apagados somem). */
 export async function cartProducts(ids: string[]): Promise<CartProduct[]> {
@@ -21,7 +21,7 @@ export async function cartProducts(ids: string[]): Promise<CartProduct[]> {
   const products = await Promise.all(unique.map((id) => getWorldProduct(id)));
   return products
     .filter((p) => p?.active)
-    .map((p) => ({ id: p!.id, name: p!.name, price: p!.price, stock: p!.stock, photo: p!.photo }));
+    .map((p) => ({ id: p!.id, name: p!.name, price: p!.price, stock: p!.stock, sizes: p!.sizes, photo: p!.photo }));
 }
 
 /** Frete fixo da região: primeiro a cidade, depois o estado todo. null = ainda não entregamos aí. */
@@ -43,6 +43,7 @@ export type CheckoutResult = PlaceOrderResult | { ok: false; error: "fields"; fi
 export async function placeOrder(lines: CartLine[], buyer: BuyerData): Promise<CheckoutResult> {
   const items = (Array.isArray(lines) ? lines : [])
     .filter((l) => typeof l?.id === "string" && Number.isInteger(l?.quantity) && l.quantity >= 1 && l.quantity <= WORLD_LIMITS.perItem)
+    .map((l) => ({ id: l.id, quantity: l.quantity, ...(typeof l.size === "string" && l.size ? { size: l.size.slice(0, WORLD_LIMITS.sizeLength) } : {}) }))
     .slice(0, 10);
   if (!items.length) return { ok: false, error: "empty" };
   const data = Object.fromEntries(

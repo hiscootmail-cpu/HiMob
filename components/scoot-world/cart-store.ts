@@ -2,12 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 
-import { WORLD_LIMITS, type CartLine } from "@/lib/scoot-world-rules";
+import { sameLine, WORLD_LIMITS, type CartLine } from "@/lib/scoot-world-rules";
 
 /*
  * Carrinho da Loja interna. Fica guardado neste navegador (vale para quem tem
  * conta e para quem não tem). O preço e o estoque de verdade são conferidos
  * pelo servidor na hora de fechar o pedido.
+ * Cada linha é um produto num tamanho (produto sem tamanho: uma linha só).
  */
 
 const KEY = "hs_cart";
@@ -29,7 +30,11 @@ function read(): CartLine[] {
     if (Array.isArray(parsed)) {
       lines = parsed
         .filter((l) => typeof l?.id === "string" && Number.isInteger(l?.quantity) && l.quantity > 0)
-        .map((l) => ({ id: l.id, quantity: Math.min(l.quantity, WORLD_LIMITS.perItem) }))
+        .map((l) => ({
+          id: l.id,
+          quantity: Math.min(l.quantity, WORLD_LIMITS.perItem),
+          ...(typeof l.size === "string" && l.size ? { size: l.size } : {}),
+        }))
         .slice(0, 10);
     }
   } catch {
@@ -57,24 +62,30 @@ function subscribe(onChange: () => void) {
   };
 }
 
+/** Unidades de um produto no carrinho, somando todos os tamanhos (o estoque é um só). */
+export const unitsOf = (lines: CartLine[], id: string) => lines.filter((l) => l.id === id).reduce((sum, l) => sum + l.quantity, 0);
+
 export function useCart() {
   const lines = useSyncExternalStore(subscribe, read, () => EMPTY);
   return {
     lines,
     count: lines.reduce((sum, l) => sum + l.quantity, 0),
-    /** Põe no carrinho (soma com o que já estava, até o limite). */
-    add: (id: string, quantity: number, max: number) => {
+    /** Põe no carrinho (soma com o que já estava, até o limite do produto). */
+    add: (line: CartLine, max: number) => {
       const current = read();
-      const existing = current.find((l) => l.id === id);
-      const limit = Math.min(max, WORLD_LIMITS.perItem);
-      const next = existing
-        ? current.map((l) => (l.id === id ? { ...l, quantity: Math.min(l.quantity + quantity, limit) } : l))
-        : [...current, { id, quantity: Math.min(quantity, limit) }];
-      write(next);
+      const room = Math.min(max, WORLD_LIMITS.perItem) - unitsOf(current, line.id);
+      const quantity = Math.min(line.quantity, room);
+      if (quantity < 1) return;
+      const existing = current.find((l) => sameLine(l, line));
+      write(
+        existing
+          ? current.map((l) => (sameLine(l, line) ? { ...l, quantity: l.quantity + quantity } : l))
+          : [...current, { ...line, quantity }],
+      );
     },
-    setQuantity: (id: string, quantity: number) =>
-      write(read().map((l) => (l.id === id ? { ...l, quantity: Math.max(1, Math.min(quantity, WORLD_LIMITS.perItem)) } : l))),
-    remove: (id: string) => write(read().filter((l) => l.id !== id)),
+    setQuantity: (line: CartLine, quantity: number) =>
+      write(read().map((l) => (sameLine(l, line) ? { ...l, quantity: Math.max(1, Math.min(quantity, WORLD_LIMITS.perItem)) } : l))),
+    remove: (line: CartLine) => write(read().filter((l) => !sameLine(l, line))),
     clear: () => write([]),
   };
 }
