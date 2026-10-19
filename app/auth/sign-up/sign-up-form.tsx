@@ -12,7 +12,8 @@ import { useFieldValidation } from "@/components/auth/use-field-validation";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/ui/password-field";
 import { TextField } from "@/components/ui/text-field";
-import { createClient } from "@/lib/supabase/client";
+import { registerSignupDocuments } from "@/app/verify-identity/actions";
+import { createClient, uploadOwnFiles } from "@/lib/supabase/client";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import {
   DOCUMENT_MAX_MB,
@@ -48,6 +49,24 @@ export function SignUpForm() {
   // Arquivos escolhidos: com a Supabase, vão direto do navegador para a pasta privada.
   const files = useRef<{ front?: File; back?: File }>({});
   const [uploading, setUploading] = useState(false);
+
+  // Conta já ativa: envia o documento para a pasta privada e entra direto no painel.
+  useEffect(() => {
+    if (!state.signedIn) return;
+    const { front, back } = files.current;
+    let cancelled = false;
+    (async () => {
+      if (front && back) {
+        const paths = await uploadOwnFiles("identity-documents", "cadastro", [front, back]);
+        // Se o envio falhar, o documento é pedido de novo em Verificação de identidade.
+        if (paths) await registerSignupDocuments(paths[0], paths[1]);
+      }
+      if (!cancelled) router.push("/dashboard?welcome=1");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [state.signedIn, router]);
 
   useEffect(() => {
     const upload = state.upload;
@@ -176,7 +195,7 @@ export function SignUpForm() {
           {t(`errors.${state.error}`)}
         </p>
       ) : null}
-      <Button type="submit" size="lg" loading={pending || (uploading && Boolean(state.upload))} className="w-full">
+      <Button type="submit" size="lg" loading={pending || (uploading && Boolean(state.upload || state.signedIn))} className="w-full">
         {t("signUp.submit")}
       </Button>
 

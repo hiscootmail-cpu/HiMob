@@ -936,7 +936,8 @@
       "phoneTitle": "Add your phone number",
       "phoneText": "A phone number is now required. It is only shown to the other person after a booking is accepted."
     },
-    "mpConnected": "Mercado Pago account connected."
+    "mpConnected": "Mercado Pago account connected.",
+    "welcome": "Account created! While the team checks your ID, you can already explore the equipment."
   },
   "conversations": {
     "title": "Messages",

@@ -44,6 +44,8 @@ export type AuthFormState = {
   values?: { email?: string };
   /** Pedido concluído (usado em "Esqueci a senha"). */
   done?: boolean;
+  /** Cadastro com a conta já ativa (confirmação de e-mail desligada): entra direto. */
+  signedIn?: boolean;
   /** Cadastro com a Supabase: onde o navegador envia frente e verso do documento. */
   upload?: { front: { path: string; token: string }; back: { path: string; token: string } };
 };
@@ -147,6 +149,11 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
       },
     });
     if (error && error.code !== "user_already_exists") return { error: "unexpected", values: { email } };
+
+    // Confirmação de e-mail desligada: a conta já nasce ativa e a pessoa já está
+    // conectada. O navegador envia o documento para a pasta privada dela e ela
+    // entra direto, podendo explorar os equipamentos enquanto a equipe confere.
+    if (data.session) return { values: { email }, signedIn: true };
 
     // Frente e verso vão para a pasta privada que só a equipe de verificação lê,
     // para conferir se o nome do documento é o mesmo do cadastro. Antes de
