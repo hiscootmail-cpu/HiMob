@@ -32,9 +32,10 @@ const MAX_CARDS = 4;
 type NextStep = { key: string; href: string; icon: React.ComponentType<IconProps>; title: string; text: string };
 
 /** Painel inicial: para onde a pessoa vai depois de entrar. */
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
   const user = await requireUser();
   const t = await getTranslations("dashboard");
+  const { mp } = await searchParams;
   const format = await getFormatter();
   const today = todayInSaoPaulo();
   const tomorrow = addDays(today, 1);
@@ -90,6 +91,13 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("hello", { name: user.full_name.split(" ")[0] })}</h1>
         <p className="text-base text-muted">{t("subtitle")}</p>
       </div>
+
+      {mp === "connected" ? (
+        <p role="status" className="flex items-center gap-2 rounded-md bg-green-soft px-4 py-3 text-sm font-medium text-on-green">
+          <CheckCircleIcon className="size-5 shrink-0" />
+          {t("mpConnected")}
+        </p>
+      ) : null}
 
       <section aria-labelledby="next-title" className="flex flex-col gap-3">
         <h2 id="next-title" className="text-lg font-semibold text-hs-black">

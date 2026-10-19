@@ -517,7 +517,24 @@
       },
       "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida.",
       "testNotice": "Pagamento de teste: nenhum valor é cobrado. O pagamento de verdade (Mercado Pago) entra em breve.",
-      "payTest": "Pagar {total} (teste)"
+      "payTest": "Pagar {total} (teste)",
+      "mp": {
+        "loading": "Carregando o pagamento seguro do Mercado Pago...",
+        "cardOnly": "Por enquanto, o pagamento é só no cartão de crédito à vista.",
+        "pixTitle": "Pague com PIX",
+        "pixText": "Abra o app do seu banco, escolha PIX e leia o QR code ou use o código abaixo.",
+        "qrAlt": "QR code do PIX",
+        "pixCodeLabel": "Código PIX (copia e cola)",
+        "pixCopy": "Copiar código",
+        "pixCopied": "Código copiado",
+        "pixWaiting": "Aguardando o pagamento. Esta tela atualiza sozinha.",
+        "pixExpires": "O código vale por 30 minutos. Se vencer, atualize a página para gerar outro.",
+        "errors": {
+          "rejected": "Pagamento recusado. Confira os dados ou use outro cartão.",
+          "unavailable": "O pagamento está indisponível agora. Tente de novo em alguns minutos.",
+          "notAllowed": "Esta reserva não está esperando pagamento."
+        }
+      }
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -921,7 +938,8 @@
       "reviewText": "Como foi com {title}?",
       "messagesTitle": "{count, plural, one {# mensagem nova} other {# mensagens novas}}",
       "messagesText": "Responda em Conversas."
-    }
+    },
+    "mpConnected": "Conta Mercado Pago conectada."
   },
   "conversations": {
     "title": "Conversas",
@@ -1129,6 +1147,23 @@
       "confirm": "Confirmar pela plataforma",
       "done": "Confirmado pela plataforma. A reserva seguiu para a próxima etapa.",
       "reasonRequired": "Escreva o motivo para confirmar."
+    }
+  },
+  "mercadoPago": {
+    "connect": {
+      "title": "Conecte sua conta Mercado Pago",
+      "description": "Para usar a Hi Scoot, conecte a sua conta Mercado Pago. É rápido e só precisa ser feito uma vez.",
+      "reasons": {
+        "receive": "Se você anunciar, o pagamento das reservas cai direto na sua conta Mercado Pago.",
+        "safe": "A Hi Scoot não vê sua senha e não mexe no seu saldo.",
+        "once": "Você autoriza uma vez só, no próprio site do Mercado Pago."
+      },
+      "button": "Conectar Mercado Pago",
+      "noAccount": "Ainda não tem conta no Mercado Pago? Você pode criar uma de graça na tela do Mercado Pago.",
+      "errors": {
+        "failed": "Não deu certo conectar a conta. Tente de novo.",
+        "unavailable": "A conexão com o Mercado Pago ainda não está disponível. Tente de novo mais tarde."
+      }
     }
   }
 }

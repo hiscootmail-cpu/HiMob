@@ -6,7 +6,12 @@ import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { bookingPrice } from "@/lib/bookings";
 import { getRiderBooking } from "@/lib/bookings-db";
+import { pendingPix } from "@/lib/mercadopago/booking-payments";
+import { mercadoPagoOn } from "@/lib/mercadopago/server";
+import { methodEnabled } from "@/lib/payment-split";
 import { PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
+import { getCurrentUser } from "@/lib/session";
+import { MercadoPagoPayment } from "./mercado-pago-payment";
 import { PaymentForm } from "./payment-form";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,6 +28,9 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
   const format = await getFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const price = bookingPrice(booking);
+  // Mercado Pago ligado: formulário seguro (PIX ou cartão à vista). Antes disso, o pagamento de teste.
+  const mpOn = booking.status === "accepted" && (await mercadoPagoOn());
+  const [user, initialPix] = mpOn ? await Promise.all([getCurrentUser(), pendingPix(booking.id)]) : [null, null];
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -49,7 +57,15 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
 
       <p className="rounded-md border border-line px-4 py-3 text-sm text-hs-black">{t("cancelPolicy")}</p>
 
-      {booking.status === "accepted" ? (
+      {booking.status === "accepted" && mpOn ? (
+        <MercadoPagoPayment
+          bookingId={booking.id}
+          total={price.total}
+          payerEmail={user?.email ?? ""}
+          pixEnabled={methodEnabled("pix")}
+          initialPix={initialPix}
+        />
+      ) : booking.status === "accepted" ? (
         <PaymentForm bookingId={booking.id} total={price.total} />
       ) : (
         <p role="status" className="rounded-md bg-surface px-4 py-3 text-sm text-hs-black">

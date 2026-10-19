@@ -7,14 +7,24 @@ import { REVIEW_COMMENT_MAX } from "@/lib/bookings";
 import { getRiderBooking } from "@/lib/bookings-db";
 import { riderCancelPolicy } from "@/lib/cancellation";
 import { exampleEquipmentCode, normalizeCode, validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
+import {
+  cancelPaidBooking,
+  checkBookingPayment,
+  payBookingWithMercadoPago,
+  type BrickFormData,
+  type PaymentResult,
+} from "@/lib/mercadopago/booking-payments";
+import { mercadoPagoOn } from "@/lib/mercadopago/server";
+import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
 /*
  * Com a Supabase: as funções do banco conferem de novo se a reserva é da
  * pessoa conectada e as regras antes de gravar (etapa 4).
- * PROVISÓRIO: o pagamento é de teste e não cobra nada (decisão de 10/10/2026)
- * até o Mercado Pago entrar.
+ * Pagamento: com o Mercado Pago ligado, PIX ou cartão à vista pelo formulário
+ * seguro do Mercado Pago (decisões de 19/10/2026). Antes disso, o pagamento é
+ * de teste e não cobra nada (decisão de 10/10/2026).
  * Sem a Supabase (demonstração): conferem os dados e simulam a resposta.
  */
 
@@ -24,6 +34,12 @@ export async function cancelBooking(bookingId: string): Promise<CancelState> {
   const booking = await getRiderBooking(bookingId);
   // Regra conferida no servidor: até 24 h antes da retirada (lib/cancellation.ts).
   if (!booking || !riderCancelPolicy(booking).allowed) return { error: "notAllowed" };
+  if (booking.status === "confirmed" && (await mercadoPagoOn())) {
+    // Reserva paga: o Mercado Pago devolve as diárias antes de cancelar.
+    if (!(await cancelPaidBooking(booking, booking.equipment.host.id))) return { error: "notAllowed" };
+    revalidatePath("/rider/reservations");
+    return { done: true };
+  }
   if (supabaseConfigured()) {
     const supabase = await createClient();
     const { error } = await supabase.rpc("cancel_booking", { p_id: bookingId });
@@ -56,6 +72,23 @@ export async function payBooking(bookingId: string, _prev: PaymentState, formDat
     if (error) return { error: "notAllowed" };
   }
   redirect(`/rider/reservations/${bookingId}/confirmed`);
+}
+
+/** Pagamento pelo formulário seguro do Mercado Pago (PIX ou cartão à vista). */
+export async function payWithMercadoPago(bookingId: string, form: BrickFormData): Promise<PaymentResult> {
+  const [user, booking] = await Promise.all([getCurrentUser(), getRiderBooking(bookingId)]);
+  if (!user || !booking) return { status: "error", error: "notAllowed" };
+  const result = await payBookingWithMercadoPago(booking, booking.equipment.host.id, user.email, form);
+  if (result.status === "approved") revalidatePath("/rider/reservations");
+  return result;
+}
+
+/** A tela do PIX pergunta: já pagou? */
+export async function checkPayment(bookingId: string): Promise<"approved" | "pending" | "rejected"> {
+  const booking = await getRiderBooking(bookingId);
+  if (!booking) return "rejected";
+  if (booking.status === "confirmed") return "approved";
+  return checkBookingPayment(bookingId);
 }
 
 export type HandoffState = {
