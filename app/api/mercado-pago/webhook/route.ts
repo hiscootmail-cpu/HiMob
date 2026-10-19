@@ -1,11 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { syncPayment, validWebhookSignature } from "@/lib/mercadopago/server";
+import { syncStorePayment } from "@/lib/store-orders";
 
 /*
  * Avisos do Mercado Pago sobre pagamentos. O site só acredita no aviso com a
  * assinatura certa e, mesmo assim, pergunta de novo ao Mercado Pago a situação
- * do pagamento antes de confirmar a reserva.
+ * do pagamento antes de confirmar a reserva (ou o pedido da loja).
  */
 export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => null)) as { type?: string; action?: string; data?: { id?: string | number } } | null;
@@ -16,6 +17,7 @@ export async function POST(request: NextRequest) {
   if (!validWebhookSignature(request.headers.get("x-signature"), request.headers.get("x-request-id"), dataId)) {
     return NextResponse.json({ error: "invalid_signature" }, { status: 401 });
   }
-  if (type === "payment") await syncPayment(dataId);
+  // Pagamento de reserva (conta do Host) ou da loja (conta da Hi Scoot).
+  if (type === "payment" && (await syncPayment(dataId)) === null) await syncStorePayment(dataId);
   return NextResponse.json({ ok: true });
 }

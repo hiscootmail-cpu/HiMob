@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Globe, ShoppingBag, Store, Tv } from "lucide-react";
+import { Globe, ShoppingBag, ShoppingCart, Store, Tv } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { isActive } from "@/components/navigation";
+import { useCart } from "@/components/scoot-world/cart-store";
 import { cn } from "@/lib/utils";
 
 const tabs = [
@@ -19,6 +20,8 @@ const tabs = [
 export function WorldTabs() {
   const t = useTranslations("scootWorld.tabs");
   const pathname = usePathname();
+  const { count } = useCart();
+  const cartActive = isActive(pathname, "/scoot-world/cart");
 
   return (
     <nav aria-label={t("label")} className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
@@ -41,6 +44,31 @@ export function WorldTabs() {
             </li>
           );
         })}
+        <li>
+          <Link
+            href="/scoot-world/cart"
+            aria-current={cartActive ? "page" : undefined}
+            aria-label={count ? t("cartCount", { count }) : t("cart")}
+            className={cn(
+              "inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold whitespace-nowrap outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+              cartActive ? "border-hs-black bg-hs-black text-hs-white" : "border-line bg-hs-white text-hs-black hover:bg-surface",
+            )}
+          >
+            <ShoppingCart className="size-4" aria-hidden />
+            {t("cart")}
+            {count ? (
+              <span
+                aria-hidden
+                className={cn(
+                  "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs",
+                  cartActive ? "bg-hs-white text-hs-black" : "bg-hs-green text-on-green",
+                )}
+              >
+                {count}
+              </span>
+            ) : null}
+          </Link>
+        </li>
       </ul>
     </nav>
   );

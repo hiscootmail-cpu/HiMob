@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 
 import { BackLink } from "@/components/rider/back-link";
+import { AddToCart } from "@/components/scoot-world/add-to-cart";
 import { ProductPhoto } from "@/components/scoot-world/product-photo";
 import { getWorldProduct } from "@/lib/scoot-world";
 
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/scoot-world/store
   };
 }
 
-/** Produto da loja interna. Por enquanto só vitrine: a compra pelo site ainda vai ser decidida. */
+/** Produto da loja interna: quantidade, "Pôr no carrinho" ou "Esgotado". */
 export default async function WorldProductPage({ params }: PageProps<"/scoot-world/store/[id]">) {
   const product = await getWorldProduct((await params).id);
   if (!product?.active) notFound();
@@ -33,9 +34,8 @@ export default async function WorldProductPage({ params }: PageProps<"/scoot-wor
           <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{product.name}</h1>
           <p className="text-3xl font-bold text-hs-black">{format.number(product.price, { style: "currency", currency: "BRL" })}</p>
           {product.description ? <p className="whitespace-pre-line text-base text-hs-black">{product.description}</p> : null}
-          <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
-            {t("store.soon")}
-          </p>
+          <AddToCart productId={product.id} stock={product.stock} />
+          <p className="text-sm text-muted">{t("store.pixOnly")}</p>
         </div>
       </div>
     </div>

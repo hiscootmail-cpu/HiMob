@@ -40,7 +40,7 @@ export type PaymentResult =
   | { status: "error"; error: "notAllowed" | "unavailable" };
 
 /** PIX vence em 30 minutos (horário de Brasília, formato pedido pelo Mercado Pago). */
-function pixExpiration() {
+export function pixExpiration() {
   const date = new Date(Date.now() + 30 * 60 * 1000 - 3 * 3600 * 1000);
   return `${date.toISOString().slice(0, 23)}-03:00`;
 }

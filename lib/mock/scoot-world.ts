@@ -1,4 +1,4 @@
-import type { WorldPlace, WorldProduct, WorldVideo } from "@/lib/scoot-world-rules";
+import type { ShippingRate, WorldPlace, WorldProduct, WorldVideo } from "@/lib/scoot-world-rules";
 
 /*
  * DADOS DE EXEMPLO, só para conferir as telas do Mundo Scoot.
@@ -13,6 +13,7 @@ export const exampleWorldProducts: WorldProduct[] = [
     description: "Produto de exemplo para conferir a tela. A equipe cadastra os produtos de verdade no painel.",
     price: 189.9,
     active: true,
+    stock: 12,
   },
   {
     id: "produto-exemplo-camiseta",
@@ -20,6 +21,7 @@ export const exampleWorldProducts: WorldProduct[] = [
     description: "Produto de exemplo para conferir a tela.",
     price: 79,
     active: true,
+    stock: 0,
   },
 ];
 
@@ -50,4 +52,9 @@ export const exampleWorldPlaces: WorldPlace[] = [
     longitude: -47.0505,
     active: true,
   },
+];
+
+export const exampleShippingRates: ShippingRate[] = [
+  { id: "frete-exemplo-campinas", state: "SP", city: "Campinas", price: 15 },
+  { id: "frete-exemplo-sp", state: "SP", city: null, price: 25 },
 ];

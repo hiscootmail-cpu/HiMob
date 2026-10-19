@@ -4,8 +4,9 @@ import { randomUUID } from "node:crypto";
 
 import { revalidatePath } from "next/cache";
 
+import { BR_STATES, WORLD_LIMITS, youtubeId } from "@/lib/scoot-world-rules";
+import { refundStoreOrder } from "@/lib/store-orders";
 import { validatePhone } from "@/lib/validation";
-import { WORLD_LIMITS, youtubeId } from "@/lib/scoot-world-rules";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { photoExtension } from "@/lib/supabase/photos";
@@ -19,11 +20,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export type WorldFormState = {
   done?: boolean;
-  error?: "notAllowed" | "saveFailed" | "name" | "price" | "description" | "photo" | "title" | "youtube" | "address" | "city" | "phone" | "services" | "kind";
+  error?: "notAllowed" | "saveFailed" | "name" | "price" | "description" | "photo" | "title" | "youtube" | "address" | "city" | "phone" | "services" | "kind" | "stock" | "state" | "shippingPrice" | "regionTaken" | "tracking" | "reason" | "refundFailed";
 };
 
 export type WorldTable = "world_products" | "world_videos" | "world_places";
 const TABLES: WorldTable[] = ["world_products", "world_videos", "world_places"];
+type DeletableTable = WorldTable | "world_shipping_rates";
+const DELETABLE: DeletableTable[] = [...TABLES, "world_shipping_rates"];
 
 async function isAdmin() {
   return Boolean((await getCurrentUser())?.is_admin);
@@ -31,6 +34,9 @@ async function isAdmin() {
 
 const text = (formData: FormData, key: string) => String(formData.get(key) ?? "").trim();
 const within = (value: string, { min, max }: { min: number; max: number }) => value.length >= min && value.length <= max;
+/** "189,90" ou "189.90" ou "1.234,50" */
+const money = (value: string) => Number(value.includes(",") ? value.replace(/\./g, "").replace(",", ".") : value);
+const wholeNumber = (value: string) => (/^\d+$/.test(value) ? Number(value) : NaN);
 
 function refresh() {
   revalidatePath("/scoot-world", "layout");
@@ -44,12 +50,14 @@ export async function addWorldProduct(_prev: WorldFormState, formData: FormData)
   if (!(await isAdmin())) return { error: "notAllowed" };
   const name = text(formData, "name");
   const description = text(formData, "description");
-  const price = Number(text(formData, "price").replace(/\./g, "").replace(",", "."));
+  const price = money(text(formData, "price"));
+  const stock = wholeNumber(text(formData, "stock"));
   const photo = formData.get("photo");
   const file = photo instanceof File && photo.size > 0 ? photo : null;
 
   if (!within(name, WORLD_LIMITS.productName)) return { error: "name" };
   if (!Number.isFinite(price) || price <= 0 || price > WORLD_LIMITS.productPrice) return { error: "price" };
+  if (!Number.isInteger(stock) || stock < 0 || stock > WORLD_LIMITS.productStock) return { error: "stock" };
   if (description.length > WORLD_LIMITS.productDescription) return { error: "description" };
   if (file && (!PHOTO_TYPES.includes(file.type) || file.size > PHOTO_MAX)) return { error: "photo" };
   if (!supabaseConfigured()) return { done: true };
@@ -63,7 +71,7 @@ export async function addWorldProduct(_prev: WorldFormState, formData: FormData)
   }
   const { error } = await supabase
     .from("world_products")
-    .insert({ name, description, price: Math.round(price * 100) / 100, photo_path: photoPath });
+    .insert({ name, description, price: Math.round(price * 100) / 100, stock, photo_path: photoPath });
   if (error) {
     if (photoPath) await supabase.storage.from("world-photos").remove([photoPath]);
     return { error: "saveFailed" };
@@ -135,8 +143,8 @@ export async function setWorldItemActive(table: WorldTable, id: string, active: 
 }
 
 /** Apagar de vez (irreversível: a foto do produto também é apagada). */
-export async function deleteWorldItem(table: WorldTable, id: string): Promise<boolean> {
-  if (!TABLES.includes(table) || !(await isAdmin())) return false;
+export async function deleteWorldItem(table: DeletableTable, id: string): Promise<boolean> {
+  if (!DELETABLE.includes(table) || !(await isAdmin())) return false;
   if (!supabaseConfigured()) return true;
   const supabase = await createClient();
   if (table === "world_products") {
@@ -147,4 +155,61 @@ export async function deleteWorldItem(table: WorldTable, id: string): Promise<bo
   if (error) return false;
   refresh();
   return true;
+}
+
+/** Ajustar o estoque de um produto (chegou mais, ou conferência). */
+export async function updateWorldStock(id: string, _prev: WorldFormState, formData: FormData): Promise<WorldFormState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const stock = wholeNumber(text(formData, "stock"));
+  if (!Number.isInteger(stock) || stock < 0 || stock > WORLD_LIMITS.productStock) return { error: "stock" };
+  if (!supabaseConfigured()) return { done: true };
+  const supabase = await createClient();
+  const { error } = await supabase.from("world_products").update({ stock }).eq("id", id);
+  if (error) return { error: "saveFailed" };
+  refresh();
+  return { done: true };
+}
+
+/** Frete fixo por região: estado todo, ou uma cidade do estado. */
+export async function addShippingRate(_prev: WorldFormState, formData: FormData): Promise<WorldFormState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const state = text(formData, "state").toUpperCase();
+  const city = text(formData, "city");
+  const price = money(text(formData, "price"));
+  if (!(BR_STATES as readonly string[]).includes(state)) return { error: "state" };
+  if (city && !within(city, WORLD_LIMITS.placeCity)) return { error: "city" };
+  if (!Number.isFinite(price) || price <= 0 || price > WORLD_LIMITS.shippingPrice) return { error: "shippingPrice" };
+  if (!supabaseConfigured()) return { done: true };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("world_shipping_rates")
+    .insert({ state, city: city || null, price: Math.round(price * 100) / 100 });
+  if (error) return { error: error.code === "23505" ? "regionTaken" : "saveFailed" };
+  refresh();
+  return { done: true };
+}
+
+/** Pedido pago foi despachado: guarda o código de rastreio (a pessoa vê na página do pedido). */
+export async function shipOrder(id: string, _prev: WorldFormState, formData: FormData): Promise<WorldFormState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const tracking = text(formData, "tracking");
+  if (tracking.length < 3 || tracking.length > 60) return { error: "tracking" };
+  if (!supabaseConfigured()) return { done: true };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("ship_world_order", { p_order: id, p_tracking: tracking });
+  if (error) return { error: error.message === "tracking_invalid" ? "tracking" : "notAllowed" };
+  refresh();
+  return { done: true };
+}
+
+/** Cancelar e devolver o dinheiro (irreversível; só pedido pago e ainda não enviado). */
+export async function refundOrder(id: string, _prev: WorldFormState, formData: FormData): Promise<WorldFormState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const reason = text(formData, "reason");
+  if (reason.length < 5 || reason.length > 200) return { error: "reason" };
+  if (!supabaseConfigured()) return { done: true };
+  const result = await refundStoreOrder(id, reason);
+  if (result !== "done") return { error: result };
+  refresh();
+  return { done: true };
 }

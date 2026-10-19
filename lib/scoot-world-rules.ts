@@ -14,6 +14,8 @@ export type WorldProduct = {
   photo?: string;
   photo_path?: string | null;
   active: boolean;
+  /** Unidades à venda (itens limitados, por temporada). 0 = esgotado. */
+  stock: number;
 };
 
 export type WorldVideo = {
@@ -45,6 +47,10 @@ export const WORLD_LIMITS = {
   productName: { min: 2, max: 80 },
   productDescription: 1000,
   productPrice: 100000,
+  productStock: 100000,
+  /** Até 10 unidades de cada produto por pedido. */
+  perItem: 10,
+  shippingPrice: 10000,
   videoTitle: { min: 2, max: 100 },
   placeName: { min: 2, max: 80 },
   placeAddress: { min: 5, max: 200 },
@@ -96,4 +102,103 @@ export function formatPhone(digits: string) {
   const d = digits.replace(/\D/g, "");
   if (d.length < 10) return digits;
   return `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
+}
+
+// -----------------------------------------------------------------------------
+// Compra na loja (decisões de 20/10/2026): qualquer pessoa compra, com ou sem
+// conta, e paga por PIX. Frete com valor fixo por região, cadastrado pela equipe.
+// -----------------------------------------------------------------------------
+
+export const BR_STATES = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA",
+  "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+] as const;
+
+export type ShippingRate = { id: string; state: string; city: string | null; price: number };
+
+export type CartLine = { id: string; quantity: number };
+
+export type OrderStatus = "pending" | "paid" | "shipped" | "canceled" | "refunded";
+
+export type StoreOrder = {
+  id: string;
+  code: string;
+  status: OrderStatus;
+  status_reason: string | null;
+  buyer_name: string;
+  buyer_email: string;
+  buyer_phone: string;
+  buyer_cpf: string;
+  cep: string;
+  street: string;
+  number: string;
+  complement: string;
+  district: string;
+  city: string;
+  state: string;
+  subtotal: number;
+  shipping: number;
+  total: number;
+  tracking_code: string | null;
+  pix_code: string | null;
+  pix_qr_base64: string | null;
+  expires_at: string;
+  created_at: string;
+  items: { name: string; price: number; quantity: number }[];
+};
+
+export type CheckoutField =
+  | "name" | "email" | "phone" | "cpf" | "cep" | "street" | "number" | "complement" | "district" | "city" | "state";
+
+export type BuyerData = Record<CheckoutField, string>;
+
+const digits = (value: string) => value.replace(/\D/g, "");
+
+/** CPF com os dois dígitos verificadores certos. */
+export function validCpf(value: string): boolean {
+  const cpf = digits(value);
+  if (!/^\d{11}$/.test(cpf) || /^(\d)\1{10}$/.test(cpf)) return false;
+  const check = (length: number) => {
+    let sum = 0;
+    for (let i = 0; i < length; i++) sum += Number(cpf[i]) * (length + 1 - i);
+    const rest = (sum * 10) % 11;
+    return rest === 10 ? 0 : rest;
+  };
+  return check(9) === Number(cpf[9]) && check(10) === Number(cpf[10]);
+}
+
+/** Confere os dados de quem compra; devolve os campos com problema. */
+export function checkBuyer(data: BuyerData): CheckoutField[] {
+  const bad: CheckoutField[] = [];
+  const len = (v: string, min: number, max: number) => v.trim().length >= min && v.trim().length <= max;
+  if (!len(data.name, 3, 120) || !data.name.trim().includes(" ")) bad.push("name");
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email.trim()) || data.email.length > 200) bad.push("email");
+  if (!/^\d{10,11}$/.test(digits(data.phone))) bad.push("phone");
+  if (!validCpf(data.cpf)) bad.push("cpf");
+  if (!/^\d{8}$/.test(digits(data.cep))) bad.push("cep");
+  if (!len(data.street, 2, 150)) bad.push("street");
+  if (!len(data.number, 1, 20)) bad.push("number");
+  if (data.complement.length > 80) bad.push("complement");
+  if (!len(data.district, 2, 80)) bad.push("district");
+  if (!len(data.city, 2, 80)) bad.push("city");
+  if (!(BR_STATES as readonly string[]).includes(data.state)) bad.push("state");
+  return bad;
+}
+
+/** Dados como o banco guarda (só números em telefone, CPF e CEP). */
+export function cleanBuyer(data: BuyerData): BuyerData {
+  return {
+    ...data,
+    name: data.name.trim(),
+    email: data.email.trim().toLowerCase(),
+    phone: digits(data.phone),
+    cpf: digits(data.cpf),
+    cep: digits(data.cep),
+  };
+}
+
+/** 13010-000 */
+export function formatCep(value: string) {
+  const d = digits(value);
+  return d.length === 8 ? `${d.slice(0, 5)}-${d.slice(5)}` : value;
 }

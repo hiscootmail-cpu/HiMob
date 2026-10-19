@@ -110,7 +110,7 @@ const listingsFilter = (value: string | undefined) => (value && /^[\w-]+$/.test(
 /** Reservas recebidas (Host): pedidos novos, em andamento, anteriores e calendário. */
 export default async function HostReservationsPage({ searchParams }: PageProps<"/host/reservations">) {
   // Com a Supabase, só quem entrou na conta (na demonstração, a tela abre direto).
-  if (supabaseConfigured()) await requireUser();
+  if (supabaseConfigured()) await requireUser({ mercadoPago: true });
   const t = await getTranslations("host.reservations");
   const params = await searchParams;
   const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : undefined);
