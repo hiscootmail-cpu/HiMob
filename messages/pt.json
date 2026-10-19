@@ -399,7 +399,8 @@
       "pickupInPast": "A retirada não pode ser antes de hoje.",
       "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
       "unavailable": "Este equipamento não está disponível para reserva.",
-      "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas."
+      "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas.",
+      "identityRequired": "Sua identidade ainda está em verificação. A reserva fica liberada assim que a equipe aprovar."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
@@ -409,7 +410,8 @@
     "dateRange": "{start} a {end}",
     "takenDays": "Dias indisponíveis: {days}",
     "photoAlt": "Foto {number} de {title}",
-    "morePhotos": "Mais fotos"
+    "morePhotos": "Mais fotos",
+    "verifyToBook": "Seu documento está em análise. Você pode ver os equipamentos e conversar com o Host; a reserva fica liberada assim que a equipe aprovar. <link>Ver verificação</link>"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -637,7 +639,10 @@
       "becomeStep1": "1. Cadastre o equipamento com fotos, preço por dia e horários.",
       "becomeStep2": "2. A equipe Hi Scoot confere e publica o anúncio.",
       "becomeStep3": "3. Você aceita os pedidos e recebe pelo Mercado Pago.",
-      "becomeButton": "Quero ser Host"
+      "becomeButton": "Quero ser Host",
+      "verifyTitle": "Falta verificar sua identidade",
+      "verifyText": "Para anunciar, a equipe Hi Scoot precisa aprovar o seu documento. Enquanto isso, você pode explorar os equipamentos.",
+      "verifyButton": "Ver verificação de identidade"
     },
     "edit": {
       "title": "Editar anúncio",

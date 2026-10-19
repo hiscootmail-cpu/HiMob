@@ -17,7 +17,7 @@ import { createClient } from "@/lib/supabase/server";
  */
 
 export type BookingRequestState = {
-  error?: BookingDatesError | "unavailable" | "datesUnavailable";
+  error?: BookingDatesError | "unavailable" | "datesUnavailable" | "identityRequired";
   done?: boolean;
 };
 
@@ -51,6 +51,7 @@ export async function requestBooking(
         dates_unavailable: "datesUnavailable",
         pickup_in_past: "pickupInPast",
         return_before_pickup: "returnBeforePickup",
+        identity_required: "identityRequired",
       } as const;
       return { error: known[error.message as keyof typeof known] ?? "unavailable" };
     }

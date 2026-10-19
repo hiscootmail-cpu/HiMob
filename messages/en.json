@@ -399,7 +399,8 @@
       "pickupInPast": "Pick-up cannot be before today.",
       "returnBeforePickup": "Return must be at least 1 day after pick-up.",
       "unavailable": "This equipment is not available for booking.",
-      "datesUnavailable": "Some day in this period isn't free. Choose other dates."
+      "datesUnavailable": "Some day in this period isn't free. Choose other dates.",
+      "identityRequired": "Your identity is still being verified. Booking unlocks as soon as the team approves."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
@@ -409,7 +410,8 @@
     "dateRange": "{start} to {end}",
     "takenDays": "Unavailable days: {days}",
     "photoAlt": "Photo {number} of {title}",
-    "morePhotos": "More photos"
+    "morePhotos": "More photos",
+    "verifyToBook": "Your ID is under review. You can browse equipment and talk to the Host; booking unlocks as soon as the team approves. <link>See verification</link>"
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -637,7 +639,10 @@
       "becomeStep1": "1. Add your equipment with photos, daily price and times.",
       "becomeStep2": "2. The Hi Scoot team checks and publishes your listing.",
       "becomeStep3": "3. You accept requests and get paid through Mercado Pago.",
-      "becomeButton": "Become a Host"
+      "becomeButton": "Become a Host",
+      "verifyTitle": "Your identity still needs to be verified",
+      "verifyText": "To list equipment, the Hi Scoot team needs to approve your ID. Meanwhile, you can explore the equipment.",
+      "verifyButton": "See identity verification"
     },
     "edit": {
       "title": "Edit listing",

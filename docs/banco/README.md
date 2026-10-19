@@ -27,3 +27,4 @@ Aviso de disponível e confirmação dupla: `docs/banco/testes-aviso-disponivel.
 Telefone no cadastro: `docs/banco/testes-telefone.sql`, também depois de todas as migrações.
 Mercado Pago: `docs/banco/testes-mercado-pago.sql`, também depois de todas as migrações.
 Excluir conta: `docs/banco/testes-excluir-conta.sql`, também depois de todas as migrações.
+Verificação para alugar e anunciar: `docs/banco/testes-verificacao.sql`, também depois de todas as migrações.
