@@ -80,9 +80,10 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
 /**
  * Telas só para quem está conectado: sem sessão, vai para a tela de entrada.
- * Conta Mercado Pago só para quem recebe (decisão de 20/10/2026): as telas do
- * Host pedem { mercadoPago: true } e, com o Mercado Pago ligado, levam para a
- * conexão. Quem só paga (Rider, comprador) usa PIX ou cartão de qualquer banco.
+ * Conta Mercado Pago só para quem recebe (decisão de 20/10/2026): cadastrar
+ * equipamento e responder pedidos de reserva pedem { mercadoPago: true } e, com
+ * o Mercado Pago ligado, levam para a conexão. Quem só paga (Rider, comprador)
+ * usa PIX ou cartão de qualquer banco, sem conta no Mercado Pago.
  * A equipe Hi Scoot fica de fora (a conta dela é a da própria plataforma).
  */
 export async function requireUser(options: { mercadoPago?: boolean } = {}): Promise<CurrentUser> {

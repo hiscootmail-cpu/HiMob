@@ -111,7 +111,7 @@ async function ListingCard({ listing, today }: { listing: HostListing; today: st
 /** Meus anúncios (Host). */
 export default async function HostListingsPage({ searchParams }: PageProps<"/host/equipment">) {
   // Com a Supabase, só quem entrou na conta (na demonstração, a tela abre direto).
-  if (supabaseConfigured()) await requireUser({ mercadoPago: true });
+  if (supabaseConfigured()) await requireUser();
   const t = await getTranslations("host.listings");
   const { sent, preview } = await searchParams;
   // Só na demonstração: ?preview=empty mostra a tela sem anúncios.

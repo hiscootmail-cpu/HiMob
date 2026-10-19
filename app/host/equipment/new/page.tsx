@@ -24,10 +24,13 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
   let notHost = preview === "new-host";
   let needsVerification = false;
   if (supabaseConfigured()) {
-    const user = await requireUser({ mercadoPago: true });
+    const user = await requireUser();
     notHost = !user.is_host;
     // Só anuncia depois da verificação de identidade (decisão de 19/10/2026).
     needsVerification = user.identity !== "approved";
+    // Conta Mercado Pago só na hora de cadastrar o equipamento (decisão de 20/10/2026):
+    // é nela que cai o pagamento das reservas.
+    if (!notHost && !needsVerification) await requireUser({ mercadoPago: true });
   }
 
   if (needsVerification) {
