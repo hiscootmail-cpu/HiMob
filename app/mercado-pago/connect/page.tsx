@@ -16,13 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Conectar a conta Mercado Pago (decisão de 19/10/2026): todo cadastro, Host
- * ou Rider, conecta antes de usar a plataforma. O Host recebe o repasse
- * direto na conta dele; do Rider, a Hi Scoot não mexe no dinheiro.
+ * Conectar a conta Mercado Pago: só o Host, que recebe o pagamento das reservas
+ * direto na conta dele (decisão de 20/10/2026). Quem só paga não precisa.
  */
 export default async function MercadoPagoConnectPage({ searchParams }: PageProps<"/mercado-pago/connect">) {
   if (!supabaseConfigured()) redirect("/dashboard");
-  await requireUser({ mercadoPago: false });
+  await requireUser();
   if (await mercadoPagoConnected()) redirect("/dashboard");
   const t = await getTranslations("mercadoPago.connect");
   const { error } = await searchParams;

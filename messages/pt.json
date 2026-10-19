@@ -1170,9 +1170,9 @@
   "mercadoPago": {
     "connect": {
       "title": "Conecte sua conta Mercado Pago",
-      "description": "Para usar a Hi Scoot, conecte a sua conta Mercado Pago. É rápido e só precisa ser feito uma vez.",
+      "description": "Para anunciar e receber o pagamento das reservas, conecte a sua conta Mercado Pago. É rápido e só precisa ser feito uma vez.",
       "reasons": {
-        "receive": "Se você anunciar, o pagamento das reservas cai direto na sua conta Mercado Pago.",
+        "receive": "O pagamento das suas reservas cai direto na sua conta Mercado Pago.",
         "safe": "A Hi Scoot não vê sua senha e não mexe no seu saldo.",
         "once": "Você autoriza uma vez só, no próprio site do Mercado Pago."
       },
@@ -1193,14 +1193,25 @@
       "home": "Início",
       "store": "Loja interna",
       "tv": "HiTV",
-      "places": "Lojas e oficinas"
+      "places": "Lojas e oficinas",
+      "cart": "Carrinho",
+      "cartCount": "Carrinho, {count, plural, one {# item} other {# itens}}"
     },
     "store": {
       "title": "Loja interna",
       "subtitle": "Produtos oficiais da Hi Scoot.",
       "empty": "Os produtos chegam em breve.",
       "back": "Voltar para a loja",
-      "soon": "A compra pelo site chega em breve."
+      "soldOut": "Esgotado",
+      "inStock": "{count, plural, one {# unidade disponível} other {# unidades disponíveis}}",
+      "quantity": "Quantidade",
+      "less": "Menos um",
+      "more": "Mais um",
+      "addToCart": "Pôr no carrinho",
+      "maxInCart": "Você já pôs no carrinho o máximo disponível.",
+      "inCart": "{count, plural, one {# no carrinho.} other {# no carrinho.}}",
+      "seeCart": "Ver carrinho",
+      "pixOnly": "Pagamento por PIX. Entrega com frete para o seu endereço."
     },
     "tv": {
       "title": "HiTV",
@@ -1221,6 +1232,103 @@
         "partner": "Loja parceira",
         "workshop": "Oficina credenciada"
       }
+    },
+    "cart": {
+      "title": "Carrinho",
+      "subtitle": "Confira os itens, preencha a entrega e pague por PIX. Não precisa ter conta.",
+      "empty": "Seu carrinho está vazio.",
+      "goToStore": "Ir para a loja",
+      "itemsTitle": "Itens",
+      "remove": "Tirar {name} do carrinho",
+      "quantityOf": "Quantidade de {name}",
+      "less": "Menos um",
+      "more": "Mais um",
+      "onlyLeft": "{count, plural, one {Só resta # unidade. Diminua a quantidade.} other {Só restam # unidades. Diminua a quantidade.}}",
+      "nowSoldOut": "Esgotou. Tire este item do carrinho.",
+      "buyerTitle": "Seus dados",
+      "addressTitle": "Endereço de entrega",
+      "fields": {
+        "name": "Nome completo",
+        "email": "E-mail",
+        "phone": "Celular com DDD",
+        "cpf": "CPF",
+        "cep": "CEP",
+        "street": "Rua",
+        "number": "Número",
+        "complement": "Complemento (opcional)",
+        "district": "Bairro",
+        "city": "Cidade",
+        "state": "Estado"
+      },
+      "hints": {
+        "email": "Para falar com você sobre o pedido.",
+        "cpf": "Pedido pelo PIX e pela nota fiscal."
+      },
+      "statePick": "UF",
+      "summaryTitle": "Resumo",
+      "subtotal": "Produtos",
+      "shipping": "Frete",
+      "shippingPending": "Preencha cidade e estado",
+      "total": "Total",
+      "notReady": "A compra pelo site está quase pronta. Volte em breve.",
+      "paying": "Gerando o PIX...",
+      "payPix": "Pagar com PIX",
+      "pixNote": "O código PIX vale 30 minutos. Os itens ficam separados para você nesse tempo.",
+      "errors": {
+        "name": "Escreva nome e sobrenome.",
+        "email": "Confira o e-mail.",
+        "phone": "Escreva o celular com DDD (10 ou 11 números).",
+        "cpf": "Confira o CPF.",
+        "cep": "O CEP tem 8 números.",
+        "street": "Escreva a rua.",
+        "number": "Escreva o número (ou S/N).",
+        "complement": "O complemento pode ter até 80 letras.",
+        "district": "Escreva o bairro.",
+        "city": "Escreva a cidade.",
+        "state": "Escolha o estado.",
+        "fix": "Confira os campos marcados.",
+        "unavailable": "A compra pelo site ainda não está disponível. Tente mais tarde.",
+        "empty": "Seu carrinho está vazio.",
+        "outOfStock": "Um item acabou de esgotar ou tem menos unidades. Confira o carrinho.",
+        "noShipping": "Ainda não entregamos nessa região.",
+        "invalid": "Não deu para fechar o pedido. Confira os dados e tente de novo.",
+        "paymentFailed": "Não deu para gerar o PIX. Tente de novo em instantes."
+      }
+    },
+    "order": {
+      "title": "Pedido",
+      "heading": "Pedido {code}",
+      "status": {
+        "pending": "Esperando o PIX",
+        "paid": "Pago",
+        "shipped": "Enviado",
+        "canceled": "Cancelado",
+        "refunded": "Devolvido"
+      },
+      "statusText": {
+        "pending": "Pague o PIX abaixo para confirmar o pedido.",
+        "paid": "Recebemos o pagamento. Agora a equipe Hi Scoot prepara o envio.",
+        "shipped": "Seu pedido saiu para entrega.",
+        "canceled": "O PIX venceu sem pagamento e o pedido foi cancelado.",
+        "refunded": "O pedido foi cancelado e o dinheiro devolvido pelo Mercado Pago."
+      },
+      "pixTitle": "Pague com PIX",
+      "pixText": "Abra o app do seu banco, escolha PIX e leia o QR Code ou cole o código.",
+      "qrAlt": "QR Code do PIX",
+      "pixCodeLabel": "PIX copia e cola",
+      "pixCopy": "Copiar código",
+      "pixCopied": "Código copiado",
+      "pixWaiting": "Esperando o pagamento...",
+      "pixExpires": "O código vale 30 minutos.",
+      "paidNote": "Pagamento confirmado.",
+      "tracking": "Código de rastreio:",
+      "reason": "Motivo: {reason}",
+      "saveLink": "Guarde o link desta página: é por ele que você acompanha o pedido.",
+      "itemsTitle": "Itens",
+      "subtotal": "Produtos",
+      "shipping": "Frete",
+      "total": "Total",
+      "addressTitle": "Entrega"
     }
   },
   "adminWorld": {
@@ -1256,7 +1364,14 @@
       "city": "Escreva a cidade.",
       "phone": "Escreva o telefone com DDD, só números (10 ou 11).",
       "services": "Os serviços podem ter até 300 letras.",
-      "kind": "Escolha loja parceira ou oficina."
+      "kind": "Escolha loja parceira ou oficina.",
+      "stock": "Escreva o estoque em número inteiro (0 ou mais).",
+      "state": "Escolha o estado.",
+      "shippingPrice": "Escreva um valor maior que zero. Exemplo: 15,00",
+      "regionTaken": "Essa região já tem frete. Apague a antiga para trocar o valor.",
+      "tracking": "Escreva o código de rastreio (3 a 60 letras).",
+      "reason": "Escreva o motivo (5 a 200 letras).",
+      "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo."
     },
     "store": {
       "addTitle": "Novo produto",
@@ -1266,7 +1381,12 @@
       "description": "Descrição (opcional)",
       "photo": "Foto (opcional)",
       "photoHint": "JPG, PNG ou WEBP, até 10 MB.",
-      "add": "Salvar produto"
+      "add": "Salvar produto",
+      "stock": "Estoque (unidades)",
+      "stockHint": "Quantas unidades tem para vender.",
+      "stockSave": "Salvar estoque",
+      "stockShown": "{count, plural, one {# em estoque} other {# em estoque}}",
+      "soldOut": "Esgotado"
     },
     "tv": {
       "addTitle": "Novo vídeo da HiTV",
@@ -1297,6 +1417,39 @@
       "mapLabel": "Mapa para marcar o local",
       "noLocation": "Sem local no mapa",
       "add": "Salvar"
+    },
+    "tabs": {
+      "orders": "Pedidos",
+      "store": "Produtos",
+      "shipping": "Frete",
+      "tv": "HiTV",
+      "places": "Lojas e oficinas"
+    },
+    "shipping": {
+      "addTitle": "Novo frete por região",
+      "help": "Valor fixo. Com cidade, vale só para ela; sem cidade, vale para o estado todo. A cidade tem prioridade.",
+      "state": "Estado",
+      "statePick": "UF",
+      "city": "Cidade (opcional)",
+      "cityHint": "Vazio: estado todo.",
+      "price": "Valor (R$)",
+      "add": "Salvar frete",
+      "wholeState": "{state} (estado todo)"
+    },
+    "orders": {
+      "totals": "Frete {shipping} · Total {total}",
+      "trackingShown": "Rastreio: {code}",
+      "tracking": "Código de rastreio",
+      "ship": "Marcar como enviado",
+      "refund": "Cancelar e devolver",
+      "refundTitle": "Cancelar o pedido {code} e devolver o dinheiro?",
+      "refundText": "O valor total volta para quem comprou pelo Mercado Pago e os itens voltam ao estoque. Isso não pode ser desfeito.",
+      "reason": "Motivo",
+      "reasonHint": "A pessoa vê este motivo na página do pedido.",
+      "refundConfirm": "Cancelar e devolver",
+      "refunded": "Pedido cancelado e dinheiro devolvido.",
+      "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo.",
+      "refundError": "Não deu para cancelar. Confira o motivo e tente de novo."
     }
   }
 }

@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), description: t("subtitle") };
 }
 
-/** Loja interna: por enquanto só vitrine (a compra pelo site ainda vai ser decidida). */
+/** Loja interna: produtos limitados, por temporada. Sem estoque, "Esgotado". */
 export default async function WorldStorePage() {
   const t = await getTranslations("scootWorld.store");
   const format = await getFormatter();
@@ -31,7 +31,12 @@ export default async function WorldStorePage() {
                 href={`/scoot-world/store/${product.id}`}
                 className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-hs-white outline-none hover:shadow-md focus-visible:ring-4 focus-visible:ring-hs-blue/40"
               >
-                <ProductPhoto src={product.photo} className="aspect-square w-full" />
+                <span className="relative block">
+                  <ProductPhoto src={product.photo} className="aspect-square w-full" />
+                  {product.stock <= 0 ? (
+                    <span className="absolute top-2 left-2 rounded-full bg-hs-black px-2.5 py-0.5 text-xs font-semibold text-hs-white">{t("soldOut")}</span>
+                  ) : null}
+                </span>
                 <span className="flex flex-1 flex-col gap-1 p-3">
                   <span className="line-clamp-2 text-sm font-semibold text-hs-black group-hover:underline">{product.name}</span>
                   <span className="text-base font-bold text-hs-black">{format.number(product.price, { style: "currency", currency: "BRL" })}</span>

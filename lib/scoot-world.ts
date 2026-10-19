@@ -1,7 +1,7 @@
 import "server-only";
 
-import { exampleWorldPlaces, exampleWorldProducts, exampleWorldVideos } from "@/lib/mock/scoot-world";
-import type { WorldPlace, WorldProduct, WorldVideo } from "@/lib/scoot-world-rules";
+import { exampleShippingRates, exampleWorldPlaces, exampleWorldProducts, exampleWorldVideos } from "@/lib/mock/scoot-world";
+import type { ShippingRate, StoreOrder, WorldPlace, WorldProduct, WorldVideo } from "@/lib/scoot-world-rules";
 import { SUPABASE_URL, supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
@@ -30,7 +30,7 @@ export async function listWorldProducts(): Promise<WorldProduct[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("world_products")
-    .select("id, name, description, price, photo_path, active")
+    .select("id, name, description, price, photo_path, active, stock")
     .order("created_at", { ascending: false });
   return (data ?? []).map(toProduct);
 }
@@ -41,7 +41,7 @@ export async function getWorldProduct(id: string): Promise<WorldProduct | null> 
   const supabase = await createClient();
   const { data } = await supabase
     .from("world_products")
-    .select("id, name, description, price, photo_path, active")
+    .select("id, name, description, price, photo_path, active, stock")
     .eq("id", id)
     .maybeSingle();
   return data ? toProduct(data) : null;
@@ -66,4 +66,40 @@ export async function listWorldPlaces(): Promise<WorldPlace[]> {
     .order("city")
     .order("name");
   return data ?? [];
+}
+
+/** Frete por região (a mesma tabela que o painel da equipe mostra). */
+export async function listShippingRates(): Promise<ShippingRate[]> {
+  if (!supabaseConfigured()) return exampleShippingRates;
+  const supabase = await createClient();
+  const { data } = await supabase.from("world_shipping_rates").select("id, state, city, price").order("state").order("city", { nullsFirst: true });
+  return (data ?? []).map((r) => ({ ...r, price: Number(r.price) }));
+}
+
+export const ORDER_COLUMNS =
+  "id, code, status, status_reason, buyer_name, buyer_email, buyer_phone, buyer_cpf, cep, street, number, complement, district, city, state, subtotal, shipping, total, tracking_code, pix_code, pix_qr_base64, expires_at, created_at, world_order_items(name, price, quantity)";
+
+type OrderRow = Omit<StoreOrder, "items" | "subtotal" | "shipping" | "total"> & {
+  subtotal: number | string;
+  shipping: number | string;
+  total: number | string;
+  world_order_items: { name: string; price: number | string; quantity: number }[] | null;
+};
+
+export function toOrder({ world_order_items, ...row }: OrderRow): StoreOrder {
+  return {
+    ...row,
+    subtotal: Number(row.subtotal),
+    shipping: Number(row.shipping),
+    total: Number(row.total),
+    items: (world_order_items ?? []).map((i) => ({ ...i, price: Number(i.price) })),
+  };
+}
+
+/** Pedidos para a equipe (o banco só entrega para quem é da equipe), mais novos primeiro. */
+export async function listStoreOrders(): Promise<StoreOrder[]> {
+  if (!supabaseConfigured()) return [];
+  const supabase = await createClient();
+  const { data } = await supabase.from("world_orders").select(ORDER_COLUMNS).order("created_at", { ascending: false }).limit(200);
+  return ((data ?? []) as unknown as OrderRow[]).map(toOrder);
 }

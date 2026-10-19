@@ -49,7 +49,9 @@ select pg_temp.fails($$update public.app_settings set value = 'off'$$, '42501', 
 reset role;
 update public.app_settings set value = 'on' where key = 'mercado_pago';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6)$$, 'mp_not_connected', 'ligado: sem conta conectada não pede reserva');
+-- Quem só paga não precisa de conta Mercado Pago (PIX ou cartão de qualquer banco; decisão de 20/10/2026)
+insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6);
+select pg_temp.ok((select count(*) from ids where name = 'b1') = 1, 'ligado: Rider sem conta Mercado Pago pede reserva');
 select pg_temp.fails($$select * from public.mp_accounts$$, '42501', 'ninguém lê as chaves das contas Mercado Pago');
 select pg_temp.fails($$insert into public.mp_accounts (user_id, mp_user_id, access_token, refresh_token, expires_at) values (auth.uid(), '1', 'x', 'y', now())$$, '42501', 'ninguém grava conta Mercado Pago direto');
 
@@ -59,7 +61,6 @@ insert into public.mp_accounts (user_id, mp_user_id, access_token, refresh_token
   ('00000000-0000-0000-0000-00000000000b', '2001', 'TEST-rider', 'R-rider', now() + interval '180 days');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.ok(public.mp_connected(), 'Rider aparece como conectado');
-insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select pg_temp.ok(not public.mp_connected(), 'Host ainda não conectado');
 select pg_temp.fails($$select public.decide_booking((select id from ids where name = 'b1'), true)$$, 'mp_not_connected', 'Host sem conta conectada não aceita pedido');

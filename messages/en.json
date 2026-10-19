@@ -1170,9 +1170,9 @@
   "mercadoPago": {
     "connect": {
       "title": "Connect your Mercado Pago account",
-      "description": "To use Hi Scoot, connect your Mercado Pago account. It is quick and you only do it once.",
+      "description": "To list equipment and get paid for bookings, connect your Mercado Pago account. It is quick and only needs to be done once.",
       "reasons": {
-        "receive": "If you list equipment, booking payments go straight to your Mercado Pago account.",
+        "receive": "Payment for your bookings goes straight to your Mercado Pago account.",
         "safe": "Hi Scoot never sees your password and never touches your balance.",
         "once": "You authorize it only once, on the Mercado Pago website."
       },
@@ -1193,14 +1193,25 @@
       "home": "Home",
       "store": "Store",
       "tv": "HiTV",
-      "places": "Shops and workshops"
+      "places": "Shops and workshops",
+      "cart": "Cart",
+      "cartCount": "Cart, {count, plural, one {# item} other {# items}}"
     },
     "store": {
       "title": "Store",
       "subtitle": "Official Hi Scoot products.",
       "empty": "Products are coming soon.",
       "back": "Back to the store",
-      "soon": "Buying on the site is coming soon."
+      "soldOut": "Sold out",
+      "inStock": "{count, plural, one {# unit available} other {# units available}}",
+      "quantity": "Quantity",
+      "less": "One less",
+      "more": "One more",
+      "addToCart": "Add to cart",
+      "maxInCart": "You already have the most available in your cart.",
+      "inCart": "{count} in your cart.",
+      "seeCart": "See cart",
+      "pixOnly": "Payment by PIX. Delivered by shipping to your address."
     },
     "tv": {
       "title": "HiTV",
@@ -1221,6 +1232,103 @@
         "partner": "Partner shop",
         "workshop": "Accredited workshop"
       }
+    },
+    "cart": {
+      "title": "Cart",
+      "subtitle": "Check your items, fill in the delivery details and pay by PIX. No account needed.",
+      "empty": "Your cart is empty.",
+      "goToStore": "Go to the store",
+      "itemsTitle": "Items",
+      "remove": "Remove {name} from the cart",
+      "quantityOf": "Quantity of {name}",
+      "less": "One less",
+      "more": "One more",
+      "onlyLeft": "{count, plural, one {Only # unit left. Lower the quantity.} other {Only # units left. Lower the quantity.}}",
+      "nowSoldOut": "Sold out. Remove this item from the cart.",
+      "buyerTitle": "Your details",
+      "addressTitle": "Delivery address",
+      "fields": {
+        "name": "Full name",
+        "email": "Email",
+        "phone": "Mobile with area code",
+        "cpf": "CPF",
+        "cep": "CEP (postcode)",
+        "street": "Street",
+        "number": "Number",
+        "complement": "Apartment, suite (optional)",
+        "district": "Neighbourhood",
+        "city": "City",
+        "state": "State"
+      },
+      "hints": {
+        "email": "So we can contact you about the order.",
+        "cpf": "Required by PIX and for the invoice."
+      },
+      "statePick": "State",
+      "summaryTitle": "Summary",
+      "subtotal": "Products",
+      "shipping": "Shipping",
+      "shippingPending": "Fill in city and state",
+      "total": "Total",
+      "notReady": "Buying on the site is almost ready. Come back soon.",
+      "paying": "Creating the PIX...",
+      "payPix": "Pay with PIX",
+      "pixNote": "The PIX code is valid for 30 minutes. Your items are held for you during that time.",
+      "errors": {
+        "name": "Write your first and last name.",
+        "email": "Check the email.",
+        "phone": "Write the mobile number with area code (10 or 11 digits).",
+        "cpf": "Check the CPF.",
+        "cep": "The CEP has 8 digits.",
+        "street": "Write the street.",
+        "number": "Write the number (or S/N).",
+        "complement": "This field can have up to 80 characters.",
+        "district": "Write the neighbourhood.",
+        "city": "Write the city.",
+        "state": "Choose the state.",
+        "fix": "Check the highlighted fields.",
+        "unavailable": "Buying on the site is not available yet. Try again later.",
+        "empty": "Your cart is empty.",
+        "outOfStock": "An item just sold out or has fewer units. Check your cart.",
+        "noShipping": "We do not deliver to this region yet.",
+        "invalid": "Could not place the order. Check your details and try again.",
+        "paymentFailed": "Could not create the PIX. Try again in a moment."
+      }
+    },
+    "order": {
+      "title": "Order",
+      "heading": "Order {code}",
+      "status": {
+        "pending": "Waiting for PIX",
+        "paid": "Paid",
+        "shipped": "Shipped",
+        "canceled": "Cancelled",
+        "refunded": "Refunded"
+      },
+      "statusText": {
+        "pending": "Pay the PIX below to confirm your order.",
+        "paid": "We received your payment. The Hi Scoot team is now preparing the shipment.",
+        "shipped": "Your order is on its way.",
+        "canceled": "The PIX expired without payment and the order was cancelled.",
+        "refunded": "The order was cancelled and the money returned through Mercado Pago."
+      },
+      "pixTitle": "Pay with PIX",
+      "pixText": "Open your bank app, choose PIX and scan the QR code or paste the code.",
+      "qrAlt": "PIX QR code",
+      "pixCodeLabel": "PIX copy and paste",
+      "pixCopy": "Copy code",
+      "pixCopied": "Code copied",
+      "pixWaiting": "Waiting for payment...",
+      "pixExpires": "The code is valid for 30 minutes.",
+      "paidNote": "Payment confirmed.",
+      "tracking": "Tracking code:",
+      "reason": "Reason: {reason}",
+      "saveLink": "Save the link to this page: you follow your order through it.",
+      "itemsTitle": "Items",
+      "subtotal": "Products",
+      "shipping": "Shipping",
+      "total": "Total",
+      "addressTitle": "Delivery"
     }
   },
   "adminWorld": {
@@ -1256,7 +1364,14 @@
       "city": "Write the city.",
       "phone": "Write the phone number with area code, digits only (10 or 11).",
       "services": "Services can have up to 300 characters.",
-      "kind": "Choose partner shop or workshop."
+      "kind": "Choose partner shop or workshop.",
+      "stock": "Write the stock as a whole number (0 or more).",
+      "state": "Choose the state.",
+      "shippingPrice": "Write an amount above zero. Example: 15.00",
+      "regionTaken": "This region already has a rate. Delete the old one to change it.",
+      "tracking": "Write the tracking code (3 to 60 characters).",
+      "reason": "Write the reason (5 to 200 characters).",
+      "refundFailed": "Mercado Pago did not return the money. Try again."
     },
     "store": {
       "addTitle": "New product",
@@ -1266,7 +1381,12 @@
       "description": "Description (optional)",
       "photo": "Photo (optional)",
       "photoHint": "JPG, PNG or WEBP, up to 10 MB.",
-      "add": "Save product"
+      "add": "Save product",
+      "stock": "Stock (units)",
+      "stockHint": "How many units there are to sell.",
+      "stockSave": "Save stock",
+      "stockShown": "{count} in stock",
+      "soldOut": "Sold out"
     },
     "tv": {
       "addTitle": "New HiTV video",
@@ -1297,6 +1417,39 @@
       "mapLabel": "Map to mark the place",
       "noLocation": "No place on the map",
       "add": "Save"
+    },
+    "tabs": {
+      "orders": "Orders",
+      "store": "Products",
+      "shipping": "Shipping",
+      "tv": "HiTV",
+      "places": "Shops and workshops"
+    },
+    "shipping": {
+      "addTitle": "New shipping rate",
+      "help": "Fixed amount. With a city, it applies only there; without one, it applies to the whole state. The city comes first.",
+      "state": "State",
+      "statePick": "State",
+      "city": "City (optional)",
+      "cityHint": "Empty: whole state.",
+      "price": "Amount (R$)",
+      "add": "Save rate",
+      "wholeState": "{state} (whole state)"
+    },
+    "orders": {
+      "totals": "Shipping {shipping} · Total {total}",
+      "trackingShown": "Tracking: {code}",
+      "tracking": "Tracking code",
+      "ship": "Mark as shipped",
+      "refund": "Cancel and refund",
+      "refundTitle": "Cancel order {code} and refund the money?",
+      "refundText": "The full amount goes back to the buyer through Mercado Pago and the items go back into stock. This cannot be undone.",
+      "reason": "Reason",
+      "reasonHint": "The buyer sees this reason on the order page.",
+      "refundConfirm": "Cancel and refund",
+      "refunded": "Order cancelled and money refunded.",
+      "refundFailed": "Mercado Pago did not return the money. Try again.",
+      "refundError": "Could not cancel. Check the reason and try again."
     }
   }
 }

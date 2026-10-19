@@ -24,7 +24,7 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
   let notHost = preview === "new-host";
   let needsVerification = false;
   if (supabaseConfigured()) {
-    const user = await requireUser();
+    const user = await requireUser({ mercadoPago: true });
     notHost = !user.is_host;
     // Só anuncia depois da verificação de identidade (decisão de 19/10/2026).
     needsVerification = user.identity !== "approved";

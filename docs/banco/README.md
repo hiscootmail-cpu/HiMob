@@ -29,3 +29,4 @@ Mercado Pago: `docs/banco/testes-mercado-pago.sql`, também depois de todas as m
 Excluir conta: `docs/banco/testes-excluir-conta.sql`, também depois de todas as migrações.
 Verificação para alugar e anunciar: `docs/banco/testes-verificacao.sql`, também depois de todas as migrações.
 Mundo Scoot (loja, HiTV, lojas parceiras e oficinas): `docs/banco/testes-mundo-scoot.sql`, também depois de todas as migrações.
+Compra na loja (estoque, frete, PIX, envio e devolução): `docs/banco/testes-loja.sql`, também depois de todas as migrações.
