@@ -936,7 +936,8 @@
       "phoneTitle": "Complete seu telefone",
       "phoneText": "O telefone agora é obrigatório. Ele só aparece para a outra pessoa depois de uma reserva aceita."
     },
-    "mpConnected": "Conta Mercado Pago conectada."
+    "mpConnected": "Conta Mercado Pago conectada.",
+    "welcome": "Conta criada! Enquanto a equipe confere seu documento, você já pode explorar os equipamentos."
   },
   "conversations": {
     "title": "Conversas",

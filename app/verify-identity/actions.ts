@@ -77,3 +77,12 @@ export async function submitSocialNameLetter(_prev: LetterState, formData: FormD
 
   return { done: true };
 }
+
+/** Documento enviado no cadastro, com a conta já ativa (o navegador já mandou os arquivos). */
+export async function registerSignupDocuments(frontPath: string, backPath: string): Promise<boolean> {
+  if (!supabaseConfigured()) return false;
+  const formData = new FormData();
+  formData.set("front_path", frontPath);
+  formData.set("back_path", backPath);
+  return saveSubmission("document", formData);
+}
