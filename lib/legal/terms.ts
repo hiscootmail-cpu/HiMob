@@ -32,7 +32,7 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "3. Cadastro e verificação de identidade",
         paragraphs: [
-          "Para usar a plataforma, você precisa ter pelo menos [idade mínima a definir] anos e informar dados verdadeiros e atualizados: nome completo, e-mail, telefone com DDD e um documento oficial com foto (frente e verso).",
+          "Para usar a plataforma, você precisa ter pelo menos 18 (dezoito) anos e informar dados verdadeiros e atualizados: nome completo, e-mail, telefone com DDD e um documento oficial com foto (frente e verso).",
           "A equipe Hi Scoot confere se o nome do documento é o mesmo do cadastro. Pessoas trans com documento ainda não retificado podem enviar uma carta escrita à mão com o nome social e o CPF, analisada com sigilo.",
           "Depois do cadastro, é preciso conectar uma conta Mercado Pago. Para o Host, é por ela que chega o valor das reservas. Para o Rider, a conexão serve para identificar a conta; a Hi Scoot não movimenta o saldo de ninguém.",
           "Você é responsável por manter sua senha em segredo e por tudo o que for feito com a sua conta.",
@@ -158,7 +158,7 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "3. Sign-up and identity verification",
         paragraphs: [
-          "To use the platform, you must be at least [minimum age to be defined] years old and provide true, up-to-date information: full name, email, phone number with area code and an official photo ID (front and back).",
+          "To use the platform, you must be at least 18 (eighteen) years old and provide true, up-to-date information: full name, email, phone number with area code and an official photo ID (front and back).",
           "The Hi Scoot team checks that the name on the ID matches the account. Trans people whose documents have not yet been updated may send a handwritten letter with their social name and CPF, reviewed confidentially.",
           "After signing up, you must connect a Mercado Pago account. For Hosts, this is where booking payments arrive. For Riders, the connection identifies the account; Hi Scoot never moves anyone's balance.",
           "You are responsible for keeping your password secret and for everything done with your account.",

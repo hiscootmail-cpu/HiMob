@@ -102,7 +102,7 @@ export const privacy: Record<"pt" | "en", LegalDocument> = {
       },
       {
         title: "11. Crianças e adolescentes",
-        paragraphs: ["A plataforma é destinada a pessoas com pelo menos [idade mínima a definir] anos."],
+        paragraphs: ["A plataforma é destinada a pessoas com pelo menos 18 (dezoito) anos."],
       },
       {
         title: "12. Mudanças nesta Política",
@@ -206,7 +206,7 @@ export const privacy: Record<"pt" | "en", LegalDocument> = {
       },
       {
         title: "11. Children and teenagers",
-        paragraphs: ["The platform is intended for people who are at least [minimum age to be defined] years old."],
+        paragraphs: ["The platform is intended for people who are at least 18 (eighteen) years old."],
       },
       {
         title: "12. Changes to this Policy",
