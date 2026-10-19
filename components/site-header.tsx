@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Globe } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -50,18 +51,20 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
                 const active = isActive(pathname, href);
                 return (
                   <li key={href}>
+                    {/* No tablet só cabe o ícone; o texto aparece a partir do computador. */}
                     <Link
                       href={href}
+                      aria-label={t(label)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+                        "inline-flex h-10 items-center justify-center gap-2 rounded-full px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 lg:px-4",
                         active
                           ? "bg-green-soft text-on-green"
                           : "text-hs-black hover:bg-surface",
                       )}
                     >
                       <Icon className="size-5" />
-                      {t(label)}
+                      <span className="hidden lg:inline">{t(label)}</span>
                     </Link>
                   </li>
                 );
@@ -73,6 +76,22 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
         )}
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
+          {/* Mundo Scoot: aberto a todas as pessoas, com ou sem cadastro (decisão de 19/10/2026). */}
+          <Link
+            href="/scoot-world"
+            aria-label={t("scootWorld")}
+            aria-current={isActive(pathname, "/scoot-world") ? "page" : undefined}
+            className={cn(
+              "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border text-sm font-semibold whitespace-nowrap outline-none transition-colors focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+              signedIn ? "w-10 xl:w-auto xl:px-4" : "w-10 sm:w-auto sm:px-4",
+              isActive(pathname, "/scoot-world")
+                ? "border-hs-black bg-hs-black text-hs-white"
+                : "border-hs-black/20 bg-hs-white text-hs-black hover:bg-surface",
+            )}
+          >
+            <Globe className="size-5" aria-hidden />
+            <span className={signedIn ? "hidden xl:inline" : "hidden sm:inline"}>{t("scootWorld")}</span>
+          </Link>
           {signedIn ? (
             // Sininho ao lado do seletor PT/EN (decisão de 09/10/2026); o seletor não muda.
             <Link

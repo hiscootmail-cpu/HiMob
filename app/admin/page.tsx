@@ -188,12 +188,18 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <ShieldAdminIcon className="size-8" />
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
           <p className="text-base text-muted">{t("subtitle")}</p>
         </div>
+        <Link
+          href="/admin/scoot-world"
+          className="ml-auto inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+        >
+          {t("scootWorld")}
+        </Link>
       </div>
 
       <nav aria-label={t("queuesLabel")} className="flex flex-col gap-1 rounded-lg border border-line p-1 sm:flex-row sm:rounded-full">

@@ -28,7 +28,8 @@
     "signIn": "Log in",
     "signUp": "Sign up",
     "notifications": "Notifications",
-    "notificationsUnread": "Notifications, {count} unread"
+    "notificationsUnread": "Notifications, {count} unread",
+    "scootWorld": "Scoot World"
   },
   "footer": {
     "slogan": "The city moves. Get in the Flow.",
@@ -1163,7 +1164,8 @@
       "confirm": "Confirm on behalf of the platform",
       "done": "Confirmed by the platform. The booking moved to the next step.",
       "reasonRequired": "Write the reason to confirm."
-    }
+    },
+    "scootWorld": "Scoot World"
   },
   "mercadoPago": {
     "connect": {
@@ -1180,6 +1182,121 @@
         "failed": "We couldn't connect the account. Please try again.",
         "unavailable": "The Mercado Pago connection is not available yet. Please try again later."
       }
+    }
+  },
+  "scootWorld": {
+    "title": "Scoot World",
+    "subtitle": "Hi Scoot products, HiTV and the shops and workshops that look after e-scooter and e-bike riders.",
+    "open": "Open",
+    "tabs": {
+      "label": "Scoot World areas",
+      "home": "Home",
+      "store": "Store",
+      "tv": "HiTV",
+      "places": "Shops and workshops"
+    },
+    "store": {
+      "title": "Store",
+      "subtitle": "Official Hi Scoot products.",
+      "empty": "Products are coming soon.",
+      "back": "Back to the store",
+      "soon": "Buying on the site is coming soon."
+    },
+    "tv": {
+      "title": "HiTV",
+      "subtitle": "The Hi Scoot video channel.",
+      "empty": "Videos are coming soon.",
+      "play": "Watch: {title}"
+    },
+    "places": {
+      "title": "Partner shops and accredited workshops",
+      "subtitle": "Where to buy parts and accessories, and where to take your equipment for a service.",
+      "partnersTitle": "Partner shops",
+      "workshopsTitle": "Accredited workshops",
+      "partnersEmpty": "Partner shops are coming soon.",
+      "workshopsEmpty": "Accredited workshops are coming soon.",
+      "route": "View on map",
+      "mapLabel": "Map of partner shops and workshops",
+      "kind": {
+        "partner": "Partner shop",
+        "workshop": "Accredited workshop"
+      }
+    }
+  },
+  "adminWorld": {
+    "title": "Scoot World: manage",
+    "subtitle": "Whatever is saved here is shown to everyone.",
+    "seePublic": "See the page",
+    "back": "Back to the panel",
+    "tabsLabel": "Scoot World areas",
+    "empty": "Nothing added yet.",
+    "saving": "Saving...",
+    "saved": "Saved. It now shows in Scoot World.",
+    "hiddenBadge": "Hidden",
+    "hide": "Hide",
+    "show": "Show again",
+    "hidden": "Hidden from Scoot World.",
+    "shown": "Shown again in Scoot World.",
+    "delete": "Delete",
+    "deleteTitle": "Delete \"{name}\"?",
+    "deleteText": "This cannot be undone. To take it down for a while, use Hide.",
+    "deleteConfirm": "Delete for good",
+    "deleted": "Deleted.",
+    "cancel": "Cancel",
+    "errors": {
+      "notAllowed": "Only the team can do this.",
+      "saveFailed": "Could not save. Try again.",
+      "name": "Write a name with 2 to 80 characters.",
+      "price": "Write a price above zero. Example: 189.90",
+      "description": "The description can have up to 1,000 characters.",
+      "photo": "Use a JPG, PNG or WEBP photo up to 10 MB.",
+      "title": "Write a title with 2 to 100 characters.",
+      "youtube": "Paste a valid YouTube link (one that is not on HiTV yet).",
+      "address": "Write the address (5 to 200 characters).",
+      "city": "Write the city.",
+      "phone": "Write the phone number with area code, digits only (10 or 11).",
+      "services": "Services can have up to 300 characters.",
+      "kind": "Choose partner shop or workshop."
+    },
+    "store": {
+      "addTitle": "New product",
+      "name": "Product name",
+      "price": "Price (R$)",
+      "priceHint": "Example: 189.90",
+      "description": "Description (optional)",
+      "photo": "Photo (optional)",
+      "photoHint": "JPG, PNG or WEBP, up to 10 MB.",
+      "add": "Save product"
+    },
+    "tv": {
+      "addTitle": "New HiTV video",
+      "videoTitle": "Video title",
+      "link": "YouTube link",
+      "linkHint": "Copy the video link on YouTube (Share button) and paste it here.",
+      "add": "Save video"
+    },
+    "places": {
+      "addTitle": "New shop or workshop",
+      "kindLabel": "Type",
+      "kind": {
+        "partner": "Partner shop",
+        "workshop": "Accredited workshop"
+      },
+      "name": "Name",
+      "address": "Address",
+      "addressHint": "Street, number and neighbourhood.",
+      "city": "City",
+      "phone": "Phone (optional)",
+      "phoneHint": "With area code, digits only.",
+      "services": "Services (optional)",
+      "servicesHint": "Example: tyre change, brake service.",
+      "location": "Place on the map (optional)",
+      "locationHint": "Tap the map where the place is. Without a pin, it shows only in the list.",
+      "locationSet": "Place marked. Tap again to change it.",
+      "locationClear": "Remove pin",
+      "mapLabel": "Map to mark the place",
+      "noLocation": "No place on the map",
+      "add": "Save"
     }
   }
 }

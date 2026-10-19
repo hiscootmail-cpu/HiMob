@@ -28,3 +28,4 @@ Telefone no cadastro: `docs/banco/testes-telefone.sql`, também depois de todas 
 Mercado Pago: `docs/banco/testes-mercado-pago.sql`, também depois de todas as migrações.
 Excluir conta: `docs/banco/testes-excluir-conta.sql`, também depois de todas as migrações.
 Verificação para alugar e anunciar: `docs/banco/testes-verificacao.sql`, também depois de todas as migrações.
+Mundo Scoot (loja, HiTV, lojas parceiras e oficinas): `docs/banco/testes-mundo-scoot.sql`, também depois de todas as migrações.
