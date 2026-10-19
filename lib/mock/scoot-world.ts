@@ -8,12 +8,22 @@ import type { ShippingRate, WorldPlace, WorldProduct, WorldVideo } from "@/lib/s
 
 export const exampleWorldProducts: WorldProduct[] = [
   {
+    id: "produto-exemplo-camiseta-tamanhos",
+    name: "Camiseta com tamanhos (exemplo)",
+    description: "Produto de exemplo para conferir a escolha de tamanho.",
+    price: 180,
+    active: true,
+    stock: 50,
+    sizes: ["P", "M", "G", "GG", "XXG"],
+  },
+  {
     id: "produto-exemplo-capacete",
     name: "Capacete Hi Scoot (exemplo)",
     description: "Produto de exemplo para conferir a tela. A equipe cadastra os produtos de verdade no painel.",
     price: 189.9,
     active: true,
     stock: 12,
+    sizes: [],
   },
   {
     id: "produto-exemplo-camiseta",
@@ -22,6 +32,7 @@ export const exampleWorldProducts: WorldProduct[] = [
     price: 79,
     active: true,
     stock: 0,
+    sizes: [],
   },
 ];
 

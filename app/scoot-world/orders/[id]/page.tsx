@@ -61,9 +61,10 @@ export default async function OrderPage({ params, searchParams }: PageProps<"/sc
         <h2 id="order-items" className="text-lg font-bold text-hs-black">{t("itemsTitle")}</h2>
         <ul className="flex flex-col gap-2 text-sm text-hs-black">
           {order.items.map((item) => (
-            <li key={item.name} className="flex justify-between gap-4">
+            <li key={`${item.name}-${item.size ?? ""}`} className="flex justify-between gap-4">
               <span>
                 {item.quantity} x {item.name}
+                {item.size ? ` · ${t("size", { size: item.size })}` : ""}
               </span>
               <span>{money(item.price * item.quantity)}</span>
             </li>

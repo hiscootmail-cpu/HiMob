@@ -14,6 +14,7 @@ import {
   refundOrder,
   setWorldItemActive,
   shipOrder,
+  updateWorldSizes,
   updateWorldStock,
   type WorldFormState,
   type WorldTable,
@@ -96,6 +97,7 @@ export function ProductForm() {
         <TextField name="price" label={t("price")} hint={t("priceHint")} inputMode="decimal" required error={fieldError("price")} />
         <TextField name="stock" label={t("stock")} hint={t("stockHint")} inputMode="numeric" required error={fieldError("stock")} />
       </div>
+      <TextField name="sizes" label={t("sizes")} hint={t("sizesHint")} placeholder="P, M, G, GG, XXG" error={fieldError("sizes")} />
       <div className="flex flex-col gap-1.5">
         <label htmlFor="product-description" className="text-sm font-medium text-hs-black">
           {t("description")}
@@ -416,5 +418,35 @@ export function RefundForm({ id, code }: { id: string; code: string }) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  );
+}
+
+/** Tamanhos de um produto já cadastrado (tirar um tamanho que acabou, por exemplo). */
+export function SizesForm({ id, sizes }: { id: string; sizes: string[] }) {
+  const t = useTranslations("adminWorld.store");
+  const { formRef, submit, pending, fieldError, formError } = useWorldForm(updateWorldSizes.bind(null, id));
+  const inputId = `sizes-${id}`;
+
+  return (
+    <form ref={formRef} onSubmit={submit} className="flex flex-wrap items-end gap-2">
+      <div className="flex flex-col gap-1">
+        <label htmlFor={inputId} className="text-xs font-medium text-hs-black">
+          {t("sizes")}
+        </label>
+        <input
+          id={inputId}
+          name="sizes"
+          defaultValue={sizes.join(", ")}
+          placeholder={t("noSizes")}
+          aria-invalid={fieldError("sizes") ? true : undefined}
+          className="h-9 w-56 rounded-md border border-line bg-hs-white px-3 text-sm text-hs-black outline-none placeholder:text-muted focus-visible:border-hs-blue focus-visible:ring-4 focus-visible:ring-hs-blue/25 aria-invalid:border-error-line"
+        />
+      </div>
+      <Button type="submit" variant="outline" size="sm" disabled={pending}>
+        {t("sizesSave")}
+      </Button>
+      {fieldError("sizes") ? <p role="alert" className="w-full text-sm text-error">{fieldError("sizes")}</p> : null}
+      {formError}
+    </form>
   );
 }

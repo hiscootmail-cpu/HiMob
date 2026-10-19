@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import { revalidatePath } from "next/cache";
 
-import { BR_STATES, WORLD_LIMITS, youtubeId } from "@/lib/scoot-world-rules";
+import { BR_STATES, parseSizes, WORLD_LIMITS, youtubeId } from "@/lib/scoot-world-rules";
 import { refundStoreOrder } from "@/lib/store-orders";
 import { validatePhone } from "@/lib/validation";
 import { getCurrentUser } from "@/lib/session";
@@ -20,7 +20,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export type WorldFormState = {
   done?: boolean;
-  error?: "notAllowed" | "saveFailed" | "name" | "price" | "description" | "photo" | "title" | "youtube" | "address" | "city" | "phone" | "services" | "kind" | "stock" | "state" | "shippingPrice" | "regionTaken" | "tracking" | "reason" | "refundFailed";
+  error?: "notAllowed" | "saveFailed" | "name" | "price" | "description" | "photo" | "title" | "youtube" | "address" | "city" | "phone" | "services" | "kind" | "stock" | "state" | "shippingPrice" | "regionTaken" | "tracking" | "reason" | "refundFailed" | "sizes";
 };
 
 export type WorldTable = "world_products" | "world_videos" | "world_places";
@@ -52,12 +52,14 @@ export async function addWorldProduct(_prev: WorldFormState, formData: FormData)
   const description = text(formData, "description");
   const price = money(text(formData, "price"));
   const stock = wholeNumber(text(formData, "stock"));
+  const sizes = parseSizes(text(formData, "sizes"));
   const photo = formData.get("photo");
   const file = photo instanceof File && photo.size > 0 ? photo : null;
 
   if (!within(name, WORLD_LIMITS.productName)) return { error: "name" };
   if (!Number.isFinite(price) || price <= 0 || price > WORLD_LIMITS.productPrice) return { error: "price" };
   if (!Number.isInteger(stock) || stock < 0 || stock > WORLD_LIMITS.productStock) return { error: "stock" };
+  if (!sizes) return { error: "sizes" };
   if (description.length > WORLD_LIMITS.productDescription) return { error: "description" };
   if (file && (!PHOTO_TYPES.includes(file.type) || file.size > PHOTO_MAX)) return { error: "photo" };
   if (!supabaseConfigured()) return { done: true };
@@ -71,7 +73,7 @@ export async function addWorldProduct(_prev: WorldFormState, formData: FormData)
   }
   const { error } = await supabase
     .from("world_products")
-    .insert({ name, description, price: Math.round(price * 100) / 100, stock, photo_path: photoPath });
+    .insert({ name, description, price: Math.round(price * 100) / 100, stock, sizes, photo_path: photoPath });
   if (error) {
     if (photoPath) await supabase.storage.from("world-photos").remove([photoPath]);
     return { error: "saveFailed" };
@@ -210,6 +212,19 @@ export async function refundOrder(id: string, _prev: WorldFormState, formData: F
   if (!supabaseConfigured()) return { done: true };
   const result = await refundStoreOrder(id, reason);
   if (result !== "done") return { error: result };
+  refresh();
+  return { done: true };
+}
+
+/** Tamanhos de um produto (ex.: tirar um tamanho que acabou). Vazio = sem tamanho. */
+export async function updateWorldSizes(id: string, _prev: WorldFormState, formData: FormData): Promise<WorldFormState> {
+  if (!(await isAdmin())) return { error: "notAllowed" };
+  const sizes = parseSizes(text(formData, "sizes"));
+  if (!sizes) return { error: "sizes" };
+  if (!supabaseConfigured()) return { done: true };
+  const supabase = await createClient();
+  const { error } = await supabase.from("world_products").update({ sizes }).eq("id", id);
+  if (error) return { error: "saveFailed" };
   refresh();
   return { done: true };
 }

@@ -34,7 +34,7 @@ export default async function WorldProductPage({ params }: PageProps<"/scoot-wor
           <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{product.name}</h1>
           <p className="text-3xl font-bold text-hs-black">{format.number(product.price, { style: "currency", currency: "BRL" })}</p>
           {product.description ? <p className="whitespace-pre-line text-base text-hs-black">{product.description}</p> : null}
-          <AddToCart productId={product.id} stock={product.stock} />
+          <AddToCart productId={product.id} stock={product.stock} sizes={product.sizes} />
           <p className="text-sm text-muted">{t("store.pixOnly")}</p>
         </div>
       </div>

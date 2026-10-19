@@ -17,12 +17,13 @@ export function worldPhotoUrl(path: string): string {
   return `${SUPABASE_URL}/storage/v1/object/public/world-photos/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-type ProductRow = Omit<WorldProduct, "photo" | "price"> & { price: number | string };
+type ProductRow = Omit<WorldProduct, "photo" | "price" | "sizes"> & { price: number | string; sizes?: string[] | null };
 
 const toProduct = (row: ProductRow): WorldProduct => ({
   ...row,
   price: Number(row.price),
   photo: row.photo_path ? worldPhotoUrl(row.photo_path) : undefined,
+  sizes: row.sizes ?? [],
 });
 
 export async function listWorldProducts(): Promise<WorldProduct[]> {
@@ -30,7 +31,7 @@ export async function listWorldProducts(): Promise<WorldProduct[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("world_products")
-    .select("id, name, description, price, photo_path, active, stock")
+    .select("id, name, description, price, photo_path, active, stock, sizes")
     .order("created_at", { ascending: false });
   return (data ?? []).map(toProduct);
 }
@@ -41,7 +42,7 @@ export async function getWorldProduct(id: string): Promise<WorldProduct | null> 
   const supabase = await createClient();
   const { data } = await supabase
     .from("world_products")
-    .select("id, name, description, price, photo_path, active, stock")
+    .select("id, name, description, price, photo_path, active, stock, sizes")
     .eq("id", id)
     .maybeSingle();
   return data ? toProduct(data) : null;
@@ -77,13 +78,13 @@ export async function listShippingRates(): Promise<ShippingRate[]> {
 }
 
 export const ORDER_COLUMNS =
-  "id, code, status, status_reason, buyer_name, buyer_email, buyer_phone, buyer_cpf, cep, street, number, complement, district, city, state, subtotal, shipping, total, tracking_code, pix_code, pix_qr_base64, expires_at, created_at, world_order_items(name, price, quantity)";
+  "id, code, status, status_reason, buyer_name, buyer_email, buyer_phone, buyer_cpf, cep, street, number, complement, district, city, state, subtotal, shipping, total, tracking_code, pix_code, pix_qr_base64, expires_at, created_at, world_order_items(name, price, quantity, size)";
 
 type OrderRow = Omit<StoreOrder, "items" | "subtotal" | "shipping" | "total"> & {
   subtotal: number | string;
   shipping: number | string;
   total: number | string;
-  world_order_items: { name: string; price: number | string; quantity: number }[] | null;
+  world_order_items: { name: string; price: number | string; quantity: number; size: string | null }[] | null;
 };
 
 export function toOrder({ world_order_items, ...row }: OrderRow): StoreOrder {
