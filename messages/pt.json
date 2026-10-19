@@ -185,7 +185,9 @@
       "capsLock": "O Caps Lock está ligado.",
       "passwordRule": "Use pelo menos {min} caracteres.",
       "fullName": "Nome completo",
-      "fullNamePlaceholder": "Seu nome completo"
+      "fullNamePlaceholder": "Seu nome completo",
+      "phone": "Telefone",
+      "phoneHint": "Com DDD. Só aparece para a outra pessoa depois da reserva aceita."
     },
     "errors": {
       "emailRequired": "Informe seu e-mail.",
@@ -200,7 +202,9 @@
       "documentTooLarge": "Arquivo grande demais. O limite é {max} MB.",
       "termsRequired": "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade.",
       "emailNotConfirmed": "Falta confirmar seu e-mail. Abra o link que enviamos e tente de novo.",
-      "unexpected": "Não foi possível concluir agora. Tente de novo em alguns minutos."
+      "unexpected": "Não foi possível concluir agora. Tente de novo em alguns minutos.",
+      "phoneRequired": "Informe seu telefone.",
+      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678."
     },
     "login": {
       "title": "Entrar",

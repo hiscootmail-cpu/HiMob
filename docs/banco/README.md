@@ -24,3 +24,4 @@ Etapa 5 (conversas, avaliações e avisos): `docs/banco/testes-etapa-5.sql`, tam
 depois de todas as migrações.
 Aviso de disponível e confirmação dupla: `docs/banco/testes-aviso-disponivel.sql` e
 `docs/banco/testes-confirmacao-dupla.sql`, também depois de todas as migrações.
+Telefone no cadastro: `docs/banco/testes-telefone.sql`, também depois de todas as migrações.

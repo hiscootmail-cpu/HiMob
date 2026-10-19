@@ -22,6 +22,7 @@ import {
   validateEmail,
   validateFullName,
   validateNewPassword,
+  validatePhone,
   type FieldErrorKey,
 } from "@/lib/validation";
 
@@ -40,6 +41,7 @@ export function SignUpForm() {
   const [state, formAction, pending] = useActionState(signUp, initialState);
   const fullName = useFieldValidation(validateFullName, state.fieldErrors?.fullName, state);
   const email = useFieldValidation(validateEmail, state.fieldErrors?.email, state);
+  const phone = useFieldValidation(validatePhone, state.fieldErrors?.phone, state);
   const password = useFieldValidation(validateNewPassword, state.fieldErrors?.password, state);
   const [checks, setChecks] = useState<LocalChecks>({ submission: state });
   const router = useRouter();
@@ -132,6 +134,19 @@ export function SignUpForm() {
         error={errorText(email.error)}
         onBlur={email.onBlur}
         onChange={email.onChange}
+      />
+
+      <TextField
+        name="phone"
+        type="tel"
+        inputMode="tel"
+        autoComplete="tel-national"
+        label={t("fields.phone")}
+        placeholder="(11) 91234-5678"
+        hint={t("fields.phoneHint")}
+        error={errorText(phone.error)}
+        onBlur={phone.onBlur}
+        onChange={phone.onChange}
       />
 
       <PasswordField
