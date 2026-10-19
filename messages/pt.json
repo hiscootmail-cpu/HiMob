@@ -506,7 +506,7 @@
       "card": "Cartão de crédito",
       "cardHint": "Visa, Mastercard, Elo e outros",
       "cardSecure": "Os dados do cartão são digitados no formulário seguro do Mercado Pago. A Hi Scoot não vê nem guarda o número do seu cartão.",
-      "pixInfo": "O QR code e o código PIX copia e cola são gerados pelo Mercado Pago depois que você tocar em Pagar.",
+      "pixInfo": "O QR code e o código PIX copia e cola são gerados pelo Mercado Pago depois que você tocar em Pagar. Não precisa ter conta no Mercado Pago: é só ler o QR code no app de qualquer banco.",
       "pay": "Pagar {total}",
       "splitInfo": "Pagamento processado pelo Mercado Pago. O valor do Host é repassado automaticamente.",
       "errors": {
@@ -1273,7 +1273,7 @@
       "notReady": "A compra pelo site está quase pronta. Volte em breve.",
       "paying": "Gerando o PIX...",
       "payPix": "Pagar com PIX",
-      "pixNote": "O código PIX vale 30 minutos. Os itens ficam separados para você nesse tempo.",
+      "pixNote": "O código PIX vale 30 minutos. Os itens ficam separados para você nesse tempo. Não precisa ter conta no Mercado Pago: é só ler o QR code no app de qualquer banco.",
       "errors": {
         "name": "Escreva nome e sobrenome.",
         "email": "Confira o e-mail.",
@@ -1313,7 +1313,7 @@
         "refunded": "O pedido foi cancelado e o dinheiro devolvido pelo Mercado Pago."
       },
       "pixTitle": "Pague com PIX",
-      "pixText": "Abra o app do seu banco, escolha PIX e leia o QR Code ou cole o código.",
+      "pixText": "Abra o app do seu banco, escolha PIX e leia o QR Code ou cole o código. Não precisa ter conta no Mercado Pago: é só ler o QR code no app de qualquer banco.",
       "qrAlt": "QR Code do PIX",
       "pixCodeLabel": "PIX copia e cola",
       "pixCopy": "Copiar código",
