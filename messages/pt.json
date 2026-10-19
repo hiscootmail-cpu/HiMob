@@ -28,7 +28,8 @@
     "signIn": "Entrar",
     "signUp": "Criar conta",
     "notifications": "Notificações",
-    "notificationsUnread": "Notificações, {count, plural, one {# não lida} other {# não lidas}}"
+    "notificationsUnread": "Notificações, {count, plural, one {# não lida} other {# não lidas}}",
+    "scootWorld": "Mundo Scoot"
   },
   "footer": {
     "slogan": "A cidade se move. Vem no Flow.",
@@ -1163,7 +1164,8 @@
       "confirm": "Confirmar pela plataforma",
       "done": "Confirmado pela plataforma. A reserva seguiu para a próxima etapa.",
       "reasonRequired": "Escreva o motivo para confirmar."
-    }
+    },
+    "scootWorld": "Mundo Scoot"
   },
   "mercadoPago": {
     "connect": {
@@ -1180,6 +1182,121 @@
         "failed": "Não deu certo conectar a conta. Tente de novo.",
         "unavailable": "A conexão com o Mercado Pago ainda não está disponível. Tente de novo mais tarde."
       }
+    }
+  },
+  "scootWorld": {
+    "title": "Mundo Scoot",
+    "subtitle": "Produtos Hi Scoot, a HiTV e as lojas e oficinas que cuidam de quem anda de patinete e bike elétrica.",
+    "open": "Abrir",
+    "tabs": {
+      "label": "Áreas do Mundo Scoot",
+      "home": "Início",
+      "store": "Loja interna",
+      "tv": "HiTV",
+      "places": "Lojas e oficinas"
+    },
+    "store": {
+      "title": "Loja interna",
+      "subtitle": "Produtos oficiais da Hi Scoot.",
+      "empty": "Os produtos chegam em breve.",
+      "back": "Voltar para a loja",
+      "soon": "A compra pelo site chega em breve."
+    },
+    "tv": {
+      "title": "HiTV",
+      "subtitle": "O canal de vídeos da Hi Scoot.",
+      "empty": "Os vídeos chegam em breve.",
+      "play": "Assistir: {title}"
+    },
+    "places": {
+      "title": "Lojas parceiras e oficinas credenciadas",
+      "subtitle": "Onde comprar peças e acessórios e onde levar seu equipamento para revisão.",
+      "partnersTitle": "Lojas parceiras",
+      "workshopsTitle": "Oficinas credenciadas",
+      "partnersEmpty": "As lojas parceiras chegam em breve.",
+      "workshopsEmpty": "As oficinas credenciadas chegam em breve.",
+      "route": "Ver no mapa",
+      "mapLabel": "Mapa das lojas parceiras e oficinas",
+      "kind": {
+        "partner": "Loja parceira",
+        "workshop": "Oficina credenciada"
+      }
+    }
+  },
+  "adminWorld": {
+    "title": "Mundo Scoot: cadastro",
+    "subtitle": "O que for salvo aqui aparece para todas as pessoas.",
+    "seePublic": "Ver a página",
+    "back": "Voltar ao painel",
+    "tabsLabel": "Áreas do Mundo Scoot",
+    "empty": "Nada cadastrado ainda.",
+    "saving": "Salvando...",
+    "saved": "Salvo. Já aparece no Mundo Scoot.",
+    "hiddenBadge": "Escondido",
+    "hide": "Esconder",
+    "show": "Mostrar de novo",
+    "hidden": "Escondido do Mundo Scoot.",
+    "shown": "Aparece de novo no Mundo Scoot.",
+    "delete": "Apagar",
+    "deleteTitle": "Apagar \"{name}\"?",
+    "deleteText": "Isso não pode ser desfeito. Se quiser só tirar do ar por um tempo, use Esconder.",
+    "deleteConfirm": "Apagar de vez",
+    "deleted": "Apagado.",
+    "cancel": "Cancelar",
+    "errors": {
+      "notAllowed": "Só a equipe pode fazer isso.",
+      "saveFailed": "Não deu para salvar. Tente de novo.",
+      "name": "Escreva um nome de 2 a 80 letras.",
+      "price": "Escreva um preço maior que zero. Exemplo: 189,90",
+      "description": "A descrição pode ter até 1.000 letras.",
+      "photo": "Use uma foto JPG, PNG ou WEBP de até 10 MB.",
+      "title": "Escreva um título de 2 a 100 letras.",
+      "youtube": "Cole um link do YouTube válido (e que ainda não esteja na HiTV).",
+      "address": "Escreva o endereço (5 a 200 letras).",
+      "city": "Escreva a cidade.",
+      "phone": "Escreva o telefone com DDD, só números (10 ou 11).",
+      "services": "Os serviços podem ter até 300 letras.",
+      "kind": "Escolha loja parceira ou oficina."
+    },
+    "store": {
+      "addTitle": "Novo produto",
+      "name": "Nome do produto",
+      "price": "Preço (R$)",
+      "priceHint": "Exemplo: 189,90",
+      "description": "Descrição (opcional)",
+      "photo": "Foto (opcional)",
+      "photoHint": "JPG, PNG ou WEBP, até 10 MB.",
+      "add": "Salvar produto"
+    },
+    "tv": {
+      "addTitle": "Novo vídeo da HiTV",
+      "videoTitle": "Título do vídeo",
+      "link": "Link do YouTube",
+      "linkHint": "Copie o link do vídeo no YouTube (botão Compartilhar) e cole aqui.",
+      "add": "Salvar vídeo"
+    },
+    "places": {
+      "addTitle": "Nova loja ou oficina",
+      "kindLabel": "Tipo",
+      "kind": {
+        "partner": "Loja parceira",
+        "workshop": "Oficina credenciada"
+      },
+      "name": "Nome",
+      "address": "Endereço",
+      "addressHint": "Rua, número e bairro.",
+      "city": "Cidade",
+      "phone": "Telefone (opcional)",
+      "phoneHint": "Com DDD, só números.",
+      "services": "Serviços (opcional)",
+      "servicesHint": "Exemplo: troca de pneu, revisão de freio.",
+      "location": "Local no mapa (opcional)",
+      "locationHint": "Toque no mapa onde fica o lugar. Sem marcar, ele aparece só na lista.",
+      "locationSet": "Local marcado. Toque de novo para mudar.",
+      "locationClear": "Tirar marcação",
+      "mapLabel": "Mapa para marcar o local",
+      "noLocation": "Sem local no mapa",
+      "add": "Salvar"
     }
   }
 }
