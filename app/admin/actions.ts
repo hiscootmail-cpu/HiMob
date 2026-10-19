@@ -1,6 +1,6 @@
 "use server";
 
-import { listHandoffQueue, listIdentityQueue, listListingQueue, validateReason } from "@/lib/admin";
+import { identityFileUrls, listHandoffQueue, listIdentityQueue, listListingQueue, validateReason, type IdentityFile } from "@/lib/admin";
 import { MAX_DOCUMENT_REJECTIONS } from "@/lib/identity";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
@@ -92,4 +92,10 @@ export async function confirmHandoffByPlatform(
   }
   const item = (await listHandoffQueue()).find((h) => h.booking_id === bookingId && h.kind === kind);
   return item ? { done: true } : { error: "notAllowed" };
+}
+
+/** "Ver documento enviado": links novos (5 minutos) só para a equipe. */
+export async function openIdentityFiles(submissionId: string): Promise<IdentityFile[] | null> {
+  if (!(await isAdmin())) return null;
+  return identityFileUrls(submissionId);
 }

@@ -259,7 +259,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                       ) : null}
                     </div>
                   </div>
-                  <DocumentDialog kind={item.kind} name={item.full_name} files={item.files} />
+                  <DocumentDialog id={item.id} kind={item.kind} name={item.full_name} />
                 </div>
                 <p className="text-sm text-hs-black">
                   {item.kind === "letter" ? t("identity.letterHelp") : t("identity.documentHelp")}
