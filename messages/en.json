@@ -517,7 +517,24 @@
       },
       "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded.",
       "testNotice": "Test payment: nothing is charged. Real payment (Mercado Pago) is coming soon.",
-      "payTest": "Pay {total} (test)"
+      "payTest": "Pay {total} (test)",
+      "mp": {
+        "loading": "Loading the secure Mercado Pago payment...",
+        "cardOnly": "For now, payment is by credit card in a single installment only.",
+        "pixTitle": "Pay with PIX",
+        "pixText": "Open your banking app, choose PIX and scan the QR code or use the code below.",
+        "qrAlt": "PIX QR code",
+        "pixCodeLabel": "PIX code (copy and paste)",
+        "pixCopy": "Copy code",
+        "pixCopied": "Code copied",
+        "pixWaiting": "Waiting for payment. This screen updates on its own.",
+        "pixExpires": "The code is valid for 30 minutes. If it expires, refresh the page to get a new one.",
+        "errors": {
+          "rejected": "Payment declined. Check the details or use another card.",
+          "unavailable": "Payment is unavailable right now. Please try again in a few minutes.",
+          "notAllowed": "This booking is not waiting for payment."
+        }
+      }
     },
     "confirmed": {
       "title": "Booking confirmed!",
@@ -921,7 +938,8 @@
       "reviewText": "How was {title}?",
       "messagesTitle": "{count, plural, one {# new message} other {# new messages}}",
       "messagesText": "Reply in Messages."
-    }
+    },
+    "mpConnected": "Mercado Pago account connected."
   },
   "conversations": {
     "title": "Messages",
@@ -1129,6 +1147,23 @@
       "confirm": "Confirm on behalf of the platform",
       "done": "Confirmed by the platform. The booking moved to the next step.",
       "reasonRequired": "Write the reason to confirm."
+    }
+  },
+  "mercadoPago": {
+    "connect": {
+      "title": "Connect your Mercado Pago account",
+      "description": "To use Hi Scoot, connect your Mercado Pago account. It is quick and you only do it once.",
+      "reasons": {
+        "receive": "If you list equipment, booking payments go straight to your Mercado Pago account.",
+        "safe": "Hi Scoot never sees your password and never touches your balance.",
+        "once": "You authorize it only once, on the Mercado Pago website."
+      },
+      "button": "Connect Mercado Pago",
+      "noAccount": "Don't have a Mercado Pago account yet? You can create one for free on the Mercado Pago screen.",
+      "errors": {
+        "failed": "We couldn't connect the account. Please try again.",
+        "unavailable": "The Mercado Pago connection is not available yet. Please try again later."
+      }
     }
   }
 }

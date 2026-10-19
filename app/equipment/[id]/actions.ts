@@ -45,6 +45,7 @@ export async function requestBooking(
     } = await supabase.auth.getUser();
     if (!user) redirect("/auth/login");
     const { error } = await supabase.rpc("request_booking", { p_equipment: equipmentId, p_start: pickup, p_end: dropoff });
+    if (error?.message === "mp_not_connected") redirect("/mercado-pago/connect");
     if (error) {
       const known = {
         dates_unavailable: "datesUnavailable",

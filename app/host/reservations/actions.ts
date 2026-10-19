@@ -8,6 +8,8 @@ import { REVIEW_COMMENT_MAX, validRejectReason } from "@/lib/bookings";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { validatePhoto, type HandoffError, type HandoffKind } from "@/lib/handoff";
 import { getHostBooking, getHostListing, listHostBookings } from "@/lib/host";
+import { cancelPaidBooking } from "@/lib/mercadopago/booking-payments";
+import { mercadoPagoOn } from "@/lib/mercadopago/server";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
@@ -62,6 +64,12 @@ export type HostCancelState = { done?: boolean; error?: "notAllowed" };
 export async function hostCancelBooking(bookingId: string): Promise<HostCancelState> {
   const booking = await getHostBooking(bookingId);
   if (!booking || !hostCancelPolicy(booking).allowed) return { error: "notAllowed" };
+  if (booking.status === "confirmed" && (await mercadoPagoOn())) {
+    // Reserva paga: o Rider recebe tudo de volta pelo Mercado Pago; a taxa fica pendente para o Host.
+    if (!(await cancelPaidBooking(booking, booking.equipment.host.id))) return { error: "notAllowed" };
+    revalidatePath("/host/reservations");
+    return { done: true };
+  }
   if (supabaseConfigured()) {
     const supabase = await createClient();
     const { error } = await supabase.rpc("cancel_booking", { p_id: bookingId });
