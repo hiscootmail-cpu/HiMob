@@ -47,7 +47,7 @@ export const privacy: Record<"pt" | "en", LegalDocument> = {
       {
         title: "4. Segurança das pessoas e da sociedade",
         paragraphs: [
-          "Para a segurança de quem usa a plataforma e da sociedade, é necessário fornecer os dados de identificação pedidos no cadastro. A Hi Scoot faz a gestão da conexão entre Host e Rider e precisa saber quem está de cada lado de cada aluguel.",
+          "Para a segurança de quem usa a plataforma e da sociedade, é necessário fornecer os dados de identificação pedidos pela plataforma. A Hi Scoot faz a gestão da conexão entre Host e Rider e precisa saber quem está de cada lado de cada aluguel.",
           "Cada pessoa é responsável pelos próprios atos. Mesmo assim, acidentes podem acontecer, e a identificação imediata do usuário pode ser importante para o seu bem-estar: por exemplo, para avisar familiares ou ajudar no atendimento de emergência.",
           "Por isso, em situações de risco à vida ou à saúde, a Hi Scoot pode informar os dados de identificação estritamente necessários às autoridades de saúde e de segurança pública (art. 7º, VII, da LGPD).",
         ],
@@ -151,7 +151,7 @@ export const privacy: Record<"pt" | "en", LegalDocument> = {
       {
         title: "4. Safety of people and society",
         paragraphs: [
-          "For the safety of the people who use the platform and of society, providing the identification data requested at sign-up is required. Hi Scoot manages the connection between Host and Rider and needs to know who is on each side of every rental.",
+          "For the safety of the people who use the platform and of society, providing the identification data requested by the platform is required. Hi Scoot manages the connection between Host and Rider and needs to know who is on each side of every rental.",
           "Each person is responsible for their own actions. Even so, accidents can happen, and immediately identifying the user can be important for their well-being: for example, to notify family members or to help emergency care.",
           "Therefore, when someone's life or health is at risk, Hi Scoot may share the strictly necessary identification data with health and public safety authorities (art. 7, VII, of the LGPD).",
         ],

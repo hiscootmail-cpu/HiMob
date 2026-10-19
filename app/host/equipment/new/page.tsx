@@ -7,7 +7,7 @@ import { KeyIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { ListingForm } from "@/components/host/listing-form";
 import { BackLink } from "@/components/rider/back-link";
 import { Button } from "@/components/ui/button";
-import { requireUser } from "@/lib/session";
+import { identityStep, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,28 +22,29 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
   // Com a Supabase, vale a conta de verdade; na demonstração, ?preview=new-host
   // mostra a tela de quem ainda não é Host.
   let notHost = preview === "new-host";
-  let needsVerification = false;
+  let verification: "send" | "review" | null = null;
   if (supabaseConfigured()) {
     const user = await requireUser();
     notHost = !user.is_host;
-    // Só anuncia depois da verificação de identidade (decisão de 19/10/2026).
-    needsVerification = user.identity !== "approved";
+    // Só anuncia depois da verificação de identidade (decisão de 19/10/2026); o
+    // documento é pedido aqui, não no cadastro (decisão de 20/10/2026).
+    verification = await identityStep(user);
     // Conta Mercado Pago só na hora de cadastrar o equipamento (decisão de 20/10/2026):
     // é nela que cai o pagamento das reservas.
-    if (!notHost && !needsVerification) await requireUser({ mercadoPago: true });
+    if (!notHost && !verification) await requireUser({ mercadoPago: true });
   }
 
-  if (needsVerification) {
+  if (verification) {
     return (
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-4 rounded-lg border border-line bg-hs-white p-6 text-center sm:p-8">
           <span className="flex size-16 items-center justify-center rounded-full bg-blue-soft">
             <VerifiedBadgeIcon className="size-9" />
           </span>
-          <h1 className="text-2xl font-bold text-hs-black">{t("verifyTitle")}</h1>
-          <p className="text-base text-muted">{t("verifyText")}</p>
+          <h1 className="text-2xl font-bold text-hs-black">{t(verification === "send" ? "verifySendTitle" : "verifyTitle")}</h1>
+          <p className="text-base text-muted">{t(verification === "send" ? "verifySendText" : "verifyText")}</p>
           <Button asChild size="lg" className="w-full">
-            <Link href="/verify-identity">{t("verifyButton")}</Link>
+            <Link href="/verify-identity">{t(verification === "send" ? "verifySendButton" : "verifyButton")}</Link>
           </Button>
         </div>
       </div>

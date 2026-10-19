@@ -401,7 +401,7 @@
       "returnBeforePickup": "Return must be at least 1 day after pick-up.",
       "unavailable": "This equipment is not available for booking.",
       "datesUnavailable": "Some day in this period isn't free. Choose other dates.",
-      "identityRequired": "Your identity is still being verified. Booking unlocks as soon as the team approves."
+      "identityRequired": "To rent, the team needs to approve your ID. Send it in Identity verification."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
@@ -412,7 +412,8 @@
     "takenDays": "Unavailable days: {days}",
     "photoAlt": "Photo {number} of {title}",
     "morePhotos": "More photos",
-    "verifyToBook": "Your ID is under review. You can browse equipment and talk to the Host; booking unlocks as soon as the team approves. <link>See verification</link>"
+    "verifyToBook": "Your ID is under review. You can browse equipment and talk to the Host; booking unlocks as soon as the team approves. <link>See verification</link>",
+    "verifyToSend": "To rent, send a photo of your ID (front and back). The team checks it and unlocks booking. You can already browse equipment and talk to the Host. <link>Send ID</link>"
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -643,7 +644,10 @@
       "becomeButton": "Become a Host",
       "verifyTitle": "Your identity still needs to be verified",
       "verifyText": "To list equipment, the Hi Scoot team needs to approve your ID. Meanwhile, you can explore the equipment.",
-      "verifyButton": "See identity verification"
+      "verifyButton": "See identity verification",
+      "verifySendTitle": "Send your ID to list equipment",
+      "verifySendText": "To list equipment, send a photo of your ID (front and back). The Hi Scoot team checks it and unlocks listing.",
+      "verifySendButton": "Send ID"
     },
     "edit": {
       "title": "Edit listing",
@@ -926,7 +930,7 @@
     },
     "cards": {
       "identityTitle": "Send your ID",
-      "identityText": "You can rent and list only after verification.",
+      "identityText": "Only needed when you rent or list.",
       "requestsTitle": "{count, plural, one {You have # new request} other {You have # new requests}}",
       "requestsText": "Accept or decline in Received bookings.",
       "payTitle": "Pay for your booking",
@@ -943,7 +947,7 @@
       "phoneText": "A phone number is now required. It is only shown to the other person after a booking is accepted."
     },
     "mpConnected": "Mercado Pago account connected.",
-    "welcome": "Account created! While the team checks your ID, you can already explore the equipment."
+    "welcome": "Account created! You can already explore the equipment. Your ID is only asked for when you rent or list."
   },
   "conversations": {
     "title": "Messages",
