@@ -57,8 +57,8 @@ export type AdminIdentity = {
   kind: "document" | "letter";
   /** Recusas anteriores (na 2ª, o cadastro é bloqueado). */
   rejections: number;
-  /** Links temporários (5 minutos) para a equipe ver os arquivos. */
-  files?: { part: "front" | "back" | "letter"; url: string }[];
+  /** Quais arquivos a pessoa enviou (os links são gerados ao abrir a janela). */
+  has?: ("front" | "back" | "letter")[];
 };
 
 const oldestFirst = <T extends { sent_at: string }>(items: T[]) => [...items].sort((a, b) => a.sent_at.localeCompare(b.sent_at));
@@ -184,11 +184,6 @@ export async function listIdentityQueue(): Promise<AdminIdentity[]> {
     .in("id", [...new Set(list.map((r) => r.user_id))]);
   const byId = new Map((people ?? []).map((p) => [p.id, p]));
 
-  // Links que valem 5 minutos, só para quem é da equipe (regra da pasta privada).
-  const paths = list.flatMap((r) => [r.front_path, r.back_path, r.letter_path].filter(Boolean) as string[]);
-  const { data: signed } = await supabase.storage.from("identity-documents").createSignedUrls(paths, 300);
-  const urlOf = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
-
   return oldestFirst(
     list.map((r) => {
       const parts: { part: "front" | "back" | "letter"; path: string | null }[] =
@@ -205,10 +200,8 @@ export async function listIdentityQueue(): Promise<AdminIdentity[]> {
         sent_at: r.created_at,
         kind: r.kind as AdminIdentity["kind"],
         rejections: byId.get(r.user_id)?.identity_rejections ?? 0,
-        files: parts.flatMap((p) => {
-          const url = p.path ? urlOf.get(p.path) : undefined;
-          return url ? [{ part: p.part, url }] : [];
-        }),
+        // Os links dos arquivos são gerados só quando a equipe abre a janela (valem 5 minutos).
+        has: parts.filter((p) => p.path).map((p) => p.part),
       };
     }),
   );
@@ -260,7 +253,7 @@ export async function listHandoffQueue(): Promise<AdminHandoff[]> {
   const { data } = await supabase.rpc("handoff_queue");
   const rows = (data ?? []) as HandoffRow[];
   if (!rows.length) return [];
-  const { data: signed } = await supabase.storage.from("handoff-photos").createSignedUrls(rows.map((r) => r.photo_path), 300);
+  const { data: signed } = await supabase.storage.from("handoff-photos").createSignedUrls(rows.map((r) => r.photo_path), 3600);
   return rows.map((r, i) => ({
     booking_id: r.booking_id,
     kind: r.kind,
@@ -273,4 +266,37 @@ export async function listHandoffQueue(): Promise<AdminHandoff[]> {
     end: `${r.end_date} ${r.return_time.slice(0, 5)}`,
     photo: signed?.[i]?.signedUrl ?? undefined,
   }));
+}
+
+export type IdentityFile = { part: "front" | "back" | "letter"; url: string; pdf: boolean };
+
+/**
+ * Links novos para os arquivos de um envio de documento, gerados na hora em
+ * que a equipe abre a janela. Valem 5 minutos e só funcionam para a equipe
+ * (regra da pasta privada). Documento é dado sensível (LGPD).
+ */
+export async function identityFileUrls(submissionId: string): Promise<IdentityFile[]> {
+  if (!supabaseConfigured()) return [];
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("identity_submissions")
+    .select("kind, front_path, back_path, letter_path")
+    .eq("id", submissionId)
+    .maybeSingle();
+  if (!row) return [];
+  const parts: { part: IdentityFile["part"]; path: string | null }[] =
+    row.kind === "document"
+      ? [
+          { part: "front", path: row.front_path },
+          { part: "back", path: row.back_path },
+        ]
+      : [{ part: "letter", path: row.letter_path }];
+  const present = parts.filter((p): p is { part: IdentityFile["part"]; path: string } => Boolean(p.path));
+  if (!present.length) return [];
+  const { data: signed } = await supabase.storage.from("identity-documents").createSignedUrls(present.map((p) => p.path), 300);
+  const urlOf = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
+  return present.flatMap((p) => {
+    const url = urlOf.get(p.path);
+    return url ? [{ part: p.part, url, pdf: p.path.toLowerCase().endsWith(".pdf") }] : [];
+  });
 }

@@ -1147,7 +1147,12 @@
       "letter": "Letter",
       "example": "Example preview",
       "checkDocument": "Compare the name on the ID with the sign-up name.",
-      "checkLetter": "The letter must be handwritten, with social name and CPF."
+      "checkLetter": "The letter must be handwritten, with social name and CPF.",
+      "loading": "Loading...",
+      "loadError": "Could not open the files. Close and open again.",
+      "missing": "File not sent.",
+      "openTab": "Open in a new tab",
+      "linkNote": "For security, links are valid for 5 minutes. If a file does not open, close and reopen this window."
     },
     "photosLabel": "Listing photos",
     "photoAlt": "Listing photo {number}",

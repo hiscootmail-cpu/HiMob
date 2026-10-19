@@ -1147,7 +1147,12 @@
       "letter": "Carta",
       "example": "Prévia de exemplo",
       "checkDocument": "Compare o nome do documento com o nome do cadastro.",
-      "checkLetter": "A carta precisa ser escrita à mão, com nome social e CPF."
+      "checkLetter": "A carta precisa ser escrita à mão, com nome social e CPF.",
+      "loading": "Carregando...",
+      "loadError": "Não deu para abrir os arquivos. Feche e abra de novo.",
+      "missing": "Arquivo não enviado.",
+      "openTab": "Abrir em outra aba",
+      "linkNote": "Por segurança, os links valem 5 minutos. Se não abrir, feche e abra a janela de novo."
     },
     "photosLabel": "Fotos do anúncio",
     "photoAlt": "Foto {number} do anúncio",
