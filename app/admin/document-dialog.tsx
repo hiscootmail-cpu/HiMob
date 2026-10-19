@@ -8,8 +8,8 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 
 /**
  * "Ver documento enviado" (inventário de ações). Dado sensível (LGPD): só a
- * equipe abre. PROVISÓRIO: ainda sem arquivo de verdade; com o Supabase, o
- * servidor gera um link que vale poucos minutos e só para a equipe.
+ * equipe abre. Com a Supabase, o servidor gera um link que vale 5 minutos e
+ * só para a equipe; na demonstração, a janela mostra só o aviso.
  */
 export function DocumentDialog({
   kind,

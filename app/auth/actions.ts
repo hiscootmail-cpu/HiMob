@@ -79,6 +79,12 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
       const notConfirmed = error.code === "email_not_confirmed";
       return { error: notConfirmed ? "emailNotConfirmed" : "invalidCredentials", values: { email } };
     }
+    // Conta excluída não entra mais (mesma mensagem neutra).
+    const { data: deleted } = await supabase.rpc("account_deleted");
+    if (deleted === true) {
+      await supabase.auth.signOut();
+      return { error: "invalidCredentials", values: { email } };
+    }
     redirect("/dashboard");
   }
 

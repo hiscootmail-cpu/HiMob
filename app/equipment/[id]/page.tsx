@@ -33,7 +33,19 @@ async function viewerState(equipmentId: string, hostId: string) {
 export async function generateMetadata({ params }: PageProps<"/equipment/[id]">): Promise<Metadata> {
   const { id } = await params;
   const equipment = await getEquipment(id);
-  return { title: equipment?.title };
+  if (!equipment) return {};
+  const tType = await getTranslations("equipmentType");
+  const description = `${tType(equipment.type)} · ${equipment.area}, ${equipment.city}`;
+  // Prévia do link do anúncio com a primeira foto (sem fotos, vale a imagem padrão do site).
+  return {
+    title: equipment.title,
+    description,
+    openGraph: {
+      title: equipment.title,
+      description,
+      ...(equipment.photos[0] ? { images: [{ url: equipment.photos[0] }] } : {}),
+    },
+  };
 }
 
 function initials(name: string) {

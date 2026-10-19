@@ -32,8 +32,8 @@ export function normalizeCode(code: string) {
 }
 
 /**
- * PROVISÓRIO: códigos de exemplo das etiquetas. O código real é gerado pelo
- * servidor quando o anúncio é publicado e só fica no servidor e na etiqueta.
+ * Só na demonstração: códigos de exemplo das etiquetas. Com a Supabase, o
+ * código real é gerado pelo banco e só fica no servidor e na etiqueta.
  */
 const exampleEquipmentCodes: Record<string, string> = {
   "eq-aro10-jardins": "HS-4821",

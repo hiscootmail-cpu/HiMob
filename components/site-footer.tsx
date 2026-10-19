@@ -1,13 +1,10 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { LogoFull } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
-/*
- * Rodapé.
- * Os links de Termos de Uso e Política de Privacidade entram quando
- * esses textos e endereços forem definidos.
- */
+/* Rodapé: slogan, Termos de Uso, Política de Privacidade e direitos. */
 export function SiteFooter({ className }: { className?: string }) {
   const t = useTranslations("footer");
 
@@ -18,7 +15,17 @@ export function SiteFooter({ className }: { className?: string }) {
           <LogoFull className="h-24" />
           <p className="text-sm text-muted">{t("slogan")}</p>
         </div>
-        <p className="text-sm text-muted">{t("rights", { year: new Date().getFullYear() })}</p>
+        <div className="flex flex-col gap-2 sm:items-end">
+          <nav aria-label={t("legalLabel")} className="flex gap-4 text-sm">
+            <Link href="/terms" className="font-medium text-hs-black underline-offset-4 hover:underline">
+              {t("terms")}
+            </Link>
+            <Link href="/privacy" className="font-medium text-hs-black underline-offset-4 hover:underline">
+              {t("privacy")}
+            </Link>
+          </nav>
+          <p className="text-sm text-muted">{t("rights", { year: new Date().getFullYear() })}</p>
+        </div>
       </div>
     </footer>
   );
