@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { becomeHost, createListing } from "@/app/host/equipment/actions";
@@ -7,7 +6,7 @@ import { KeyIcon } from "@/components/icons";
 import { ListingForm } from "@/components/host/listing-form";
 import { BackLink } from "@/components/rider/back-link";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/session";
+import { requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,8 +22,7 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
   // mostra a tela de quem ainda não é Host.
   let notHost = preview === "new-host";
   if (supabaseConfigured()) {
-    const user = await getCurrentUser();
-    if (!user) redirect("/auth/login");
+    const user = await requireUser();
     notHost = !user.is_host;
   }
 

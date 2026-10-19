@@ -7,6 +7,7 @@ import {
   CalendarIcon,
   ChatIcon,
   CheckCircleIcon,
+  UserIcon,
   KeyIcon,
   QrCodeIcon,
   SearchIcon,
@@ -53,6 +54,10 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   ]);
 
   const steps: NextStep[] = [];
+  // Telefone obrigatório (decisão de 19/10/2026): contas antigas completam no perfil.
+  if (!user.phone) {
+    steps.push({ key: "phone", href: "/profile/edit", icon: UserIcon, title: t("cards.phoneTitle"), text: t("cards.phoneText") });
+  }
   if (user.identity !== "approved") {
     steps.push({ key: "identity", href: "/verify-identity", icon: VerifiedBadgeIcon, title: t("cards.identityTitle"), text: t("cards.identityText") });
   }

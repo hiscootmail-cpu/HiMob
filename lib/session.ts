@@ -59,9 +59,12 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   // As regras do banco só entregam a linha da própria pessoa.
   const [{ data: profile }, { data: secret }] = await Promise.all([
-    supabase.from("profiles").select("city, is_host, identity_status").eq("id", user.id).maybeSingle(),
+    supabase.from("profiles").select("city, is_host, identity_status, deleted_at").eq("id", user.id).maybeSingle(),
     supabase.from("profile_private").select("full_name, phone, is_admin").eq("id", user.id).maybeSingle(),
   ]);
+
+  // Conta excluída (decisão de 19/10/2026): vale como ninguém conectado.
+  if (profile?.deleted_at) return null;
 
   return {
     id: user.id,

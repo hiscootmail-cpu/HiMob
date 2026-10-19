@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
 import { unreadCount } from "@/lib/notifications";
 import { isSignedIn } from "@/lib/session";
+import { SITE_URL } from "@/lib/site-url";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -19,10 +20,20 @@ const inter = Inter({
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
+  const locale = await getLocale();
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: { default: t("title"), template: `%s | Hi Scoot` },
     description: t("description"),
+    // Prévia quando alguém compartilha um link (WhatsApp, redes sociais); a imagem é app/opengraph-image.png.
+    openGraph: {
+      type: "website",
+      siteName: "Hi Scoot",
+      title: t("title"),
+      description: t("description"),
+      locale: locale === "en" ? "en_US" : "pt_BR",
+    },
     icons: {
       icon: [
         { url: "/icons/hiscoot-icon-32-light-bg.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },

@@ -4,6 +4,7 @@ import { ChevronRight, LogOut } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { signOut } from "@/app/auth/actions";
+import { DeleteAccount } from "@/app/settings/delete-account";
 import { LanguageChoice } from "@/app/settings/language-choice";
 import { ShieldAdminIcon, UserIcon, VerifiedBadgeIcon, type IconProps } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,7 @@ function Row({ href, icon: Icon, label, extra }: { href: string; icon: React.Com
   );
 }
 
-/** Configurações: idioma, conta e sair. */
+/** Configurações: idioma, conta, sair e excluir a conta. */
 export default async function SettingsPage() {
   const user = await requireUser();
   const t = await getTranslations("settings");
@@ -76,6 +77,8 @@ export default async function SettingsPage() {
           {t("signOut")}
         </Button>
       </form>
+
+      {user.is_admin ? null : <DeleteAccount />}
     </div>
   );
 }

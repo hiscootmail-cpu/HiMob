@@ -95,7 +95,7 @@ async function ListingCard({ listing, today }: { listing: HostListing; today: st
         {approved ? <QrLabelDialog code={listing.label_code} title={listing.title} qrSvg={qrSvg} /> : null}
         {isPublic ? (
           <Button asChild variant="ghost">
-            <Link href={`/equipment/${listing.id}?preview=owner`}>{t("view")}</Link>
+            <Link href={supabaseConfigured() ? `/equipment/${listing.id}` : `/equipment/${listing.id}?preview=owner`}>{t("view")}</Link>
           </Button>
         ) : null}
       </div>
@@ -114,8 +114,8 @@ export default async function HostListingsPage({ searchParams }: PageProps<"/hos
   if (supabaseConfigured()) await requireUser();
   const t = await getTranslations("host.listings");
   const { sent, preview } = await searchParams;
-  // PROVISÓRIO até o login existir: ?preview=empty mostra a tela sem anúncios.
-  const listings = preview === "empty" ? [] : await listHostListings();
+  // Só na demonstração: ?preview=empty mostra a tela sem anúncios.
+  const listings = preview === "empty" && !supabaseConfigured() ? [] : await listHostListings();
   const today = todayInSaoPaulo();
   const sentKey = sent === "new" || sent === "edit" || sent === "resent" ? sent : null;
 

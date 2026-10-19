@@ -66,7 +66,7 @@ export async function payBooking(bookingId: string, _prev: PaymentState, formDat
   if (method !== "pix" && method !== "card") return { error: "methodRequired" };
 
   if (supabaseConfigured()) {
-    // PROVISÓRIO: pagamento de teste. Sai quando o Mercado Pago entrar.
+    // Pagamento de teste: só enquanto o Mercado Pago está desligado (o banco confere).
     const supabase = await createClient();
     const { error } = await supabase.rpc("pay_booking_test", { p_id: bookingId });
     if (error) return { error: "notAllowed" };

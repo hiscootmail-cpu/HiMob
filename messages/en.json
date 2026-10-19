@@ -32,7 +32,10 @@
   },
   "footer": {
     "slogan": "The city moves. Get in the Flow.",
-    "rights": "© {year} Hi Scoot. All rights reserved."
+    "rights": "© {year} Hi Scoot. All rights reserved.",
+    "legalLabel": "Legal documents",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy"
   },
   "designSystem": {
     "badge": "Review page",
@@ -279,15 +282,7 @@
   },
   "legal": {
     "close": "Close",
-    "pendingNotice": "Text in preparation.",
-    "terms": {
-      "title": "Terms of Use",
-      "placeholder": "The official Hi Scoot Terms of Use will be published here before launch."
-    },
-    "privacy": {
-      "title": "Privacy Policy",
-      "placeholder": "The official Hi Scoot Privacy Policy, in line with Brazil's LGPD, will be published here before launch."
-    }
+    "draftNotice": "Draft under legal review. The final text will be published before launch."
   },
   "verifyIdentity": {
     "title": "Identity verification",
@@ -937,7 +932,9 @@
       "reviewTitle": "Rate your rental",
       "reviewText": "How was {title}?",
       "messagesTitle": "{count, plural, one {# new message} other {# new messages}}",
-      "messagesText": "Reply in Messages."
+      "messagesText": "Reply in Messages.",
+      "phoneTitle": "Add your phone number",
+      "phoneText": "A phone number is now required. It is only shown to the other person after a booking is accepted."
     },
     "mpConnected": "Mercado Pago account connected."
   },
@@ -1020,6 +1017,19 @@
       "pending": "Under review",
       "rejected": "Rejected",
       "blocked": "Blocked"
+    },
+    "delete": {
+      "title": "Delete my account",
+      "text": "Your account stops working and your profile and listings are removed from the platform. For safety, your data is kept and may only be provided to the Brazilian courts, upon a court order.",
+      "button": "Delete my account",
+      "confirmTitle": "Delete your account?",
+      "confirmText": "This can't be undone. You will be signed out now and won't be able to sign in again with this email.",
+      "confirm": "Delete account",
+      "cancel": "Back",
+      "errors": {
+        "ongoing": "You have ongoing bookings. Complete or cancel them before deleting your account.",
+        "failed": "We couldn't delete your account right now. Please try again."
+      }
     }
   },
   "notifications": {

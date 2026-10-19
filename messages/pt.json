@@ -32,7 +32,10 @@
   },
   "footer": {
     "slogan": "A cidade se move. Vem no Flow.",
-    "rights": "© {year} Hi Scoot. Todos os direitos reservados."
+    "rights": "© {year} Hi Scoot. Todos os direitos reservados.",
+    "legalLabel": "Documentos legais",
+    "terms": "Termos de Uso",
+    "privacy": "Política de Privacidade"
   },
   "designSystem": {
     "badge": "Página de conferência",
@@ -279,15 +282,7 @@
   },
   "legal": {
     "close": "Fechar",
-    "pendingNotice": "Texto em preparação.",
-    "terms": {
-      "title": "Termos de Uso",
-      "placeholder": "O texto oficial dos Termos de Uso da Hi Scoot será publicado aqui antes do lançamento."
-    },
-    "privacy": {
-      "title": "Política de Privacidade",
-      "placeholder": "O texto oficial da Política de Privacidade da Hi Scoot, de acordo com a LGPD, será publicado aqui antes do lançamento."
-    }
+    "draftNotice": "Rascunho em revisão jurídica. O texto final será publicado antes do lançamento."
   },
   "verifyIdentity": {
     "title": "Verificação de identidade",
@@ -937,7 +932,9 @@
       "reviewTitle": "Avalie seu aluguel",
       "reviewText": "Como foi com {title}?",
       "messagesTitle": "{count, plural, one {# mensagem nova} other {# mensagens novas}}",
-      "messagesText": "Responda em Conversas."
+      "messagesText": "Responda em Conversas.",
+      "phoneTitle": "Complete seu telefone",
+      "phoneText": "O telefone agora é obrigatório. Ele só aparece para a outra pessoa depois de uma reserva aceita."
     },
     "mpConnected": "Conta Mercado Pago conectada."
   },
@@ -1020,6 +1017,19 @@
       "pending": "Em análise",
       "rejected": "Recusada",
       "blocked": "Bloqueada"
+    },
+    "delete": {
+      "title": "Excluir minha conta",
+      "text": "A conta deixa de funcionar e seu perfil e seus anúncios saem da plataforma. Por segurança, seus dados ficam guardados e só podem ser fornecidos à Justiça brasileira, mediante ordem judicial.",
+      "button": "Excluir minha conta",
+      "confirmTitle": "Excluir sua conta?",
+      "confirmText": "Não dá para desfazer. Você sai agora e não consegue entrar de novo com este e-mail.",
+      "confirm": "Excluir conta",
+      "cancel": "Voltar",
+      "errors": {
+        "ongoing": "Você tem reservas em andamento. Conclua ou cancele antes de excluir a conta.",
+        "failed": "Não foi possível excluir a conta agora. Tente de novo."
+      }
     }
   },
   "notifications": {
