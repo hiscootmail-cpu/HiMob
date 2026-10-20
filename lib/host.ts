@@ -55,9 +55,10 @@ export type EditPolicy =
  *   edição é aprovada na hora (decisão de 20/10/2026).
  */
 export function editPolicy(listing: HostListing, today: string, isAdmin = false): EditPolicy {
+  // A equipe sempre edita (a edição nova substitui uma antiga em análise).
+  if (isAdmin) return { allowed: true };
   if (listing.review_status === "pending") return { allowed: false, reason: "inReview" };
   if (listing.edit_in_review) return { allowed: false, reason: "editInReview" };
-  if (isAdmin) return { allowed: true };
   if (listing.last_sent_at) {
     const nextDate = addDays(listing.last_sent_at, EDIT_INTERVAL_DAYS);
     if (today < nextDate) return { allowed: false, reason: "tooSoon", nextDate };

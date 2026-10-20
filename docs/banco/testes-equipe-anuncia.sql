@@ -32,6 +32,13 @@ select public.review_listing('10000000-0000-0000-0000-000000000001', true);
 select pg_temp.ok((select review_status from public.equipment) = 'approved', 'Equipe aprova o próprio anúncio');
 select pg_temp.ok(public.submit_listing_edit('10000000-0000-0000-0000-000000000001', '{"title":"Patinete Hi Scoot Mogi Mirim"}') = 'edit', 'Equipe edita logo depois (sem esperar 30 dias)');
 
+-- Edição antiga em análise não trava a equipe: a nova substitui
+select pg_temp.ok((select count(*) from public.equipment_edits where status = 'pending') = 1, 'Há uma edição esperando análise');
+select pg_temp.ok(public.submit_listing_edit('10000000-0000-0000-0000-000000000001', '{"title":"Patinete Hi Scoot Mogi Mirim Centro"}') = 'edit', 'Equipe edita de novo com edição antiga em análise');
+select pg_temp.ok((select count(*) from public.equipment_edits where status = 'pending') = 1, 'A edição antiga foi substituída');
+select public.review_listing_edit((select id from public.equipment_edits where status = 'pending'), true);
+select pg_temp.ok((select title from public.equipment where id = '10000000-0000-0000-0000-000000000001') = 'Patinete Hi Scoot Mogi Mirim Centro', 'Edição da equipe aprovada na hora');
+
 -- Host comum continua com as regras
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.become_host();
