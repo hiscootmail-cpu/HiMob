@@ -195,8 +195,14 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
           <p className="text-base text-muted">{t("subtitle")}</p>
         </div>
         <Link
-          href="/admin/scoot-world"
+          href="/admin/coupons"
           className="ml-auto inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+        >
+          {t("coupons")}
+        </Link>
+        <Link
+          href="/admin/scoot-world"
+          className="inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
         >
           {t("scootWorld")}
         </Link>

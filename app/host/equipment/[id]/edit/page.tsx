@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
 import { editPolicy, getHostListing } from "@/lib/host";
+import { getCurrentUser } from "@/lib/session";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("host.edit");
@@ -23,7 +24,7 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
   if (!listing) notFound();
   const t = await getTranslations("host.edit");
   const format = await getFormatter();
-  const policy = editPolicy(listing, todayInSaoPaulo());
+  const policy = editPolicy(listing, todayInSaoPaulo(), Boolean((await getCurrentUser())?.is_admin));
   const longDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
 

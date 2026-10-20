@@ -14,7 +14,7 @@ import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
 import { getEquipment } from "@/lib/equipment-db";
 import { editPolicy, listHostListings, type HostListing } from "@/lib/host";
 import { riderDailyPrice } from "@/lib/pricing";
-import { requireUser } from "@/lib/session";
+import { getCurrentUser, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,13 +24,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const reviewTone = { pending: "pending", approved: "success", rejected: "error" } as const;
 
-async function ListingCard({ listing, today }: { listing: HostListing; today: string }) {
+async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; today: string; isAdmin: boolean }) {
   const t = await getTranslations("host.listings");
   const format = await getFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const longDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
-  const policy = editPolicy(listing, today);
+  const policy = editPolicy(listing, today, isAdmin);
   const approved = listing.review_status === "approved";
   const isPublic = approved && (await getEquipment(listing.id)) !== null;
   const qrSvg = approved ? await QRCode.toString(listing.label_code, { type: "svg", margin: 1 }) : "";
@@ -117,7 +117,8 @@ export default async function HostListingsPage({ searchParams }: PageProps<"/hos
   // Só na demonstração: ?preview=empty mostra a tela sem anúncios.
   const listings = preview === "empty" && !supabaseConfigured() ? [] : await listHostListings();
   const today = todayInSaoPaulo();
-  const sentKey = sent === "new" || sent === "edit" || sent === "resent" ? sent : null;
+  const sentKey = sent === "new" || sent === "edit" || sent === "resent" || sent === "published" ? sent : null;
+  const isAdmin = Boolean((await getCurrentUser())?.is_admin);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -156,7 +157,7 @@ export default async function HostListingsPage({ searchParams }: PageProps<"/hos
       ) : (
         <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} today={today} />
+            <ListingCard key={listing.id} listing={listing} today={today} isAdmin={isAdmin} />
           ))}
         </ul>
       )}

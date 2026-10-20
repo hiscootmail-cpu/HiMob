@@ -401,7 +401,12 @@
       "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
       "unavailable": "Este equipamento não está disponível para reserva.",
       "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas.",
-      "identityRequired": "Para alugar, a equipe precisa aprovar seu documento. Envie em Verificação de identidade."
+      "identityRequired": "Para alugar, a equipe precisa aprovar seu documento. Envie em Verificação de identidade.",
+      "couponInvalid": "Cupom não encontrado ou fora da validade.",
+      "couponCity": "Este cupom não vale na cidade deste equipamento.",
+      "couponUsedUp": "Este cupom já foi usado o máximo de vezes.",
+      "couponAlreadyUsed": "Você já usou este cupom.",
+      "couponDays": "Este cupom não vale para tantos dias. Escolha menos dias."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
@@ -413,7 +418,14 @@
     "photoAlt": "Foto {number} de {title}",
     "morePhotos": "Mais fotos",
     "verifyToBook": "Seu documento está em análise. Você pode ver os equipamentos e conversar com o Host; a reserva fica liberada assim que a equipe aprovar. <link>Ver verificação</link>",
-    "verifyToSend": "Para alugar, envie a foto do seu documento (frente e verso). A equipe confere e libera a reserva. Você já pode ver os equipamentos e conversar com o Host. <link>Enviar documento</link>"
+    "verifyToSend": "Para alugar, envie a foto do seu documento (frente e verso). A equipe confere e libera a reserva. Você já pode ver os equipamentos e conversar com o Host. <link>Enviar documento</link>",
+    "couponOpen": "Tem um cupom?",
+    "couponLabel": "Cupom",
+    "couponApply": "Aplicar",
+    "couponApplied": "Cupom {code} aplicado: aluguel grátis.",
+    "couponLine": "Cupom {code}",
+    "free": "Grátis",
+    "requestSentFree": "Pedido com cupom enviado. Quando o Host aceitar, a reserva já fica confirmada, sem pagamento."
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -624,7 +636,8 @@
       "errors": {
         "ratingRequired": "Escolha uma nota de 1 a 5 estrelas."
       }
-    }
+    },
+    "freeWithCoupon": "Grátis · cupom {code}"
   },
   "host": {
     "tabs": {
@@ -770,7 +783,9 @@
         "editTitle": "Edição enviada para análise",
         "editText": "O anúncio atual continua no ar até a edição ser aprovada.",
         "resentTitle": "Anúncio reenviado para análise",
-        "resentText": "A equipe Hi Scoot confere as correções e você recebe um aviso com a resposta."
+        "resentText": "A equipe Hi Scoot confere as correções e você recebe um aviso com a resposta.",
+        "publishedTitle": "Equipamento publicado",
+        "publishedText": "Equipamento da Hi Scoot: já está no ar, sem passar pela análise."
       },
       "availabilityError": "Não foi possível mudar agora. Tente de novo.",
       "markedUnavailable": "Anúncio marcado como indisponível.",
@@ -909,7 +924,8 @@
       "noOngoing": "Nenhuma reserva em andamento.",
       "noPast": "Nenhuma reserva anterior.",
       "emptyTitle": "Você ainda não recebeu reservas",
-      "emptyText": "Quando um Rider pedir um equipamento seu, o pedido aparece aqui."
+      "emptyText": "Quando um Rider pedir um equipamento seu, o pedido aparece aqui.",
+      "freeWithCoupon": "Grátis · cupom {code} (sem pagamento)"
     }
   },
   "dashboard": {
@@ -1175,7 +1191,8 @@
       "done": "Confirmado pela plataforma. A reserva seguiu para a próxima etapa.",
       "reasonRequired": "Escreva o motivo para confirmar."
     },
-    "scootWorld": "Mundo Scoot"
+    "scootWorld": "Mundo Scoot",
+    "coupons": "Cupons"
   },
   "mercadoPago": {
     "connect": {
@@ -1471,6 +1488,61 @@
       "refundFailed": "O Mercado Pago não devolveu o dinheiro. Tente de novo.",
       "refundError": "Não deu para cancelar. Confira o motivo e tente de novo.",
       "size": "Tamanho {size}"
+    }
+  },
+  "adminCoupons": {
+    "title": "Cupons",
+    "subtitle": "Cupons de aluguel grátis para as ações da Hi Scoot. Cada cupom pode valer só numa cidade.",
+    "back": "Voltar ao painel",
+    "empty": "Nenhum cupom ainda.",
+    "newTitle": "Novo cupom",
+    "newHelp": "O cupom deixa o aluguel grátis: a reserva fica confirmada sem pagamento quando o Host aceita. Use em equipamentos da Hi Scoot ou de parceiros que toparam emprestar.",
+    "code": "Código",
+    "codeHint": "Só letras e números, sem espaço. Ex.: ScootemMogi",
+    "city": "Cidade (opcional)",
+    "cityHint": "Vazio: vale em qualquer cidade.",
+    "maxUses": "Total de usos (opcional)",
+    "perPerson": "Usos por pessoa (opcional)",
+    "maxDays": "Máximo de dias por reserva (opcional)",
+    "validUntil": "Vale até (opcional)",
+    "emptyNoLimit": "Vazio: sem limite.",
+    "emptyNoDate": "Vazio: sem data para acabar.",
+    "create": "Criar cupom",
+    "saveChanges": "Salvar alterações",
+    "saving": "Salvando...",
+    "saved": "Cupom salvo.",
+    "on": "Ligado",
+    "off": "Desligado",
+    "kindFree": "Aluguel grátis",
+    "onlyCity": "Só em {city}",
+    "anyCity": "Qualquer cidade",
+    "uses": "{uses, plural, =0 {nenhum uso} one {# uso} other {# usos}}",
+    "usesOf": "{uses} de {max} usos",
+    "perPersonShown": "{count, plural, one {# vez por pessoa} other {# vezes por pessoa}}",
+    "maxDaysShown": "{count, plural, one {até # dia} other {até # dias}}",
+    "untilShown": "até {date}",
+    "edit": "Editar",
+    "closeEdit": "Fechar edição",
+    "turnOff": "Desligar",
+    "turnOn": "Ligar",
+    "turnedOff": "Cupom desligado.",
+    "turnedOn": "Cupom ligado.",
+    "delete": "Apagar",
+    "deleteTitle": "Apagar o cupom {code}?",
+    "deleteText": "Isso não pode ser desfeito. As reservas já feitas continuam com o código. Para parar só por um tempo, use Desligar.",
+    "deleteConfirm": "Apagar de vez",
+    "deleted": "Cupom apagado.",
+    "cancel": "Cancelar",
+    "errors": {
+      "notAllowed": "Só a equipe pode fazer isso.",
+      "saveFailed": "Não deu para salvar. Tente de novo.",
+      "code": "Use de 3 a 30 letras e números, sem espaço.",
+      "codeTaken": "Já existe um cupom com esse código.",
+      "city": "Escreva o nome da cidade.",
+      "maxUses": "Escreva um número inteiro (1 ou mais), ou deixe vazio.",
+      "perPerson": "Escreva um número inteiro (1 ou mais), ou deixe vazio.",
+      "maxDays": "Escreva de 1 a 60 dias, ou deixe vazio.",
+      "validUntil": "Escolha uma data válida, ou deixe vazio."
     }
   }
 }

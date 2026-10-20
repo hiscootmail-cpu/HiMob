@@ -38,6 +38,10 @@ export type Booking = {
   rider_reviewed: boolean;
   /** Motivo curto escrito pelo Host ao recusar (decisão de 10/10/2026). */
   reject_reason?: string | null;
+  /** Cupom usado no pedido (ex.: SCOOTEMMOGI). */
+  coupon_code?: string | null;
+  /** Aluguel grátis (cupom de ação): confirmado sem pagamento, ninguém recebe. */
+  free?: boolean;
   /**
    * Quem já confirmou a retirada e a devolução. A reserva só segue quando os
    * dois confirmam (decisão de 10/10/2026); sem isso, a equipe verifica em 2 horas.

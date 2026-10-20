@@ -16,10 +16,51 @@ import { createClient } from "@/lib/supabase/server";
  * Dias já reservados e dias bloqueados pelo Host já são recusados aqui.
  */
 
+export type CouponError = "couponInvalid" | "couponCity" | "couponUsedUp" | "couponAlreadyUsed" | "couponDays";
+
 export type BookingRequestState = {
-  error?: BookingDatesError | "unavailable" | "datesUnavailable" | "identityRequired";
+  error?: BookingDatesError | "unavailable" | "datesUnavailable" | "identityRequired" | CouponError;
   done?: boolean;
+  /** Pedido feito com cupom de aluguel grátis (ação da Hi Scoot). */
+  free?: boolean;
 };
+
+const COUPON_ERRORS: Record<string, CouponError> = {
+  coupon_invalid: "couponInvalid",
+  coupon_city: "couponCity",
+  coupon_used_up: "couponUsedUp",
+  coupon_already_used: "couponAlreadyUsed",
+  coupon_days: "couponDays",
+};
+
+/** Cupons da demonstração (sem Supabase), só para conferir a tela. */
+const DEMO_COUPONS = ["SCOOTEMMOGI", "SCOOTEMJAGUA", "SCOOTEMSAMPA"];
+
+const cleanCoupon = (value: FormDataEntryValue | string | null) =>
+  String(value ?? "").replace(/\s/g, "").toUpperCase().slice(0, 30);
+
+/**
+ * Cupom digitado no quadro de reserva (decisão de 20/10/2026): o banco confere
+ * cidade, validade e limites. Por enquanto todo cupom deixa o aluguel grátis.
+ */
+export async function checkCoupon(
+  equipmentId: string,
+  code: string,
+  pickup: string,
+  dropoff: string,
+): Promise<{ ok: true } | { ok: false; error: CouponError }> {
+  const coupon = cleanCoupon(code);
+  if (!/^[A-Z0-9]{3,30}$/.test(coupon)) return { ok: false, error: "couponInvalid" };
+  if (!supabaseConfigured()) return DEMO_COUPONS.includes(coupon) ? { ok: true } : { ok: false, error: "couponInvalid" };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("check_coupon", {
+    p_code: coupon,
+    p_equipment: equipmentId,
+    p_start: pickup || null,
+    p_end: dropoff || null,
+  });
+  return error ? { ok: false, error: COUPON_ERRORS[error.message] ?? "couponInvalid" } : { ok: true };
+}
 
 export async function requestBooking(
   equipmentId: string,
@@ -37,6 +78,8 @@ export async function requestBooking(
   const { booked, blocked } = await unavailableDays(equipmentId);
   if (firstConflict(pickup, dropoff, [...booked, ...blocked])) return { error: "datesUnavailable" };
 
+  const coupon = cleanCoupon(formData.get("coupon"));
+
   // O valor é sempre recalculado no servidor (diárias x daily_price), nunca vem do navegador.
   if (supabaseConfigured()) {
     const supabase = await createClient();
@@ -44,8 +87,14 @@ export async function requestBooking(
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) redirect("/auth/login");
-    const { error } = await supabase.rpc("request_booking", { p_equipment: equipmentId, p_start: pickup, p_end: dropoff });
+    const { error } = await supabase.rpc("request_booking", {
+      p_equipment: equipmentId,
+      p_start: pickup,
+      p_end: dropoff,
+      p_coupon: coupon || null,
+    });
     if (error) {
+      if (COUPON_ERRORS[error.message]) return { error: COUPON_ERRORS[error.message] };
       const known = {
         dates_unavailable: "datesUnavailable",
         pickup_in_past: "pickupInPast",
@@ -54,8 +103,10 @@ export async function requestBooking(
       } as const;
       return { error: known[error.message as keyof typeof known] ?? "unavailable" };
     }
+    return { done: true, free: Boolean(coupon) };
   }
-  return { done: true };
+  if (coupon && !DEMO_COUPONS.includes(coupon)) return { error: "couponInvalid" };
+  return { done: true, free: Boolean(coupon) };
 }
 
 export type WaitlistState = { onWaitlist: boolean };

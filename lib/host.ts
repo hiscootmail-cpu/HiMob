@@ -51,10 +51,13 @@ export type EditPolicy =
  * - Em análise (anúncio novo): ainda não.
  * - Publicado ou recusado: uma vez a cada 30 dias desde o último envio,
  *   e só se não houver outra edição em análise.
+ * - A equipe (equipamentos da própria Hi Scoot) edita quando quiser e a
+ *   edição é aprovada na hora (decisão de 20/10/2026).
  */
-export function editPolicy(listing: HostListing, today: string): EditPolicy {
+export function editPolicy(listing: HostListing, today: string, isAdmin = false): EditPolicy {
   if (listing.review_status === "pending") return { allowed: false, reason: "inReview" };
   if (listing.edit_in_review) return { allowed: false, reason: "editInReview" };
+  if (isAdmin) return { allowed: true };
   if (listing.last_sent_at) {
     const nextDate = addDays(listing.last_sent_at, EDIT_INTERVAL_DAYS);
     if (today < nextDate) return { allowed: false, reason: "tooSoon", nextDate };

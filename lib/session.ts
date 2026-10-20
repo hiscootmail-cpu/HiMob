@@ -101,8 +101,9 @@ export async function requireUser(options: { mercadoPago?: boolean } = {}): Prom
  * anunciar: "send" (ainda não enviou, ou precisa reenviar), "review" (enviado,
  * esperando a equipe) ou null (aprovada).
  */
-export async function identityStep(user: Pick<CurrentUser, "id" | "identity">): Promise<"send" | "review" | null> {
-  if (user.identity === "approved") return null;
+export async function identityStep(user: Pick<CurrentUser, "id" | "identity" | "is_admin">): Promise<"send" | "review" | null> {
+  // A equipe cadastra os equipamentos da própria Hi Scoot sem as regras do Host (decisão de 20/10/2026).
+  if (user.identity === "approved" || user.is_admin) return null;
   if (!supabaseConfigured()) return "send";
   const supabase = await createClient();
   const { count } = await supabase
