@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { todayInSaoPaulo } from "@/lib/booking";
 import { editPolicy, getHostListing } from "@/lib/host";
+import { locateAddress } from "@/lib/geocode";
 import { parsePrice, readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -43,8 +44,8 @@ function listingFields(formData: FormData) {
     pickup_time: get("pickup_time"),
     return_time: get("return_time"),
     pickup_address: get("pickup_address"),
-    latitude: Number(get("latitude")),
-    longitude: Number(get("longitude")),
+    latitude: get("latitude") ? Number(get("latitude")) : null,
+    longitude: get("longitude") ? Number(get("longitude")) : null,
   };
 }
 
@@ -81,6 +82,12 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
   if (Object.keys(errors).length) return { errors };
 
   const f = listingFields(formData);
+  // Sem marcar no mapa: acha a região pelo endereço de retirada.
+  const point =
+    f.latitude !== null && f.longitude !== null
+      ? { latitude: f.latitude, longitude: f.longitude }
+      : await locateAddress({ address: f.pickup_address, area: f.area, city: f.city });
+  if (!point) return { errors: { location: "locationNotFound" } };
   const { data: created, error } = await supabase
     .from("equipment")
     .insert({
@@ -102,8 +109,8 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
     supabase.from("equipment_private").insert({
       equipment_id: created.id,
       pickup_address: f.pickup_address,
-      latitude: f.latitude,
-      longitude: f.longitude,
+      latitude: point.latitude,
+      longitude: point.longitude,
     }),
     supabase.from("equipment_photos").insert(paths.map((path, position) => ({ equipment_id: created.id, path, position }))),
   ]);
@@ -140,7 +147,15 @@ export async function updateListing(listingId: string, _prev: ListingState, form
   if (Object.keys(errors).length) return { errors };
 
   // Só o que mudou vai para a análise.
-  const f = listingFields(formData);
+  const fields = listingFields(formData);
+  // Sem marcar no mapa: mantém o ponto atual, ou acha a região pelo endereço se ele mudou.
+  const addressChanged =
+    fields.pickup_address !== listing.pickup_address || fields.area !== listing.area || fields.city !== listing.city;
+  let point = fields.latitude !== null && fields.longitude !== null ? { latitude: fields.latitude, longitude: fields.longitude } : null;
+  if (!point && !addressChanged) point = { latitude: listing.latitude, longitude: listing.longitude };
+  if (!point) point = await locateAddress({ address: fields.pickup_address, area: fields.area, city: fields.city });
+  if (!point) return { errors: { location: "locationNotFound" } };
+  const f = { ...fields, ...point };
   const current: Record<string, unknown> = {
     type: listing.type,
     title: listing.title,

@@ -24,7 +24,7 @@
 
 export const EDIT_INTERVAL_DAYS = 30;
 
-export const MIN_PHOTOS = 4;
+export const MIN_PHOTOS = 2;
 export const MAX_PHOTOS = 10;
 
 export type EquipmentType = "scooter" | "ebike";

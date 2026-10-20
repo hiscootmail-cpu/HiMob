@@ -696,11 +696,11 @@
       "addressLabel": "Endereço de retirada",
       "addressPlaceholder": "Rua, número e complemento",
       "addressHint": "Só aparece para o Rider depois que a reserva é paga.",
-      "locationLabel": "Localização no mapa",
-      "locationHelp": "Use no local onde o equipamento fica. O mapa mostra só a região, nunca o ponto exato.",
+      "locationLabel": "Localização no mapa (opcional)",
+      "locationHelp": "Se você estiver no local onde o equipamento fica, toque no botão. Se não, usamos o endereço de retirada. O mapa mostra só a região, nunca o ponto exato.",
       "locationUse": "Usar minha localização",
       "locationUpdate": "Atualizar localização",
-      "locationDenied": "Não conseguimos pegar a sua localização. Permita o acesso à localização no navegador e tente de novo.",
+      "locationDenied": "Não conseguimos pegar a sua localização. Tudo bem: usamos o endereço de retirada.",
       "locationSaved": "Localização salva.",
       "pickupTimeLabel": "Horário de retirada",
       "returnTimeLabel": "Horário de devolução",
@@ -725,7 +725,8 @@
         "uploadFailed": "Não foi possível enviar as fotos. Confira a internet e tente de novo.",
         "tooSoon": "Você já enviou este anúncio nos últimos 30 dias.",
         "inReview": "Este anúncio está em análise.",
-        "editInReview": "Já existe uma edição em análise."
+        "editInReview": "Já existe uma edição em análise.",
+        "locationNotFound": "Não achamos esse endereço no mapa. Confira o endereço, o bairro e a cidade, ou toque em \"Usar minha localização\"."
       }
     },
     "label": {

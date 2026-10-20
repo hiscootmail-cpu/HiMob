@@ -696,11 +696,11 @@
       "addressLabel": "Pick-up address",
       "addressPlaceholder": "Street, number and unit",
       "addressHint": "Only shown to the Rider after the booking is paid.",
-      "locationLabel": "Map location",
-      "locationHelp": "Use it where the equipment is kept. The map shows only the area, never the exact spot.",
+      "locationLabel": "Location on the map (optional)",
+      "locationHelp": "If you are where the equipment is kept, tap the button. Otherwise, we use the pickup address. The map only shows the area, never the exact spot.",
       "locationUse": "Use my location",
       "locationUpdate": "Update location",
-      "locationDenied": "We couldn't get your location. Allow location access in your browser and try again.",
+      "locationDenied": "We could not get your location. That is fine: we will use the pickup address.",
       "locationSaved": "Location saved.",
       "pickupTimeLabel": "Pick-up time",
       "returnTimeLabel": "Return time",
@@ -725,7 +725,8 @@
         "uploadFailed": "We couldn’t upload the photos. Check your connection and try again.",
         "tooSoon": "You already sent this listing in the last 30 days.",
         "inReview": "This listing is under review.",
-        "editInReview": "An edit is already under review."
+        "editInReview": "An edit is already under review.",
+        "locationNotFound": "We could not find this address on the map. Check the address, neighbourhood and city, or tap \"Use my location\"."
       }
     },
     "label": {

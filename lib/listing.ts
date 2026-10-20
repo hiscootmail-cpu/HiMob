@@ -32,6 +32,7 @@ export type ListingError =
   | "tooLong"
   | "priceInvalid"
   | "locationRequired"
+  | "locationNotFound"
   | "photosTooFew"
   | "photosTooMany"
   | "photoType"
@@ -84,10 +85,14 @@ export function validateListing(input: ListingInput): ListingErrors {
   text("area", input.area);
   text("pickup_address", input.pickup_address);
 
-  const lat = Number(input.latitude);
-  const lng = Number(input.longitude);
-  if (!input.latitude || !input.longitude || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) {
-    errors.location = "locationRequired";
+  // Marcar no mapa é opcional (decisão de 20/10/2026): sem marcar, o servidor
+  // acha a região pelo endereço de retirada. Se marcou, o ponto precisa ser válido.
+  if (input.latitude || input.longitude) {
+    const lat = Number(input.latitude);
+    const lng = Number(input.longitude);
+    if (!input.latitude || !input.longitude || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+      errors.location = "locationRequired";
+    }
   }
 
   if (!(input.keepPhotos && input.photos.length === 0)) {
