@@ -361,7 +361,9 @@
     "verified": "verified",
     "pricePerDay": "{price}/day",
     "reserve": "Book",
-    "loading": "Loading equipment"
+    "loading": "Loading equipment",
+    "searchAllCities": "Searching all cities",
+    "showingNearest": "Nothing within {km} km. Showing the closest ones"
   },
   "equipment": {
     "backToSearch": "Back to search",
