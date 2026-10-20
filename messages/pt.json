@@ -797,7 +797,7 @@
       "price": "Você recebe <strong>{host}</strong> por dia · Rider vê {rider}",
       "rejectedReason": "Motivo da recusa",
       "pendingText": "A equipe Hi Scoot está conferindo este anúncio. Você recebe um aviso com a resposta.",
-      "edit": "Editar",
+      "edit": "Editar anúncio",
       "fixAndResend": "Corrigir e reenviar",
       "view": "Ver anúncio",
       "editAllowed": "Você pode editar uma vez a cada {days} dias.",

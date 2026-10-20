@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Pencil } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import QRCode from "qrcode";
 
@@ -35,8 +36,9 @@ async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; 
   const isPublic = approved && (await getEquipment(listing.id)) !== null;
   const qrSvg = approved ? await QRCode.toString(listing.label_code, { type: "svg", margin: 1 }) : "";
 
+  // A equipe edita os equipamentos da Hi Scoot quando quiser: sem o aviso dos 30 dias.
   const editNote = policy.allowed
-    ? approved
+    ? approved && !isAdmin
       ? t("editAllowed", { days: EDIT_INTERVAL_DAYS })
       : null
     : policy.reason === "tooSoon" && policy.nextDate
@@ -81,14 +83,17 @@ async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; 
       {approved ? <AvailabilityToggle listingId={listing.id} initial={listing.is_available} /> : null}
 
       <div className="flex flex-col gap-2 border-t border-line pt-4 sm:flex-row sm:flex-wrap sm:items-center [&>*]:w-full sm:[&>*]:w-auto">
+        {/* Editar anúncio: sempre o primeiro botão, bem visível (pedido de 20/10/2026). */}
         {policy.allowed ? (
-          <Button asChild variant={listing.review_status === "rejected" ? "primary" : "secondary"}>
+          <Button asChild variant="primary">
             <Link href={`/host/equipment/${listing.id}/edit`}>
+              <Pencil aria-hidden />
               {listing.review_status === "rejected" ? t("fixAndResend") : t("edit")}
             </Link>
           </Button>
         ) : (
-          <Button variant="secondary" disabled aria-describedby={`edit-note-${listing.id}`}>
+          <Button variant="primary" disabled aria-describedby={`edit-note-${listing.id}`}>
+            <Pencil aria-hidden />
             {t("edit")}
           </Button>
         )}
