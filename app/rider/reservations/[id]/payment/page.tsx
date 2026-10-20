@@ -48,9 +48,17 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
           <dt className="text-hs-black">
             {t("rentalOf", { duration: durationText(tDuration, booking.hours) })}
           </dt>
-          <dd className="text-hs-black">{money(price.total)}</dd>
+          <dd className="text-hs-black">{money(price.fullTotal)}</dd>
         </div>
-        <p className="text-xs text-muted">{t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(price.fee) })}</p>
+        <p className="text-xs text-muted">
+          {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(price.fee + price.feeDiscount) })}
+        </p>
+        {price.rentalDiscount + price.feeDiscount > 0 ? (
+          <div className="flex justify-between gap-3 text-on-green">
+            <dt>{t("couponDiscount", { code: booking.coupon_code ?? "" })}</dt>
+            <dd className="whitespace-nowrap">- {money(price.rentalDiscount + price.feeDiscount)}</dd>
+          </div>
+        ) : null}
         <div className="flex justify-between gap-3 border-t border-line pt-2 text-base font-bold">
           <dt className="text-hs-black">{t("total")}</dt>
           <dd className="text-hs-black">{money(price.total)}</dd>

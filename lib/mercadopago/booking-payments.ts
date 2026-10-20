@@ -2,7 +2,7 @@ import "server-only";
 
 import { randomUUID } from "node:crypto";
 
-import type { Booking } from "@/lib/bookings";
+import { bookingPrice, type Booking } from "@/lib/bookings";
 import {
   createMpPayment,
   mercadoPagoOn,
@@ -83,7 +83,7 @@ export async function payBookingWithMercadoPago(
   const receiver = await receiverFor(hostId);
   if (!admin || !receiver) return { status: "error", error: "unavailable" };
   const { data: debt } = receiver.hiScoot ? { data: 0 } : await admin.rpc("host_pending_debt", { p_host: hostId });
-  const split = paymentSplit(booking.host_amount, method, Number(debt ?? 0));
+  const split = paymentSplit(bookingPrice(booking), method, Number(debt ?? 0));
   // Equipamento da Hi Scoot: o valor todo cai na conta da Hi Scoot, sem divisão.
   const applicationFee = receiver.hiScoot ? 0 : split.applicationFee;
 
@@ -170,7 +170,7 @@ export async function cancelPaidBooking(booking: Booking, hostId: string): Promi
     .maybeSingle();
   if (!payment?.mp_payment_id) return false;
 
-  const { refund, hostDebt } = cancelRefund(who, booking.host_amount);
+  const { refund, hostDebt } = cancelRefund(who, bookingPrice(booking));
   const refunded = await refundMpPayment(receiver.token, payment.mp_payment_id, refund, `refund-${booking.id}`);
   if (!refunded.ok) return false;
   const { error: saveError } = await admin.rpc("cancel_paid_booking", {

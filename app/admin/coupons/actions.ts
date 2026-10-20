@@ -14,7 +14,17 @@ import { createClient } from "@/lib/supabase/server";
 
 export type CouponFormState = {
   done?: boolean;
-  error?: "notAllowed" | "saveFailed" | "code" | "codeTaken" | "city" | "maxUses" | "perPerson" | "maxDays" | "validUntil";
+  error?:
+    | "notAllowed"
+    | "saveFailed"
+    | "code"
+    | "codeTaken"
+    | "city"
+    | "maxUses"
+    | "perPerson"
+    | "maxDays"
+    | "validUntil"
+    | "percent";
 };
 
 async function isAdmin() {
@@ -38,6 +48,10 @@ function readCoupon(formData: FormData) {
   const perPerson = optionalInt(text(formData, "per_person"), 1, 1000);
   const maxDays = optionalInt(text(formData, "max_days"), 1, 60);
   const validUntil = text(formData, "valid_until");
+  // Aluguel grátis, ou desconto: x% no aluguel (parte do Host) e y% na taxa (parte da Hi Scoot).
+  const kind = text(formData, "kind") === "discount" ? "discount" : "free";
+  const rentalPercent = kind === "discount" ? (optionalInt(text(formData, "rental_percent"), 0, 100) ?? 0) : 0;
+  const feePercent = kind === "discount" ? (optionalInt(text(formData, "fee_percent"), 0, 100) ?? 0) : 0;
   let error: CouponFormState["error"];
   if (!/^[A-Z0-9]{3,30}$/.test(code)) error = "code";
   else if (city && (city.length < 2 || city.length > 80)) error = "city";
@@ -45,6 +59,7 @@ function readCoupon(formData: FormData) {
   else if (perPerson === "bad") error = "perPerson";
   else if (maxDays === "bad") error = "maxDays";
   else if (validUntil && !/^\d{4}-\d{2}-\d{2}$/.test(validUntil)) error = "validUntil";
+  else if (rentalPercent === "bad" || feePercent === "bad" || (kind === "discount" && !rentalPercent && !feePercent)) error = "percent";
   return {
     error,
     row: {
@@ -54,6 +69,9 @@ function readCoupon(formData: FormData) {
       per_person: perPerson === "bad" ? null : perPerson,
       max_days: maxDays === "bad" ? null : maxDays,
       valid_until: validUntil || null,
+      kind,
+      rental_percent: rentalPercent === "bad" ? 0 : rentalPercent,
+      fee_percent: feePercent === "bad" ? 0 : feePercent,
     },
   };
 }
@@ -62,7 +80,7 @@ function refresh() {
   revalidatePath("/admin/coupons");
 }
 
-/** Criar cupom (sempre de aluguel grátis, por enquanto). */
+/** Criar cupom: aluguel grátis, ou desconto em % no aluguel e na taxa. */
 export async function createCoupon(_prev: CouponFormState, formData: FormData): Promise<CouponFormState> {
   if (!(await isAdmin())) return { error: "notAllowed" };
   const { error, row } = readCoupon(formData);

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { listAvailableDays } from "@/lib/availability";
 import { addDays, saoPauloTime, todayInSaoPaulo } from "@/lib/booking";
-import type { BookingStatus } from "@/lib/bookings";
+import { bookingPrice, type BookingStatus } from "@/lib/bookings";
 import { durationText } from "@/lib/duration";
 import { listHostBookings, listHostListings, type HostBooking } from "@/lib/host";
 import { requireUser } from "@/lib/session";
@@ -59,11 +59,11 @@ export default async function HostOverviewPage() {
     .filter((b) => b.status === "accepted" || b.status === "confirmed" || b.status === "active")
     .sort((a, b) => saoPauloTime(a.start_date, a.pickup_time) - saoPauloTime(b.start_date, b.pickup_time));
   const inUse = bookings.filter((b) => b.status === "active");
-  // Valor do Host nas reservas pagas com retirada neste mês (reserva grátis não conta).
+  // Valor do Host nas reservas pagas com retirada neste mês, já com desconto de cupom (grátis não conta).
   const month = today.slice(0, 7);
   const monthAmount = bookings
     .filter((b) => ["confirmed", "active", "completed"].includes(b.status) && !b.free && b.start_date.startsWith(month))
-    .reduce((sum, b) => sum + b.host_amount, 0);
+    .reduce((sum, b) => sum + bookingPrice(b).subtotal, 0);
 
   const tiles = [
     { label: t("tiles.pending"), value: String(pending.length), href: "/host/reservations", highlight: pending.length > 0 },
@@ -134,7 +134,7 @@ export default async function HostOverviewPage() {
                     <Badge tone={tones[b.status]}>
                       {b.free && b.status === "confirmed" ? tStatus("confirmedFree") : tStatus(b.status)}
                     </Badge>
-                    <span className="text-sm font-semibold text-hs-black">{b.free ? t("free") : money(b.host_amount)}</span>
+                    <span className="text-sm font-semibold text-hs-black">{b.free ? t("free") : money(bookingPrice(b).subtotal)}</span>
                   </span>
                 </Link>
               </li>

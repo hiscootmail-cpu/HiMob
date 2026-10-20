@@ -84,3 +84,32 @@ export function breakdownFromHost(hostAmount: number): BookingBreakdown {
   const fee = feeCents(subtotalCents);
   return { subtotal: toReais(subtotalCents), fee: toReais(fee), total: toReais(subtotalCents + fee) };
 }
+
+export type DiscountedBreakdown = BookingBreakdown & {
+  /** Desconto do cupom no aluguel (sai da parte do Host). */
+  rentalDiscount: number;
+  /** Desconto do cupom na taxa (sai da parte da Hi Scoot). */
+  feeDiscount: number;
+  /** Total sem o cupom. */
+  fullTotal: number;
+};
+
+/**
+ * Preço com cupom de desconto (20/10/2026): x% no aluguel e y% na taxa.
+ * subtotal = o que o Host recebe; fee = o que fica para a Hi Scoot.
+ */
+export function discountedBreakdown(hostAmount: number, rentalPercent = 0, feePercent = 0): DiscountedBreakdown {
+  const full = breakdownFromHost(hostAmount);
+  const subtotalCents = toCents(full.subtotal);
+  const feeFullCents = toCents(full.fee);
+  const rentalCents = Math.round((subtotalCents * Math.min(100, Math.max(0, rentalPercent))) / 100);
+  const feeCutCents = Math.round((feeFullCents * Math.min(100, Math.max(0, feePercent))) / 100);
+  return {
+    subtotal: toReais(subtotalCents - rentalCents),
+    fee: toReais(feeFullCents - feeCutCents),
+    total: toReais(subtotalCents - rentalCents + feeFullCents - feeCutCents),
+    rentalDiscount: toReais(rentalCents),
+    feeDiscount: toReais(feeCutCents),
+    fullTotal: full.total,
+  };
+}
