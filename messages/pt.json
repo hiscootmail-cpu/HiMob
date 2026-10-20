@@ -361,7 +361,9 @@
     "verified": "verificado",
     "pricePerDay": "{price}/dia",
     "reserve": "Reservar",
-    "loading": "Carregando equipamentos"
+    "loading": "Carregando equipamentos",
+    "searchAllCities": "Buscando em todas as cidades",
+    "showingNearest": "Nada a até {km} km. Mostrando os mais próximos"
   },
   "equipment": {
     "backToSearch": "Voltar para a busca",

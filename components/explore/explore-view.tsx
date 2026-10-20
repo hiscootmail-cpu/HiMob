@@ -37,11 +37,15 @@ export function ExploreView({ items }: { items: Equipment[] }) {
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
-  const results = useMemo(() => {
+  /*
+   * Sem busca: equipamentos até 5 km; se não houver nenhum por perto, mostra
+   * os mais próximos (de qualquer cidade). Com busca (ex.: "Mogi Mirim"):
+   * procura em todas as cidades, do mais perto para o mais longe.
+   */
+  const { results, mode } = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean);
-    return items
+    const matches = items
       .map((item) => ({ item, km: distanceKm(location, item) }))
-      .filter(({ km }) => km <= SEARCH_RADIUS_KM)
       .filter(({ item }) => typeFilter === "all" || item.type === typeFilter)
       .filter(({ item }) => {
         if (words.length === 0) return true;
@@ -49,6 +53,9 @@ export function ExploreView({ items }: { items: Equipment[] }) {
         return words.every((word) => haystack.includes(word));
       })
       .sort((a, b) => a.km - b.km);
+    if (words.length) return { results: matches, mode: "search" as const };
+    const near = matches.filter(({ km }) => km <= SEARCH_RADIUS_KM);
+    return near.length || !matches.length ? { results: near, mode: "near" as const } : { results: matches, mode: "nearest" as const };
   }, [items, location, query, typeFilter, tType]);
 
   function locateMe() {
@@ -131,11 +138,15 @@ export function ExploreView({ items }: { items: Equipment[] }) {
             </Button>
           </div>
           <p role="status" className="text-sm text-muted">
-            {locationState === "granted"
-              ? t("locationGranted", { km: SEARCH_RADIUS_KM })
-              : locationState === "denied"
-                ? t("locationDenied", { km: SEARCH_RADIUS_KM })
-                : t("locationFallback", { km: SEARCH_RADIUS_KM })}{" "}
+            {mode === "search"
+              ? t("searchAllCities")
+              : mode === "nearest"
+                ? t("showingNearest", { km: SEARCH_RADIUS_KM })
+                : locationState === "granted"
+                  ? t("locationGranted", { km: SEARCH_RADIUS_KM })
+                  : locationState === "denied"
+                    ? t("locationDenied", { km: SEARCH_RADIUS_KM })
+                    : t("locationFallback", { km: SEARCH_RADIUS_KM })}{" "}
             · {t("resultCount", { count: results.length })}
           </p>
         </div>
