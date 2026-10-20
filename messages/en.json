@@ -471,7 +471,8 @@
       "active": "In use",
       "completed": "Completed",
       "rejected": "Declined",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "confirmedFree": "Confirmed (free), ready for pickup"
     },
     "dates": "{start} to {end}",
     "days": "{count, plural, one {# day} other {# days}}",
@@ -670,7 +671,8 @@
     "tabs": {
       "label": "Host area",
       "listings": "My listings",
-      "reservations": "Received bookings"
+      "reservations": "Received bookings",
+      "overview": "Overview"
     },
     "new": {
       "title": "New listing",
@@ -940,7 +942,8 @@
         "active": "In use",
         "completed": "Completed",
         "rejected": "Declined",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "confirmedFree": "Confirmed (free), ready for pickup"
       },
       "rider": "Rider: <link>{name}</link>",
       "when": "{start} to {end}",
@@ -978,6 +981,34 @@
       "weekdays": "Weekdays only",
       "clearMonth": "Close the month",
       "shortcutsHelp": "Shortcuts apply from today to the end of the month shown. Days with bookings stay open."
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "Your requests, rentals and listings in one place.",
+      "newListing": "New listing",
+      "tiles": {
+        "pending": "New requests",
+        "upcoming": "Upcoming rentals",
+        "inUse": "In use now",
+        "month": "Paid bookings this month"
+      },
+      "nextTitle": "Upcoming rentals",
+      "seeAllReservations": "See all bookings",
+      "nextEmpty": "No rentals scheduled. As soon as a request is accepted or confirmed, it shows here.",
+      "free": "Free",
+      "listingsTitle": "Your listings",
+      "seeAllListings": "See My listings",
+      "listingsEmpty": "You have no listings yet.",
+      "listingLive": "Published and available",
+      "listingPaused": "Published, marked unavailable",
+      "listingReview": "Under review by the team",
+      "listingRejected": "Rejected: see the reason in My listings",
+      "openDays": "{count, plural, one {# open day} other {# open days}} in the next {days} days",
+      "noOpenDays": "No open days: nobody can book. Tap Available days.",
+      "nextBooking": "Next pickup: {when}",
+      "noNextBooking": "No bookings scheduled",
+      "edit": "Edit listing",
+      "availableDays": "Available days"
     }
   },
   "dashboard": {

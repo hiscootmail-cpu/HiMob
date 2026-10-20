@@ -14,7 +14,8 @@ const tones = {
 } as const;
 
 /** Etiqueta com a situação da reserva. */
-export function BookingStatusBadge({ status }: { status: BookingStatus }) {
+export function BookingStatusBadge({ status, free = false }: { status: BookingStatus; free?: boolean }) {
   const t = useTranslations("rider.status");
-  return <Badge tone={tones[status]}>{t(status)}</Badge>;
+  // Reserva grátis (cupom de ação): confirmada sem pagamento.
+  return <Badge tone={tones[status]}>{free && status === "confirmed" ? t("confirmedFree") : t(status)}</Badge>;
 }
