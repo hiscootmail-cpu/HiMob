@@ -326,19 +326,17 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
             <LocateFixed aria-hidden />
             {location === "saved" ? t("locationUpdate") : t("locationUse")}
           </Button>
+          {/* Localização é opcional: sem ela, o servidor usa o endereço de retirada (decisão de 20/10/2026). */}
           <p
             id="location-message"
-            role={errors.location || location === "denied" ? "alert" : "status"}
-            className={cn(
-              "flex items-center gap-2 text-sm",
-              errors.location || location === "denied" ? "text-error" : "text-hs-black",
-            )}
+            role={errors.location ? "alert" : "status"}
+            className={cn("flex items-center gap-2 text-sm", errors.location ? "text-error" : location === "denied" ? "text-muted" : "text-hs-black")}
           >
-            {location === "saved" ? <CheckCircleIcon className="size-4 text-on-green" /> : null}
-            {location === "denied"
-              ? t("locationDenied")
-              : errors.location
-                ? message("location")
+            {location === "saved" && !errors.location ? <CheckCircleIcon className="size-4 text-on-green" /> : null}
+            {errors.location
+              ? message("location")
+              : location === "denied"
+                ? t("locationDenied")
                 : location === "saved"
                   ? t("locationSaved")
                   : null}
