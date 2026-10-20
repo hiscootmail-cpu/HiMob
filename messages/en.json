@@ -797,7 +797,7 @@
       "price": "You get <strong>{host}</strong> per day · Riders see {rider}",
       "rejectedReason": "Reason for rejection",
       "pendingText": "The Hi Scoot team is checking this listing. You'll get a notice with the answer.",
-      "edit": "Edit",
+      "edit": "Edit listing",
       "fixAndResend": "Fix and resend",
       "view": "View listing",
       "editAllowed": "You can edit once every {days} days.",
