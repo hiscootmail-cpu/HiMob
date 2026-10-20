@@ -6,6 +6,7 @@ import { todayInSaoPaulo } from "@/lib/booking";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { locateAddress } from "@/lib/geocode";
 import { parsePrice, readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
+import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
@@ -119,6 +120,11 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
     await supabase.from("equipment").delete().eq("id", created.id);
     return { error: "notAllowed" };
   }
+  // Equipamento da própria Hi Scoot: a equipe publica na hora (decisão de 20/10/2026).
+  if ((await getCurrentUser())?.is_admin) {
+    const { error: reviewError } = await supabase.rpc("review_listing", { p_id: created.id, p_approve: true, p_reason: null });
+    if (!reviewError) redirect("/host/equipment?sent=published");
+  }
   redirect("/host/equipment?sent=new");
 }
 
@@ -128,7 +134,8 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
  */
 export async function updateListing(listingId: string, _prev: ListingState, formData: FormData): Promise<ListingState> {
   const listing = await getHostListing(listingId);
-  if (!listing || !editPolicy(listing, todayInSaoPaulo()).allowed) return { error: "notAllowed" };
+  const isAdmin = Boolean((await getCurrentUser())?.is_admin);
+  if (!listing || !editPolicy(listing, todayInSaoPaulo(), isAdmin).allowed) return { error: "notAllowed" };
 
   if (!supabaseConfigured()) {
     const errors = validateListing(readListingForm(formData, true));
@@ -179,6 +186,24 @@ export async function updateListing(listingId: string, _prev: ListingState, form
   if (error) {
     const known = { too_soon: "tooSoon", in_review: "inReview", edit_in_review: "editInReview" } as const;
     return { error: known[error.message as keyof typeof known] ?? "notAllowed" };
+  }
+  // Equipamento da própria Hi Scoot: a edição vale na hora (decisão de 20/10/2026).
+  if (isAdmin) {
+    if (data === "resent") {
+      const { error: reviewError } = await supabase.rpc("review_listing", { p_id: listingId, p_approve: true, p_reason: null });
+      if (!reviewError) redirect("/host/equipment?sent=published");
+    } else {
+      const { data: edit } = await supabase
+        .from("equipment_edits")
+        .select("id")
+        .eq("equipment_id", listingId)
+        .eq("status", "pending")
+        .maybeSingle();
+      const { error: reviewError } = edit
+        ? await supabase.rpc("review_listing_edit", { p_edit: edit.id, p_approve: true, p_reason: null })
+        : { error: true };
+      if (!reviewError) redirect("/host/equipment?sent=published");
+    }
   }
   redirect(`/host/equipment?sent=${data === "resent" ? "resent" : "edit"}`);
 }

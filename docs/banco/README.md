@@ -31,3 +31,5 @@ Verificação para alugar e anunciar: `docs/banco/testes-verificacao.sql`, tamb�
 Mundo Scoot (loja, HiTV, lojas parceiras e oficinas): `docs/banco/testes-mundo-scoot.sql`, também depois de todas as migrações.
 Compra na loja (estoque, frete, PIX, envio e devolução): `docs/banco/testes-loja.sql`, também depois de todas as migrações.
 Anúncio com no mínimo 2 fotos: `docs/banco/testes-duas-fotos.sql`, também depois de todas as migrações.
+Cupons de aluguel: `docs/banco/testes-cupons.sql`, também depois de todas as migrações.
+A equipe cadastra equipamentos da Hi Scoot: `docs/banco/testes-equipe-anuncia.sql`, também depois de todas as migrações.

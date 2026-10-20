@@ -401,7 +401,12 @@
       "returnBeforePickup": "Return must be at least 1 day after pick-up.",
       "unavailable": "This equipment is not available for booking.",
       "datesUnavailable": "Some day in this period isn't free. Choose other dates.",
-      "identityRequired": "To rent, the team needs to approve your ID. Send it in Identity verification."
+      "identityRequired": "To rent, the team needs to approve your ID. Send it in Identity verification.",
+      "couponInvalid": "Coupon not found or expired.",
+      "couponCity": "This coupon is not valid in this equipment’s city.",
+      "couponUsedUp": "This coupon has reached its usage limit.",
+      "couponAlreadyUsed": "You have already used this coupon.",
+      "couponDays": "This coupon is not valid for that many days. Choose fewer days."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
@@ -413,7 +418,14 @@
     "photoAlt": "Photo {number} of {title}",
     "morePhotos": "More photos",
     "verifyToBook": "Your ID is under review. You can browse equipment and talk to the Host; booking unlocks as soon as the team approves. <link>See verification</link>",
-    "verifyToSend": "To rent, send a photo of your ID (front and back). The team checks it and unlocks booking. You can already browse equipment and talk to the Host. <link>Send ID</link>"
+    "verifyToSend": "To rent, send a photo of your ID (front and back). The team checks it and unlocks booking. You can already browse equipment and talk to the Host. <link>Send ID</link>",
+    "couponOpen": "Have a coupon?",
+    "couponLabel": "Coupon",
+    "couponApply": "Apply",
+    "couponApplied": "Coupon {code} applied: free rental.",
+    "couponLine": "Coupon {code}",
+    "free": "Free",
+    "requestSentFree": "Request with coupon sent. When the Host accepts, the booking is confirmed right away, with no payment."
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -624,7 +636,8 @@
       "errors": {
         "ratingRequired": "Choose a rating from 1 to 5 stars."
       }
-    }
+    },
+    "freeWithCoupon": "Free · coupon {code}"
   },
   "host": {
     "tabs": {
@@ -770,7 +783,9 @@
         "editTitle": "Edit sent for review",
         "editText": "The current listing stays live until the edit is approved.",
         "resentTitle": "Listing resent for review",
-        "resentText": "The Hi Scoot team checks your fixes and you'll get a notice with the answer."
+        "resentText": "The Hi Scoot team checks your fixes and you'll get a notice with the answer.",
+        "publishedTitle": "Equipment published",
+        "publishedText": "Hi Scoot equipment: it is live right away, without review."
       },
       "availabilityError": "We couldn't change it now. Try again.",
       "markedUnavailable": "Listing marked as unavailable.",
@@ -909,7 +924,8 @@
       "noOngoing": "No bookings in progress.",
       "noPast": "No past bookings.",
       "emptyTitle": "You haven't received bookings yet",
-      "emptyText": "When a Rider requests your equipment, it shows up here."
+      "emptyText": "When a Rider requests your equipment, it shows up here.",
+      "freeWithCoupon": "Free · coupon {code} (no payment)"
     }
   },
   "dashboard": {
@@ -1175,7 +1191,8 @@
       "done": "Confirmed by the platform. The booking moved to the next step.",
       "reasonRequired": "Write the reason to confirm."
     },
-    "scootWorld": "Scoot World"
+    "scootWorld": "Scoot World",
+    "coupons": "Coupons"
   },
   "mercadoPago": {
     "connect": {
@@ -1471,6 +1488,61 @@
       "refundFailed": "Mercado Pago did not return the money. Try again.",
       "refundError": "Could not cancel. Check the reason and try again.",
       "size": "Size {size}"
+    }
+  },
+  "adminCoupons": {
+    "title": "Coupons",
+    "subtitle": "Free rental coupons for Hi Scoot campaigns. Each coupon can be limited to one city.",
+    "back": "Back to the panel",
+    "empty": "No coupons yet.",
+    "newTitle": "New coupon",
+    "newHelp": "The coupon makes the rental free: the booking is confirmed without payment when the Host accepts. Use it on Hi Scoot equipment or partners who agreed to lend theirs.",
+    "code": "Code",
+    "codeHint": "Letters and numbers only, no spaces. E.g.: ScootemMogi",
+    "city": "City (optional)",
+    "cityHint": "Empty: valid in any city.",
+    "maxUses": "Total uses (optional)",
+    "perPerson": "Uses per person (optional)",
+    "maxDays": "Max days per booking (optional)",
+    "validUntil": "Valid until (optional)",
+    "emptyNoLimit": "Empty: no limit.",
+    "emptyNoDate": "Empty: no end date.",
+    "create": "Create coupon",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "saved": "Coupon saved.",
+    "on": "On",
+    "off": "Off",
+    "kindFree": "Free rental",
+    "onlyCity": "Only in {city}",
+    "anyCity": "Any city",
+    "uses": "{uses, plural, =0 {no uses} one {# use} other {# uses}}",
+    "usesOf": "{uses} of {max} uses",
+    "perPersonShown": "{count, plural, one {# time per person} other {# times per person}}",
+    "maxDaysShown": "{count, plural, one {up to # day} other {up to # days}}",
+    "untilShown": "until {date}",
+    "edit": "Edit",
+    "closeEdit": "Close editing",
+    "turnOff": "Turn off",
+    "turnOn": "Turn on",
+    "turnedOff": "Coupon turned off.",
+    "turnedOn": "Coupon turned on.",
+    "delete": "Delete",
+    "deleteTitle": "Delete coupon {code}?",
+    "deleteText": "This cannot be undone. Bookings already made keep the code. To pause it for a while, use Turn off.",
+    "deleteConfirm": "Delete for good",
+    "deleted": "Coupon deleted.",
+    "cancel": "Cancel",
+    "errors": {
+      "notAllowed": "Only the team can do this.",
+      "saveFailed": "Could not save. Try again.",
+      "code": "Use 3 to 30 letters and numbers, no spaces.",
+      "codeTaken": "A coupon with this code already exists.",
+      "city": "Write the city name.",
+      "maxUses": "Write a whole number (1 or more), or leave empty.",
+      "perPerson": "Write a whole number (1 or more), or leave empty.",
+      "maxDays": "Write 1 to 60 days, or leave empty.",
+      "validUntil": "Pick a valid date, or leave empty."
     }
   }
 }

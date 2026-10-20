@@ -66,7 +66,9 @@ async function HostBookingCard({ booking }: { booking: HostBooking }) {
             })}{" "}
             · {t("days", { count: booking.days })}
           </p>
-          <p className="text-base font-bold text-hs-black">{t("youReceive", { value: money(price.subtotal) })}</p>
+          <p className="text-base font-bold text-hs-black">
+            {booking.free ? t("freeWithCoupon", { code: booking.coupon_code ?? "" }) : t("youReceive", { value: money(price.subtotal) })}
+          </p>
         </div>
       </div>
 

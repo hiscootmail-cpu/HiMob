@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import Link from "next/link";
-import { Bell, BellOff } from "lucide-react";
+import { Bell, BellOff, TicketPercent } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { ChatIcon, CheckCircleIcon } from "@/components/icons";
@@ -11,7 +11,7 @@ import { addDays, countDays, firstConflict, toRanges, validateBookingDates } fro
 import { bookingBreakdown, PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
 import type { Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
-import { requestBooking, startConversation, toggleWaitlist, type BookingRequestState } from "./actions";
+import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError } from "./actions";
 
 type BookingPanelProps = {
   equipment: Equipment;
@@ -83,6 +83,20 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
 
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
+  // Cupom (decisão de 20/10/2026): por enquanto, todo cupom deixa o aluguel grátis.
+  const [couponOpen, setCouponOpen] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<{ code: string; error?: CouponError } | null>(null);
+  const [checkingCoupon, startCouponCheck] = useTransition();
+  const appliedCoupon = coupon && !coupon.error ? coupon.code : "";
+  const applyCoupon = () => {
+    const code = couponInput.replace(/\s/g, "").toUpperCase();
+    if (!code) return;
+    startCouponCheck(async () => {
+      const result = await checkCoupon(equipment.id, code, pickup, dropoff);
+      setCoupon(result.ok ? { code } : { code, error: result.error });
+    });
+  };
   const [state, formAction, pending] = useActionState(requestBooking.bind(null, equipment.id), {} as BookingRequestState);
   const [waitlist, waitlistAction, waitlistPending] = useActionState(toggleWaitlist.bind(null, equipment.id), {
     onWaitlist,
@@ -152,7 +166,7 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
           <CheckCircleIcon className="size-6 shrink-0 text-on-green" />
           <div className="flex flex-col gap-1">
             <p className="text-sm font-semibold text-on-green">{t("requestSentTitle")}</p>
-            <p className="text-sm text-hs-black">{t("requestSentText")}</p>
+            <p className="text-sm text-hs-black">{state.free ? t("requestSentFree") : t("requestSentText")}</p>
           </div>
         </div>
         <Button asChild variant="outline" className="w-full">
@@ -215,12 +229,67 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
             <p className="text-xs text-muted">
               {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(breakdown.fee) })}
             </p>
+            {appliedCoupon ? (
+              <div className="flex justify-between gap-3 text-on-green">
+                <dt>{t("couponLine", { code: appliedCoupon })}</dt>
+                <dd>- {money(breakdown.total)}</dd>
+              </div>
+            ) : null}
             <div className="flex justify-between gap-3 border-t border-line pt-2 font-bold">
               <dt className="text-hs-black">{t("total")}</dt>
-              <dd className="text-hs-black">{money(breakdown.total)}</dd>
+              <dd className="text-hs-black">{appliedCoupon ? t("free") : money(breakdown.total)}</dd>
             </div>
           </dl>
         ) : null}
+
+        <input type="hidden" name="coupon" value={appliedCoupon} />
+        {couponOpen ? (
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="coupon-code" className="text-sm font-medium text-hs-black">
+              {t("couponLabel")}
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="coupon-code"
+                value={couponInput}
+                onChange={(event) => {
+                  setCouponInput(event.currentTarget.value);
+                  setCoupon(null);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyCoupon();
+                  }
+                }}
+                maxLength={30}
+                autoCapitalize="characters"
+                aria-invalid={coupon?.error ? true : undefined}
+                aria-describedby="coupon-message"
+                className="h-11 min-w-0 flex-1 rounded-md border border-line bg-hs-white px-4 text-base text-hs-black uppercase outline-none focus-visible:border-hs-blue focus-visible:ring-4 focus-visible:ring-hs-blue/25 aria-invalid:border-error-line"
+              />
+              <Button type="button" variant="outline" loading={checkingCoupon} onClick={applyCoupon}>
+                {t("couponApply")}
+              </Button>
+            </div>
+            <p
+              id="coupon-message"
+              role={coupon?.error ? "alert" : "status"}
+              className={cn("text-sm", coupon?.error ? "text-error" : "text-on-green")}
+            >
+              {coupon?.error ? t(`errors.${coupon.error}`) : appliedCoupon ? t("couponApplied", { code: appliedCoupon }) : null}
+            </p>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setCouponOpen(true)}
+            className="inline-flex w-fit items-center gap-2 rounded-md text-sm font-semibold text-hs-black underline underline-offset-2 outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+          >
+            <TicketPercent className="size-4" aria-hidden />
+            {t("couponOpen")}
+          </button>
+        )}
 
         {verification ? (
           <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">

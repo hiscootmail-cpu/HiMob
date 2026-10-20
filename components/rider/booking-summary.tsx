@@ -41,7 +41,9 @@ export function BookingSummary({
           {booking.equipment.area} · {t("hostLabel", { name: booking.equipment.host.full_name })}
         </p>
         <p className="text-base font-bold text-hs-black">
-          {format.number(price.total, { style: "currency", currency: "BRL" })}
+          {booking.free
+            ? t("freeWithCoupon", { code: booking.coupon_code ?? "" })
+            : format.number(price.total, { style: "currency", currency: "BRL" })}
         </p>
       </div>
     </div>
