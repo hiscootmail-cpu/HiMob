@@ -83,7 +83,7 @@ export async function payBookingWithMercadoPago(
   const hostToken = await accessTokenFor(hostId);
   if (!admin || !hostToken) return { status: "error", error: "unavailable" };
   const { data: debt } = await admin.rpc("host_pending_debt", { p_host: hostId });
-  const split = paymentSplit(booking.days, booking.host_daily_price, method, Number(debt ?? 0));
+  const split = paymentSplit(booking.host_amount, method, Number(debt ?? 0));
 
   const body: Record<string, unknown> = {
     transaction_amount: split.total,
@@ -168,7 +168,7 @@ export async function cancelPaidBooking(booking: Booking, hostId: string): Promi
     .maybeSingle();
   if (!payment?.mp_payment_id) return false;
 
-  const { refund, hostDebt } = cancelRefund(who, booking.days, booking.host_daily_price);
+  const { refund, hostDebt } = cancelRefund(who, booking.host_amount);
   const refunded = await refundMpPayment(hostToken, payment.mp_payment_id, refund, `refund-${booking.id}`);
   if (!refunded.ok) return false;
   const { error: saveError } = await admin.rpc("cancel_paid_booking", {

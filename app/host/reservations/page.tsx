@@ -9,6 +9,7 @@ import { HostCalendar } from "@/components/host/host-calendar";
 import { Badge } from "@/components/ui/badge";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { bookingPrice, type BookingStatus } from "@/lib/bookings";
+import { durationText } from "@/lib/duration";
 import { hostCancelPolicy } from "@/lib/cancellation";
 import { unavailableDays } from "@/lib/availability";
 import { listHostBookings, listHostListings, type HostBooking } from "@/lib/host";
@@ -33,6 +34,7 @@ const tones: Record<BookingStatus, "pending" | "info" | "success" | "highlight" 
 
 async function HostBookingCard({ booking }: { booking: HostBooking }) {
   const t = await getTranslations("host.reservations");
+  const tDuration = await getTranslations("duration");
   const format = await getFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const shortDate = (date: string) =>
@@ -64,7 +66,7 @@ async function HostBookingCard({ booking }: { booking: HostBooking }) {
               start: `${shortDate(booking.start_date)}, ${booking.pickup_time}`,
               end: `${shortDate(booking.end_date)}, ${booking.return_time}`,
             })}{" "}
-            · {t("days", { count: booking.days })}
+            · {durationText(tDuration, booking.hours)}
           </p>
           <p className="text-base font-bold text-hs-black">
             {booking.free ? t("freeWithCoupon", { code: booking.coupon_code ?? "" }) : t("youReceive", { value: money(price.subtotal) })}

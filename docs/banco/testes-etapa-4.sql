@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 -- Pessoas: Host (a), Rider (b), outro Rider (d), equipe (c)
@@ -47,16 +58,22 @@ select pg_temp.ok((select count(*) from public.unavailable_days('10000000-0000-0
 
 -- Pedido
 select pg_temp.as_user(null);
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 7)$$, '42501', 'visitante não pede reserva');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 7)$$, 'own_listing', 'Host não reserva o próprio anúncio');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() - 1, public.today_sp() + 1)$$, 'pickup_in_past', 'retirada no passado é recusada');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 5)$$, 'return_before_pickup', 'devolução no mesmo dia é recusada (mínimo 1 diária)');
+select pg_temp.open_days();
+select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 4)$$, 'return_before_pickup', 'devolução antes da retirada é recusada');
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 19, public.today_sp() + 21)$$, 'dates_unavailable', 'pedido em dia bloqueado é recusado');
 select pg_temp.fails($$insert into public.bookings (equipment_id, rider_id, host_id, start_date, end_date, host_daily_price, pickup_time, return_time) values ('10000000-0000-0000-0000-000000000001', auth.uid(), '00000000-0000-0000-0000-00000000000a', public.today_sp() + 5, public.today_sp() + 7, 1, '09:00', '18:00')$$, '42501', 'Rider não grava reserva direto na tabela (preço sempre do servidor)');
 create temp table ids (name text primary key, id uuid);
 grant all on ids to anon, authenticated;
+select pg_temp.open_days();
 insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 7);
 select pg_temp.ok((select host_daily_price = 45 and status = 'pending' from public.bookings where id = (select id from ids where name = 'b1')), 'pedido guarda o preço do anúncio e fica aguardando o Host');
 select pg_temp.fails($$update public.bookings set status = 'confirmed'$$, '42501', 'Rider não muda a situação da reserva direto');
@@ -65,6 +82,7 @@ select pg_temp.ok(public.pickup_address((select id from ids where name = 'b1')) 
 
 -- Outro Rider pede os mesmos dias (pedido novo não bloqueia dia)
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
+select pg_temp.open_days();
 insert into ids select 'b2', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 6, public.today_sp() + 8);
 select pg_temp.ok((select count(*) from public.bookings) = 1, 'cada Rider só vê a própria reserva');
 select pg_temp.fails($$select public.cancel_booking((select id from ids where name = 'b1'))$$, 'not_allowed', 'Rider não cancela reserva dos outros');
@@ -86,7 +104,8 @@ select pg_temp.ok(public.decide_booking((select id from ids where name = 'b2'), 
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 select pg_temp.ok((select kind from public.notifications) = 'bookingRejected', 'Rider recusado recebe aviso');
 select pg_temp.ok((select reject_reason from public.bookings) = 'Equipamento em manutenção', 'Rider vê o motivo da recusa');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 7, public.today_sp() + 9)$$, 'dates_unavailable', 'novo pedido em dias reservados é recusado');
+select pg_temp.open_days();
+select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 7, public.today_sp() + 9)$$, 'times_taken', 'novo pedido em horário já reservado é recusado');
 
 -- Pagamento de teste
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
@@ -141,9 +160,11 @@ select pg_temp.ok((select count(*) from public.handoffs) = 0, 'outras pessoas n�
 
 -- Cancelamento: prazo de 24 h antes da retirada
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
 insert into ids select 'b3', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 30, public.today_sp() + 31);
 select public.cancel_booking((select id from ids where name = 'b3'));
 select pg_temp.ok((select status = 'cancelled' and cancelled_by = 'rider' from public.bookings where id = (select id from ids where name = 'b3')), 'Rider cancela pedido novo sem custo');
+select pg_temp.open_days();
 insert into ids select 'b4', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 1, public.today_sp() + 2);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.decide_booking((select id from ids where name = 'b4'), true);

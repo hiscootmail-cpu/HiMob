@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 create or replace function pg_temp.as_server() returns void language plpgsql as $$
@@ -40,6 +51,7 @@ grant all on ids to anon, authenticated, service_role;
 -- Mercado Pago ainda desligado: tudo como antes
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.ok(not public.mp_required(), 'Mercado Pago começa desligado');
+select pg_temp.open_days();
 insert into ids select 'b0', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 40, public.today_sp() + 41);
 select pg_temp.ok((select count(*) from ids where name = 'b0') = 1, 'desligado: pede reserva sem conta conectada');
 select pg_temp.fails($$select * from public.app_settings$$, '42501', 'ninguém lê as chaves de funcionamento');
@@ -50,6 +62,7 @@ reset role;
 update public.app_settings set value = 'on' where key = 'mercado_pago';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 -- Quem só paga não precisa de conta Mercado Pago (PIX ou cartão de qualquer banco; decisão de 20/10/2026)
+select pg_temp.open_days();
 insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6);
 select pg_temp.ok((select count(*) from ids where name = 'b1') = 1, 'ligado: Rider sem conta Mercado Pago pede reserva');
 select pg_temp.fails($$select * from public.mp_accounts$$, '42501', 'ninguém lê as chaves das contas Mercado Pago');
@@ -106,6 +119,7 @@ select pg_temp.ok((select refunded from public.payments) = 103.50, 'devolução 
 select pg_temp.ok((select count(*) from public.host_fee_debts) = 0, 'Rider não vê taxas do Host');
 
 -- Próxima reserva paga do Host quita a taxa
+select pg_temp.open_days();
 insert into ids select 'b2', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 10, public.today_sp() + 11);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.decide_booking((select id from ids where name = 'b2'), true);

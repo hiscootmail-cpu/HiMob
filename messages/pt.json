@@ -397,24 +397,28 @@
     "reserve": "Reservar",
     "seeOptions": "Ver opções",
     "errors": {
-      "pickupRequired": "Escolha a data de retirada.",
-      "returnRequired": "Escolha a data de devolução.",
-      "pickupInPast": "A retirada não pode ser antes de hoje.",
-      "returnBeforePickup": "A devolução precisa ser pelo menos 1 dia depois da retirada.",
+      "pickupRequired": "Escolha o dia e a hora da retirada.",
+      "returnRequired": "Escolha o dia e a hora da devolução.",
+      "pickupInPast": "A retirada não pode ser num horário que já passou.",
+      "returnBeforePickup": "A devolução precisa ser depois da retirada.",
       "unavailable": "Este equipamento não está disponível para reserva.",
-      "datesUnavailable": "Algum dia desse período não está livre. Escolha outras datas.",
+      "datesUnavailable": "Algum dia desse período não foi liberado pelo Host. Escolha outros dias.",
       "identityRequired": "Para alugar, a equipe precisa aprovar seu documento. Envie em Verificação de identidade.",
       "couponInvalid": "Cupom não encontrado ou fora da validade.",
       "couponCity": "Este cupom não vale na cidade deste equipamento.",
       "couponUsedUp": "Este cupom já foi usado o máximo de vezes.",
       "couponAlreadyUsed": "Você já usou este cupom.",
-      "couponDays": "Este cupom não vale para tantos dias. Escolha menos dias."
+      "couponDays": "Este cupom não vale para tantos dias. Escolha menos dias.",
+      "tooShort": "O aluguel mínimo é de 1 hora.",
+      "timeInvalid": "Escolha horários de 30 em 30 minutos.",
+      "outsideHours": "Escolha horários dentro do atendimento do Host.",
+      "timesTaken": "Esse horário já está reservado (ou sem 1 hora de folga). Escolha outro."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
     "feeIncluded": "Inclui a taxa da plataforma ({percent}%)",
     "feeIncludedLine": "Inclui {percent}% de taxa da plataforma ({fee}), cobrada do Rider",
-    "hours": "Horário definido pelo Host: retirada às {pickup} e devolução até {return}.",
+    "hours": "O Host atende das {pickup} às {return}. Você escolhe a hora de retirar e de devolver.",
     "dateRange": "{start} a {end}",
     "takenDays": "Dias indisponíveis: {days}",
     "photoAlt": "Foto {number} de {title}",
@@ -427,7 +431,27 @@
     "couponApplied": "Cupom {code} aplicado: aluguel grátis.",
     "couponLine": "Cupom {code}",
     "free": "Grátis",
-    "requestSentFree": "Pedido com cupom enviado. Quando o Host aceitar, a reserva já fica confirmada, sem pagamento."
+    "requestSentFree": "Pedido com cupom enviado. Quando o Host aceitar, a reserva já fica confirmada, sem pagamento.",
+    "orPerHour": "ou {price} por hora",
+    "chooseDays": "Escolha o dia e o horário",
+    "noDaysYet": "O Host ainda não liberou dias para este equipamento. Fale com o Host ou volte depois.",
+    "calendarHelp": "Toque no dia da retirada. Para mais de um dia, toque também no dia da devolução. Dias em verde estão liberados.",
+    "chosenDay": "Dia: {day}",
+    "chosenDays": "De {start} a {end}",
+    "pickupTime": "Hora da retirada",
+    "returnTime": "Hora da devolução",
+    "timePick": "Escolher",
+    "hostHours": "O Host atende das {from} às {until}. Mínimo de 1 hora; o equipamento fica 1 hora livre entre um aluguel e o próximo.",
+    "busyTimes": "Já reservado: {times}. Escolha um horário com 1 hora de folga.",
+    "rentalOf": "Aluguel de {duration}",
+    "dayLook": {
+      "available": "liberado",
+      "selected": "escolhido",
+      "inRange": "escolhido",
+      "busy": "reservado",
+      "off": "indisponível",
+      "closed": "fechado"
+    }
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -547,7 +571,8 @@
           "unavailable": "O pagamento está indisponível agora. Tente de novo em alguns minutos.",
           "notAllowed": "Esta reserva não está esperando pagamento."
         }
-      }
+      },
+      "rentalOf": "Aluguel de {duration}"
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -717,9 +742,9 @@
       "locationUpdate": "Atualizar localização",
       "locationDenied": "Não conseguimos pegar a sua localização. Tudo bem: usamos o endereço de retirada.",
       "locationSaved": "Localização salva.",
-      "pickupTimeLabel": "Horário de retirada",
-      "returnTimeLabel": "Horário de devolução",
-      "timesHint": "Horário de Brasília. Vale para todas as reservas deste equipamento.",
+      "pickupTimeLabel": "Atende a partir de",
+      "returnTimeLabel": "Atende até",
+      "timesHint": "Horário de Brasília. O Rider escolhe a hora de retirar e de devolver dentro deste horário. O preço por hora sai da sua diária.",
       "submitNew": "Enviar para análise",
       "submitEdit": "Enviar edição para análise",
       "reviewNoteNew": "A equipe Hi Scoot confere o anúncio antes de publicar.",
@@ -795,7 +820,9 @@
       "isAvailable": "Disponível para reservas.",
       "isUnavailable": "Indisponível: não recebe pedidos novos.",
       "markUnavailable": "Marcar indisponível",
-      "markAvailable": "Marcar disponível"
+      "markAvailable": "Marcar disponível",
+      "availableDays": "Dias disponíveis",
+      "openHours": "Atende das {from} às {until}"
     },
     "handoff": {
       "close": "Fechar",
@@ -928,6 +955,27 @@
       "emptyTitle": "Você ainda não recebeu reservas",
       "emptyText": "Quando um Rider pedir um equipamento seu, o pedido aparece aqui.",
       "freeWithCoupon": "Grátis · cupom {code} (sem pagamento)"
+    },
+    "availability": {
+      "title": "Dias disponíveis",
+      "back": "Voltar para Meus anúncios",
+      "help": "Toque nos dias em que você vai alugar. Só esses dias aparecem para o Rider. Em cada dia, o Rider escolhe a hora dentro do seu atendimento (das {from} às {until}).",
+      "saveError": "Não deu para salvar. Tente de novo.",
+      "keptBooked": "Dia com reserva aceita não pode deixar de estar disponível.",
+      "dayOpen": "liberado",
+      "dayBooked": "com reserva",
+      "dayPast": "já passou",
+      "dayClosed": "fechado",
+      "legendOpen": "Liberado",
+      "legendClosed": "Fechado",
+      "legendBooked": "Com reserva",
+      "countInMonth": "{count, plural, =0 {Nenhum dia liberado neste mês} one {# dia liberado neste mês} other {# dias liberados neste mês}}",
+      "shortcuts": "Atalhos para o mês na tela",
+      "wholeMonth": "O mês todo",
+      "weekends": "Só fins de semana",
+      "weekdays": "Só dias úteis",
+      "clearMonth": "Fechar o mês",
+      "shortcutsHelp": "Os atalhos valem dos próximos dias até o fim do mês mostrado. Dias com reserva continuam liberados."
     }
   },
   "dashboard": {
@@ -1546,5 +1594,15 @@
       "maxDays": "Escreva de 1 a 60 dias, ou deixe vazio.",
       "validUntil": "Escolha uma data válida, ou deixe vazio."
     }
+  },
+  "duration": {
+    "days": "{count, plural, one {# dia} other {# dias}}",
+    "hours": "{count, plural, one {# hora} other {# horas}}",
+    "minutes": "{count} min",
+    "join": "{first} e {last}"
+  },
+  "calendar": {
+    "previous": "Mês anterior",
+    "next": "Próximo mês"
   }
 }

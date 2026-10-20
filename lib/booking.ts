@@ -1,6 +1,7 @@
 /*
- * Cálculo de reserva por DIÁRIA (regra 1: nunca por hora).
- * Datas no formato AAAA-MM-DD. Retirada num dia e devolução no outro = 1 diária.
+ * Datas e horários da reserva. Datas no formato AAAA-MM-DD, horas HH:MM
+ * (horário de Brasília). Desde 20/10/2026 dá para alugar por horas: o Rider
+ * escolhe dia e hora de retirada e de devolução (preço em lib/pricing.ts).
  */
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -64,4 +65,39 @@ export function toRanges(days: string[]): { start: string; end: string }[] {
     else ranges.push({ start: day, end: day });
   }
   return ranges;
+}
+
+/** Brasília não tem horário de verão desde 2019: sempre -03:00. */
+export const saoPauloTime = (date: string, time: string) => Date.parse(`${date}T${time.slice(0, 5)}:00-03:00`);
+
+/** Duração em horas entre retirada e devolução (0 se não vale). */
+export function rentalHours(startDate: string, startTime: string, endDate: string, endTime: string): number {
+  const start = saoPauloTime(startDate, startTime);
+  const end = saoPauloTime(endDate, endTime);
+  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) return 0;
+  return (end - start) / (60 * 60 * 1000);
+}
+
+/** Dias do calendário de start a end, contando os dois (mesmo dia = 1). */
+export function calendarDays(start: string, end: string): number {
+  const a = parse(start);
+  const b = parse(end);
+  return a === null || b === null || b < a ? 0 : Math.round((b - a) / DAY_MS) + 1;
+}
+
+/** Horários de 30 em 30 minutos dentro do atendimento do Host ("HH:MM"). */
+export function timeSlots(openFrom: string, openUntil: string): string[] {
+  const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
+  let from = toMin(openFrom);
+  let until = toMin(openUntil);
+  if (until <= from) {
+    // Atende 24 h.
+    from = 0;
+    until = 24 * 60 - 30;
+  }
+  const slots: string[] = [];
+  for (let m = Math.ceil(from / 30) * 30; m <= until; m += 30) {
+    slots.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
+  }
+  return slots;
 }

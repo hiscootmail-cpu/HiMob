@@ -3,6 +3,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { BookingStatusBadge } from "@/components/rider/booking-status-badge";
 import { bookingPrice, type Booking } from "@/lib/bookings";
+import { durationText } from "@/lib/duration";
 import { cn } from "@/lib/utils";
 
 /** Data AAAA-MM-DD mostrada como "12 de out." (sem mudar o dia por fuso horário). */
@@ -23,6 +24,7 @@ export function BookingSummary({
   className?: string;
 }) {
   const t = useTranslations("rider");
+  const tDuration = useTranslations("duration");
   const format = useFormatter();
   const shortDate = useShortDate();
   const price = bookingPrice(booking);
@@ -34,8 +36,11 @@ export function BookingSummary({
         {showStatus ? <BookingStatusBadge status={booking.status} /> : null}
         <p className="line-clamp-2 text-base font-semibold text-hs-black">{booking.equipment.title}</p>
         <p className="text-sm text-muted">
-          {t("dates", { start: shortDate(booking.start_date), end: shortDate(booking.end_date) })} ·{" "}
-          {t("days", { count: booking.days })}
+          {t("dates", {
+            start: `${shortDate(booking.start_date)}, ${booking.pickup_time}`,
+            end: `${shortDate(booking.end_date)}, ${booking.return_time}`,
+          })}{" "}
+          · {durationText(tDuration, booking.hours)}
         </p>
         <p className="text-sm text-muted">
           {booking.equipment.area} · {t("hostLabel", { name: booking.equipment.host.full_name })}

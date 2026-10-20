@@ -1,5 +1,5 @@
 import type { Equipment } from "@/lib/equipment";
-import { bookingBreakdown, type BookingBreakdown } from "@/lib/pricing";
+import { breakdownFromHost, type BookingBreakdown } from "@/lib/pricing";
 
 /*
  * Reserva, do ponto de vista do Rider.
@@ -25,10 +25,15 @@ export type Booking = {
   /** Retirada e devolução, no formato AAAA-MM-DD. */
   start_date: string;
   end_date: string;
+  /** Dias do calendário que a reserva ocupa (retirada e devolução no mesmo dia = 1). */
   days: number;
+  /** Duração em horas (aluguel por horas, decisão de 20/10/2026). */
+  hours: number;
   /** Valor do Host por dia no momento da reserva (o preço do anúncio pode mudar depois). */
   host_daily_price: number;
-  /** Horários do anúncio no momento da reserva (HH:MM, horário de Brasília). */
+  /** Valor do Host por esta reserva, antes da taxa (guardado pelo banco). */
+  host_amount: number;
+  /** Hora de retirada e de devolução escolhidas pelo Rider (HH:MM, horário de Brasília). */
   pickup_time: string;
   return_time: string;
   status: BookingStatus;
@@ -67,7 +72,7 @@ export const REVIEW_COMMENT_MAX = 500;
 export const ONGOING: BookingStatus[] = ["pending", "accepted", "confirmed", "active"];
 
 export function bookingPrice(booking: Booking): BookingBreakdown {
-  return bookingBreakdown(booking.days, booking.host_daily_price);
+  return breakdownFromHost(booking.host_amount);
 }
 
 // Leitura das reservas (banco ou exemplos): lib/bookings-db.ts (só no servidor).

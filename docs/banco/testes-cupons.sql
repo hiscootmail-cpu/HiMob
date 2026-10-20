@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -52,6 +63,7 @@ select pg_temp.fails($$select public.check_coupon('NAOEXISTE', '10000000-0000-00
 -- Reserva grátis: o Host aceita e já fica confirmada, sem pagamento e sem Mercado Pago
 create temp table ids (name text, id uuid);
 grant all on ids to authenticated;
+select pg_temp.open_days();
 insert into ids select 'g1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 3, public.today_sp() + 5, 'ScootemMogi');
 select pg_temp.ok((select free and coupon_code = 'SCOOTEMMOGI' from public.bookings where id = (select id from ids where name = 'g1')), 'Reserva guarda o cupom e fica grátis');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
@@ -62,22 +74,28 @@ select public.cancel_booking((select id from ids where name = 'g1'));
 select pg_temp.ok((select status from public.bookings where id = (select id from ids where name = 'g1')) = 'cancelled', 'Reserva grátis cancela sem devolução');
 
 -- Reserva sem cupom continua pedindo Mercado Pago do Host
+select pg_temp.open_days();
 insert into ids select 'p1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 10, public.today_sp() + 11);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select pg_temp.fails($$select public.decide_booking((select id from ids where name = 'p1'), true)$$, 'mp_not_connected', 'Sem cupom: Host sem Mercado Pago não aceita');
 
 -- Limites opcionais
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 20, public.today_sp() + 22, 'UMDIA')$$, 'coupon_days', 'Cupom de 1 dia não vale para 2 dias');
-insert into ids select 'u1', public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 20, public.today_sp() + 21, 'UMDIA');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 25, public.today_sp() + 26, 'UMDIA')$$, 'coupon_already_used', 'Uma vez por pessoa');
+select pg_temp.open_days();
+select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 20, public.today_sp() + 22, 'UMDIA')$$, 'coupon_days', 'Cupom de 1 dia não vale para 3 dias');
+select pg_temp.open_days();
+insert into ids select 'u1', public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 20, public.today_sp() + 20, 'UMDIA');
+select pg_temp.open_days();
+select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 25, public.today_sp() + 25, 'UMDIA')$$, 'coupon_already_used', 'Uma vez por pessoa');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
-insert into ids select 'u2', public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 30, public.today_sp() + 31, 'UMDIA');
+select pg_temp.open_days();
+insert into ids select 'u2', public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 30, public.today_sp() + 30, 'UMDIA');
 reset role;
 insert into auth.users (id, email, raw_user_meta_data) values ('00000000-0000-0000-0000-00000000000e', 'caio@exemplo.com', '{"full_name":"Caio Lima","phone":"11955550104"}');
 update public.profiles set identity_status = 'approved' where id = '00000000-0000-0000-0000-00000000000e';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000e');
-select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 35, public.today_sp() + 36, 'UMDIA')$$, 'coupon_used_up', 'Limite total de usos');
+select pg_temp.open_days();
+select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000002', public.today_sp() + 35, public.today_sp() + 35, 'UMDIA')$$, 'coupon_used_up', 'Limite total de usos');
 
 -- A equipe desliga o cupom
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');

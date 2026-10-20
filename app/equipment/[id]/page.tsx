@@ -7,7 +7,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { MapPinIcon, StarIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
-import { unavailableDays } from "@/lib/availability";
+import { equipmentSchedule } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment-db";
 import { riderDailyPrice } from "@/lib/pricing";
@@ -83,8 +83,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
     ? await viewerState(equipment.id, equipment.host_id)
     : { isOwner: preview === "owner", onWaitlist: false, verification: null };
   const today = todayInSaoPaulo();
-  const { booked, blocked } = await unavailableDays(equipment.id);
-  const unavailable = [...booked, ...blocked].filter((day) => day >= today).sort();
+  const schedule = await equipmentSchedule(equipment.id, today);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pt-4 pb-28 sm:px-6 md:pb-12">
@@ -196,7 +195,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
 
         <aside id="reservar" aria-label={t("bookingLabel")} className="scroll-mt-20">
           <div className="rounded-lg border border-line bg-hs-white p-5 shadow-sm md:sticky md:top-20">
-            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} unavailable={unavailable} onWaitlist={onWaitlist} verification={verification} />
+            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} schedule={schedule} onWaitlist={onWaitlist} verification={verification} />
           </div>
         </aside>
       </div>
