@@ -44,7 +44,8 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2", className)}>
       <Image src={logoImage} alt="" aria-hidden className="h-11 w-auto" sizes="48px" priority />
-      <span aria-hidden>
+      {/* Em celular bem estreito fica só o cachorrinho, para os botões do topo caberem. */}
+      <span aria-hidden className="hidden min-[400px]:inline">
         <Wordmark />
       </span>
       <span className="sr-only">{t("name")}</span>

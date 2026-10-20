@@ -5,7 +5,7 @@ import { Globe } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { BellIcon } from "@/components/icons";
+import { BellIcon, ShieldAdminIcon } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { isActive, navItems } from "@/components/navigation";
@@ -17,13 +17,15 @@ type SiteHeaderProps = {
   signedIn: boolean;
   /** Avisos ainda não lidos (sininho, só para quem está conectado). */
   unreadCount?: number;
+  /** Conta da equipe Hi Scoot? Só ela vê o botão do Painel. */
+  isAdmin?: boolean;
   /** Na página de conferência o menu não fica preso no topo. */
   sticky?: boolean;
   className?: string;
 };
 
 /** Menu principal com o seletor de idioma PT/EN: uma peça só. */
-export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className }: SiteHeaderProps) {
+export function SiteHeader({ signedIn, unreadCount = 0, isAdmin = false, sticky = true, className }: SiteHeaderProps) {
   const t = useTranslations("nav");
   const pathname = usePathname();
 
@@ -35,7 +37,7 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
         className,
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-4 sm:px-6">
         <Link
           href="/"
           aria-label={t("home")}
@@ -51,20 +53,21 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
                 const active = isActive(pathname, href);
                 return (
                   <li key={href}>
-                    {/* No tablet só cabe o ícone; o texto aparece a partir do computador. */}
+                    {/* No tablet só cabe o ícone; o texto aparece a partir do computador (tela maior com o botão do Painel). */}
                     <Link
                       href={href}
                       aria-label={t(label)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "inline-flex h-10 items-center justify-center gap-2 rounded-full px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 lg:px-4",
+                        "inline-flex h-10 items-center justify-center gap-2 rounded-full px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+                        isAdmin ? "xl:px-4" : "lg:px-4",
                         active
                           ? "bg-green-soft text-on-green"
                           : "text-hs-black hover:bg-surface",
                       )}
                     >
                       <Icon className="size-5" />
-                      <span className="hidden lg:inline">{t(label)}</span>
+                      <span className={cn("hidden", isAdmin ? "xl:inline" : "lg:inline")}>{t(label)}</span>
                     </Link>
                   </li>
                 );
@@ -75,7 +78,7 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
           <div className="flex-1" />
         )}
 
-        <div className="ml-auto flex items-center gap-2 md:ml-0">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">
           {/* Mundo Scoot: aberto a todas as pessoas, com ou sem cadastro (decisão de 19/10/2026). */}
           <Link
             href="/scoot-world"
@@ -83,15 +86,33 @@ export function SiteHeader({ signedIn, unreadCount = 0, sticky = true, className
             aria-current={isActive(pathname, "/scoot-world") ? "page" : undefined}
             className={cn(
               "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border text-sm font-semibold whitespace-nowrap outline-none transition-colors focus-visible:ring-4 focus-visible:ring-hs-blue/40",
-              signedIn ? "w-10 xl:w-auto xl:px-4" : "w-10 sm:w-auto sm:px-4",
+              // Com o botão do Painel (equipe), o nome só cabe em tela bem larga.
+              !signedIn ? "w-10 sm:w-auto sm:px-4" : isAdmin ? "w-10 2xl:w-auto 2xl:px-4" : "w-10 xl:w-auto xl:px-4",
               isActive(pathname, "/scoot-world")
                 ? "border-hs-black bg-hs-black text-hs-white"
                 : "border-hs-black/20 bg-hs-white text-hs-black hover:bg-surface",
             )}
           >
             <Globe className="size-5" aria-hidden />
-            <span className={signedIn ? "hidden xl:inline" : "hidden sm:inline"}>{t("scootWorld")}</span>
+            <span className={cn("hidden", !signedIn ? "sm:inline" : isAdmin ? "2xl:inline" : "xl:inline")}>{t("scootWorld")}</span>
           </Link>
+          {signedIn && isAdmin ? (
+            // Painel da equipe: só aparece na conta de admin.
+            <Link
+              href="/admin"
+              aria-label={t("admin")}
+              aria-current={isActive(pathname, "/admin") ? "page" : undefined}
+              className={cn(
+                "inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full border text-sm font-semibold whitespace-nowrap outline-none transition-colors focus-visible:ring-4 focus-visible:ring-hs-blue/40 xl:w-auto xl:px-4",
+                isActive(pathname, "/admin")
+                  ? "border-hs-black bg-hs-black text-hs-white"
+                  : "border-hs-purple/50 bg-hs-white text-hs-purple hover:bg-surface",
+              )}
+            >
+              <ShieldAdminIcon className="size-5" />
+              <span className="hidden xl:inline">{t("admin")}</span>
+            </Link>
+          ) : null}
           {signedIn ? (
             // Sininho ao lado do seletor PT/EN (decisão de 09/10/2026); o seletor não muda.
             <Link

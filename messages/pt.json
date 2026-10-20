@@ -29,7 +29,8 @@
     "signUp": "Criar conta",
     "notifications": "Notificações",
     "notificationsUnread": "Notificações, {count, plural, one {# não lida} other {# não lidas}}",
-    "scootWorld": "Mundo Scoot"
+    "scootWorld": "Mundo Scoot",
+    "admin": "Painel"
   },
   "footer": {
     "slogan": "A cidade se move. Vem no Flow.",
@@ -598,7 +599,7 @@
       "cameraDenied": "Não conseguimos usar a câmera. Libere a câmera nas configurações do navegador ou digite o código abaixo.",
       "cameraUnavailable": "Este aparelho não tem câmera disponível. Digite o código abaixo.",
       "typeCode": "Ou digite o código escrito embaixo do QR code da etiqueta",
-      "codePlaceholder": "Ex.: HS-4821"
+      "codePlaceholder": "Ex.: HS-482193"
     },
     "handoff": {
       "back": "Voltar para a reserva",

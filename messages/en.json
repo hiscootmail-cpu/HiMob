@@ -29,7 +29,8 @@
     "signUp": "Sign up",
     "notifications": "Notifications",
     "notificationsUnread": "Notifications, {count} unread",
-    "scootWorld": "Scoot World"
+    "scootWorld": "Scoot World",
+    "admin": "Admin"
   },
   "footer": {
     "slogan": "The city moves. Get in the Flow.",
@@ -598,7 +599,7 @@
       "cameraDenied": "We could not use the camera. Allow camera access in your browser settings or type the code below.",
       "cameraUnavailable": "This device has no camera available. Type the code below.",
       "typeCode": "Or type the code written below the QR code on the label",
-      "codePlaceholder": "E.g. HS-4821"
+      "codePlaceholder": "E.g. HS-482193"
     },
     "handoff": {
       "back": "Back to the booking",
