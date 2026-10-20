@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -36,6 +47,7 @@ grant all on ids to anon, authenticated, service_role;
 
 -- Reserva em andamento impede a exclusão
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
 insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6);
 select pg_temp.fails($$select public.delete_my_account()$$, 'ongoing_bookings', 'Rider com reserva em andamento não exclui a conta');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
@@ -55,6 +67,7 @@ select pg_temp.ok((select count(*) from public.profiles where id = '00000000-000
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.ok((select count(*) from public.profiles where id = '00000000-0000-0000-0000-00000000000a') = 0, 'nem para outras pessoas');
 select pg_temp.fails($$select public.start_conversation('10000000-0000-0000-0000-000000000001')$$, 'not_allowed', 'não começa conversa com quem excluiu a conta');
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 8, public.today_sp() + 9)$$, 'unavailable', 'não reserva equipamento de quem excluiu a conta');
 
 -- Os dados ficam guardados (só a equipe vê, para pedidos da Justiça)

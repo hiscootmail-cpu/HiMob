@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -44,10 +55,12 @@ select public.review_listing('10000000-0000-0000-0000-000000000001', true);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.ok((select count(*) from public.listings()) = 1, 'Rider em análise vê os equipamentos');
 select pg_temp.ok(public.start_conversation('10000000-0000-0000-0000-000000000001') is not null, 'Rider em análise conversa com o Host');
+select pg_temp.open_days();
 select pg_temp.fails($$select public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6)$$, 'identity_required', 'Rider em análise não pede reserva');
 reset role;
 update public.profiles set identity_status = 'approved' where id = '00000000-0000-0000-0000-00000000000b';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
 select pg_temp.ok(public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 5, public.today_sp() + 6) is not null, 'Rider aprovado pede reserva');
 reset role;
 \echo 'Verificação para alugar: todos os testes passaram'

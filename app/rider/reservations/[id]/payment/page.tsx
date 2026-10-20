@@ -6,10 +6,11 @@ import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { bookingPrice } from "@/lib/bookings";
 import { getRiderBooking } from "@/lib/bookings-db";
+import { durationText } from "@/lib/duration";
 import { pendingPix } from "@/lib/mercadopago/booking-payments";
 import { mercadoPagoOn } from "@/lib/mercadopago/server";
 import { methodEnabled } from "@/lib/payment-split";
-import { PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
+import { PLATFORM_FEE_PERCENT } from "@/lib/pricing";
 import { getCurrentUser } from "@/lib/session";
 import { MercadoPagoPayment } from "./mercado-pago-payment";
 import { PaymentForm } from "./payment-form";
@@ -25,6 +26,7 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
   const booking = await getRiderBooking(id);
   if (!booking) notFound();
   const t = await getTranslations("rider.payment");
+  const tDuration = await getTranslations("duration");
   const format = await getFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const price = bookingPrice(booking);
@@ -44,7 +46,7 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
       <dl className="flex flex-col gap-2 rounded-lg bg-surface px-4 py-3 text-sm">
         <div className="flex justify-between gap-3">
           <dt className="text-hs-black">
-            {t("priceTimesDays", { price: money(riderDailyPrice(booking.host_daily_price)), count: booking.days })}
+            {t("rentalOf", { duration: durationText(tDuration, booking.hours) })}
           </dt>
           <dd className="text-hs-black">{money(price.total)}</dd>
         </div>

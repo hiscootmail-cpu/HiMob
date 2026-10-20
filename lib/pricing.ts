@@ -9,6 +9,12 @@
  * - Na reserva: "R$ 51,75 x 2 diárias = R$ 103,50" e, na linha de baixo,
  *   "Inclui 15% de taxa da plataforma (R$ 13,50), cobrada do Rider".
  *
+ * Aluguel por horas (decisão de 20/10/2026): o Host informa só a diária.
+ * Hora = diária ÷ horas de atendimento do Host. Até 24 h: horas usadas, sem
+ * passar de 1 diária. Cada 24 h a mais conta 1 diária; o que sobra conta por
+ * hora, sem passar de 1 diária. A mesma conta está no banco
+ * (public.rental_host_amount), que é quem guarda o valor da reserva.
+ *
  * Tudo é calculado em centavos para não errar arredondamento.
  * O servidor sempre refaz esta conta; o valor nunca vem do navegador.
  */
@@ -44,4 +50,37 @@ export function bookingBreakdown(days: number, hostDailyPrice: number): BookingB
   const subtotalCents = n * hostCents;
   const totalCents = n * (hostCents + feeCents(hostCents));
   return { subtotal: toReais(subtotalCents), fee: toReais(totalCents - subtotalCents), total: toReais(totalCents) };
+}
+
+/** "HH:MM" → minutos desde 00:00. */
+const minutesOf = (time: string) => {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + (m || 0);
+};
+
+/** Horas de atendimento do Host. Fim igual ou antes do início = atende 24 h. */
+export function openHours(openFrom: string, openUntil: string): number {
+  const span = minutesOf(openUntil) - minutesOf(openFrom);
+  return span > 0 ? span / 60 : 24;
+}
+
+/** Valor do Host por hora (antes da taxa). */
+export function hostHourlyPrice(hostDailyPrice: number, openFrom: string, openUntil: string): number {
+  return Math.round((hostDailyPrice / openHours(openFrom, openUntil)) * 100) / 100;
+}
+
+/** Valor do Host por um aluguel de tantas horas (antes da taxa). */
+export function rentalHostAmount(hostDailyPrice: number, openFrom: string, openUntil: string, hours: number): number {
+  if (hours <= 0) return 0;
+  const fullDays = Math.floor(hours / 24);
+  const rest = hours - fullDays * 24;
+  const amount = fullDays * hostDailyPrice + Math.min(hostDailyPrice, (rest * hostDailyPrice) / openHours(openFrom, openUntil));
+  return Math.round(amount * 100) / 100;
+}
+
+/** Valor do Host + 15% da plataforma = o que o Rider paga. */
+export function breakdownFromHost(hostAmount: number): BookingBreakdown {
+  const subtotalCents = toCents(hostAmount);
+  const fee = feeCents(subtotalCents);
+  return { subtotal: toReais(subtotalCents), fee: toReais(fee), total: toReais(subtotalCents + fee) };
 }

@@ -7,8 +7,11 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { ChatIcon, CheckCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { addDays, countDays, firstConflict, toRanges, validateBookingDates } from "@/lib/booking";
-import { bookingBreakdown, PLATFORM_FEE_PERCENT, riderDailyPrice } from "@/lib/pricing";
+import { MonthCalendar } from "@/components/equipment/month-calendar";
+import { GAP_HOURS, type Schedule } from "@/lib/availability-rules";
+import { daysBetween, rentalHours, saoPauloTime, timeSlots } from "@/lib/booking";
+import { durationText } from "@/lib/duration";
+import { breakdownFromHost, hostHourlyPrice, PLATFORM_FEE_PERCENT, rentalHostAmount, riderDailyPrice } from "@/lib/pricing";
 import type { Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError } from "./actions";
@@ -19,8 +22,8 @@ type BookingPanelProps = {
   today: string;
   /** A pessoa que está vendo é a dona do anúncio? */
   isOwner: boolean;
-  /** Dias de hoje em diante já reservados ou bloqueados pelo Host (AAAA-MM-DD). */
-  unavailable: string[];
+  /** Dias liberados pelo Host e horários já ocupados (decisões de 20/10/2026). */
+  schedule: Schedule;
   /** A pessoa já pediu "Avisar quando disponível"? */
   onWaitlist?: boolean;
   /**
@@ -30,36 +33,47 @@ type BookingPanelProps = {
   verification?: "send" | "review" | null;
 };
 
-function DateField({
+type LocalError = "pickupInPast" | "returnBeforePickup" | "tooShort" | "timesTaken";
+
+const HOUR_MS = 60 * 60 * 1000;
+
+function TimeSelect({
   id,
   name,
   label,
   value,
-  min,
+  options,
   onChange,
   invalid,
+  placeholder,
 }: {
   id: string;
   name: string;
   label: string;
   value: string;
-  min: string;
+  options: string[];
   onChange: (value: string) => void;
   invalid: boolean;
+  placeholder: string;
 }) {
   return (
     <label htmlFor={id} className="flex min-w-0 flex-1 flex-col gap-1 rounded-md border border-line px-3 py-2 focus-within:border-hs-blue focus-within:ring-4 focus-within:ring-hs-blue/25">
       <span className="text-xs font-semibold tracking-wide text-hs-black uppercase">{label}</span>
-      <input
+      <select
         id={id}
         name={name}
-        type="date"
         value={value}
-        min={min}
         aria-invalid={invalid || undefined}
         onChange={(event) => onChange(event.currentTarget.value)}
         className="w-full min-w-0 bg-transparent text-base text-hs-black outline-none"
-      />
+      >
+        <option value="">{placeholder}</option>
+        {options.map((time) => (
+          <option key={time} value={time}>
+            {time}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }
@@ -75,14 +89,43 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
   );
 }
 
-/** Quadro de reserva: preço por dia, datas, total e ações (inventário de ações). */
-export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlist = false, verification = null }: BookingPanelProps) {
+/**
+ * Quadro de reserva (decisões de 20/10/2026): o Rider escolhe no calendário os
+ * dias liberados pelo Host e a hora de retirar e de devolver, de 30 em 30
+ * minutos, dentro do atendimento. Mínimo de 1 hora. O preço sai da diária.
+ */
+export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist = false, verification = null }: BookingPanelProps) {
   const t = useTranslations("equipment");
+  const tDuration = useTranslations("duration");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
 
-  const [pickup, setPickup] = useState("");
-  const [dropoff, setDropoff] = useState("");
+  const openFrom = equipment.pickup_time.slice(0, 5);
+  const openUntil = equipment.return_time.slice(0, 5);
+  const slots = timeSlots(openFrom, openUntil);
+  const startSlots = openUntil > openFrom ? slots.filter((time) => time < openUntil) : slots;
+  const endSlots = openUntil > openFrom ? slots.filter((time) => time > openFrom) : slots;
+  const available = new Set(schedule.available);
+  const firstMonth = today.slice(0, 7);
+  const lastMonth = (schedule.available.at(-1) ?? today).slice(0, 7);
+
+  const [month, setMonth] = useState(schedule.available[0]?.slice(0, 7) ?? firstMonth);
+  const [range, setRange] = useState<{ start: string; end: string } | null>(null);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const pickup = range?.start ?? "";
+  const dropoff = range?.end ?? "";
+
+  const selectDay = (day: string) => {
+    setRange((current) => {
+      // Primeiro toque (ou nova escolha): um dia só. Segundo toque num dia depois: até ele.
+      if (!current || current.end !== current.start || day < current.start) return { start: day, end: day };
+      if (day === current.start) return current;
+      const allFree = daysBetween(current.start, day).every((d) => available.has(d));
+      return allFree ? { start: current.start, end: day } : { start: day, end: day };
+    });
+  };
+
   // Cupom (decisão de 20/10/2026): por enquanto, todo cupom deixa o aluguel grátis.
   const [couponOpen, setCouponOpen] = useState(false);
   const [couponInput, setCouponInput] = useState("");
@@ -102,19 +145,37 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
     onWaitlist,
   });
 
-  const days = countDays(pickup, dropoff);
-  const localError = pickup && dropoff
-    ? (validateBookingDates(pickup, dropoff, today) ??
-      (firstConflict(pickup, dropoff, unavailable) ? ("datesUnavailable" as const) : null))
-    : null;
+  const complete = Boolean(pickup && dropoff && startTime && endTime);
+  const startMs = complete ? saoPauloTime(pickup, startTime) : 0;
+  const endMs = complete ? saoPauloTime(dropoff, endTime) : 0;
+  const hours = complete ? rentalHours(pickup, startTime, dropoff, endTime) : 0;
+  // Date.now() só serve de aviso; o servidor confere de novo na hora do pedido.
+  // eslint-disable-next-line react-hooks/purity -- aviso na tela, não decide nada
+  const now = Date.now();
+  const localError: LocalError | null = !complete
+    ? null
+    : startMs < now
+      ? "pickupInPast"
+      : endMs <= startMs
+        ? "returnBeforePickup"
+        : hours < 1
+          ? "tooShort"
+          : schedule.busy.some((b) => startMs < b.end + GAP_HOURS * HOUR_MS && b.start < endMs + GAP_HOURS * HOUR_MS)
+            ? "timesTaken"
+            : null;
+  const error = localError ?? state.error;
+  const hostAmount = rentalHostAmount(equipment.daily_price, openFrom, openUntil, hours);
+  const breakdown = breakdownFromHost(hostAmount);
+  const hourly = riderDailyPrice(hostHourlyPrice(equipment.daily_price, openFrom, openUntil));
+
+  // Horários já ocupados nos dias escolhidos (para a pessoa evitar).
+  const time = (ms: number) =>
+    format.dateTime(new Date(ms), { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
   const shortDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "short", timeZone: "UTC" });
-  const takenRanges = toRanges(unavailable).map(({ start, end }) =>
-    start === end ? shortDate(start) : t("dateRange", { start: shortDate(start), end: shortDate(end) }),
-  );
-  const error = localError ?? state.error;
-
-  const breakdown = bookingBreakdown(days, equipment.daily_price);
+  const busyShown = range
+    ? schedule.busy.filter((b) => b.end + GAP_HOURS * HOUR_MS > saoPauloTime(range.start, "00:00") && b.start < saoPauloTime(range.end, "23:59"))
+    : [];
 
   const header = (
     <div className="flex flex-col gap-0.5">
@@ -122,6 +183,7 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
         <span className="text-2xl font-bold text-hs-black">{money(riderDailyPrice(equipment.daily_price))}</span>
         <span className="text-base text-muted"> {t("perDay")}</span>
       </p>
+      <p className="text-sm text-hs-black">{t("orPerHour", { price: money(hourly) })}</p>
       <p className="text-xs text-muted">{t("feeIncluded", { percent: PLATFORM_FEE_PERCENT })}</p>
     </div>
   );
@@ -181,34 +243,69 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
     <div className="flex flex-col gap-4">
       {header}
       <form action={formAction} className="flex flex-col gap-4">
-        <fieldset className="flex min-w-0 flex-col gap-2">
-          <legend className="mb-2 text-sm font-semibold text-hs-black">{t("chooseDates")}</legend>
-          <div className="flex flex-col gap-2 sm:flex-row md:flex-col lg:flex-row">
-            <DateField
-              id="pickup"
-              name="pickup"
-              label={t("pickup")}
-              value={pickup}
-              min={today}
-              invalid={error === "pickupInPast" || error === "pickupRequired"}
-              onChange={(value) => {
-                setPickup(value);
-                if (dropoff && value >= dropoff) setDropoff(addDays(value, 1));
-              }}
-            />
-            <DateField
-              id="return"
-              name="return"
-              label={t("return")}
-              value={dropoff}
-              min={pickup ? addDays(pickup, 1) : addDays(today, 1)}
-              invalid={error === "returnBeforePickup" || error === "returnRequired"}
-              onChange={setDropoff}
-            />
-          </div>
-          {takenRanges.length ? (
-            <p className={cn("text-sm", error === "datesUnavailable" ? "text-hs-black" : "text-muted")}>
-              {t("takenDays", { days: takenRanges.join(", ") })}
+        <fieldset className="flex min-w-0 flex-col gap-3">
+          <legend className="mb-2 text-sm font-semibold text-hs-black">{t("chooseDays")}</legend>
+          {schedule.available.length === 0 ? (
+            <p className="rounded-md bg-surface px-4 py-3 text-sm text-hs-black">{t("noDaysYet")}</p>
+          ) : (
+            <>
+              <MonthCalendar
+                month={month}
+                onMonthChange={setMonth}
+                minMonth={firstMonth}
+                maxMonth={lastMonth < firstMonth ? firstMonth : lastMonth}
+                onSelect={selectDay}
+                dayLook={(day) =>
+                  range && day === range.start
+                    ? "selected"
+                    : range && day > range.start && day <= range.end
+                      ? "inRange"
+                      : available.has(day) && day >= today
+                        ? "available"
+                        : "off"
+                }
+                dayLabel={(_, look) => t(`dayLook.${look}`)}
+              />
+              <p className="text-xs text-muted">{t("calendarHelp")}</p>
+            </>
+          )}
+          {range ? (
+            <p className="text-sm font-semibold text-hs-black">
+              {range.start === range.end
+                ? t("chosenDay", { day: shortDate(range.start) })
+                : t("chosenDays", { start: shortDate(range.start), end: shortDate(range.end) })}
+            </p>
+          ) : null}
+          {range ? (
+            <div className="flex flex-col gap-2 sm:flex-row md:flex-col lg:flex-row">
+              <TimeSelect
+                id="pickup-time"
+                name="pickup_time"
+                label={t("pickupTime")}
+                value={startTime}
+                options={startSlots}
+                onChange={setStartTime}
+                invalid={error === "pickupInPast"}
+                placeholder={t("timePick")}
+              />
+              <TimeSelect
+                id="return-time"
+                name="return_time"
+                label={t("returnTime")}
+                value={endTime}
+                options={endSlots}
+                onChange={setEndTime}
+                invalid={error === "returnBeforePickup" || error === "tooShort"}
+                placeholder={t("timePick")}
+              />
+            </div>
+          ) : null}
+          <p className="text-xs text-muted">{t("hostHours", { from: openFrom, until: openUntil })}</p>
+          {busyShown.length ? (
+            <p className="text-sm text-hs-black">
+              {t("busyTimes", {
+                times: busyShown.map((b) => `${shortDate(new Date(b.start).toISOString().slice(0, 10))} ${time(b.start)}–${time(b.end)}`).join(", "),
+              })}
             </p>
           ) : null}
           {error ? (
@@ -217,13 +314,13 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
             </p>
           ) : null}
         </fieldset>
+        <input type="hidden" name="pickup_date" value={pickup} />
+        <input type="hidden" name="return_date" value={dropoff} />
 
-        {days > 0 && !localError ? (
+        {complete && !localError ? (
           <dl className="flex flex-col gap-2 rounded-md bg-surface px-4 py-3 text-sm">
             <div className="flex justify-between gap-3">
-              <dt className="text-hs-black">
-                {t("priceTimesDays", { price: money(riderDailyPrice(equipment.daily_price)), count: days })}
-              </dt>
+              <dt className="text-hs-black">{t("rentalOf", { duration: durationText(tDuration, hours) })}</dt>
               <dd className="text-hs-black">{money(breakdown.total)}</dd>
             </div>
             <p className="text-xs text-muted">
@@ -306,7 +403,7 @@ export function BookingPanel({ equipment, today, isOwner, unavailable, onWaitlis
           type="submit"
           size="lg"
           loading={pending}
-          disabled={Boolean(verification) || !pickup || !dropoff || Boolean(localError)}
+          disabled={Boolean(verification) || !complete || Boolean(localError)}
           className="w-full"
         >
           {t("sendRequest")}

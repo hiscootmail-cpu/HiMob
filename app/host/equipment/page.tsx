@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import QRCode from "qrcode";
 
-import { CheckCircleIcon, KeyIcon, PlusIcon } from "@/components/icons";
+import { CalendarIcon, CheckCircleIcon, KeyIcon, PlusIcon } from "@/components/icons";
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { AvailabilityToggle } from "@/components/host/availability-toggle";
 import { QrLabelDialog } from "@/components/host/qr-label-dialog";
@@ -56,7 +56,7 @@ async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; 
           </div>
           <p className="line-clamp-2 text-base font-semibold text-hs-black">{listing.title}</p>
           <p className="text-sm text-muted">
-            {listing.area}, {listing.city} · {t("hours", { pickup: listing.pickup_time, return: listing.return_time })}
+            {listing.area}, {listing.city} · {t("openHours", { from: listing.pickup_time, until: listing.return_time })}
           </p>
           <p className="text-sm text-hs-black">
             {t.rich("price", {
@@ -92,6 +92,13 @@ async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; 
             {t("edit")}
           </Button>
         )}
+        {/* Dias em que o Host vai alugar (decisão de 20/10/2026): sem dias liberados, ninguém reserva. */}
+        <Button asChild variant="outline">
+          <Link href={`/host/equipment/${listing.id}/availability`}>
+            <CalendarIcon className="size-5" />
+            {t("availableDays")}
+          </Link>
+        </Button>
         {approved ? <QrLabelDialog code={listing.label_code} title={listing.title} qrSvg={qrSvg} /> : null}
         {isPublic ? (
           <Button asChild variant="ghost">

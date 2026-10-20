@@ -1,5 +1,5 @@
 import type { Booking } from "@/lib/bookings";
-import { addDays, todayInSaoPaulo } from "@/lib/booking";
+import { addDays, calendarDays, rentalHours, todayInSaoPaulo } from "@/lib/booking";
 import { exampleEquipment } from "@/lib/mock/equipment";
 
 /*
@@ -20,6 +20,10 @@ const withTimes = (booking: Booking): Booking => ({
   ...booking,
   pickup_time: booking.equipment.pickup_time,
   return_time: booking.equipment.return_time,
+  // Exemplos antigos eram por diária: "days" diárias, do dia da retirada ao dia da devolução.
+  days: calendarDays(booking.start_date, booking.end_date),
+  hours: rentalHours(booking.start_date, booking.equipment.pickup_time, booking.end_date, booking.equipment.return_time),
+  host_amount: booking.days * booking.host_daily_price,
 });
 
 export const exampleBookings: Booking[] = (<Booking[]>[

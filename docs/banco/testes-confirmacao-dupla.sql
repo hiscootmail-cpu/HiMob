@@ -15,6 +15,17 @@ exception when others then
   if expected is not null and sqlerrm <> expected and sqlstate <> expected then raise exception 'FALHOU: % (erro %: %)', msg, sqlstate, sqlerrm; end if;
   raise notice 'OK  %', msg;
 end $$;
+-- Dias liberados pelo Host (horários, 23/10/2026): libera 120 dias de todos os equipamentos.
+create or replace function pg_temp.open_days() returns void language plpgsql as $f$
+declare r text := current_setting('role'); s text := current_setting('request.jwt.claim.sub', true);
+begin
+  perform set_config('role', 'none', false);
+  insert into public.equipment_available_days
+    select e.id, d::date from public.equipment e, generate_series(public.today_sp(), public.today_sp() + 120, interval '1 day') d
+    on conflict do nothing;
+  perform set_config('role', r, false);
+  perform set_config('request.jwt.claim.sub', coalesce(s, ''), false);
+end $f$;
 set client_min_messages = notice;
 
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -35,6 +46,7 @@ select public.review_listing('10000000-0000-0000-0000-000000000001', true);
 create temp table ids (name text primary key, id uuid);
 grant all on ids to anon, authenticated;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
 insert into ids select 'b1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 2, public.today_sp() + 3);
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select public.decide_booking((select id from ids where name = 'b1'), true);

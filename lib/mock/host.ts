@@ -1,4 +1,4 @@
-import { addDays, todayInSaoPaulo } from "@/lib/booking";
+import { addDays, rentalHours, todayInSaoPaulo } from "@/lib/booking";
 import type { BookingStatus } from "@/lib/bookings";
 import type { HostBooking, HostListing } from "@/lib/host";
 import { exampleEquipment } from "@/lib/mock/equipment";
@@ -126,8 +126,10 @@ function booking(
     rider,
     start_date: addDays(today, start),
     end_date: addDays(today, start + days),
-    days,
+    days: days + 1,
+    hours: rentalHours(addDays(today, start), equipment.pickup_time, addDays(today, start + days), equipment.return_time),
     host_daily_price: equipment.daily_price,
+    host_amount: days * equipment.daily_price,
     pickup_time: equipment.pickup_time,
     return_time: equipment.return_time,
     status,

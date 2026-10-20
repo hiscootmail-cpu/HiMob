@@ -1,6 +1,6 @@
 import "server-only";
 
-import { countDays } from "@/lib/booking";
+import { calendarDays, rentalHours } from "@/lib/booking";
 import type { Booking, BookingStatus } from "@/lib/bookings";
 import { FALLBACK_LOCATION, type EquipmentType } from "@/lib/equipment";
 import type { HostBooking } from "@/lib/host";
@@ -15,7 +15,7 @@ import { createClient } from "@/lib/supabase/server";
  */
 
 const SELECT = `
-  id, rider_id, host_id, start_date, end_date, host_daily_price, pickup_time, return_time,
+  id, rider_id, host_id, start_date, end_date, host_daily_price, host_amount, pickup_time, return_time,
   status, rider_reviewed, host_reviewed, reject_reason, coupon_code, free,
   handoffs(kind, by_role),
   equipment(id, host_id, type, title, description, daily_price, city, area, latitude, longitude,
@@ -31,6 +31,7 @@ type Row = {
   start_date: string;
   end_date: string;
   host_daily_price: number;
+  host_amount: number | string;
   pickup_time: string;
   return_time: string;
   status: BookingStatus;
@@ -72,8 +73,10 @@ function fromRow(row: Row): HostBooking {
     rider_id: row.rider_id,
     start_date: row.start_date,
     end_date: row.end_date,
-    days: countDays(row.start_date, row.end_date),
+    days: calendarDays(row.start_date, row.end_date),
+    hours: rentalHours(row.start_date, hhmm(row.pickup_time), row.end_date, hhmm(row.return_time)),
     host_daily_price: Number(row.host_daily_price),
+    host_amount: Number(row.host_amount),
     pickup_time: hhmm(row.pickup_time),
     return_time: hhmm(row.return_time),
     status: row.status,

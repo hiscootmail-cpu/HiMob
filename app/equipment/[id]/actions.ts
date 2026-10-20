@@ -2,8 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { unavailableDays } from "@/lib/availability";
-import { firstConflict, todayInSaoPaulo, validateBookingDates, type BookingDatesError } from "@/lib/booking";
+import { rentalHours, saoPauloTime, type BookingDatesError } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment-db";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -19,7 +18,16 @@ import { createClient } from "@/lib/supabase/server";
 export type CouponError = "couponInvalid" | "couponCity" | "couponUsedUp" | "couponAlreadyUsed" | "couponDays";
 
 export type BookingRequestState = {
-  error?: BookingDatesError | "unavailable" | "datesUnavailable" | "identityRequired" | CouponError;
+  error?:
+    | BookingDatesError
+    | "unavailable"
+    | "datesUnavailable"
+    | "identityRequired"
+    | "tooShort"
+    | "timeInvalid"
+    | "outsideHours"
+    | "timesTaken"
+    | CouponError;
   done?: boolean;
   /** Pedido feito com cupom de aluguel grátis (ação da Hi Scoot). */
   free?: boolean;
@@ -70,17 +78,23 @@ export async function requestBooking(
   const equipment = await getEquipment(equipmentId);
   if (!equipment || !equipment.is_available) return { error: "unavailable" };
 
-  const pickup = String(formData.get("pickup") ?? "");
-  const dropoff = String(formData.get("return") ?? "");
-  const error = validateBookingDates(pickup, dropoff, todayInSaoPaulo());
-  if (error) return { error };
-
-  const { booked, blocked } = await unavailableDays(equipmentId);
-  if (firstConflict(pickup, dropoff, [...booked, ...blocked])) return { error: "datesUnavailable" };
+  // Dia e hora de retirada e de devolução (decisões de 20/10/2026).
+  const pickup = String(formData.get("pickup_date") ?? "");
+  const dropoff = String(formData.get("return_date") ?? "");
+  const pickupTime = String(formData.get("pickup_time") ?? "");
+  const returnTime = String(formData.get("return_time") ?? "");
+  const DATE = /^\d{4}-\d{2}-\d{2}$/;
+  const TIME = /^([01]\d|2[0-3]):(00|30)$/;
+  if (!DATE.test(pickup) || !TIME.test(pickupTime)) return { error: "pickupRequired" };
+  if (!DATE.test(dropoff) || !TIME.test(returnTime)) return { error: "returnRequired" };
+  if (saoPauloTime(pickup, pickupTime) < Date.now()) return { error: "pickupInPast" };
+  const hours = rentalHours(pickup, pickupTime, dropoff, returnTime);
+  if (hours <= 0) return { error: "returnBeforePickup" };
+  if (hours < 1) return { error: "tooShort" };
 
   const coupon = cleanCoupon(formData.get("coupon"));
 
-  // O valor é sempre recalculado no servidor (diárias x daily_price), nunca vem do navegador.
+  // O valor é sempre calculado pelo banco (diária e horas), nunca vem do navegador.
   if (supabaseConfigured()) {
     const supabase = await createClient();
     const {
@@ -90,7 +104,9 @@ export async function requestBooking(
     const { error } = await supabase.rpc("request_booking", {
       p_equipment: equipmentId,
       p_start: pickup,
+      p_start_time: pickupTime,
       p_end: dropoff,
+      p_end_time: returnTime,
       p_coupon: coupon || null,
     });
     if (error) {
@@ -100,6 +116,10 @@ export async function requestBooking(
         pickup_in_past: "pickupInPast",
         return_before_pickup: "returnBeforePickup",
         identity_required: "identityRequired",
+        too_short: "tooShort",
+        time_invalid: "timeInvalid",
+        outside_hours: "outsideHours",
+        times_taken: "timesTaken",
       } as const;
       return { error: known[error.message as keyof typeof known] ?? "unavailable" };
     }
