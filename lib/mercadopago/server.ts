@@ -116,6 +116,23 @@ export async function connectAccount(userId: string, code: string, verifier: str
   return !error;
 }
 
+/**
+ * Conta que recebe o pagamento de uma reserva. Equipamento da própria Hi Scoot
+ * (Host = conta da equipe): a conta Mercado Pago da Hi Scoot (MP_ACCESS_TOKEN),
+ * sem divisão. Os demais: a conta conectada do Host, com a parte da Hi Scoot.
+ */
+export async function receiverFor(hostId: string): Promise<{ token: string; hiScoot: boolean } | null> {
+  const admin = createSecretClient();
+  if (!admin) return null;
+  const { data } = await admin.from("profile_private").select("is_admin").eq("id", hostId).maybeSingle();
+  if (data?.is_admin) {
+    const token = process.env.MP_ACCESS_TOKEN;
+    return token ? { token, hiScoot: true } : null;
+  }
+  const token = await accessTokenFor(hostId);
+  return token ? { token, hiScoot: false } : null;
+}
+
 /** Chave da conta Mercado Pago de uma pessoa (renova sozinha perto de vencer). */
 export async function accessTokenFor(userId: string): Promise<string | null> {
   const admin = createSecretClient();
@@ -230,9 +247,9 @@ export async function syncPayment(mpPaymentId: string): Promise<"approved" | "pe
   if (!row) return null;
   const hostId = (row.bookings as unknown as { host_id: string } | null)?.host_id;
   if (!hostId) return null;
-  const token = await accessTokenFor(hostId);
-  if (!token) return null;
-  const { ok, data } = await getMpPayment(token, mpPaymentId);
+  const receiver = await receiverFor(hostId);
+  if (!receiver) return null;
+  const { ok, data } = await getMpPayment(receiver.token, mpPaymentId);
   if (!ok || !data) return null;
   if (data.external_reference && data.external_reference !== row.booking_id) return null;
 

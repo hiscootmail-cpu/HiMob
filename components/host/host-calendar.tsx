@@ -10,9 +10,9 @@ import type { HostBooking, HostListing } from "@/lib/host";
 import { cn } from "@/lib/utils";
 
 /*
- * Calendário do Host: mostra, mês a mês, os dias ocupados por reservas.
- * Com um equipamento escolhido, o Host bloqueia ou desbloqueia dias (decisão
- * de 09/10/2026). Dias já reservados ficam bloqueados sozinhos.
+ * Calendário do Host: mostra, mês a mês, as reservas de cada dia (com horário).
+ * Liberar dias agora é em "Dias disponíveis" de cada equipamento (decisão de
+ * 20/10/2026); aqui só dá para desbloquear um dia bloqueado no modelo antigo.
  * O dia escolhido vai no endereço (?day=), então funciona sem JavaScript.
  */
 
@@ -203,7 +203,7 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
                   >
                     <span className="font-semibold">{b.equipment.title}</span>
                     <span className="text-muted">
-                      {b.rider.full_name} · {t(`kinds.${kindOf(b.status)}`)}
+                      {b.pickup_time}–{b.return_time} · {b.rider.full_name} · {t(`kinds.${kindOf(b.status)}`)}
                     </span>
                   </Link>
                 </li>
@@ -212,12 +212,21 @@ export async function HostCalendar({ bookings, listings, month, today, equipment
           ) : (
             <p className="text-sm text-muted">{blockedSet.has(selectedDay) ? t("blockedInfo") : t("free")}</p>
           )}
-          {selectedDay < today ? null : !equipmentId ? (
-            <p className="text-sm text-muted">{t("chooseToBlock")}</p>
-          ) : selectedBooked ? (
-            <p className="text-sm text-muted">{t("bookedInfo")}</p>
+          {/*
+            Os dias de cada equipamento agora são liberados em "Dias disponíveis"
+            (decisão de 20/10/2026). Aqui só sobra desbloquear um dia bloqueado antes.
+          */}
+          {selectedDay < today ? null : equipmentId && blockedSet.has(selectedDay) && !selectedBooked ? (
+            <DayBlockButton equipmentId={equipmentId} day={selectedDay} blocked />
+          ) : equipmentId ? (
+            <Link
+              href={`/host/equipment/${equipmentId}/availability`}
+              className="w-fit text-sm font-semibold text-hs-black underline underline-offset-2 outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+            >
+              {t("manageDays")}
+            </Link>
           ) : (
-            <DayBlockButton equipmentId={equipmentId} day={selectedDay} blocked={blockedSet.has(selectedDay)} />
+            <p className="text-sm text-muted">{t("chooseToManage")}</p>
           )}
         </div>
       ) : (

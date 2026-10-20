@@ -923,7 +923,9 @@
       "bookedInfo": "Dia reservado: já fica bloqueado para outras reservas.",
       "count": "{count, plural, =0 {livre} one {# reserva} other {# reservas}}",
       "free": "Nenhuma reserva neste dia.",
-      "tapDay": "Toque num dia para ver as reservas."
+      "tapDay": "Toque num dia para ver as reservas.",
+      "manageDays": "Liberar ou fechar dias deste equipamento",
+      "chooseToManage": "Escolha um equipamento acima para liberar ou fechar dias."
     },
     "reservations": {
       "title": "Reservas recebidas",

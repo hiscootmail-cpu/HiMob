@@ -4,10 +4,10 @@ import { randomUUID } from "node:crypto";
 
 import type { Booking } from "@/lib/bookings";
 import {
-  accessTokenFor,
   createMpPayment,
   mercadoPagoOn,
   mercadoPagoServerReady,
+  receiverFor,
   refundMpPayment,
   syncPayment,
 } from "@/lib/mercadopago/server";
@@ -80,14 +80,16 @@ export async function payBookingWithMercadoPago(
   }
 
   const admin = createSecretClient();
-  const hostToken = await accessTokenFor(hostId);
-  if (!admin || !hostToken) return { status: "error", error: "unavailable" };
-  const { data: debt } = await admin.rpc("host_pending_debt", { p_host: hostId });
+  const receiver = await receiverFor(hostId);
+  if (!admin || !receiver) return { status: "error", error: "unavailable" };
+  const { data: debt } = receiver.hiScoot ? { data: 0 } : await admin.rpc("host_pending_debt", { p_host: hostId });
   const split = paymentSplit(booking.host_amount, method, Number(debt ?? 0));
+  // Equipamento da Hi Scoot: o valor todo cai na conta da Hi Scoot, sem divisão.
+  const applicationFee = receiver.hiScoot ? 0 : split.applicationFee;
 
   const body: Record<string, unknown> = {
     transaction_amount: split.total,
-    application_fee: split.applicationFee,
+    ...(receiver.hiScoot ? {} : { application_fee: applicationFee }),
     description: `Hi Scoot · ${booking.equipment.title}`.slice(0, 120),
     external_reference: booking.id,
     notification_url: `${await siteOrigin()}/api/mercado-pago/webhook`,
@@ -102,7 +104,7 @@ export async function payBookingWithMercadoPago(
       : { token: form.token, installments: 1, ...(form.issuer_id ? { issuer_id: String(form.issuer_id) } : {}) }),
   };
 
-  const { ok, data } = await createMpPayment(hostToken, body, randomUUID());
+  const { ok, data } = await createMpPayment(receiver.token, body, randomUUID());
   if (!ok || !data?.id) return { status: "rejected" };
 
   const pix = data.point_of_interaction?.transaction_data;
@@ -114,8 +116,8 @@ export async function payBookingWithMercadoPago(
       method,
       status: data.status,
       amount: split.total,
-      application_fee: split.applicationFee,
-      debt_included: split.debtIncluded,
+      application_fee: applicationFee,
+      debt_included: receiver.hiScoot ? 0 : split.debtIncluded,
       pix_code: pix?.qr_code ?? null,
       pix_qr_base64: pix?.qr_code_base64 ?? null,
     })
@@ -156,8 +158,8 @@ export async function cancelPaidBooking(booking: Booking, hostId: string): Promi
   if (error || (who !== "rider" && who !== "host")) return false;
 
   const admin = createSecretClient();
-  const hostToken = await accessTokenFor(hostId);
-  if (!admin || !hostToken) return false;
+  const receiver = await receiverFor(hostId);
+  if (!admin || !receiver) return false;
   const { data: payment } = await admin
     .from("payments")
     .select("mp_payment_id")
@@ -169,13 +171,14 @@ export async function cancelPaidBooking(booking: Booking, hostId: string): Promi
   if (!payment?.mp_payment_id) return false;
 
   const { refund, hostDebt } = cancelRefund(who, booking.host_amount);
-  const refunded = await refundMpPayment(hostToken, payment.mp_payment_id, refund, `refund-${booking.id}`);
+  const refunded = await refundMpPayment(receiver.token, payment.mp_payment_id, refund, `refund-${booking.id}`);
   if (!refunded.ok) return false;
   const { error: saveError } = await admin.rpc("cancel_paid_booking", {
     p_id: booking.id,
     p_who: who,
     p_refunded: refund,
-    p_host_debt: hostDebt,
+    // Equipamento da Hi Scoot: não existe taxa pendente de Host.
+    p_host_debt: receiver.hiScoot ? 0 : hostDebt,
   });
   return !saveError;
 }
