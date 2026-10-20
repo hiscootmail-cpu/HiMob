@@ -25,6 +25,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
 update public.profile_private set is_admin = true where id = '00000000-0000-0000-0000-00000000000c';
 
 -- A equipe cadastra produtos com estoque e o frete por região
+-- (começa sem o frete de R$ 65 para todo o Brasil, que vem nas migrações)
+delete from public.world_shipping_rates;
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
 insert into public.world_products (id, name, price, stock) values
   ('50000000-0000-0000-0000-000000000001', 'Capacete', 100, 3),
