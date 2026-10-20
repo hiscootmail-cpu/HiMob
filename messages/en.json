@@ -923,7 +923,9 @@
       "bookedInfo": "Booked day: it's already blocked for other bookings.",
       "count": "{count, plural, =0 {free} one {# booking} other {# bookings}}",
       "free": "No bookings on this day.",
-      "tapDay": "Tap a day to see its bookings."
+      "tapDay": "Tap a day to see its bookings.",
+      "manageDays": "Open or close days for this equipment",
+      "chooseToManage": "Choose equipment above to open or close days."
     },
     "reservations": {
       "title": "Received bookings",

@@ -45,5 +45,17 @@ reset role;
 update public.equipment set review_status = 'approved', last_sent_at = now() where id = '10000000-0000-0000-0000-000000000002';
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
 select pg_temp.fails($$select public.submit_listing_edit('10000000-0000-0000-0000-000000000002', '{"title":"Outro"}')$$, 'too_soon', 'Host comum espera 30 dias para editar');
+
+-- Reserva paga no equipamento da Hi Scoot: a equipe aceita sem conectar Mercado Pago
+-- (o pagamento cai na conta da própria Hi Scoot).
+reset role;
+update public.app_settings set value = 'on' where key = 'mercado_pago';
+insert into public.equipment_available_days select '10000000-0000-0000-0000-000000000001', public.today_sp() + n from generate_series(1, 10) n;
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000a');
+create temp table ids (name text, id uuid);
+grant all on ids to authenticated;
+insert into ids select 'r1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 3, '10:00', public.today_sp() + 3, '13:00');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+select pg_temp.ok(public.decide_booking((select id from ids where name = 'r1'), true) = 'accepted', 'Equipe aceita reserva paga sem conta Mercado Pago conectada');
 reset role;
 \echo 'Equipe anuncia: todos os testes passaram'

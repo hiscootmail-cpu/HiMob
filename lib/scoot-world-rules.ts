@@ -129,7 +129,8 @@ export const sameLine = (a: Pick<CartLine, "id" | "size">, b: Pick<CartLine, "id
 
 /** "P, M, G" ou "P M G" → ["P", "M", "G"] (sem repetir). null se algum tamanho for inválido. */
 export function parseSizes(input: string): string[] | null {
-  const list = [...new Set(input.split(/[,;\s]+/).map((v) => v.trim().toUpperCase()).filter(Boolean))];
+  // Só letras e números contam como tamanho ("P - M" vira P e M).
+  const list = [...new Set(input.split(/[,;\s/|-]+/).map((v) => v.trim().toUpperCase()).filter((v) => /^[A-Z0-9]+$/.test(v)))];
   if (list.length > WORLD_LIMITS.sizes || list.some((v) => v.length > WORLD_LIMITS.sizeLength)) return null;
   return list;
 }
