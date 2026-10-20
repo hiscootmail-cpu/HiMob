@@ -471,7 +471,8 @@
       "active": "Em uso",
       "completed": "Concluída",
       "rejected": "Recusada",
-      "cancelled": "Cancelada"
+      "cancelled": "Cancelada",
+      "confirmedFree": "Confirmada (grátis), pronta para retirada"
     },
     "dates": "{start} a {end}",
     "days": "{count, plural, one {# diária} other {# diárias}}",
@@ -670,7 +671,8 @@
     "tabs": {
       "label": "Área do Host",
       "listings": "Meus anúncios",
-      "reservations": "Reservas recebidas"
+      "reservations": "Reservas recebidas",
+      "overview": "Visão geral"
     },
     "new": {
       "title": "Novo anúncio",
@@ -940,7 +942,8 @@
         "active": "Em uso",
         "completed": "Concluída",
         "rejected": "Recusada",
-        "cancelled": "Cancelada"
+        "cancelled": "Cancelada",
+        "confirmedFree": "Confirmada (grátis), pronta para retirada"
       },
       "rider": "Rider: <link>{name}</link>",
       "when": "{start} até {end}",
@@ -978,6 +981,34 @@
       "weekdays": "Só dias úteis",
       "clearMonth": "Fechar o mês",
       "shortcutsHelp": "Os atalhos valem dos próximos dias até o fim do mês mostrado. Dias com reserva continuam liberados."
+    },
+    "overview": {
+      "title": "Visão geral",
+      "subtitle": "Seus pedidos, aluguéis e anúncios num lugar só.",
+      "newListing": "Novo anúncio",
+      "tiles": {
+        "pending": "Pedidos novos",
+        "upcoming": "Próximos aluguéis",
+        "inUse": "Em uso agora",
+        "month": "Reservas pagas no mês"
+      },
+      "nextTitle": "Próximos aluguéis",
+      "seeAllReservations": "Ver todas as reservas",
+      "nextEmpty": "Nenhum aluguel marcado. Assim que um pedido for aceito ou confirmado, ele aparece aqui.",
+      "free": "Grátis",
+      "listingsTitle": "Seus anúncios",
+      "seeAllListings": "Ver Meus anúncios",
+      "listingsEmpty": "Você ainda não tem anúncios.",
+      "listingLive": "Publicado e disponível",
+      "listingPaused": "Publicado, marcado como indisponível",
+      "listingReview": "Em análise pela equipe",
+      "listingRejected": "Recusado: veja o motivo em Meus anúncios",
+      "openDays": "{count, plural, one {# dia liberado} other {# dias liberados}} nos próximos {days} dias",
+      "noOpenDays": "Nenhum dia liberado: ninguém consegue reservar. Toque em Dias disponíveis.",
+      "nextBooking": "Próxima retirada: {when}",
+      "noNextBooking": "Sem reservas marcadas",
+      "edit": "Editar anúncio",
+      "availableDays": "Dias disponíveis"
     }
   },
   "dashboard": {

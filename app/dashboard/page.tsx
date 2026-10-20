@@ -86,7 +86,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const shortcuts = [
     { href: "/", icon: SearchIcon, label: t("shortcuts.explore") },
     { href: "/rider/reservations", icon: CalendarIcon, label: t("shortcuts.reservations") },
-    { href: user.is_host ? "/host/equipment" : "/host/equipment/new", icon: KeyIcon, label: user.is_host ? t("shortcuts.myListings") : t("shortcuts.becomeHost") },
+    { href: user.is_host ? "/host" : "/host/equipment/new", icon: KeyIcon, label: user.is_host ? t("shortcuts.myListings") : t("shortcuts.becomeHost") },
     { href: "/conversations", icon: ChatIcon, label: t("shortcuts.conversations") },
   ];
 

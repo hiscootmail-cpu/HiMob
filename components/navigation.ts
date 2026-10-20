@@ -24,7 +24,7 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { href: "/", label: "explore", icon: SearchIcon },
   { href: "/rider/reservations", label: "reservations", icon: CalendarIcon },
-  { href: "/host/equipment", label: "host", icon: KeyIcon },
+  { href: "/host", label: "host", icon: KeyIcon },
   { href: "/conversations", label: "conversations", icon: ChatIcon },
   { href: "/settings", label: "profile", icon: UserIcon },
 ];
