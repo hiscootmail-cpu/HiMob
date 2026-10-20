@@ -11,10 +11,10 @@ import { MonthCalendar } from "@/components/equipment/month-calendar";
 import { GAP_HOURS, type Schedule } from "@/lib/availability-rules";
 import { daysBetween, rentalHours, saoPauloTime, timeSlots } from "@/lib/booking";
 import { durationText } from "@/lib/duration";
-import { breakdownFromHost, hostHourlyPrice, PLATFORM_FEE_PERCENT, rentalHostAmount, riderDailyPrice } from "@/lib/pricing";
+import { discountedBreakdown, hostHourlyPrice, PLATFORM_FEE_PERCENT, rentalHostAmount, riderDailyPrice } from "@/lib/pricing";
 import type { Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
-import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError } from "./actions";
+import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError, type CouponPreview } from "./actions";
 
 type BookingPanelProps = {
   equipment: Equipment;
@@ -126,10 +126,10 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
     });
   };
 
-  // Cupom (decisão de 20/10/2026): por enquanto, todo cupom deixa o aluguel grátis.
+  // Cupom (decisões de 20/10/2026): aluguel grátis, ou x% no aluguel e y% na taxa.
   const [couponOpen, setCouponOpen] = useState(false);
   const [couponInput, setCouponInput] = useState("");
-  const [coupon, setCoupon] = useState<{ code: string; error?: CouponError } | null>(null);
+  const [coupon, setCoupon] = useState<({ code: string; error?: CouponError } & Partial<CouponPreview>) | null>(null);
   const [checkingCoupon, startCouponCheck] = useTransition();
   const appliedCoupon = coupon && !coupon.error ? coupon.code : "";
   const applyCoupon = () => {
@@ -137,7 +137,7 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
     if (!code) return;
     startCouponCheck(async () => {
       const result = await checkCoupon(equipment.id, code, pickup, dropoff);
-      setCoupon(result.ok ? { code } : { code, error: result.error });
+      setCoupon(result.ok ? { code, kind: result.kind, rentalPercent: result.rentalPercent, feePercent: result.feePercent } : { code, error: result.error });
     });
   };
   const [state, formAction, pending] = useActionState(requestBooking.bind(null, equipment.id), {} as BookingRequestState);
@@ -165,7 +165,12 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
             : null;
   const error = localError ?? state.error;
   const hostAmount = rentalHostAmount(equipment.daily_price, openFrom, openUntil, hours);
-  const breakdown = breakdownFromHost(hostAmount);
+  const freeCoupon = Boolean(appliedCoupon) && (coupon?.kind === "free" || (coupon?.rentalPercent === 100 && coupon?.feePercent === 100));
+  const breakdown = discountedBreakdown(
+    hostAmount,
+    appliedCoupon && !freeCoupon ? (coupon?.rentalPercent ?? 0) : 0,
+    appliedCoupon && !freeCoupon ? (coupon?.feePercent ?? 0) : 0,
+  );
   const hourly = riderDailyPrice(hostHourlyPrice(equipment.daily_price, openFrom, openUntil));
 
   // Horários já ocupados nos dias escolhidos (para a pessoa evitar).
@@ -321,20 +326,32 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
           <dl className="flex flex-col gap-2 rounded-md bg-surface px-4 py-3 text-sm">
             <div className="flex justify-between gap-3">
               <dt className="text-hs-black">{t("rentalOf", { duration: durationText(tDuration, hours) })}</dt>
-              <dd className="text-hs-black">{money(breakdown.total)}</dd>
+              <dd className="text-hs-black">{money(breakdown.fullTotal)}</dd>
             </div>
             <p className="text-xs text-muted">
-              {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(breakdown.fee) })}
+              {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(breakdown.fee + breakdown.feeDiscount) })}
             </p>
-            {appliedCoupon ? (
+            {freeCoupon ? (
               <div className="flex justify-between gap-3 text-on-green">
                 <dt>{t("couponLine", { code: appliedCoupon })}</dt>
-                <dd>- {money(breakdown.total)}</dd>
+                <dd className="whitespace-nowrap">- {money(breakdown.fullTotal)}</dd>
+              </div>
+            ) : null}
+            {!freeCoupon && breakdown.rentalDiscount > 0 ? (
+              <div className="flex justify-between gap-3 text-on-green">
+                <dt>{t("couponRental", { code: appliedCoupon, percent: coupon?.rentalPercent ?? 0 })}</dt>
+                <dd className="whitespace-nowrap">- {money(breakdown.rentalDiscount)}</dd>
+              </div>
+            ) : null}
+            {!freeCoupon && breakdown.feeDiscount > 0 ? (
+              <div className="flex justify-between gap-3 text-on-green">
+                <dt>{t("couponFee", { code: appliedCoupon, percent: coupon?.feePercent ?? 0 })}</dt>
+                <dd className="whitespace-nowrap">- {money(breakdown.feeDiscount)}</dd>
               </div>
             ) : null}
             <div className="flex justify-between gap-3 border-t border-line pt-2 font-bold">
               <dt className="text-hs-black">{t("total")}</dt>
-              <dd className="text-hs-black">{appliedCoupon ? t("free") : money(breakdown.total)}</dd>
+              <dd className="text-hs-black">{freeCoupon ? t("free") : money(breakdown.total)}</dd>
             </div>
           </dl>
         ) : null}
@@ -374,7 +391,13 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
               role={coupon?.error ? "alert" : "status"}
               className={cn("text-sm", coupon?.error ? "text-error" : "text-on-green")}
             >
-              {coupon?.error ? t(`errors.${coupon.error}`) : appliedCoupon ? t("couponApplied", { code: appliedCoupon }) : null}
+              {coupon?.error
+                ? t(`errors.${coupon.error}`)
+                : appliedCoupon
+                  ? freeCoupon
+                    ? t("couponApplied", { code: appliedCoupon })
+                    : t("couponAppliedDiscount", { code: appliedCoupon, rental: coupon?.rentalPercent ?? 0, fee: coupon?.feePercent ?? 0 })
+                  : null}
             </p>
           </div>
         ) : (

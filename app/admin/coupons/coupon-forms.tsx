@@ -28,6 +28,9 @@ export type CouponRow = {
   valid_until: string | null;
   active: boolean;
   uses: number;
+  kind: "free" | "discount";
+  rental_percent: number;
+  fee_percent: number;
 };
 
 /** Campos do cupom: os mesmos para criar e para editar. Limites vazios = sem limite. */
@@ -62,9 +65,52 @@ function CouponForm({
   };
   const err = (key: NonNullable<CouponFormState["error"]>) => (state.error === key ? t(`errors.${key}`) : undefined);
   const id = coupon?.id ?? "new";
+  const [kind, setKind] = useState<"free" | "discount">(coupon?.kind ?? "free");
 
   return (
     <form ref={formRef} onSubmit={submit} className="flex flex-col gap-4">
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1.5 text-sm font-medium text-hs-black">{t("kindLabel")}</legend>
+        <div className="flex flex-wrap gap-2">
+          {(["free", "discount"] as const).map((option) => (
+            <label
+              key={option}
+              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-4 text-sm font-semibold text-hs-black has-checked:border-hs-black has-checked:bg-hs-black has-checked:text-hs-white"
+            >
+              <input
+                type="radio"
+                name="kind"
+                value={option}
+                checked={kind === option}
+                onChange={() => setKind(option)}
+                className="sr-only"
+              />
+              {t(option === "free" ? "kindFree" : "kindDiscount")}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {kind === "discount" ? (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextField
+            id={`rental-percent-${id}`}
+            name="rental_percent"
+            label={t("rentalPercent")}
+            hint={t("rentalPercentHint")}
+            inputMode="numeric"
+            defaultValue={coupon?.rental_percent || ""}
+            error={err("percent")}
+          />
+          <TextField
+            id={`fee-percent-${id}`}
+            name="fee_percent"
+            label={t("feePercent")}
+            hint={t("feePercentHint")}
+            inputMode="numeric"
+            defaultValue={coupon?.fee_percent || ""}
+          />
+        </div>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
           id={`code-${id}`}
@@ -126,7 +172,11 @@ export function CouponItem({ coupon }: { coupon: CouponRow }) {
         <span className={coupon.active ? "rounded-full bg-green-soft px-2.5 py-0.5 text-xs font-semibold text-on-green" : "rounded-full bg-surface px-2.5 py-0.5 text-xs font-semibold text-hs-black"}>
           {coupon.active ? t("on") : t("off")}
         </span>
-        <span className="rounded-full bg-purple-soft px-2.5 py-0.5 text-xs font-semibold text-on-purple">{t("kindFree")}</span>
+        <span className="rounded-full bg-purple-soft px-2.5 py-0.5 text-xs font-semibold text-on-purple">
+          {coupon.kind === "discount"
+            ? t("discountShown", { rental: coupon.rental_percent, fee: coupon.fee_percent })
+            : t("kindFree")}
+        </span>
       </div>
       <p className="text-sm text-hs-black">{limits.join(" · ")}</p>
       {editing ? (

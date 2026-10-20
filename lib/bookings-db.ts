@@ -16,7 +16,7 @@ import { createClient } from "@/lib/supabase/server";
 
 const SELECT = `
   id, rider_id, host_id, start_date, end_date, host_daily_price, host_amount, pickup_time, return_time,
-  status, rider_reviewed, host_reviewed, reject_reason, coupon_code, free,
+  status, rider_reviewed, host_reviewed, reject_reason, coupon_code, free, coupon_rental_percent, coupon_fee_percent,
   handoffs(kind, by_role),
   equipment(id, host_id, type, title, description, daily_price, city, area, latitude, longitude,
             pickup_time, return_time, is_available, equipment_photos(path, position)),
@@ -40,6 +40,8 @@ type Row = {
   reject_reason: string | null;
   coupon_code: string | null;
   free: boolean;
+  coupon_rental_percent: number;
+  coupon_fee_percent: number;
   handoffs: { kind: "pickup" | "return"; by_role: "rider" | "host" }[];
   equipment: {
     id: string;
@@ -86,6 +88,8 @@ function fromRow(row: Row): HostBooking {
     reject_reason: row.reject_reason,
     coupon_code: row.coupon_code,
     free: row.free,
+    coupon_rental_percent: row.coupon_rental_percent ?? 0,
+    coupon_fee_percent: row.coupon_fee_percent ?? 0,
     confirmed: {
       pickup: { rider: has(row, "pickup", "rider"), host: has(row, "pickup", "host") },
       return: { rider: has(row, "return", "rider"), host: has(row, "return", "host") },

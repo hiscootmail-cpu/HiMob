@@ -451,7 +451,10 @@
       "busy": "booked",
       "off": "unavailable",
       "closed": "closed"
-    }
+    },
+    "couponRental": "Coupon {code}: {percent}% off the rental",
+    "couponFee": "Coupon {code}: {percent}% off the fee",
+    "couponAppliedDiscount": "Coupon {code} applied: {rental}% off the rental and {fee}% off the fee."
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -573,7 +576,8 @@
           "notAllowed": "This booking is not waiting for payment."
         }
       },
-      "rentalOf": "Rental for {duration}"
+      "rentalOf": "Rental for {duration}",
+      "couponDiscount": "Coupon {code} discount"
     },
     "confirmed": {
       "title": "Booking confirmed!",
@@ -1575,11 +1579,11 @@
   },
   "adminCoupons": {
     "title": "Coupons",
-    "subtitle": "Free rental coupons for Hi Scoot campaigns. Each coupon can be limited to one city.",
+    "subtitle": "Rental coupons: free (Hi Scoot campaigns) or a percentage discount. Each coupon can be limited to one city.",
     "back": "Back to the panel",
     "empty": "No coupons yet.",
     "newTitle": "New coupon",
-    "newHelp": "The coupon makes the rental free: the booking is confirmed without payment when the Host accepts. Use it on Hi Scoot equipment or partners who agreed to lend theirs.",
+    "newHelp": "Free rental: the booking is confirmed without payment when the Host accepts. Discount: x% off the rental (from the Host’s share) and y% off the 15% fee (from Hi Scoot’s share).",
     "code": "Code",
     "codeHint": "Letters and numbers only, no spaces. E.g.: ScootemMogi",
     "city": "City (optional)",
@@ -1625,8 +1629,16 @@
       "maxUses": "Write a whole number (1 or more), or leave empty.",
       "perPerson": "Write a whole number (1 or more), or leave empty.",
       "maxDays": "Write 1 to 60 days, or leave empty.",
-      "validUntil": "Pick a valid date, or leave empty."
-    }
+      "validUntil": "Pick a valid date, or leave empty.",
+      "percent": "Enter 1 to 100 in at least one of the discounts."
+    },
+    "kindLabel": "Coupon type",
+    "kindDiscount": "Percentage discount",
+    "rentalPercent": "Rental discount (%)",
+    "rentalPercentHint": "Comes from the Host’s share. Empty or 0: no rental discount.",
+    "feePercent": "Fee discount (%)",
+    "feePercentHint": "Comes from Hi Scoot’s 15% fee. Empty or 0: no fee discount.",
+    "discountShown": "{rental}% off rental · {fee}% off fee"
   },
   "duration": {
     "days": "{count, plural, one {# day} other {# days}}",

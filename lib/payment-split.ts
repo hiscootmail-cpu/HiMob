@@ -1,4 +1,4 @@
-import { breakdownFromHost } from "@/lib/pricing";
+import type { BookingBreakdown } from "@/lib/pricing";
 
 /*
  * Divisão do pagamento no Mercado Pago (decisões de 19/10/2026).
@@ -41,11 +41,10 @@ export type PaymentSplit = {
   hostReceives: number;
 };
 
-/** hostAmount: valor do Host pela reserva (guardado no banco: diárias ou horas). */
-export function paymentSplit(hostAmount: number, method: PaymentMethod, hostDebt = 0): PaymentSplit {
+/** price: preço da reserva (lib/bookings.ts bookingPrice), já com o desconto do cupom. */
+export function paymentSplit(price: BookingBreakdown, method: PaymentMethod, hostDebt = 0): PaymentSplit {
   const rate = MP_FEE_PERCENT[method];
   if (rate === null) throw new Error(`method_disabled:${method}`);
-  const price = breakdownFromHost(hostAmount);
   const totalCents = toCents(price.total);
   const subtotalCents = toCents(price.subtotal);
   const feeCents = toCents(price.fee);
@@ -73,9 +72,8 @@ export function paymentSplit(hostAmount: number, method: PaymentMethod, hostDebt
  */
 export function cancelRefund(
   who: "rider" | "host",
-  hostAmount: number,
+  price: BookingBreakdown,
 ): { refund: number; hostDebt: number } {
-  const price = breakdownFromHost(hostAmount);
   const totalCents = toCents(price.total);
   const subtotalCents = toCents(price.subtotal);
   if (who === "host") return { refund: price.total, hostDebt: price.fee };

@@ -451,7 +451,10 @@
       "busy": "reservado",
       "off": "indisponível",
       "closed": "fechado"
-    }
+    },
+    "couponRental": "Cupom {code}: {percent}% no aluguel",
+    "couponFee": "Cupom {code}: {percent}% na taxa",
+    "couponAppliedDiscount": "Cupom {code} aplicado: {rental}% de desconto no aluguel e {fee}% na taxa."
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -573,7 +576,8 @@
           "notAllowed": "Esta reserva não está esperando pagamento."
         }
       },
-      "rentalOf": "Aluguel de {duration}"
+      "rentalOf": "Aluguel de {duration}",
+      "couponDiscount": "Desconto do cupom {code}"
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -1575,11 +1579,11 @@
   },
   "adminCoupons": {
     "title": "Cupons",
-    "subtitle": "Cupons de aluguel grátis para as ações da Hi Scoot. Cada cupom pode valer só numa cidade.",
+    "subtitle": "Cupons de aluguel: grátis (ações da Hi Scoot) ou com desconto em porcentagem. Cada cupom pode valer só numa cidade.",
     "back": "Voltar ao painel",
     "empty": "Nenhum cupom ainda.",
     "newTitle": "Novo cupom",
-    "newHelp": "O cupom deixa o aluguel grátis: a reserva fica confirmada sem pagamento quando o Host aceita. Use em equipamentos da Hi Scoot ou de parceiros que toparam emprestar.",
+    "newHelp": "Aluguel grátis: a reserva fica confirmada sem pagamento quando o Host aceita. Desconto: x% no aluguel (sai da parte do Host) e y% na taxa de 15% (sai da parte da Hi Scoot).",
     "code": "Código",
     "codeHint": "Só letras e números, sem espaço. Ex.: ScootemMogi",
     "city": "Cidade (opcional)",
@@ -1625,8 +1629,16 @@
       "maxUses": "Escreva um número inteiro (1 ou mais), ou deixe vazio.",
       "perPerson": "Escreva um número inteiro (1 ou mais), ou deixe vazio.",
       "maxDays": "Escreva de 1 a 60 dias, ou deixe vazio.",
-      "validUntil": "Escolha uma data válida, ou deixe vazio."
-    }
+      "validUntil": "Escolha uma data válida, ou deixe vazio.",
+      "percent": "Escreva de 1 a 100 em pelo menos um dos descontos."
+    },
+    "kindLabel": "Tipo de cupom",
+    "kindDiscount": "Desconto em %",
+    "rentalPercent": "Desconto no aluguel (%)",
+    "rentalPercentHint": "Sai da parte do Host. Vazio ou 0: sem desconto no aluguel.",
+    "feePercent": "Desconto na taxa (%)",
+    "feePercentHint": "Sai da taxa de 15% da Hi Scoot. Vazio ou 0: sem desconto na taxa.",
+    "discountShown": "{rental}% no aluguel · {fee}% na taxa"
   },
   "duration": {
     "days": "{count, plural, one {# dia} other {# dias}}",

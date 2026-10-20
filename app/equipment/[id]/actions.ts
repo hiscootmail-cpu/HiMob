@@ -48,26 +48,36 @@ const cleanCoupon = (value: FormDataEntryValue | string | null) =>
   String(value ?? "").replace(/\s/g, "").toUpperCase().slice(0, 30);
 
 /**
- * Cupom digitado no quadro de reserva (decisão de 20/10/2026): o banco confere
- * cidade, validade e limites. Por enquanto todo cupom deixa o aluguel grátis.
+ * Cupom digitado no quadro de reserva (decisões de 20/10/2026): o banco confere
+ * cidade, validade e limites. O cupom deixa o aluguel grátis ou dá x% de
+ * desconto no aluguel e y% na taxa.
  */
+export type CouponPreview = { kind: "free" | "discount"; rentalPercent: number; feePercent: number };
+
 export async function checkCoupon(
   equipmentId: string,
   code: string,
   pickup: string,
   dropoff: string,
-): Promise<{ ok: true } | { ok: false; error: CouponError }> {
+): Promise<({ ok: true } & CouponPreview) | { ok: false; error: CouponError }> {
   const coupon = cleanCoupon(code);
   if (!/^[A-Z0-9]{3,30}$/.test(coupon)) return { ok: false, error: "couponInvalid" };
-  if (!supabaseConfigured()) return DEMO_COUPONS.includes(coupon) ? { ok: true } : { ok: false, error: "couponInvalid" };
+  if (!supabaseConfigured()) {
+    if (coupon === "DEMO10") return { ok: true, kind: "discount", rentalPercent: 10, feePercent: 20 };
+    return DEMO_COUPONS.includes(coupon) ? { ok: true, kind: "free", rentalPercent: 100, feePercent: 100 } : { ok: false, error: "couponInvalid" };
+  }
   const supabase = await createClient();
-  const { error } = await supabase.rpc("check_coupon", {
+  const { data, error } = await supabase.rpc("coupon_preview", {
     p_code: coupon,
     p_equipment: equipmentId,
     p_start: pickup || null,
     p_end: dropoff || null,
   });
-  return error ? { ok: false, error: COUPON_ERRORS[error.message] ?? "couponInvalid" } : { ok: true };
+  const row = (data as { kind: string; rental_percent: number; fee_percent: number }[] | null)?.[0];
+  if (error || !row) return { ok: false, error: COUPON_ERRORS[error?.message ?? ""] ?? "couponInvalid" };
+  return row.kind === "discount"
+    ? { ok: true, kind: "discount", rentalPercent: row.rental_percent, feePercent: row.fee_percent }
+    : { ok: true, kind: "free", rentalPercent: 100, feePercent: 100 };
 }
 
 export async function requestBooking(
@@ -123,10 +133,11 @@ export async function requestBooking(
       } as const;
       return { error: known[error.message as keyof typeof known] ?? "unavailable" };
     }
-    return { done: true, free: Boolean(coupon) };
+    const { data: made } = await supabase.from("bookings").select("free").eq("rider_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+    return { done: true, free: Boolean(coupon && made?.free) };
   }
-  if (coupon && !DEMO_COUPONS.includes(coupon)) return { error: "couponInvalid" };
-  return { done: true, free: Boolean(coupon) };
+  if (coupon && !DEMO_COUPONS.includes(coupon) && coupon !== "DEMO10") return { error: "couponInvalid" };
+  return { done: true, free: DEMO_COUPONS.includes(coupon) };
 }
 
 export type WaitlistState = { onWaitlist: boolean };

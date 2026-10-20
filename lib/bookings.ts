@@ -1,5 +1,5 @@
 import type { Equipment } from "@/lib/equipment";
-import { breakdownFromHost, type BookingBreakdown } from "@/lib/pricing";
+import { discountedBreakdown, type DiscountedBreakdown } from "@/lib/pricing";
 
 /*
  * Reserva, do ponto de vista do Rider.
@@ -47,6 +47,9 @@ export type Booking = {
   coupon_code?: string | null;
   /** Aluguel grátis (cupom de ação): confirmado sem pagamento, ninguém recebe. */
   free?: boolean;
+  /** Cupom de desconto: % no aluguel (parte do Host) e % na taxa (parte da Hi Scoot). */
+  coupon_rental_percent?: number;
+  coupon_fee_percent?: number;
   /**
    * Quem já confirmou a retirada e a devolução. A reserva só segue quando os
    * dois confirmam (decisão de 10/10/2026); sem isso, a equipe verifica em 2 horas.
@@ -71,8 +74,8 @@ export const REVIEW_COMMENT_MAX = 500;
 /** Situações em que a reserva ainda está acontecendo. */
 export const ONGOING: BookingStatus[] = ["pending", "accepted", "confirmed", "active"];
 
-export function bookingPrice(booking: Booking): BookingBreakdown {
-  return breakdownFromHost(booking.host_amount);
+export function bookingPrice(booking: Booking): DiscountedBreakdown {
+  return discountedBreakdown(booking.host_amount, booking.coupon_rental_percent ?? 0, booking.coupon_fee_percent ?? 0);
 }
 
 // Leitura das reservas (banco ou exemplos): lib/bookings-db.ts (só no servidor).

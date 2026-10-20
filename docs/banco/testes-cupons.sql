@@ -104,5 +104,21 @@ select pg_temp.ok((select count(*) from public.bookings where coupon_code is not
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
 select pg_temp.fails($$select public.check_coupon('ScootemSampa', '10000000-0000-0000-0000-000000000002', public.today_sp() + 3, public.today_sp() + 4)$$, 'coupon_invalid', 'Cupom desligado não vale');
 select pg_temp.fails($$insert into public.coupons (code) values ('HACK')$$, '42501', 'Rider não cria cupom');
+-- Cupom de desconto: x% no aluguel e y% na taxa (20/10/2026)
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+select pg_temp.fails($$insert into public.coupons (code, kind) values ('SEMPORCENTO', 'discount')$$, '23514', 'Cupom de desconto precisa de alguma porcentagem');
+select pg_temp.fails($$insert into public.coupons (code, kind, rental_percent) values ('DEMAIS', 'discount', 120)$$, '23514', 'Porcentagem até 100');
+insert into public.coupons (code, kind, rental_percent, fee_percent) values ('DEZVINTE', 'discount', 10, 20);
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.ok((select rental_percent = 10 and fee_percent = 20 and kind = 'discount' from public.coupon_preview('dezvinte', '10000000-0000-0000-0000-000000000001', public.today_sp() + 40, public.today_sp() + 40)), 'Rider vê as porcentagens do cupom');
+select pg_temp.open_days();
+insert into ids select 'd1', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 40, public.today_sp() + 40, 'DezVinte');
+select pg_temp.ok((select coupon_rental_percent = 10 and coupon_fee_percent = 20 and not free from public.bookings where id = (select id from ids where name = 'd1')), 'Reserva guarda os descontos e não fica grátis');
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000c');
+insert into public.coupons (code, kind, rental_percent, fee_percent) values ('TUDO100', 'discount', 100, 100);
+select pg_temp.as_user('00000000-0000-0000-0000-00000000000b');
+select pg_temp.open_days();
+insert into ids select 'd2', public.request_booking('10000000-0000-0000-0000-000000000001', public.today_sp() + 45, public.today_sp() + 45, 'TUDO100');
+select pg_temp.ok((select free from public.bookings where id = (select id from ids where name = 'd2')), '100% nas duas partes = aluguel grátis');
 reset role;
 \echo 'Cupons: todos os testes passaram'
