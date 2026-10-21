@@ -6,12 +6,14 @@ import { Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { updateProfile, type ProfileState } from "@/app/profile/actions";
+import { CityField } from "@/components/city-field";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
-import { CITY_MAX, NAME_MIN_LENGTH } from "@/lib/validation";
+import type { ChosenCity } from "@/lib/br-cities";
+import { NAME_MIN_LENGTH } from "@/lib/validation";
 
 type ProfileFormProps = {
-  defaults: { fullName: string; phone: string; city: string };
+  defaults: { fullName: string; phone: string; city: ChosenCity | null; secondCity: ChosenCity | null };
   /** Identidade verificada: o nome fica travado. */
   nameLocked: boolean;
 };
@@ -62,14 +64,18 @@ export function ProfileForm({ defaults, nameLocked }: ProfileFormProps) {
         hint={t("phoneHint")}
         error={state.errors?.phone ? t(`errors.${state.errors.phone}`) : undefined}
       />
-      <TextField
-        key={`city-${values.city}`}
+      <CityField
         name="city"
         label={t("cityLabel")}
-        autoComplete="address-level2"
-        maxLength={CITY_MAX}
         defaultValue={values.city}
-        error={state.errors?.city ? t(`errors.${state.errors.city}`, { max: CITY_MAX }) : undefined}
+        error={state.errors?.city ? tAuth(state.errors.city) : undefined}
+      />
+      <CityField
+        name="secondCity"
+        label={t("secondCityLabel")}
+        hint={t("secondCityHint")}
+        defaultValue={values.secondCity}
+        error={state.errors?.secondCity ? tAuth(state.errors.secondCity) : undefined}
       />
       {state.error ? (
         <p role="alert" className="text-sm text-error">

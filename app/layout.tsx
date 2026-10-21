@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { BottomNav } from "@/components/bottom-nav";
+import { CityGate } from "@/components/city-gate";
 import { NewVersionReload } from "@/components/new-version-reload";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -60,6 +61,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter className={cn(signedIn && "pb-16 md:pb-0")} />
           {signedIn ? <BottomNav /> : null}
           <Toaster />
+          {/* Conta sem a cidade onde mora (escolhida da lista): pede antes de continuar. */}
+          {user && !user.city_state ? <CityGate /> : null}
           <NewVersionReload />
         </NextIntlClientProvider>
       </body>

@@ -3,6 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { readCityField } from "@/lib/br-cities-server";
 import { DEMO_SESSION_COOKIE } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -34,6 +35,8 @@ export type AuthFormState = {
     fullName?: FieldErrorKey;
     email?: FieldErrorKey;
     phone?: FieldErrorKey;
+    city?: FieldErrorKey;
+    secondCity?: FieldErrorKey;
     password?: FieldErrorKey;
     terms?: FieldErrorKey;
   };
@@ -103,11 +106,16 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   // Telefone obrigatório (decisão de 19/10/2026): só aparece para a outra pessoa depois da reserva aceita.
   const phone = text(formData, "phone").trim();
   const acceptedTerms = formData.get("terms") === "on";
+  // Cidade onde mora (obrigatória) e secundária (opcional), da lista oficial (decisão de 21/10/2026).
+  const city = readCityField(formData, "city", true);
+  const secondCity = readCityField(formData, "secondCity", false);
 
   const fieldErrors = {
     fullName: validateFullName(fullName) ?? undefined,
     email: validateEmail(email) ?? undefined,
     phone: validatePhone(phone) ?? undefined,
+    city: city.error,
+    secondCity: secondCity.error,
     password: validateNewPassword(password) ?? undefined,
     terms: acceptedTerms ? undefined : ("termsRequired" as const),
   };
@@ -121,7 +129,14 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
       email,
       password,
       options: {
-        data: { full_name: fullName, phone },
+        data: {
+          full_name: fullName,
+          phone,
+          city: city.city?.city,
+          city_state: city.city?.uf,
+          second_city: secondCity.city?.city,
+          second_city_state: secondCity.city?.uf,
+        },
         emailRedirectTo: `${await siteOrigin()}/auth/confirm?next=/dashboard`,
       },
     });

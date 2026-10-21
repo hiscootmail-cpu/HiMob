@@ -22,6 +22,11 @@ export type CurrentUser = {
   email: string;
   phone: string;
   city: string;
+  /** Estado (UF) da cidade onde mora; vazio = ainda não escolheu da lista (pede ao entrar). */
+  city_state: string;
+  /** Cidade secundária (opcional): trabalho, estudo, fim de semana. */
+  second_city: string;
+  second_city_state: string;
   /** Já virou Host? (conta única: a mesma pessoa é Rider e Host) */
   is_host: boolean;
   /** Faz parte da equipe Hi Scoot? Só a equipe abre o painel do administrador. */
@@ -36,6 +41,9 @@ const demoUser: CurrentUser = {
   email: "teste@hiscoot.com.br",
   phone: "(11) 98765-4321",
   city: "São Paulo",
+  city_state: "SP",
+  second_city: "",
+  second_city_state: "",
   is_host: true,
   is_admin: true,
   identity: "approved",
@@ -59,7 +67,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   // As regras do banco só entregam a linha da própria pessoa.
   const [{ data: profile }, { data: secret }] = await Promise.all([
-    supabase.from("profiles").select("city, is_host, identity_status, deleted_at").eq("id", user.id).maybeSingle(),
+    supabase.from("profiles").select("city, city_state, second_city, second_city_state, is_host, identity_status, deleted_at").eq("id", user.id).maybeSingle(),
     supabase.from("profile_private").select("full_name, phone, is_admin").eq("id", user.id).maybeSingle(),
   ]);
 
@@ -72,6 +80,9 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     full_name: secret?.full_name ?? "",
     phone: secret?.phone ?? "",
     city: profile?.city ?? "",
+    city_state: profile?.city_state ?? "",
+    second_city: profile?.second_city ?? "",
+    second_city_state: profile?.second_city_state ?? "",
     is_host: profile?.is_host ?? false,
     is_admin: secret?.is_admin ?? false,
     identity: (profile?.identity_status as IdentityStatus | undefined) ?? "pending",

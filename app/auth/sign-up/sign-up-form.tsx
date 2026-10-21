@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { signUp, type AuthFormState } from "@/app/auth/actions";
 import { TermsConsent } from "@/components/auth/terms-consent";
 import { useFieldValidation } from "@/components/auth/use-field-validation";
+import { CityField } from "@/components/city-field";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/ui/password-field";
 import { TextField } from "@/components/ui/text-field";
@@ -98,6 +99,20 @@ export function SignUpForm() {
         error={errorText(phone.error)}
         onBlur={phone.onBlur}
         onChange={phone.onChange}
+      />
+
+      <CityField
+        name="city"
+        label={t("fields.city")}
+        hint={t("fields.cityHint")}
+        error={errorText(state.fieldErrors?.city)}
+      />
+
+      <CityField
+        name="secondCity"
+        label={t("fields.secondCity")}
+        hint={t("fields.secondCityHint")}
+        error={errorText(state.fieldErrors?.secondCity)}
       />
 
       <PasswordField

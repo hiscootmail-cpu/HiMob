@@ -23,7 +23,12 @@ export default async function EditProfilePage() {
         <p className="text-base text-muted">{t("subtitle")}</p>
       </div>
       <ProfileForm
-        defaults={{ fullName: user.full_name, phone: user.phone, city: user.city }}
+        defaults={{
+          fullName: user.full_name,
+          phone: user.phone,
+          city: user.city_state ? { city: user.city, uf: user.city_state } : null,
+          secondCity: user.second_city && user.second_city_state ? { city: user.second_city, uf: user.second_city_state } : null,
+        }}
         nameLocked={user.identity === "approved"}
       />
     </div>
