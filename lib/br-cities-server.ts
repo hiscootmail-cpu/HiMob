@@ -5,6 +5,19 @@ import { parseCityValue, type ChosenCity } from "@/lib/br-cities";
 
 const CITIES = new Set<string>(list as string[]);
 
+const plain = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+/**
+ * Cidade escrita à mão (cadastros antigos, ex.: "Jaguariuna") → a da lista, se
+ * só uma cidade tiver esse nome. Com nome repetido em vários estados, null.
+ */
+export function findCity(name: string): ChosenCity | null {
+  const wanted = plain(name);
+  if (!wanted) return null;
+  const found = (list as string[]).filter((row) => plain(row.split("|")[0]) === wanted);
+  return found.length === 1 ? parseCityValue(found[0]) : null;
+}
+
 /** Cidade da lista oficial? Devolve cidade e estado, ou null. */
 export function checkCity(value: string): ChosenCity | null {
   const chosen = parseCityValue(value.trim());

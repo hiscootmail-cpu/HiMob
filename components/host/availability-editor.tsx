@@ -6,22 +6,26 @@ import { toast } from "sonner";
 
 import { daysOfMonth, MonthCalendar, shiftMonth, weekday } from "@/components/equipment/month-calendar";
 import { Button } from "@/components/ui/button";
-import { saveAvailability } from "./actions";
+import { saveAvailability } from "@/app/host/equipment/[id]/availability/actions";
 
 /** Até 6 meses à frente. */
 const MONTHS_AHEAD = 6;
 
 /**
  * Calendário do Host: tocar num dia libera ou tira. Atalhos para o mês na tela:
- * o mês todo, só fins de semana, só dias úteis, limpar. Salva na hora.
+ * o mês todo, só fins de semana, só dias úteis, limpar.
+ * Com `listingId`, salva na hora. Sem ele (anúncio novo), guarda os dias num
+ * campo escondido do formulário (`name`) e o anúncio salva junto.
  */
 export function AvailabilityEditor({
   listingId,
+  name,
   today,
   initial,
   booked,
 }: {
-  listingId: string;
+  listingId?: string;
+  name?: string;
   today: string;
   initial: string[];
   /** Dias com reserva aceita (não podem sair). */
@@ -46,6 +50,7 @@ export function AvailabilityEditor({
       removable.forEach((d) => next.delete(d));
       return next;
     });
+    if (!listingId) return;
     start(async () => {
       const result = await saveAvailability(listingId, add, removable);
       if (result.available) setAvailable(new Set(result.available));
@@ -64,6 +69,7 @@ export function AvailabilityEditor({
 
   return (
     <section className="flex flex-col gap-4 rounded-lg border border-line bg-hs-white p-4">
+      {name ? <input type="hidden" name={name} value={JSON.stringify([...available].filter((d) => d >= today).sort())} /> : null}
       <MonthCalendar
         month={month}
         onMonthChange={setMonth}

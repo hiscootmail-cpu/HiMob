@@ -6,9 +6,12 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import type { ListingState } from "@/app/host/equipment/actions";
 import { CheckCircleIcon, ScooterIcon } from "@/components/icons";
+import { CityField } from "@/components/city-field";
+import { AvailabilityEditor } from "@/components/host/availability-editor";
 import { PhotoPicker } from "@/components/host/photo-picker";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
+import type { ChosenCity } from "@/lib/br-cities";
 import { MAX_PHOTOS, MIN_PHOTOS, type EquipmentType } from "@/lib/equipment";
 import { PHOTO_MAX_MB } from "@/lib/handoff";
 import {
@@ -46,17 +49,22 @@ type ListingFormProps = {
   action: (prev: ListingState, formData: FormData) => Promise<ListingState>;
   mode: "new" | "edit";
   defaults?: ListingDefaults;
+  /** Cidade já escolhida da lista (na edição, a do anúncio; no novo, a cidade onde a pessoa mora). */
+  cityPick?: ChosenCity | null;
+  /** Dias disponíveis: no anúncio novo vão junto com o formulário; na edição, salvam na hora. */
+  days?: { listingId?: string; today: string; initial: string[]; booked: string[] };
 };
 
 type LocationStatus = "idle" | "locating" | "saved" | "denied";
 
 /** Formulário do anúncio: o mesmo para criar e para editar. */
-export function ListingForm({ action, mode, defaults }: ListingFormProps) {
+export function ListingForm({ action, mode, defaults, cityPick = null, days }: ListingFormProps) {
   const t = useTranslations("host.form");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const formRef = useRef<HTMLFormElement>(null);
   const [state, submit, pending] = useActionState(action, {} as ListingState);
+  const tDays = useTranslations("host.availability");
 
   const [type, setType] = useState<EquipmentType | "">(defaults?.type ?? "");
   const [price, setPrice] = useState(defaults ? String(defaults.daily_price).replace(".", ",") : "");
@@ -280,12 +288,12 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
           {t("sectionWhere")}
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
+          {/* Cidade da lista oficial (com estado): "Jaguariuna" e "Jaguariúna" viram a mesma cidade. */}
+          <CityField
             name="city"
             label={t("cityLabel")}
-            autoComplete="address-level2"
-            defaultValue={defaults?.city ?? "São Paulo"}
-            error={message("city")}
+            defaultValue={cityPick}
+            error={message("city") ? t("errors.cityPick") : undefined}
             onChange={() => clear("city")}
           />
           <TextField
@@ -363,6 +371,25 @@ export function ListingForm({ action, mode, defaults }: ListingFormProps) {
         </div>
         <p className="text-sm text-muted">{t("timesHint")}</p>
       </section>
+
+      {/* 5. Dias disponíveis (decisão de 21/10/2026: já no anúncio, sem página separada) */}
+      {days ? (
+        <section className={sectionClass} aria-labelledby="sec-days">
+          <div className="flex flex-col gap-1">
+            <h2 id="sec-days" className="text-lg font-semibold text-hs-black">
+              {tDays("title")}
+            </h2>
+            <p className="text-sm text-muted">{days.listingId ? t("daysHintEdit") : t("daysHintNew")}</p>
+          </div>
+          <AvailabilityEditor
+            listingId={days.listingId}
+            name={days.listingId ? undefined : "available_days"}
+            today={days.today}
+            initial={days.initial}
+            booked={days.booked}
+          />
+        </section>
+      ) : null}
 
       {state.error || uploadFailed ? (
         <p role="alert" className="text-sm text-error">

@@ -7,7 +7,8 @@ import { KeyIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { ListingForm } from "@/components/host/listing-form";
 import { BackLink } from "@/components/rider/back-link";
 import { Button } from "@/components/ui/button";
-import { identityStep, requireUser } from "@/lib/session";
+import { todayInSaoPaulo } from "@/lib/booking";
+import { getCurrentUser, identityStep, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,6 +24,8 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
   // mostra a tela de quem ainda não é Host.
   let notHost = preview === "new-host";
   let verification: "send" | "review" | null = null;
+  const me = await getCurrentUser();
+  const home = me?.city && me.city_state ? { city: me.city, uf: me.city_state } : null;
   if (supabaseConfigured()) {
     const user = await requireUser();
     notHost = !user.is_host;
@@ -82,7 +85,13 @@ export default async function NewListingPage({ searchParams }: PageProps<"/host/
         <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
         <p className="text-base text-muted">{t("subtitle")}</p>
       </div>
-      <ListingForm action={createListing} mode="new" />
+      <ListingForm
+        action={createListing}
+        mode="new"
+        // Começa na cidade onde a pessoa mora; ela pode trocar.
+        cityPick={home}
+        days={{ today: todayInSaoPaulo(), initial: [], booked: [] }}
+      />
     </div>
   );
 }

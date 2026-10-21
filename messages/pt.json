@@ -805,8 +805,11 @@
         "tooSoon": "Você já enviou este anúncio nos últimos 30 dias.",
         "inReview": "Este anúncio está em análise.",
         "editInReview": "Já existe uma edição em análise.",
-        "locationNotFound": "Não achamos esse endereço no mapa. Confira o endereço, o bairro e a cidade, ou toque em \"Usar minha localização\"."
-      }
+        "locationNotFound": "Não achamos esse endereço no mapa. Confira o endereço, o bairro e a cidade, ou toque em \"Usar minha localização\".",
+        "cityPick": "Escolha a cidade na lista de sugestões."
+      },
+      "daysHintNew": "Toque nos dias em que você vai alugar, ou use os atalhos. Sem dias marcados, ninguém consegue reservar. Dá para mudar depois.",
+      "daysHintEdit": "Os dias salvam na hora, sem passar pela análise da equipe."
     },
     "label": {
       "open": "Etiqueta QR",

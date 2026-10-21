@@ -123,7 +123,8 @@ export function readListingForm(formData: FormData, keepPhotos = false): Listing
     title: get("title"),
     description: get("description"),
     daily_price: get("daily_price"),
-    city: get("city"),
+    // Cidade da lista oficial chega como "Nome|UF" (vazio se não escolheu da lista).
+    city: get("city").split("|")[0],
     area: get("area"),
     pickup_address: get("pickup_address"),
     latitude: get("latitude"),
