@@ -1280,7 +1280,8 @@
       "reasonRequired": "Escreva o motivo para confirmar."
     },
     "scootWorld": "Mundo Scoot",
-    "coupons": "Cupons"
+    "coupons": "Cupons",
+    "operations": "Operação"
   },
   "mercadoPago": {
     "connect": {
@@ -1650,5 +1651,37 @@
   "calendar": {
     "previous": "Mês anterior",
     "next": "Próximo mês"
+  },
+  "adminOperations": {
+    "title": "Operação",
+    "subtitle": "Números de agora ({time}). Escolha uma cidade para ver só ela.",
+    "back": "Voltar ao painel",
+    "citiesLabel": "Cidade",
+    "allCities": "Todas as cidades",
+    "error": "Não foi possível carregar os números. Tente de novo.",
+    "people": "Pessoas",
+    "riders": "Riders cadastrados",
+    "ridersHint": "Contas ativas",
+    "ridersVerified": "Riders aprovados",
+    "ridersVerifiedHint": "Documento aprovado: podem alugar",
+    "hosts": "Hosts",
+    "hostsHint": "Com pelo menos 1 anúncio publicado",
+    "equipment": "Equipamentos",
+    "type": "Tipo",
+    "published": "Publicados",
+    "withDays": "Com dias liberados",
+    "inUse": "Em uso agora",
+    "total": "Total",
+    "publishedHint": "Publicados: anúncios aprovados e ativos.",
+    "withDaysHint": "Com dias liberados: têm pelo menos um dia disponível de hoje em diante.",
+    "inUseHint": "Em uso agora: retirados e ainda não devolvidos.",
+    "today": "Hoje",
+    "pickupsToday": "Retiradas de hoje",
+    "pickupsTodayHint": "Reservas confirmadas com retirada hoje",
+    "queues": "A analisar",
+    "queuesHint": "Filas do painel, de todas as cidades.",
+    "queueListings": "Anúncios novos",
+    "queueEdits": "Edições",
+    "queueIdentity": "Cadastros"
   }
 }

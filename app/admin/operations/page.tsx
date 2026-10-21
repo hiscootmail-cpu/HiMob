@@ -1,0 +1,196 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getFormatter, getTranslations } from "next-intl/server";
+
+import { BackLink } from "@/components/rider/back-link";
+import { getCurrentUser } from "@/lib/session";
+import { supabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("adminOperations");
+  return { title: t("title") };
+}
+
+type TypeNumbers = { published: number; with_days: number; in_use: number };
+
+type Operations = {
+  riders: number;
+  riders_verified: number;
+  hosts: number;
+  equipment: { scooter?: TypeNumbers; ebike?: TypeNumbers };
+  pickups_today: number;
+  queue_listings: number;
+  queue_edits: number;
+  queue_identity: number;
+  cities: string[];
+};
+
+const TYPES = ["scooter", "ebike"] as const;
+const EMPTY: TypeNumbers = { published: 0, with_days: 0, in_use: 0 };
+
+/** Números de exemplo da demonstração (sem Supabase). */
+const EXAMPLE: Operations = {
+  riders: 42,
+  riders_verified: 18,
+  hosts: 6,
+  equipment: { scooter: { published: 9, with_days: 7, in_use: 2 }, ebike: { published: 3, with_days: 2, in_use: 1 } },
+  pickups_today: 4,
+  queue_listings: 1,
+  queue_edits: 0,
+  queue_identity: 2,
+  cities: ["Jaguariúna", "Mogi Mirim", "São Paulo"],
+};
+
+async function loadOperations(city: string | null): Promise<Operations | null> {
+  if (!supabaseConfigured()) return EXAMPLE;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("admin_operations", { p_city: city });
+  return error ? null : (data as Operations);
+}
+
+function Tile({ label, value, hint, href }: { label: string; value: number; hint?: string; href?: string }) {
+  const body = (
+    <>
+      <span className="text-sm font-medium text-muted">{label}</span>
+      <span className="text-3xl font-bold text-hs-black">{value}</span>
+      {hint ? <span className="text-xs text-muted">{hint}</span> : null}
+    </>
+  );
+  const style = "flex flex-col gap-1 rounded-lg border border-line bg-hs-white p-4";
+  return href ? (
+    <Link href={href} className={cn(style, "outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40")}>
+      {body}
+    </Link>
+  ) : (
+    <div className={style}>{body}</div>
+  );
+}
+
+/** Painel da equipe → Operação (decisão de 21/10/2026): os números da operação, por cidade. */
+export default async function AdminOperationsPage({ searchParams }: PageProps<"/admin/operations">) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/auth/login");
+  if (!user.is_admin) redirect("/");
+  const t = await getTranslations("adminOperations");
+  const tType = await getTranslations("equipmentType");
+  const format = await getFormatter();
+
+  const { city: cityParam } = await searchParams;
+  const city = typeof cityParam === "string" && cityParam.trim() ? cityParam.trim() : null;
+  const ops = await loadOperations(city);
+  // As cidades vêm sempre da lista completa (sem filtro), para os botões não sumirem.
+  const cities = city ? ((await loadOperations(null))?.cities ?? []) : (ops?.cities ?? []);
+
+  const sum = (key: keyof TypeNumbers) => TYPES.reduce((total, type) => total + (ops?.equipment[type]?.[key] ?? 0), 0);
+  const chip = (active: boolean) =>
+    cn(
+      "inline-flex h-9 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
+      active ? "border-hs-black bg-hs-black text-hs-white" : "border-hs-black/20 bg-hs-white text-hs-black hover:bg-surface",
+    );
+
+  return (
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6">
+      <BackLink href="/admin" label={t("back")} />
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
+        <p className="text-base text-muted">
+          {t("subtitle", { time: format.dateTime(new Date(), { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" }) })}
+        </p>
+      </div>
+
+      <nav aria-label={t("citiesLabel")} className="flex flex-wrap gap-2">
+        <Link href="/admin/operations" aria-current={city ? undefined : "page"} className={chip(!city)}>
+          {t("allCities")}
+        </Link>
+        {cities.map((name) => {
+          const active = city?.toLocaleLowerCase() === name.toLocaleLowerCase();
+          return (
+            <Link
+              key={name}
+              href={`/admin/operations?city=${encodeURIComponent(name)}`}
+              aria-current={active ? "page" : undefined}
+              className={chip(active)}
+            >
+              {name}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {ops === null ? (
+        <p className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-base text-hs-black">{t("error")}</p>
+      ) : (
+        <>
+          <section aria-labelledby="ops-people" className="flex flex-col gap-3">
+            <h2 id="ops-people" className="text-lg font-semibold text-hs-black">{t("people")}</h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Tile label={t("riders")} value={ops.riders} hint={t("ridersHint")} />
+              <Tile label={t("ridersVerified")} value={ops.riders_verified} hint={t("ridersVerifiedHint")} />
+              <Tile label={t("hosts")} value={ops.hosts} hint={t("hostsHint")} />
+            </div>
+          </section>
+
+          <section aria-labelledby="ops-equipment" className="flex flex-col gap-3">
+            <h2 id="ops-equipment" className="text-lg font-semibold text-hs-black">{t("equipment")}</h2>
+            <div className="overflow-x-auto rounded-lg border border-line">
+              <table className="w-full min-w-[480px] text-left text-sm text-hs-black">
+                <thead className="bg-surface text-xs text-muted">
+                  <tr>
+                    <th scope="col" className="px-4 py-3 font-semibold">{t("type")}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-semibold">{t("published")}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-semibold">{t("withDays")}</th>
+                    <th scope="col" className="px-4 py-3 text-right font-semibold">{t("inUse")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TYPES.map((type) => {
+                    const row = ops.equipment[type] ?? EMPTY;
+                    return (
+                      <tr key={type} className="border-t border-line">
+                        <th scope="row" className="px-4 py-3 font-medium">{tType(type)}</th>
+                        <td className="px-4 py-3 text-right text-base font-semibold">{row.published}</td>
+                        <td className="px-4 py-3 text-right text-base font-semibold">{row.with_days}</td>
+                        <td className="px-4 py-3 text-right text-base font-semibold">{row.in_use}</td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="border-t border-line bg-surface">
+                    <th scope="row" className="px-4 py-3 font-semibold">{t("total")}</th>
+                    <td className="px-4 py-3 text-right text-base font-bold">{sum("published")}</td>
+                    <td className="px-4 py-3 text-right text-base font-bold">{sum("with_days")}</td>
+                    <td className="px-4 py-3 text-right text-base font-bold">{sum("in_use")}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul className="flex flex-col gap-1 text-xs text-muted">
+              <li>{t("publishedHint")}</li>
+              <li>{t("withDaysHint")}</li>
+              <li>{t("inUseHint")}</li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="ops-today" className="flex flex-col gap-3">
+            <h2 id="ops-today" className="text-lg font-semibold text-hs-black">{t("today")}</h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Tile label={t("pickupsToday")} value={ops.pickups_today} hint={t("pickupsTodayHint")} />
+            </div>
+          </section>
+
+          <section aria-labelledby="ops-queues" className="flex flex-col gap-3">
+            <h2 id="ops-queues" className="text-lg font-semibold text-hs-black">{t("queues")}</h2>
+            <p className="-mt-2 text-xs text-muted">{t("queuesHint")}</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Tile label={t("queueListings")} value={ops.queue_listings} href="/admin?tab=listings" />
+              <Tile label={t("queueEdits")} value={ops.queue_edits} href="/admin?tab=edits" />
+              <Tile label={t("queueIdentity")} value={ops.queue_identity} href="/admin?tab=identity" />
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
+}

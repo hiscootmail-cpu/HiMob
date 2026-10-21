@@ -1280,7 +1280,8 @@
       "reasonRequired": "Write the reason to confirm."
     },
     "scootWorld": "Scoot World",
-    "coupons": "Coupons"
+    "coupons": "Coupons",
+    "operations": "Operations"
   },
   "mercadoPago": {
     "connect": {
@@ -1650,5 +1651,37 @@
   "calendar": {
     "previous": "Previous month",
     "next": "Next month"
+  },
+  "adminOperations": {
+    "title": "Operations",
+    "subtitle": "Live numbers ({time}). Pick a city to see only that city.",
+    "back": "Back to admin",
+    "citiesLabel": "City",
+    "allCities": "All cities",
+    "error": "Couldn't load the numbers. Try again.",
+    "people": "People",
+    "riders": "Registered riders",
+    "ridersHint": "Active accounts",
+    "ridersVerified": "Approved riders",
+    "ridersVerifiedHint": "ID approved: can rent",
+    "hosts": "Hosts",
+    "hostsHint": "With at least 1 published listing",
+    "equipment": "Equipment",
+    "type": "Type",
+    "published": "Published",
+    "withDays": "With open days",
+    "inUse": "In use now",
+    "total": "Total",
+    "publishedHint": "Published: approved and active listings.",
+    "withDaysHint": "With open days: at least one available day from today on.",
+    "inUseHint": "In use now: picked up and not yet returned.",
+    "today": "Today",
+    "pickupsToday": "Pickups today",
+    "pickupsTodayHint": "Confirmed bookings picked up today",
+    "queues": "To review",
+    "queuesHint": "Admin queues, all cities.",
+    "queueListings": "New listings",
+    "queueEdits": "Edits",
+    "queueIdentity": "Sign-ups"
   }
 }

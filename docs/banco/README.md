@@ -34,3 +34,4 @@ Anúncio com no mínimo 2 fotos: `docs/banco/testes-duas-fotos.sql`, também dep
 Cupons de aluguel: `docs/banco/testes-cupons.sql`, também depois de todas as migrações.
 A equipe cadastra equipamentos da Hi Scoot: `docs/banco/testes-equipe-anuncia.sql`, também depois de todas as migrações.
 Dias disponíveis e aluguel por horas: `docs/banco/testes-horarios.sql`, também depois de todas as migrações.
+Painel → Operação (números por cidade): `docs/banco/testes-operacao.sql`, também depois de todas as migrações.

@@ -194,9 +194,16 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
           <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
           <p className="text-base text-muted">{t("subtitle")}</p>
         </div>
+        {/* Operação em destaque: os números do dia (decisão de 21/10/2026). */}
+        <Link
+          href="/admin/operations"
+          className="ml-auto inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black bg-hs-black px-4 text-sm font-semibold text-hs-white outline-none hover:bg-hs-black/85 focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+        >
+          {t("operations")}
+        </Link>
         <Link
           href="/admin/coupons"
-          className="ml-auto inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
+          className="inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
         >
           {t("coupons")}
         </Link>
