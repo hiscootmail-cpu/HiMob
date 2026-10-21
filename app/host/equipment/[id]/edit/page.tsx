@@ -7,7 +7,9 @@ import { updateListing } from "@/app/host/equipment/actions";
 import { ListingForm } from "@/components/host/listing-form";
 import { BackLink } from "@/components/rider/back-link";
 import { Button } from "@/components/ui/button";
+import { listingDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
+import { findCity } from "@/lib/br-cities-server";
 import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { getCurrentUser } from "@/lib/session";
@@ -24,7 +26,9 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
   if (!listing) notFound();
   const t = await getTranslations("host.edit");
   const format = await getFormatter();
-  const policy = editPolicy(listing, todayInSaoPaulo(), Boolean((await getCurrentUser())?.is_admin));
+  const today = todayInSaoPaulo();
+  const policy = editPolicy(listing, today, Boolean((await getCurrentUser())?.is_admin));
+  const { available, booked } = await listingDays(listing.id, today);
   const longDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
 
@@ -65,6 +69,8 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
               pickup_time: listing.pickup_time,
               return_time: listing.return_time,
             }}
+            cityPick={findCity(listing.city)}
+            days={{ listingId: listing.id, today, initial: available, booked }}
           />
         </>
       ) : (

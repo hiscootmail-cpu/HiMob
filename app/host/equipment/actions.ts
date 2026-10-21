@@ -2,7 +2,9 @@
 
 import { redirect } from "next/navigation";
 
+import { setAvailableDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
+import { checkCity } from "@/lib/br-cities-server";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { locateAddress } from "@/lib/geocode";
 import { parsePrice, readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
@@ -40,7 +42,8 @@ function listingFields(formData: FormData) {
     title: get("title"),
     description: get("description"),
     daily_price: parsePrice(get("daily_price")) ?? 0,
-    city: get("city"),
+    // Só cidade da lista oficial (o nome, sem o estado).
+    city: checkCity(get("city"))?.city ?? "",
     area: get("area"),
     pickup_time: get("pickup_time"),
     return_time: get("return_time"),
@@ -48,6 +51,18 @@ function listingFields(formData: FormData) {
     latitude: get("latitude") ? Number(get("latitude")) : null,
     longitude: get("longitude") ? Number(get("longitude")) : null,
   };
+}
+
+/** Dias liberados no anúncio novo (campo escondido do calendário), de hoje em diante. */
+function chosenDays(formData: FormData): string[] {
+  try {
+    const parsed: unknown = JSON.parse(String(formData.get("available_days") ?? "[]"));
+    const today = todayInSaoPaulo();
+    if (!Array.isArray(parsed)) return [];
+    return [...new Set(parsed)].filter((d): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= today).slice(0, 400);
+  } catch {
+    return [];
+  }
 }
 
 /** "Quero ser Host": self-service, um clique (inventário de ações). */
@@ -83,6 +98,7 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
   if (Object.keys(errors).length) return { errors };
 
   const f = listingFields(formData);
+  if (!f.city) return { errors: { city: "required" } };
   // Sem marcar no mapa: acha a região pelo endereço de retirada.
   const point =
     f.latitude !== null && f.longitude !== null
@@ -120,6 +136,9 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
     await supabase.from("equipment").delete().eq("id", created.id);
     return { error: "notAllowed" };
   }
+  // Dias marcados no próprio anúncio (decisão de 21/10/2026). Se falhar, dá para marcar depois.
+  const days = chosenDays(formData);
+  if (days.length) await setAvailableDays(created.id, days, true);
   // Equipamento da própria Hi Scoot: a equipe publica na hora (decisão de 20/10/2026).
   if ((await getCurrentUser())?.is_admin) {
     const { error: reviewError } = await supabase.rpc("review_listing", { p_id: created.id, p_approve: true, p_reason: null });
@@ -155,6 +174,7 @@ export async function updateListing(listingId: string, _prev: ListingState, form
 
   // Só o que mudou vai para a análise.
   const fields = listingFields(formData);
+  if (!fields.city) return { errors: { city: "required" } };
   // Sem marcar no mapa: mantém o ponto atual, ou acha a região pelo endereço se ele mudou.
   const addressChanged =
     fields.pickup_address !== listing.pickup_address || fields.area !== listing.area || fields.city !== listing.city;

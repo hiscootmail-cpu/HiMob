@@ -805,8 +805,11 @@
         "tooSoon": "You already sent this listing in the last 30 days.",
         "inReview": "This listing is under review.",
         "editInReview": "An edit is already under review.",
-        "locationNotFound": "We could not find this address on the map. Check the address, neighbourhood and city, or tap \"Use my location\"."
-      }
+        "locationNotFound": "We could not find this address on the map. Check the address, neighbourhood and city, or tap \"Use my location\".",
+        "cityPick": "Pick the city from the suggestions."
+      },
+      "daysHintNew": "Tap the days you will rent, or use the shortcuts. With no days marked, nobody can book. You can change it later.",
+      "daysHintEdit": "Days save right away, without going through the team review."
     },
     "label": {
       "open": "QR label",

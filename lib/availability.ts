@@ -138,3 +138,11 @@ export async function setAvailableDays(equipmentId: string, days: string[], avai
   }
   return { ok: true, kept };
 }
+
+/** Dias liberados e dias com reserva aceita (estes não podem sair), de hoje em diante. */
+export async function listingDays(equipmentId: string, today: string): Promise<{ available: string[]; booked: string[] }> {
+  const [available, schedule] = await Promise.all([listAvailableDays(equipmentId, today), equipmentSchedule(equipmentId, today)]);
+  const iso = (ms: number) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(ms));
+  const booked = [...new Set(schedule.busy.flatMap((b) => daysBetween(iso(b.start), iso(b.end))))].filter((d) => d >= today);
+  return { available, booked };
+}

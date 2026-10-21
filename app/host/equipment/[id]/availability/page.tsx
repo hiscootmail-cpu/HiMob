@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
+import { AvailabilityEditor } from "@/components/host/availability-editor";
 import { BackLink } from "@/components/rider/back-link";
-import { equipmentSchedule, listAvailableDays } from "@/lib/availability";
-import { daysBetween, todayInSaoPaulo } from "@/lib/booking";
+import { listingDays } from "@/lib/availability";
+import { todayInSaoPaulo } from "@/lib/booking";
 import { getHostListing } from "@/lib/host";
 import { requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
-import { AvailabilityEditor } from "./availability-editor";
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("host.availability");
@@ -23,10 +24,7 @@ export default async function AvailabilityPage({ params }: PageProps<"/host/equi
   if (!listing) notFound();
   const t = await getTranslations("host.availability");
   const today = todayInSaoPaulo();
-  const [available, schedule] = await Promise.all([listAvailableDays(id, today), equipmentSchedule(id, today)]);
-  // Dias com reserva aceita não podem sair (o banco também confere).
-  const iso = (ms: number) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(ms));
-  const booked = [...new Set(schedule.busy.flatMap((b) => daysBetween(iso(b.start), iso(b.end))))].filter((d) => d >= today);
+  const { available, booked } = await listingDays(id, today);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6">
