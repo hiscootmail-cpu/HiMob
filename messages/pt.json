@@ -370,7 +370,12 @@
     "reserve": "Reservar",
     "loading": "Carregando equipamentos",
     "searchAllCities": "Buscando em todas as cidades",
-    "showingNearest": "Nada a até {km} km. Mostrando os mais próximos"
+    "showingNearest": "Nada a até {km} km. Mostrando os mais próximos",
+    "travelChip": "Em viagem: {city}",
+    "travelClear": "Ver todas as cidades",
+    "travelShowing": "Equipamentos em {city}, a cidade da sua viagem",
+    "travelEmptyTitle": "Ainda não há equipamentos em {city}",
+    "travelEmptyText": "Toque em \"{button}\" para ver os equipamentos de outras cidades."
   },
   "equipment": {
     "backToSearch": "Voltar para a busca",
@@ -676,7 +681,28 @@
         "ratingRequired": "Escolha uma nota de 1 a 5 estrelas."
       }
     },
-    "freeWithCoupon": "Grátis · cupom {code}"
+    "freeWithCoupon": "Grátis · cupom {code}",
+    "travel": {
+      "title": "Vai viajar?",
+      "text": "Marque a cidade e até quando fica. O Explorar abre direto nela.",
+      "start": "Estou em viagem",
+      "activeTitle": "Em viagem: {city}",
+      "activeText": "Até {until}. O Explorar abre nessa cidade e volta ao normal sozinho depois.",
+      "explore": "Ver equipamentos",
+      "change": "Mudar",
+      "end": "Encerrar viagem",
+      "formTitle": "Estou em viagem",
+      "city": "Cidade da viagem",
+      "until": "Fico até",
+      "untilHint": "No dia seguinte, o site volta para a sua cidade sozinho.",
+      "cancel": "Cancelar",
+      "save": "Salvar viagem",
+      "errors": {
+        "untilRequired": "Informe até quando você fica.",
+        "untilPast": "A data de volta não pode ser antes de hoje.",
+        "untilTooFar": "Marque viagens de até 1 ano."
+      }
+    }
   },
   "host": {
     "tabs": {

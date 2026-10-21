@@ -370,7 +370,12 @@
     "reserve": "Book",
     "loading": "Loading equipment",
     "searchAllCities": "Searching all cities",
-    "showingNearest": "Nothing within {km} km. Showing the closest ones"
+    "showingNearest": "Nothing within {km} km. Showing the closest ones",
+    "travelChip": "Traveling: {city}",
+    "travelClear": "See all cities",
+    "travelShowing": "Equipment in {city}, your trip city",
+    "travelEmptyTitle": "No equipment in {city} yet",
+    "travelEmptyText": "Tap \"{button}\" to see equipment in other cities."
   },
   "equipment": {
     "backToSearch": "Back to search",
@@ -676,7 +681,28 @@
         "ratingRequired": "Choose a rating from 1 to 5 stars."
       }
     },
-    "freeWithCoupon": "Free · coupon {code}"
+    "freeWithCoupon": "Free · coupon {code}",
+    "travel": {
+      "title": "Going on a trip?",
+      "text": "Set the city and how long you stay. Explore opens right there.",
+      "start": "I'm traveling",
+      "activeTitle": "Traveling: {city}",
+      "activeText": "Until {until}. Explore opens in this city and goes back to normal by itself afterwards.",
+      "explore": "See equipment",
+      "change": "Change",
+      "end": "End trip",
+      "formTitle": "I'm traveling",
+      "city": "Trip city",
+      "until": "Staying until",
+      "untilHint": "The next day, the site goes back to your city by itself.",
+      "cancel": "Cancel",
+      "save": "Save trip",
+      "errors": {
+        "untilRequired": "Tell us until when you stay.",
+        "untilPast": "The return date can't be before today.",
+        "untilTooFar": "Trips can be up to 1 year."
+      }
+    }
   },
   "host": {
     "tabs": {
