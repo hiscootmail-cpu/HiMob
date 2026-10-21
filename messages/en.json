@@ -16,13 +16,13 @@
     "home": "Hi Scoot, home page",
     "mainMenu": "Main menu",
     "explore": "Explore",
-    "reservations": "My bookings",
-    "host": "List",
+    "reservations": "Rider",
+    "host": "Host",
     "conversations": "Messages",
     "profile": "Profile",
     "exploreShort": "Explore",
-    "reservationsShort": "Bookings",
-    "hostShort": "List",
+    "reservationsShort": "Rider",
+    "hostShort": "Host",
     "conversationsShort": "Messages",
     "profileShort": "Profile",
     "signIn": "Log in",
@@ -192,7 +192,11 @@
       "fullName": "Full name",
       "fullNamePlaceholder": "Your full name",
       "phone": "Phone",
-      "phoneHint": "With area code. Only shown to the other person after the booking is accepted."
+      "phoneHint": "With area code. Only shown to the other person after the booking is accepted.",
+      "city": "City you live in",
+      "cityHint": "Type and pick from the list.",
+      "secondCity": "Second city (optional)",
+      "secondCityHint": "Where you work, study or spend weekends."
     },
     "errors": {
       "emailRequired": "Enter your email.",
@@ -209,7 +213,9 @@
       "emailNotConfirmed": "Your email isn’t confirmed yet. Open the link we sent and try again.",
       "unexpected": "We couldn’t finish this now. Try again in a few minutes.",
       "phoneRequired": "Enter your phone.",
-      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678."
+      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678.",
+      "cityRequired": "Pick the city you live in from the list.",
+      "cityInvalid": "Pick the city from the suggestions."
     },
     "login": {
       "title": "Log in",
@@ -1109,14 +1115,14 @@
     "nameLocked": "Your name was checked against your ID. To change it, <link>send a new ID</link>.",
     "phoneLabel": "Phone",
     "phoneHint": "With area code. Only shown to the other person after the booking is accepted.",
-    "cityLabel": "City",
+    "cityLabel": "City you live in",
     "save": "Save",
     "errors": {
       "phoneRequired": "Enter your phone.",
-      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678.",
-      "cityRequired": "Enter your city.",
-      "cityTooLong": "Use at most {max} characters."
-    }
+      "phoneInvalid": "Enter your phone with area code. E.g.: (11) 91234-5678."
+    },
+    "secondCityLabel": "Second city (optional)",
+    "secondCityHint": "Where you work, study or spend weekends."
   },
   "settings": {
     "title": "Settings",
@@ -1692,5 +1698,16 @@
       "state": "State",
       "country": "Country"
     }
+  },
+  "cityField": {
+    "placeholder": "Type and pick from the list"
+  },
+  "cityGate": {
+    "title": "Which city do you live in?",
+    "text": "We need your city to show equipment and news near you.",
+    "city": "City you live in",
+    "secondCity": "Second city (optional)",
+    "secondCityHint": "Where you work, study or spend weekends.",
+    "save": "Continue"
   }
 }

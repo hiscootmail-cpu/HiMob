@@ -28,7 +28,9 @@ export type FieldErrorKey =
   | "documentTooLarge"
   | "termsRequired"
   | "phoneRequired"
-  | "phoneInvalid";
+  | "phoneInvalid"
+  | "cityRequired"
+  | "cityInvalid";
 
 export function validateFullName(value: string): FieldErrorKey | null {
   const name = value.trim();

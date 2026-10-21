@@ -16,13 +16,13 @@
     "home": "Hi Scoot, página inicial",
     "mainMenu": "Menu principal",
     "explore": "Explorar",
-    "reservations": "Minhas reservas",
-    "host": "Anunciar",
+    "reservations": "Rider",
+    "host": "Host",
     "conversations": "Conversas",
     "profile": "Perfil",
     "exploreShort": "Explorar",
-    "reservationsShort": "Reservas",
-    "hostShort": "Anunciar",
+    "reservationsShort": "Rider",
+    "hostShort": "Host",
     "conversationsShort": "Conversas",
     "profileShort": "Perfil",
     "signIn": "Entrar",
@@ -192,7 +192,11 @@
       "fullName": "Nome completo",
       "fullNamePlaceholder": "Seu nome completo",
       "phone": "Telefone",
-      "phoneHint": "Com DDD. Só aparece para a outra pessoa depois da reserva aceita."
+      "phoneHint": "Com DDD. Só aparece para a outra pessoa depois da reserva aceita.",
+      "city": "Cidade onde você mora",
+      "cityHint": "Digite e escolha na lista.",
+      "secondCity": "Cidade secundária (opcional)",
+      "secondCityHint": "Onde você trabalha, estuda ou passa os fins de semana."
     },
     "errors": {
       "emailRequired": "Informe seu e-mail.",
@@ -209,7 +213,9 @@
       "emailNotConfirmed": "Falta confirmar seu e-mail. Abra o link que enviamos e tente de novo.",
       "unexpected": "Não foi possível concluir agora. Tente de novo em alguns minutos.",
       "phoneRequired": "Informe seu telefone.",
-      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678."
+      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678.",
+      "cityRequired": "Escolha na lista a cidade onde você mora.",
+      "cityInvalid": "Escolha a cidade na lista de sugestões."
     },
     "login": {
       "title": "Entrar",
@@ -1109,14 +1115,14 @@
     "nameLocked": "Seu nome já foi conferido com o documento. Para trocar, <link>envie um documento novo</link>.",
     "phoneLabel": "Telefone",
     "phoneHint": "Com DDD. Só aparece para a outra pessoa depois da reserva aceita.",
-    "cityLabel": "Cidade",
+    "cityLabel": "Cidade onde você mora",
     "save": "Salvar",
     "errors": {
       "phoneRequired": "Informe seu telefone.",
-      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678.",
-      "cityRequired": "Informe sua cidade.",
-      "cityTooLong": "Use no máximo {max} caracteres."
-    }
+      "phoneInvalid": "Digite o telefone com DDD. Ex.: (11) 91234-5678."
+    },
+    "secondCityLabel": "Cidade secundária (opcional)",
+    "secondCityHint": "Onde você trabalha, estuda ou passa os fins de semana."
   },
   "settings": {
     "title": "Configurações",
@@ -1692,5 +1698,16 @@
       "state": "Estado",
       "country": "País"
     }
+  },
+  "cityField": {
+    "placeholder": "Digite e escolha na lista"
+  },
+  "cityGate": {
+    "title": "Em que cidade você mora?",
+    "text": "Precisamos da sua cidade para mostrar equipamentos e novidades perto de você.",
+    "city": "Cidade onde você mora",
+    "secondCity": "Cidade secundária (opcional)",
+    "secondCityHint": "Onde você trabalha, estuda ou passa os fins de semana.",
+    "save": "Continuar"
   }
 }
