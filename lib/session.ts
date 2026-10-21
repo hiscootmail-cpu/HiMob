@@ -60,6 +60,35 @@ export async function isSignedIn(): Promise<boolean> {
   return (await getCurrentUser()) !== null;
 }
 
+type ProfileRow = {
+  city: string;
+  city_state: string | null;
+  second_city: string | null;
+  second_city_state: string | null;
+  travel_city?: string | null;
+  travel_city_state?: string | null;
+  travel_until?: string | null;
+  is_host: boolean;
+  identity_status: string;
+  deleted_at: string | null;
+};
+
+const PROFILE_COLUMNS = "city, city_state, second_city, second_city_state, is_host, identity_status, deleted_at";
+
+/**
+ * Lê o perfil. Se o banco ainda não tiver os campos da viagem (atualização do
+ * banco chegando depois do site), lê sem eles em vez de deixar a pessoa sem perfil.
+ */
+async function readProfile(supabase: Awaited<ReturnType<typeof createClient>>, id: string) {
+  const full = await supabase
+    .from("profiles")
+    .select(`${PROFILE_COLUMNS}, travel_city, travel_city_state, travel_until`)
+    .eq("id", id)
+    .maybeSingle<ProfileRow>();
+  if (!full.error) return full;
+  return supabase.from("profiles").select(PROFILE_COLUMNS).eq("id", id).maybeSingle<ProfileRow>();
+}
+
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!supabaseConfigured()) {
     const store = await cookies();
@@ -74,7 +103,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   // As regras do banco só entregam a linha da própria pessoa.
   const [{ data: profile }, { data: secret }] = await Promise.all([
-    supabase.from("profiles").select("city, city_state, second_city, second_city_state, travel_city, travel_city_state, travel_until, is_host, identity_status, deleted_at").eq("id", user.id).maybeSingle(),
+    readProfile(supabase, user.id),
     supabase.from("profile_private").select("full_name, phone, is_admin").eq("id", user.id).maybeSingle(),
   ]);
 
