@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 
+import { RegionPicker, type RegionOption } from "@/app/admin/operations/region-picker";
 import { BackLink } from "@/components/rider/back-link";
+import { listPlaces, type Place } from "@/lib/regions";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -25,8 +27,10 @@ type Operations = {
   queue_listings: number;
   queue_edits: number;
   queue_identity: number;
-  cities: string[];
 };
+
+/** Filtro escolhido (?r=): "city:Mogi Mirim", "state:BR:São Paulo" ou "country:BR". */
+type Filter = { p_city: string | null; p_state: string | null; p_country: string | null };
 
 const TYPES = ["scooter", "ebike"] as const;
 const EMPTY: TypeNumbers = { published: 0, with_days: 0, in_use: 0 };
@@ -41,13 +45,55 @@ const EXAMPLE: Operations = {
   queue_listings: 1,
   queue_edits: 0,
   queue_identity: 2,
-  cities: ["Jaguariúna", "Mogi Mirim", "São Paulo"],
 };
 
-async function loadOperations(city: string | null): Promise<Operations | null> {
+const EXAMPLE_PLACES: Place[] = [
+  { city: "Jaguariúna", state: "São Paulo", state_code: "SP", country: "BR", latitude: null, longitude: null },
+  { city: "Mogi Mirim", state: "São Paulo", state_code: "SP", country: "BR", latitude: null, longitude: null },
+  { city: "São Paulo", state: "São Paulo", state_code: "SP", country: "BR", latitude: null, longitude: null },
+  { city: "Rio de Janeiro", state: "Rio de Janeiro", state_code: "RJ", country: "BR", latitude: null, longitude: null },
+];
+
+function parseFilter(value: string | null): Filter {
+  const none: Filter = { p_city: null, p_state: null, p_country: null };
+  if (!value) return none;
+  const [kind, ...rest] = value.split(":");
+  if (kind === "city" && rest.join(":").trim()) return { ...none, p_city: rest.join(":").trim() };
+  if (kind === "state" && rest.length >= 2) return { ...none, p_country: rest[0], p_state: rest.slice(1).join(":") };
+  if (kind === "country" && /^[A-Z]{2}$/.test(rest[0] ?? "")) return { ...none, p_country: rest[0] };
+  return none;
+}
+
+/** Sugestões do filtro: países, estados e cidades com anúncio. */
+function regionOptions(places: Place[], locale: string): RegionOption[] {
+  const names = new Intl.DisplayNames([locale === "en" ? "en" : "pt-BR"], { type: "region" });
+  const countryName = (code: string) => names.of(code) ?? code;
+  const options = new Map<string, RegionOption>();
+  for (const place of places) {
+    if (place.country) {
+      options.set(`country:${place.country}`, { value: `country:${place.country}`, label: countryName(place.country), detail: "", kind: "country" });
+      if (place.state) {
+        const value = `state:${place.country}:${place.state}`;
+        options.set(value, {
+          value,
+          label: place.state_code ? `${place.state} (${place.state_code})` : place.state,
+          detail: countryName(place.country),
+          kind: "state",
+        });
+      }
+    }
+    const value = `city:${place.city}`;
+    const where = [place.state_code ?? place.state, place.country ? countryName(place.country) : null].filter(Boolean).join(", ");
+    options.set(value, { value, label: place.city, detail: where, kind: "city" });
+  }
+  const order = { country: 0, state: 1, city: 2 };
+  return [...options.values()].sort((a, b) => order[a.kind] - order[b.kind] || a.label.localeCompare(b.label, "pt-BR"));
+}
+
+async function loadOperations(filter: Filter): Promise<Operations | null> {
   if (!supabaseConfigured()) return EXAMPLE;
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("admin_operations", { p_city: city });
+  const { data, error } = await supabase.rpc("admin_operations", filter);
   return error ? null : (data as Operations);
 }
 
@@ -69,7 +115,7 @@ function Tile({ label, value, hint, href }: { label: string; value: number; hint
   );
 }
 
-/** Painel da equipe → Operação (decisão de 21/10/2026): os números da operação, por cidade. */
+/** Painel da equipe → Operação (decisão de 21/10/2026): os números da operação, por cidade, estado ou país. */
 export default async function AdminOperationsPage({ searchParams }: PageProps<"/admin/operations">) {
   const user = await getCurrentUser();
   if (!user) redirect("/auth/login");
@@ -78,18 +124,22 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
   const tType = await getTranslations("equipmentType");
   const format = await getFormatter();
 
-  const { city: cityParam } = await searchParams;
-  const city = typeof cityParam === "string" && cityParam.trim() ? cityParam.trim() : null;
-  const ops = await loadOperations(city);
-  // As cidades vêm sempre da lista completa (sem filtro), para os botões não sumirem.
-  const cities = city ? ((await loadOperations(null))?.cities ?? []) : (ops?.cities ?? []);
+  const { r } = await searchParams;
+  const regionValue = typeof r === "string" && r.trim() ? r.trim() : null;
+  const filter = parseFilter(regionValue);
+  const [ops, places] = await Promise.all([loadOperations(filter), supabaseConfigured() ? listPlaces() : EXAMPLE_PLACES]);
+  const options = regionOptions(places, await getLocale());
+  const selected =
+    regionValue && (filter.p_city || filter.p_state || filter.p_country)
+      ? (options.find((o) => o.value === regionValue) ?? {
+          value: regionValue,
+          label: filter.p_city ?? filter.p_state ?? filter.p_country ?? "",
+          detail: "",
+          kind: filter.p_city ? "city" : filter.p_state ? "state" : "country",
+        })
+      : null;
 
   const sum = (key: keyof TypeNumbers) => TYPES.reduce((total, type) => total + (ops?.equipment[type]?.[key] ?? 0), 0);
-  const chip = (active: boolean) =>
-    cn(
-      "inline-flex h-9 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40",
-      active ? "border-hs-black bg-hs-black text-hs-white" : "border-hs-black/20 bg-hs-white text-hs-black hover:bg-surface",
-    );
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -101,24 +151,7 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
         </p>
       </div>
 
-      <nav aria-label={t("citiesLabel")} className="flex flex-wrap gap-2">
-        <Link href="/admin/operations" aria-current={city ? undefined : "page"} className={chip(!city)}>
-          {t("allCities")}
-        </Link>
-        {cities.map((name) => {
-          const active = city?.toLocaleLowerCase() === name.toLocaleLowerCase();
-          return (
-            <Link
-              key={name}
-              href={`/admin/operations?city=${encodeURIComponent(name)}`}
-              aria-current={active ? "page" : undefined}
-              className={chip(active)}
-            >
-              {name}
-            </Link>
-          );
-        })}
-      </nav>
+      <RegionPicker options={options} selected={selected} />
 
       {ops === null ? (
         <p className="rounded-lg border border-dashed border-line px-4 py-8 text-center text-base text-hs-black">{t("error")}</p>

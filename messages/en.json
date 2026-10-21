@@ -1654,14 +1654,12 @@
   },
   "adminOperations": {
     "title": "Operations",
-    "subtitle": "Live numbers ({time}). Pick a city to see only that city.",
+    "subtitle": "Live numbers ({time}). Search a city, state or country to see only that region.",
     "back": "Back to admin",
-    "citiesLabel": "City",
-    "allCities": "All cities",
     "error": "Couldn't load the numbers. Try again.",
     "people": "People",
     "riders": "Registered riders",
-    "ridersHint": "Active accounts",
+    "ridersHint": "Active accounts, by sign-up city",
     "ridersVerified": "Approved riders",
     "ridersVerifiedHint": "ID approved: can rent",
     "hosts": "Hosts",
@@ -1682,6 +1680,17 @@
     "queuesHint": "Admin queues, all cities.",
     "queueListings": "New listings",
     "queueEdits": "Edits",
-    "queueIdentity": "Sign-ups"
+    "queueIdentity": "Sign-ups",
+    "searchLabel": "Search region",
+    "searchPlaceholder": "Search city, state or country",
+    "noMatch": "No region with listings has that name.",
+    "showing": "Showing:",
+    "showingAll": "Showing all regions.",
+    "clear": "Clear filter",
+    "kind": {
+      "city": "City",
+      "state": "State",
+      "country": "Country"
+    }
   }
 }

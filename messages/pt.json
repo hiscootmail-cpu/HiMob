@@ -1654,14 +1654,12 @@
   },
   "adminOperations": {
     "title": "Operação",
-    "subtitle": "Números de agora ({time}). Escolha uma cidade para ver só ela.",
+    "subtitle": "Números de agora ({time}). Busque uma cidade, estado ou país para ver só a região.",
     "back": "Voltar ao painel",
-    "citiesLabel": "Cidade",
-    "allCities": "Todas as cidades",
     "error": "Não foi possível carregar os números. Tente de novo.",
     "people": "Pessoas",
     "riders": "Riders cadastrados",
-    "ridersHint": "Contas ativas",
+    "ridersHint": "Contas ativas, pela cidade do cadastro",
     "ridersVerified": "Riders aprovados",
     "ridersVerifiedHint": "Documento aprovado: podem alugar",
     "hosts": "Hosts",
@@ -1682,6 +1680,17 @@
     "queuesHint": "Filas do painel, de todas as cidades.",
     "queueListings": "Anúncios novos",
     "queueEdits": "Edições",
-    "queueIdentity": "Cadastros"
+    "queueIdentity": "Cadastros",
+    "searchLabel": "Buscar região",
+    "searchPlaceholder": "Buscar cidade, estado ou país",
+    "noMatch": "Nenhuma região com anúncio tem esse nome.",
+    "showing": "Mostrando:",
+    "showingAll": "Mostrando todas as regiões.",
+    "clear": "Limpar filtro",
+    "kind": {
+      "city": "Cidade",
+      "state": "Estado",
+      "country": "País"
+    }
   }
 }
