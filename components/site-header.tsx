@@ -32,7 +32,7 @@ export function SiteHeader({ signedIn, unreadCount = 0, isAdmin = false, sticky 
   return (
     <header
       className={cn(
-        "z-40 w-full border-b border-line bg-hs-white/95 text-hs-black backdrop-blur",
+        "hs-chrome z-40 w-full border-b border-line bg-hs-white text-hs-black",
         sticky && "sticky top-0",
         className,
       )}
