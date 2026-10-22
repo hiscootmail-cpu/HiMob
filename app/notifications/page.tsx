@@ -44,6 +44,9 @@ const icons: Record<NotificationKind, React.ComponentType<IconProps>> = {
   bookingExpired: CalendarIcon,
   cityAvailable: MapPinIcon,
   hostDemand: KeyIcon,
+  supportNew: ChatIcon,
+  supportReply: ChatIcon,
+  sosAlert: BellIcon,
   returnWaiting: QrCodeIcon,
 };
 

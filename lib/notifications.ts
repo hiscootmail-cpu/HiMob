@@ -26,6 +26,9 @@ export const notificationKinds = [
   "bookingExpired",
   "cityAvailable",
   "hostDemand",
+  "supportNew",
+  "supportReply",
+  "sosAlert",
 ] as const;
 
 export type NotificationKind = (typeof notificationKinds)[number];

@@ -134,3 +134,8 @@
     print-color-adjust: exact;
   }
 }
+
+/* Site sempre claro, mesmo com o modo escuro do celular ligado (decisão de 22/10/2026). */
+:root {
+  color-scheme: only light;
+}

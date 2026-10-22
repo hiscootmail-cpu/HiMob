@@ -16,7 +16,10 @@ export function SiteFooter({ className }: { className?: string }) {
           <p className="text-sm text-muted">{t("slogan")}</p>
         </div>
         <div className="flex flex-col gap-2 sm:items-end">
-          <nav aria-label={t("legalLabel")} className="flex gap-4 text-sm">
+          <nav aria-label={t("legalLabel")} className="flex flex-wrap gap-4 text-sm">
+            <Link href="/help" className="font-medium text-hs-black underline-offset-4 hover:underline">
+              {t("help")}
+            </Link>
             <Link href="/terms" className="font-medium text-hs-black underline-offset-4 hover:underline">
               {t("terms")}
             </Link>

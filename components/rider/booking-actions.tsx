@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { Siren } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { cancelBooking, type CancelState } from "@/app/rider/reservations/actions";
@@ -137,6 +138,15 @@ export function BookingActions({
       {booking.status === "pending" && booking.respond_by ? <Deadline until={booking.respond_by} kind="riderWaitHost" /> : null}
       {booking.status === "accepted" && booking.pay_by ? <Deadline until={booking.pay_by} kind="pay" /> : null}
       {booking.status === "expired" ? <p className="text-sm text-hs-black">{t("expiredText")}</p> : null}
+      {/* SOS durante o uso (decisão de 22/10/2026). */}
+      {booking.status === "active" ? (
+        <Button asChild className="w-full bg-hs-black text-hs-white hover:brightness-110 sm:w-fit">
+          <Link href={`/rider/reservations/${booking.id}/sos`}>
+            <Siren aria-hidden />
+            {t("sos")}
+          </Link>
+        </Button>
+      ) : null}
     <div
       className={cn(
         "flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center [&>*]:w-full sm:[&>*]:w-auto",

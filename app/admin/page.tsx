@@ -204,6 +204,9 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
           >
             {t("operations")}
           </Link>
+          <Link href="/admin/support" className="inline-flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 border-hs-black/20 text-hs-black hover:bg-surface">
+            {t("support")}
+          </Link>
           <Link href="/admin/coupons" className="inline-flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 border-hs-black/20 text-hs-black hover:bg-surface">
             {t("coupons")}
           </Link>
