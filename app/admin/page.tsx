@@ -188,31 +188,29 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-center gap-3">
-        <ShieldAdminIcon className="size-8" />
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
-          <p className="text-base text-muted">{t("subtitle")}</p>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <ShieldAdminIcon className="size-8 shrink-0" />
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
+            <p className="text-base text-muted">{t("subtitle")}</p>
+          </div>
         </div>
-        {/* Operação em destaque: os números do dia (decisão de 21/10/2026). */}
-        <Link
-          href="/admin/operations"
-          className="ml-auto inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black bg-hs-black px-4 text-sm font-semibold text-hs-white outline-none hover:bg-hs-black/85 focus-visible:ring-4 focus-visible:ring-hs-blue/40"
-        >
-          {t("operations")}
-        </Link>
-        <Link
-          href="/admin/coupons"
-          className="inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
-        >
-          {t("coupons")}
-        </Link>
-        <Link
-          href="/admin/scoot-world"
-          className="inline-flex h-10 shrink-0 items-center rounded-full border border-hs-black/20 px-4 text-sm font-semibold text-hs-black outline-none hover:bg-surface focus-visible:ring-4 focus-visible:ring-hs-blue/40"
-        >
-          {t("scootWorld")}
-        </Link>
+        {/* Operação, Cupons e Mundo Scoot sempre juntos, lado a lado (Operação em destaque). */}
+        <nav aria-label={t("toolsLabel")} className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/operations"
+            className="inline-flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 border-hs-black bg-hs-black text-hs-white hover:bg-hs-black/85"
+          >
+            {t("operations")}
+          </Link>
+          <Link href="/admin/coupons" className="inline-flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 border-hs-black/20 text-hs-black hover:bg-surface">
+            {t("coupons")}
+          </Link>
+          <Link href="/admin/scoot-world" className="inline-flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 border-hs-black/20 text-hs-black hover:bg-surface">
+            {t("scootWorld")}
+          </Link>
+        </nav>
       </div>
 
       <nav aria-label={t("queuesLabel")} className="flex flex-col gap-1 rounded-lg border border-line p-1 sm:flex-row sm:rounded-full">
