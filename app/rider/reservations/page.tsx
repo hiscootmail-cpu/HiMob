@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ONGOING, type Booking } from "@/lib/bookings";
 import { listRiderBookings } from "@/lib/bookings-db";
 import { addDays, todayInSaoPaulo } from "@/lib/booking";
-import { activeTravel, getCurrentUser, requireUser } from "@/lib/session";
+import { getCurrentUser, plannedTravel, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -45,7 +45,7 @@ export default async function RiderReservationsPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
-      {user ? <TravelCard travel={activeTravel(user, today)} today={today} maxDay={addDays(today, 365)} /> : null}
+      {user ? <TravelCard travel={plannedTravel(user, today)} today={today} maxDay={addDays(today, 365)} /> : null}
 
       {bookings.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-line px-6 py-12 text-center">

@@ -27,9 +27,10 @@ export type CurrentUser = {
   /** Cidade secundária (opcional): trabalho, estudo, fim de semana. */
   second_city: string;
   second_city_state: string;
-  /** Em viagem (aba Rider): cidade, estado e data de volta (AAAA-MM-DD). Vazio = sem viagem marcada. */
+  /** Em viagem (aba Rider): cidade, estado, ida e volta (AAAA-MM-DD). Vazio = sem viagem marcada. */
   travel_city: string;
   travel_city_state: string;
+  travel_from: string;
   travel_until: string;
   /** Já virou Host? (conta única: a mesma pessoa é Rider e Host) */
   is_host: boolean;
@@ -50,6 +51,7 @@ const demoUser: CurrentUser = {
   second_city_state: "",
   travel_city: "",
   travel_city_state: "",
+  travel_from: "",
   travel_until: "",
   is_host: true,
   is_admin: true,
@@ -67,6 +69,7 @@ type ProfileRow = {
   second_city_state: string | null;
   travel_city?: string | null;
   travel_city_state?: string | null;
+  travel_from?: string | null;
   travel_until?: string | null;
   is_host: boolean;
   identity_status: string;
@@ -82,7 +85,7 @@ const PROFILE_COLUMNS = "city, city_state, second_city, second_city_state, is_ho
 async function readProfile(supabase: Awaited<ReturnType<typeof createClient>>, id: string) {
   const full = await supabase
     .from("profiles")
-    .select(`${PROFILE_COLUMNS}, travel_city, travel_city_state, travel_until`)
+    .select(`${PROFILE_COLUMNS}, travel_city, travel_city_state, travel_from, travel_until`)
     .eq("id", id)
     .maybeSingle<ProfileRow>();
   if (!full.error) return full;
@@ -121,6 +124,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     second_city_state: profile?.second_city_state ?? "",
     travel_city: profile?.travel_city ?? "",
     travel_city_state: profile?.travel_city_state ?? "",
+    travel_from: profile?.travel_from ?? "",
     travel_until: profile?.travel_until ?? "",
     is_host: profile?.is_host ?? false,
     is_admin: secret?.is_admin ?? false,
@@ -164,8 +168,14 @@ export async function identityStep(user: Pick<CurrentUser, "id" | "identity" | "
   return count ? "review" : "send";
 }
 
-/** Viagem que ainda vale hoje (até a data de volta, inclusive). */
-export function activeTravel(user: CurrentUser | null, today: string): { city: string; uf: string; until: string } | null {
+/** Viagem marcada que ainda não terminou (pode começar no futuro). */
+export function plannedTravel(user: CurrentUser | null, today: string): { city: string; uf: string; from: string; until: string } | null {
   if (!user?.travel_city || !user.travel_city_state || !user.travel_until || user.travel_until < today) return null;
-  return { city: user.travel_city, uf: user.travel_city_state, until: user.travel_until };
+  return { city: user.travel_city, uf: user.travel_city_state, from: user.travel_from || today, until: user.travel_until };
+}
+
+/** Viagem valendo hoje (da ida até a volta, inclusive). */
+export function activeTravel(user: CurrentUser | null, today: string) {
+  const travel = plannedTravel(user, today);
+  return travel && travel.from <= today ? travel : null;
 }

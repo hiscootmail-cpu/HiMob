@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { cityLabel } from "@/lib/br-cities";
 
-type Travel = { city: string; uf: string; until: string };
+type Travel = { city: string; uf: string; from: string; until: string };
 
 /**
- * "Estou em viagem" na aba Rider (decisão de 21/10/2026): cidade e data de
- * volta. Enquanto vale, o Explorar abre na cidade da viagem.
+ * "Estou em viagem" na aba Rider (decisões de 21 e 22/10/2026): cidade, ida e
+ * volta. Dá para avisar antes; da ida até a volta, o Explorar abre na cidade da viagem.
  */
 export function TravelCard({ travel, today, maxDay }: { travel: Travel | null; today: string; maxDay: string }) {
   const t = useTranslations("rider.travel");
@@ -29,6 +29,8 @@ export function TravelCard({ travel, today, maxDay }: { travel: Travel | null; t
   const editing = openedAt !== null && !(state.done && state !== openedAt);
   const setEditing = (open: boolean) => setOpenedAt(open ? state : null);
 
+  const [from, setFrom] = useState(travel?.from ?? today);
+  const scheduled = travel !== null && travel.from > today;
   const untilText = (day: string) => format.dateTime(new Date(`${day}T12:00:00`), { day: "numeric", month: "long" });
 
   if (!editing) {
@@ -37,10 +39,14 @@ export function TravelCard({ travel, today, maxDay }: { travel: Travel | null; t
         <Plane aria-hidden className="size-6 shrink-0 text-hs-black" />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <h2 id="travel-title" className="text-base font-semibold text-hs-black">
-            {travel ? t("activeTitle", { city: cityLabel(travel) }) : t("title")}
+            {travel ? t(scheduled ? "scheduledTitle" : "activeTitle", { city: cityLabel(travel) }) : t("title")}
           </h2>
           <p className="text-sm text-muted">
-            {travel ? t("activeText", { until: untilText(travel.until) }) : t("text")}
+            {travel
+              ? scheduled
+                ? t("scheduledText", { from: untilText(travel.from), until: untilText(travel.until) })
+                : t("activeText", { until: untilText(travel.until) })
+              : t("text")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -98,16 +104,27 @@ export function TravelCard({ travel, today, maxDay }: { travel: Travel | null; t
           defaultValue={travel ? { city: travel.city, uf: travel.uf } : null}
           error={state.errors?.city ? tErrors(state.errors.city) : undefined}
         />
-        <TextField
-          name="until"
-          type="date"
-          label={t("until")}
-          min={today}
-          max={maxDay}
-          defaultValue={travel?.until ?? ""}
-          hint={t("untilHint")}
-          error={state.errors?.until ? t(`errors.${state.errors.until}`) : undefined}
-        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <TextField
+            name="from"
+            type="date"
+            label={t("from")}
+            min={today}
+            max={maxDay}
+            value={from}
+            onChange={(event) => setFrom(event.currentTarget.value)}
+            error={state.errors?.from ? t(`errors.${state.errors.from}`) : undefined}
+          />
+          <TextField
+            name="until"
+            type="date"
+            label={t("until")}
+            min={from || today}
+            defaultValue={travel?.until ?? ""}
+            error={state.errors?.until ? t(`errors.${state.errors.until}`) : undefined}
+          />
+        </div>
+        <p className="-mt-2 text-sm text-muted">{t("datesHint")}</p>
         {state.error ? (
           <p role="alert" className="text-sm text-error">
             {tErrors("unexpected")}
