@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const unread = signedIn ? await unreadCount() : 0;
 
   return (
-    <html lang={locale === "pt" ? "pt-BR" : "en"} className={cn(inter.variable, "h-full")}>
+    <html lang={locale === "pt" ? "pt-BR" : "en"} className={cn(inter.variable, "h-full")} style={{ colorScheme: "only light" }}>
       <body className="flex min-h-full flex-col bg-hs-white text-hs-black">
         <NextIntlClientProvider>
           <SiteHeader signedIn={signedIn} unreadCount={unread} isAdmin={user?.is_admin ?? false} />

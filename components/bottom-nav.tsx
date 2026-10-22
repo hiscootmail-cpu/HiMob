@@ -22,7 +22,7 @@ export function BottomNav({ fixed = true, className }: BottomNavProps) {
     <nav
       aria-label={t("mainMenu")}
       className={cn(
-        "z-40 w-full border-t border-line bg-hs-white text-hs-black md:hidden",
+        "hs-chrome z-40 w-full border-t border-line bg-hs-white text-hs-black md:hidden",
         fixed && "fixed inset-x-0 bottom-0 pb-[env(safe-area-inset-bottom)]",
         className,
       )}

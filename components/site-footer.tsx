@@ -9,7 +9,7 @@ export function SiteFooter({ className }: { className?: string }) {
   const t = useTranslations("footer");
 
   return (
-    <footer className={cn("w-full border-t border-line bg-surface text-hs-black", className)}>
+    <footer className={cn("hs-chrome w-full border-t border-line bg-hs-white text-hs-black", className)}>
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex items-center gap-4">
           <LogoFull className="h-24" />

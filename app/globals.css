@@ -135,7 +135,26 @@
   }
 }
 
-/* Site sempre claro, mesmo com o modo escuro do celular ligado (decisão de 22/10/2026). */
+/*
+ * Site sempre claro, mesmo com o modo escuro do celular ligado (decisão de 22/10/2026).
+ * - color-scheme "only light": o Chrome e o Safari não escurecem a página.
+ * - O bloco de modo escuro abaixo diz aos navegadores que escurecem por conta
+ *   própria (Samsung Internet, navegadores dentro de apps) que o site já cuida
+ *   do modo escuro, e ele continua claro: cabeçalho, rodapé e menu brancos.
+ */
 :root {
   color-scheme: only light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: only light;
+  }
+
+  html,
+  body,
+  .hs-chrome {
+    background-color: #ffffff;
+    color: #171717;
+  }
 }
