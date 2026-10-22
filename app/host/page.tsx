@@ -4,6 +4,7 @@ import { Pencil } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 
 import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
+import { HostJourney, type JourneyStep } from "@/components/host/host-journey";
 import { CalendarIcon, KeyIcon, PlusIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,8 @@ import { addDays, saoPauloTime, todayInSaoPaulo } from "@/lib/booking";
 import { bookingPrice, type BookingStatus } from "@/lib/bookings";
 import { durationText } from "@/lib/duration";
 import { listHostBookings, listHostListings, type HostBooking } from "@/lib/host";
-import { requireUser } from "@/lib/session";
+import { mercadoPagoConnected, mercadoPagoOn } from "@/lib/mercadopago/server";
+import { getCurrentUser, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,6 +75,34 @@ export default async function HostOverviewPage() {
     { label: t("tiles.month"), value: money(monthAmount), href: "/host/reservations", highlight: false },
   ];
 
+  // Caminho até o primeiro anúncio no ar (decisão de 22/10/2026).
+  const user = await getCurrentUser();
+  const isAdmin = Boolean(user?.is_admin);
+  const mpOk = isAdmin || !supabaseConfigured() || !(await mercadoPagoOn()) || (await mercadoPagoConnected());
+  const firstWithDays = listings.find((_, i) => availability[i].length > 0);
+  const firstListing = listings[0];
+  const journey: JourneyStep[] = [
+    { key: "identity", done: isAdmin || user?.identity === "approved", waiting: user?.identity === "pending", href: "/verify-identity" },
+    { key: "mercadoPago", done: mpOk, href: "/mercado-pago/connect" },
+    { key: "listing", done: listings.length > 0, href: "/host/equipment/new" },
+    {
+      key: "days",
+      done: Boolean(firstWithDays),
+      href: firstListing ? `/host/equipment/${firstListing.id}/availability` : "/host/equipment/new",
+    },
+    {
+      key: "review",
+      done: listings.some((l) => l.review_status === "approved"),
+      waiting: listings.some((l) => l.review_status === "pending"),
+      href: "/host/equipment",
+    },
+    {
+      key: "live",
+      done: listings.some((l, i) => l.review_status === "approved" && l.is_available && availability[i].length > 0),
+      href: "/host/equipment",
+    },
+  ];
+
   const nextOf = (listingId: string): HostBooking | undefined => upcoming.find((b) => b.equipment.id === listingId);
 
   return (
@@ -89,6 +119,8 @@ export default async function HostOverviewPage() {
           </Link>
         </Button>
       </div>
+
+      <HostJourney steps={journey} />
 
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map((tile) => (

@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { LocateFixed } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -12,7 +12,7 @@ import { AvailabilityEditor } from "@/components/host/availability-editor";
 import { PhotoPicker } from "@/components/host/photo-picker";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
-import type { ChosenCity } from "@/lib/br-cities";
+import { parseCityValue, type ChosenCity } from "@/lib/br-cities";
 import { MAX_PHOTOS, MIN_PHOTOS, type EquipmentType } from "@/lib/equipment";
 import { PHOTO_MAX_MB } from "@/lib/handoff";
 import {
@@ -53,13 +53,93 @@ type ListingFormProps = {
   /** Cidade já escolhida da lista (na edição, a do anúncio; no novo, a cidade onde a pessoa mora). */
   cityPick?: ChosenCity | null;
   /** Dias disponíveis: no anúncio novo vão junto com o formulário; na edição, salvam na hora. */
-  days?: { listingId?: string; today: string; initial: string[]; booked: string[] };
+  days?: { listingId?: string; today: string; initial: string[]; booked: string[]; weekly?: number[] };
 };
 
 type LocationStatus = "idle" | "locating" | "saved" | "denied";
 
 /** Formulário do anúncio: o mesmo para criar e para editar. */
-export function ListingForm({ action, mode, defaults, cityPick = null, days }: ListingFormProps) {
+/** Rascunho do anúncio novo, guardado no aparelho (decisão de 22/10/2026). As fotos não entram. */
+const DRAFT_KEY = "hs-listing-draft-v1";
+const DRAFT_FIELDS = [
+  "type", "title", "description", "daily_price", "city", "area", "pickup_address", "pickup_time", "return_time",
+  "available_days", "available_days_weekly",
+] as const;
+type Draft = Partial<Record<(typeof DRAFT_FIELDS)[number], string>>;
+
+function readDraft(): Draft | null {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DRAFT_KEY) ?? "null") as Draft | null;
+    return parsed && Object.values(parsed).some((v) => v && v !== "[]") ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // Sem acesso ao armazenamento do aparelho: nada a apagar.
+  }
+}
+
+/**
+ * Formulário do anúncio. No anúncio novo, o que a pessoa preenche fica salvo
+ * no aparelho como rascunho e volta quando ela abrir de novo.
+ */
+export function ListingForm(props: ListingFormProps) {
+  const t = useTranslations("host.form");
+  const [draft, setDraft] = useState<Draft | null>(null);
+  const [version, setVersion] = useState(0);
+  const isNew = props.mode === "new";
+
+  // Lê o rascunho só no navegador (depois da primeira tela, para não dar diferença com o servidor).
+  useEffect(() => {
+    if (!isNew) return;
+    const found = readDraft();
+    if (!found) return;
+    const timer = setTimeout(() => {
+      setDraft(found);
+      setVersion((v) => v + 1);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [isNew]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      {draft ? (
+        <div role="status" className="flex flex-col gap-2 rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue sm:flex-row sm:items-center">
+          <span className="flex-1">{t("draftRestored")}</span>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              clearDraft();
+              setDraft(null);
+              setVersion((v) => v + 1);
+            }}
+          >
+            {t("draftDiscard")}
+          </Button>
+        </div>
+      ) : null}
+      <ListingFormInner key={version} {...props} draft={draft} />
+    </div>
+  );
+}
+
+function parseList<T>(value: string | undefined, fallback: T[]): T[] {
+  try {
+    const parsed: unknown = JSON.parse(value ?? "");
+    return Array.isArray(parsed) ? (parsed as T[]) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft }: ListingFormProps & { draft: Draft | null }) {
   const t = useTranslations("host.form");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
@@ -67,8 +147,9 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
   const [state, submit, pending] = useActionState(action, {} as ListingState);
   const tDays = useTranslations("host.availability");
 
-  const [type, setType] = useState<EquipmentType | "">(defaults?.type ?? "");
-  const [price, setPrice] = useState(defaults ? String(defaults.daily_price).replace(".", ",") : "");
+  const [type, setType] = useState<EquipmentType | "">(defaults?.type ?? ((draft?.type as EquipmentType | undefined) || ""));
+  const [price, setPrice] = useState(defaults ? String(defaults.daily_price).replace(".", ",") : (draft?.daily_price ?? ""));
+  const draftCity = draft?.city ? parseCityValue(draft.city) : null;
   const [photos, setPhotos] = useState<File[]>([]);
   const [coords, setCoords] = useState(defaults ? { lat: defaults.latitude, lng: defaults.longitude } : null);
   const [location, setLocation] = useState<LocationStatus>(defaults ? "saved" : "idle");
@@ -110,6 +191,27 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
     );
   }
 
+  // Anúncio novo: guarda o rascunho no aparelho a cada poucos segundos.
+  useEffect(() => {
+    if (mode !== "new") return;
+    const timer = setInterval(() => {
+      const form = formRef.current;
+      if (!form) return;
+      const data = new FormData(form);
+      const next: Draft = {};
+      for (const field of DRAFT_FIELDS) {
+        const value = data.get(field);
+        if (typeof value === "string" && value && value !== "[]") next[field] = value;
+      }
+      try {
+        if (Object.keys(next).length) localStorage.setItem(DRAFT_KEY, JSON.stringify(next));
+      } catch {
+        // Sem espaço ou sem permissão no aparelho: segue sem rascunho.
+      }
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [mode]);
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     // Envio manual: o formulário não é limpo e as fotos escolhidas continuam.
     event.preventDefault();
@@ -137,6 +239,8 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
       formData.delete("photos");
       formData.set("photo_paths", JSON.stringify(paths));
     }
+    // Enviado: o rascunho não é mais necessário (se der erro, o formulário continua preenchido).
+    if (mode === "new") clearDraft();
     startTransition(() => submit(formData));
   }
 
@@ -201,7 +305,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
           name="title"
           label={t("titleLabel")}
           placeholder={t("titlePlaceholder")}
-          defaultValue={defaults?.title}
+          defaultValue={defaults?.title ?? draft?.title}
           maxLength={TITLE_MAX}
           hint={t("titleHint")}
           error={message("title")}
@@ -217,7 +321,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
             name="description"
             rows={5}
             maxLength={DESCRIPTION_MAX}
-            defaultValue={defaults?.description}
+            defaultValue={defaults?.description ?? draft?.description}
             placeholder={t("descriptionPlaceholder")}
             aria-invalid={errors.description ? true : undefined}
             aria-describedby="listing-description-message"
@@ -295,7 +399,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
           <CityField
             name="city"
             label={t("cityLabel")}
-            defaultValue={cityPick}
+            defaultValue={draftCity ?? cityPick}
             error={message("city") ? t("errors.cityPick") : undefined}
             onChange={() => clear("city")}
           />
@@ -303,7 +407,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
             name="area"
             label={t("areaLabel")}
             placeholder={t("areaPlaceholder")}
-            defaultValue={defaults?.area}
+            defaultValue={defaults?.area ?? draft?.area}
             hint={t("areaHint")}
             error={message("area")}
             onChange={() => clear("area")}
@@ -314,7 +418,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
           label={t("addressLabel")}
           autoComplete="street-address"
           placeholder={t("addressPlaceholder")}
-          defaultValue={defaults?.pickup_address}
+          defaultValue={defaults?.pickup_address ?? draft?.pickup_address}
           hint={t("addressHint")}
           error={message("pickup_address")}
           onChange={() => clear("pickup_address")}
@@ -359,7 +463,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
             name="pickup_time"
             type="time"
             label={t("pickupTimeLabel")}
-            defaultValue={defaults?.pickup_time}
+            defaultValue={defaults?.pickup_time ?? draft?.pickup_time}
             error={message("pickup_time")}
             onChange={() => clear("pickup_time")}
           />
@@ -367,7 +471,7 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
             name="return_time"
             type="time"
             label={t("returnTimeLabel")}
-            defaultValue={defaults?.return_time}
+            defaultValue={defaults?.return_time ?? draft?.return_time}
             error={message("return_time")}
             onChange={() => clear("return_time")}
           />
@@ -388,8 +492,9 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
             listingId={days.listingId}
             name={days.listingId ? undefined : "available_days"}
             today={days.today}
-            initial={days.initial}
+            initial={draft ? parseList<string>(draft.available_days, days.initial) : days.initial}
             booked={days.booked}
+            weekly={draft ? parseList<number>(draft.available_days_weekly, days.weekly ?? []) : days.weekly}
           />
         </section>
       ) : null}

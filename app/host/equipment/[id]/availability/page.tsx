@@ -24,7 +24,7 @@ export default async function AvailabilityPage({ params }: PageProps<"/host/equi
   if (!listing) notFound();
   const t = await getTranslations("host.availability");
   const today = todayInSaoPaulo();
-  const { available, booked } = await listingDays(id, today);
+  const { available, booked, weekly } = await listingDays(id, today);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6">
@@ -36,7 +36,7 @@ export default async function AvailabilityPage({ params }: PageProps<"/host/equi
       <p className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
         {t("help", { from: listing.pickup_time, until: listing.return_time })}
       </p>
-      <AvailabilityEditor listingId={id} today={today} initial={available} booked={booked} />
+      <AvailabilityEditor listingId={id} today={today} initial={available} booked={booked} weekly={weekly} />
     </div>
   );
 }

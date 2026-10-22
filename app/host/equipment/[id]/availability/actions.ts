@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { listAvailableDays, setAvailableDays } from "@/lib/availability";
+import { listAvailableDays, setAvailableDays, setWeeklyDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { getHostListing } from "@/lib/host";
 import { supabaseConfigured } from "@/lib/supabase/config";
@@ -26,4 +26,15 @@ export async function saveAvailability(listingId: string, add: string[], remove:
   if (!supabaseConfigured()) return { ok: true, available: null, kept: [] };
   revalidatePath(`/equipment/${listingId}`);
   return { ok: added.ok && removed.ok, available: await listAvailableDays(listingId, today), kept: removed.kept };
+}
+
+/** Dias que se repetem toda semana (decisão de 22/10/2026). Devolve a lista certa de dias liberados. */
+export async function saveWeeklyDays(listingId: string, weekdays: number[]): Promise<AvailabilityResult> {
+  const today = todayInSaoPaulo();
+  const listing = await getHostListing(listingId);
+  if (!listing) return { ok: false, available: [], kept: [] };
+  const ok = await setWeeklyDays(listingId, weekdays);
+  if (!supabaseConfigured()) return { ok, available: null, kept: [] };
+  revalidatePath(`/equipment/${listingId}`);
+  return { ok, available: await listAvailableDays(listingId, today), kept: [] };
 }

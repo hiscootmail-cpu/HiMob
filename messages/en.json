@@ -742,7 +742,8 @@
       "label": "Host area",
       "listings": "My listings",
       "reservations": "Received bookings",
-      "overview": "Overview"
+      "overview": "Overview",
+      "earnings": "Earnings"
     },
     "new": {
       "title": "New listing",
@@ -844,7 +845,9 @@
         "cityPick": "Pick the city from the suggestions."
       },
       "daysHintNew": "Tap the days you will rent, or use the shortcuts. With no days marked, nobody can book. You can change it later.",
-      "daysHintEdit": "Days save right away, without going through the team review."
+      "daysHintEdit": "Days save right away, without going through the team review.",
+      "draftRestored": "Draft restored: pick up where you left off. Photos need to be chosen again.",
+      "draftDiscard": "Discard draft"
     },
     "label": {
       "open": "QR label",
@@ -1056,7 +1059,13 @@
       "weekends": "Weekends only",
       "weekdays": "Weekdays only",
       "clearMonth": "Close the month",
-      "shortcutsHelp": "Shortcuts apply from today to the end of the month shown. Days with bookings stay open."
+      "shortcutsHelp": "Shortcuts apply from today to the end of the month shown. Days with bookings stay open.",
+      "repeatTitle": "Repeat every week",
+      "repeatHelp": "Pick the weekdays you always rent. The site opens those days for the next 3 months and keeps renewing them. To close a single day, tap it in the calendar.",
+      "repeatSave": "Save repeat",
+      "repeatSaved": "Repeat saved. The days were opened.",
+      "repeatOn": "Repeating every week: {days}",
+      "repeatOff": "No days repeating."
     },
     "overview": {
       "title": "Overview",
@@ -1085,6 +1094,90 @@
       "noNextBooking": "No bookings scheduled",
       "edit": "Edit listing",
       "availableDays": "Available days"
+    },
+    "journey": {
+      "title": "Your path to listing",
+      "progress": "{done} of {total} steps done",
+      "done": "done",
+      "waiting": "in progress",
+      "todo": "to do",
+      "steps": {
+        "identity": {
+          "title": "ID approved",
+          "text": "Send a photo of your ID (front and back).",
+          "waiting": "ID under team review.",
+          "action": "Send ID"
+        },
+        "mercadoPago": {
+          "title": "Mercado Pago connected",
+          "text": "This is where booking money goes.",
+          "waiting": "",
+          "action": "Connect"
+        },
+        "listing": {
+          "title": "Listing created",
+          "text": "Photos (at least 2), daily price, hours and pickup address.",
+          "waiting": "",
+          "action": "Create listing"
+        },
+        "days": {
+          "title": "Days opened",
+          "text": "With no open days, nobody can book. Use \"Repeat every week\".",
+          "waiting": "",
+          "action": "Open days"
+        },
+        "review": {
+          "title": "Approved by the team",
+          "text": "The team checks the listing before publishing.",
+          "waiting": "Listing under team review.",
+          "action": "See listings"
+        },
+        "live": {
+          "title": "Live",
+          "text": "Approved, available and with open days: it shows in search.",
+          "waiting": "",
+          "action": "See listings"
+        }
+      }
+    },
+    "earnings": {
+      "title": "Earnings",
+      "subtitle": "How much your paid bookings earned you, by pickup date.",
+      "tabMine": "My earnings",
+      "tabSimulate": "Simulate",
+      "today": "Today",
+      "month": "This month",
+      "year": "This year",
+      "whenTitle": "When do I get paid?",
+      "when1": "As soon as the Rider pays, Mercado Pago splits your share and sends it straight to your Mercado Pago account.",
+      "when2": "You get the full daily price you set. Hi Scoot's {fee}% fee is paid by the Rider on top, and the Mercado Pago fee comes out of Hi Scoot's share.",
+      "when3": "When the money is available to withdraw depends on your Mercado Pago account. Check it in the Mercado Pago app.",
+      "when4": "If you cancel a paid booking, the platform fee is taken from a later payment.",
+      "byMonth": "Month by month",
+      "list": "Paid bookings",
+      "empty": "No paid bookings yet. When someone pays, it shows here.",
+      "sim": {
+        "title": "Simulate earnings",
+        "subtitle": "See how much you could earn with more equipment and in other cities.",
+        "equipment": "How many units",
+        "daily": "Daily price each (R$)",
+        "riderPays": "The Rider pays {value} per day (price + fee).",
+        "days": "Days rented per month: {days}",
+        "daysHint": "Average per unit. Start with a conservative guess.",
+        "city": "City (optional)",
+        "cityHint": "See demand and the average daily price in another city.",
+        "perDay": "Per rented day",
+        "perMonth": "Per month",
+        "perYear": "Per year",
+        "loading": "Looking up demand in the city...",
+        "demandTitle": "Demand in {city}",
+        "trips": "{count, plural, =0 {No trips planned for the next 90 days} one {# trip planned for the next 90 days} other {# trips planned for the next 90 days}}",
+        "equipmentThere": "{count, plural, one {# unit published there} other {# units published there}}",
+        "noEquipment": "No equipment published there yet: you could be the first.",
+        "avgDaily": "Average daily price there: {value}",
+        "noData": "Couldn't load the demand right now.",
+        "disclaimer": "Simple estimate (units × daily price × days rented), no guarantee. It doesn't include costs like maintenance, charging and transport."
+      }
     }
   },
   "dashboard": {

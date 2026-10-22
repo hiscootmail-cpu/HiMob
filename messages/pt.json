@@ -742,7 +742,8 @@
       "label": "Área do Host",
       "listings": "Meus anúncios",
       "reservations": "Reservas recebidas",
-      "overview": "Visão geral"
+      "overview": "Visão geral",
+      "earnings": "Ganhos"
     },
     "new": {
       "title": "Novo anúncio",
@@ -844,7 +845,9 @@
         "cityPick": "Escolha a cidade na lista de sugestões."
       },
       "daysHintNew": "Toque nos dias em que você vai alugar, ou use os atalhos. Sem dias marcados, ninguém consegue reservar. Dá para mudar depois.",
-      "daysHintEdit": "Os dias salvam na hora, sem passar pela análise da equipe."
+      "daysHintEdit": "Os dias salvam na hora, sem passar pela análise da equipe.",
+      "draftRestored": "Rascunho recuperado: continue de onde parou. As fotos precisam ser escolhidas de novo.",
+      "draftDiscard": "Descartar rascunho"
     },
     "label": {
       "open": "Etiqueta QR",
@@ -1056,7 +1059,13 @@
       "weekends": "Só fins de semana",
       "weekdays": "Só dias úteis",
       "clearMonth": "Fechar o mês",
-      "shortcutsHelp": "Os atalhos valem dos próximos dias até o fim do mês mostrado. Dias com reserva continuam liberados."
+      "shortcutsHelp": "Os atalhos valem dos próximos dias até o fim do mês mostrado. Dias com reserva continuam liberados.",
+      "repeatTitle": "Repetir toda semana",
+      "repeatHelp": "Marque os dias da semana em que você sempre aluga. O site libera esses dias pelos próximos 3 meses e vai renovando sozinho. Para fechar um dia avulso, toque nele no calendário.",
+      "repeatSave": "Salvar repetição",
+      "repeatSaved": "Repetição salva. Os dias foram liberados.",
+      "repeatOn": "Repetindo toda semana: {days}",
+      "repeatOff": "Nenhum dia repetindo."
     },
     "overview": {
       "title": "Visão geral",
@@ -1085,6 +1094,90 @@
       "noNextBooking": "Sem reservas marcadas",
       "edit": "Editar anúncio",
       "availableDays": "Dias disponíveis"
+    },
+    "journey": {
+      "title": "Seu caminho para anunciar",
+      "progress": "{done} de {total} passos prontos",
+      "done": "pronto",
+      "waiting": "em andamento",
+      "todo": "a fazer",
+      "steps": {
+        "identity": {
+          "title": "Documento aprovado",
+          "text": "Envie a foto do documento (frente e verso).",
+          "waiting": "Documento em análise pela equipe.",
+          "action": "Enviar documento"
+        },
+        "mercadoPago": {
+          "title": "Mercado Pago conectado",
+          "text": "É onde cai o dinheiro das reservas.",
+          "waiting": "",
+          "action": "Conectar"
+        },
+        "listing": {
+          "title": "Anúncio criado",
+          "text": "Fotos (mínimo 2), diária, horário e endereço de retirada.",
+          "waiting": "",
+          "action": "Criar anúncio"
+        },
+        "days": {
+          "title": "Dias liberados",
+          "text": "Sem dias liberados, ninguém consegue reservar. Use \"Repetir toda semana\".",
+          "waiting": "",
+          "action": "Liberar dias"
+        },
+        "review": {
+          "title": "Aprovado pela equipe",
+          "text": "A equipe confere o anúncio antes de publicar.",
+          "waiting": "Anúncio em análise pela equipe.",
+          "action": "Ver anúncios"
+        },
+        "live": {
+          "title": "No ar",
+          "text": "Aprovado, disponível e com dias liberados: aparece na busca.",
+          "waiting": "",
+          "action": "Ver anúncios"
+        }
+      }
+    },
+    "earnings": {
+      "title": "Ganhos",
+      "subtitle": "Quanto suas reservas pagas renderam para você, pela data da retirada.",
+      "tabMine": "Meus ganhos",
+      "tabSimulate": "Simular",
+      "today": "Hoje",
+      "month": "Este mês",
+      "year": "Este ano",
+      "whenTitle": "Quando eu recebo?",
+      "when1": "Na hora em que o Rider paga, o Mercado Pago separa sozinho a sua parte e manda direto para a sua conta Mercado Pago.",
+      "when2": "Você recebe a diária inteira que definiu. A taxa de {fee}% da Hi Scoot é paga pelo Rider por cima, e a tarifa do Mercado Pago sai da parte da Hi Scoot.",
+      "when3": "O prazo para o dinheiro ficar disponível para saque é o da sua conta Mercado Pago. Confira no app do Mercado Pago, em \"Seu dinheiro\".",
+      "when4": "Se você cancelar uma reserva paga, a taxa da plataforma é descontada de um próximo pagamento.",
+      "byMonth": "Mês a mês",
+      "list": "Reservas pagas",
+      "empty": "Nenhuma reserva paga ainda. Quando alguém pagar, aparece aqui.",
+      "sim": {
+        "title": "Simular ganhos",
+        "subtitle": "Veja quanto pode ganhar com mais equipamentos e em outras cidades.",
+        "equipment": "Quantos equipamentos",
+        "daily": "Diária de cada um (R$)",
+        "riderPays": "O Rider paga {value} por dia (diária + taxa).",
+        "days": "Dias alugados por mês: {days}",
+        "daysHint": "Média por equipamento. Comece com uma estimativa conservadora.",
+        "city": "Cidade (opcional)",
+        "cityHint": "Veja a procura e a diária média em outra cidade.",
+        "perDay": "Por dia alugado",
+        "perMonth": "Por mês",
+        "perYear": "Por ano",
+        "loading": "Buscando a procura na cidade...",
+        "demandTitle": "Procura em {city}",
+        "trips": "{count, plural, =0 {Nenhuma viagem marcada para os próximos 90 dias} one {# viagem marcada para os próximos 90 dias} other {# viagens marcadas para os próximos 90 dias}}",
+        "equipmentThere": "{count, plural, one {# equipamento publicado lá} other {# equipamentos publicados lá}}",
+        "noEquipment": "Nenhum equipamento publicado lá ainda: você pode ser o primeiro.",
+        "avgDaily": "Diária média dos anúncios de lá: {value}",
+        "noData": "Não foi possível buscar a procura agora.",
+        "disclaimer": "Estimativa simples (equipamentos × diária × dias alugados), sem garantia de ganho. Não inclui custos como manutenção, carregamento e transporte."
+      }
     }
   },
   "dashboard": {
