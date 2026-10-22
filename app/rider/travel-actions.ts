@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { addDays, todayInSaoPaulo } from "@/lib/booking";
 import { readCityField } from "@/lib/br-cities-server";
+import { equipmentTypes, type EquipmentType } from "@/lib/equipment";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -28,7 +29,7 @@ export type TravelState = {
 };
 
 const MAX_DAYS = 365;
-const WANTS = ["scooter", "ebike", "both"];
+
 
 /** Nova viagem (campo tripId vazio) ou mudança de uma viagem da pessoa. */
 export async function saveTrip(_prev: TravelState, formData: FormData): Promise<TravelState> {
@@ -38,7 +39,10 @@ export async function saveTrip(_prev: TravelState, formData: FormData): Promise<
   const city = readCityField(formData, "travelCity", true);
   const from = String(formData.get("from") ?? "");
   const until = String(formData.get("until") ?? "");
-  const wants = String(formData.get("wants") ?? "");
+  // Um ou mais tipos (decisão de 22/10/2026).
+  const wants = [...new Set(formData.getAll("wants").map(String))].filter((w): w is EquipmentType =>
+    equipmentTypes.includes(w as EquipmentType),
+  );
   const today = todayInSaoPaulo();
   const isDay = (day: string) => /^\d{4}-\d{2}-\d{2}$/.test(day);
   const fromError = !isDay(from)
@@ -57,7 +61,7 @@ export async function saveTrip(_prev: TravelState, formData: FormData): Promise<
         : isDay(from) && until > addDays(from, MAX_DAYS)
           ? ("untilTooFar" as const)
           : undefined;
-  const wantsError = WANTS.includes(wants) ? undefined : ("wantsRequired" as const);
+  const wantsError = wants.length ? undefined : ("wantsRequired" as const);
   if (city.error || fromError || untilError || wantsError) {
     return { errors: { city: city.error, from: fromError, until: untilError, wants: wantsError } };
   }

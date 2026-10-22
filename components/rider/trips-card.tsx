@@ -11,12 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { cityLabel } from "@/lib/br-cities";
+import { equipmentTypes, type EquipmentType } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 
-type TripWants = "scooter" | "ebike" | "both";
-type Trip = { id: string; city: string; uf: string; from: string; until: string; wants: TripWants };
-
-const WANTS: TripWants[] = ["scooter", "ebike", "both"];
+type Trip = { id: string; city: string; uf: string; from: string; until: string; wants: EquipmentType[] };
 
 /**
  * Minhas viagens na aba Rider (decisões de 21 e 22/10/2026): várias viagens
@@ -35,12 +33,12 @@ export function TripsCard({ trips, today, maxDay, maxTrips }: { trips: Trip[]; t
   const editing = open && !(state.done && state !== open.at) ? open.target : null;
   const editingTrip = trips.find((trip) => trip.id === editing) ?? null;
   const [from, setFrom] = useState(today);
-  const [wants, setWants] = useState<TripWants | "">("");
+  const [wants, setWants] = useState<EquipmentType[]>([]);
 
   const startEdit = (target: string) => {
     const trip = trips.find((item) => item.id === target);
     setFrom(trip?.from ?? today);
-    setWants(trip?.wants ?? "");
+    setWants(trip?.wants ?? []);
     setOpen({ target, at: state });
   };
 
@@ -76,7 +74,7 @@ export function TripsCard({ trips, today, maxDay, maxTrips }: { trips: Trip[]; t
                     <Badge tone={now ? "success" : "info"}>{now ? t("now") : t("planned")}</Badge>
                   </p>
                   <p className="text-sm text-muted">
-                    {t("dates", { from: day(trip.from), until: day(trip.until) })} · {t(`wants.${trip.wants}`)}
+                    {t("dates", { from: day(trip.from), until: day(trip.until) })} · {trip.wants.map((w) => t(`wants.${w}`)).join(", ")}
                   </p>
                 </div>
                 <div className="flex gap-1">
@@ -148,20 +146,20 @@ export function TripsCard({ trips, today, maxDay, maxTrips }: { trips: Trip[]; t
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-2 text-sm font-medium text-hs-black">{t("wantsLabel")}</legend>
             <div className="flex flex-wrap gap-2">
-              {WANTS.map((option) => (
+              {equipmentTypes.map((option) => (
                 <label
                   key={option}
                   className={cn(
                     "inline-flex h-10 cursor-pointer items-center rounded-full border px-4 text-sm font-medium has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-hs-blue/40",
-                    wants === option ? "border-hs-black bg-hs-black text-hs-white" : "border-line bg-hs-white text-hs-black hover:bg-surface",
+                    wants.includes(option) ? "border-hs-black bg-hs-black text-hs-white" : "border-line bg-hs-white text-hs-black hover:bg-surface",
                   )}
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     name="wants"
                     value={option}
-                    checked={wants === option}
-                    onChange={() => setWants(option)}
+                    checked={wants.includes(option)}
+                    onChange={() => setWants((list) => (list.includes(option) ? list.filter((w) => w !== option) : [...list, option]))}
                     className="sr-only"
                   />
                   {t(`wants.${option}`)}

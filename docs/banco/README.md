@@ -37,3 +37,4 @@ Dias disponíveis e aluguel por horas: `docs/banco/testes-horarios.sql`, também
 Painel → Operação (números por cidade): `docs/banco/testes-operacao.sql`, também depois de todas as migrações.
 Cidade onde mora e cidade secundária: `docs/banco/testes-cidades.sql`, também depois de todas as migrações.
 Viagens do Rider e demanda: `docs/banco/testes-viagens.sql`, também depois de todas as migrações.
+Novos tipos e jetboard para maiores de 21: `docs/banco/testes-novos-tipos.sql`, também depois de todas as migrações.

@@ -21,7 +21,7 @@ async function viewerState(equipmentId: string, hostId: string) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { isOwner: false, onWaitlist: false, verification: null };
+  if (!user) return { isOwner: false, onWaitlist: false, verification: null, hasBirthDate: false };
   const [{ count }, { data: profile }, { count: waiting }] = await Promise.all([
     supabase
       .from("waitlist")
@@ -31,11 +31,14 @@ async function viewerState(equipmentId: string, hostId: string) {
     supabase.from("profiles").select("identity_status").eq("id", user.id).maybeSingle(),
     supabase.from("identity_submissions").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "pending"),
   ]);
+  // Data de nascimento (jetboard só para maiores de 21). Sem o campo no banco ainda, pede na reserva.
+  const { data: born } = await supabase.from("profile_private").select("birth_date").eq("id", user.id).maybeSingle();
   return {
     isOwner: user.id === hostId,
     onWaitlist: Boolean(count),
     // Documento só na hora de alugar (decisão de 20/10/2026): "send" = ainda não enviou; "review" = em análise.
     verification: profile?.identity_status === "approved" ? null : waiting ? ("review" as const) : ("send" as const),
+    hasBirthDate: Boolean(born?.birth_date),
   };
 }
 
@@ -79,9 +82,9 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
   const price = format.number(riderDailyPrice(equipment.daily_price), { style: "currency", currency: "BRL" });
 
   // Na demonstração, ?preview=owner mostra a tela como o dono do anúncio vê.
-  const { isOwner, onWaitlist, verification } = supabaseConfigured()
+  const { isOwner, onWaitlist, verification, hasBirthDate } = supabaseConfigured()
     ? await viewerState(equipment.id, equipment.host_id)
-    : { isOwner: preview === "owner", onWaitlist: false, verification: null };
+    : { isOwner: preview === "owner", onWaitlist: false, verification: null, hasBirthDate: false };
   const today = todayInSaoPaulo();
   const schedule = await equipmentSchedule(equipment.id, today);
 
@@ -195,7 +198,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
 
         <aside id="reservar" aria-label={t("bookingLabel")} className="scroll-mt-20">
           <div className="rounded-lg border border-line bg-hs-white p-5 shadow-sm md:sticky md:top-20">
-            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} schedule={schedule} onWaitlist={onWaitlist} verification={verification} />
+            <BookingPanel equipment={equipment} today={today} isOwner={isOwner} schedule={schedule} onWaitlist={onWaitlist} verification={verification} hasBirthDate={hasBirthDate} />
           </div>
         </aside>
       </div>

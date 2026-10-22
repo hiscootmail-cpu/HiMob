@@ -27,9 +27,13 @@ export const EDIT_INTERVAL_DAYS = 30;
 export const MIN_PHOTOS = 2;
 export const MAX_PHOTOS = 10;
 
-export type EquipmentType = "scooter" | "ebike";
+/** Tipos de equipamento (skate elétrico e jetboard: decisão de 22/10/2026). */
+export type EquipmentType = "scooter" | "ebike" | "eskate" | "jetboard";
 
-export const equipmentTypes: EquipmentType[] = ["scooter", "ebike"];
+export const equipmentTypes: EquipmentType[] = ["scooter", "ebike", "eskate", "jetboard"];
+
+/** Jetboard (usado na água): só para maiores de 21 anos (o banco também confere). */
+export const JETBOARD_MIN_AGE = 21;
 
 export type EquipmentHost = {
   id: string;

@@ -339,12 +339,14 @@
   },
   "equipmentType": {
     "scooter": "Patinete elétrico",
-    "ebike": "Bike elétrica"
+    "ebike": "Bike elétrica",
+    "eskate": "Skate elétrico",
+    "jetboard": "Jetboard"
   },
   "explore": {
     "title": "Alugue perto de você",
     "searchLabel": "Buscar equipamentos",
-    "searchPlaceholder": "Buscar patinete, bike ou bairro",
+    "searchPlaceholder": "Buscar patinete, bike, skate, jetboard ou bairro",
     "typeFilterLabel": "Tipo de equipamento",
     "filterAll": "Todos",
     "nearMe": "Perto de mim",
@@ -424,7 +426,10 @@
       "tooShort": "O aluguel mínimo é de 1 hora.",
       "timeInvalid": "Escolha horários de 30 em 30 minutos.",
       "outsideHours": "Escolha horários dentro do atendimento do Host.",
-      "timesTaken": "Esse horário já está reservado (ou sem 1 hora de folga). Escolha outro."
+      "timesTaken": "Esse horário já está reservado (ou sem 1 hora de folga). Escolha outro.",
+      "birthDateRequired": "Informe sua data de nascimento.",
+      "birthDateInvalid": "Data de nascimento inválida.",
+      "tooYoung": "Jetboard é só para maiores de 21 anos."
     },
     "hostReviewCount": "({count, plural, one {# avaliação} other {# avaliações}} como Host)",
     "hostNoReviews": "Ainda sem avaliações como Host",
@@ -466,7 +471,10 @@
     },
     "couponRental": "Cupom {code}: {percent}% no aluguel",
     "couponFee": "Cupom {code}: {percent}% na taxa",
-    "couponAppliedDiscount": "Cupom {code} aplicado: {rental}% de desconto no aluguel e {fee}% na taxa."
+    "couponAppliedDiscount": "Cupom {code} aplicado: {rental}% de desconto no aluguel e {fee}% na taxa.",
+    "jetboardSafety": "Jetboard é só para maiores de {age} anos. Use sempre colete salva-vidas, fique nas áreas permitidas para jet e siga as regras locais (Marinha e prefeitura).",
+    "birthDateLabel": "Data de nascimento",
+    "birthDateHint": "Precisamos dela uma vez para confirmar que você tem {age} anos ou mais. A equipe confere no seu documento."
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -684,7 +692,7 @@
     "freeWithCoupon": "Grátis · cupom {code}",
     "travel": {
       "title": "Minhas viagens",
-      "text": "Marque as viagens em que vai precisar de patinete ou bike, mesmo com antecedência. Da ida até a volta, o Explorar abre na cidade da viagem.",
+      "text": "Marque as viagens em que vai precisar de patinete, bike, skate ou jetboard, mesmo com antecedência. Da ida até a volta, o Explorar abre na cidade da viagem.",
       "add": "Adicionar viagem",
       "empty": "Nenhuma viagem marcada.",
       "now": "Agora",
@@ -698,11 +706,12 @@
       "city": "Cidade da viagem",
       "from": "Vou em",
       "until": "Volto em",
-      "wantsLabel": "O que pretende usar?",
+      "wantsLabel": "O que pretende usar? (pode marcar mais de um)",
       "wants": {
         "scooter": "Patinete",
         "ebike": "Bike",
-        "both": "Os dois"
+        "eskate": "Skate",
+        "jetboard": "Jetboard"
       },
       "datesHint": "As viagens não podem cruzar datas. Depois da volta, o site volta para a sua cidade sozinho.",
       "cancel": "Cancelar",
@@ -735,7 +744,7 @@
       "back": "Voltar para Meus anúncios",
       "subtitle": "Preencha os dados do seu equipamento. A equipe Hi Scoot confere antes de publicar.",
       "becomeTitle": "Quero ser Host",
-      "becomeText": "Anuncie seu patinete ou bike elétrica e ganhe com cada diária.",
+      "becomeText": "Anuncie seu patinete, bike, skate elétrico ou jetboard e ganhe com cada diária.",
       "becomeStep1": "1. Cadastre o equipamento com fotos, preço por dia e horários.",
       "becomeStep2": "2. A equipe Hi Scoot confere e publica o anúncio.",
       "becomeStep3": "3. Você aceita os pedidos e recebe pelo Mercado Pago.",
@@ -762,7 +771,9 @@
       "typeLabel": "Tipo",
       "types": {
         "scooter": "Patinete elétrico",
-        "ebike": "Bike elétrica"
+        "ebike": "Bike elétrica",
+        "eskate": "Skate elétrico",
+        "jetboard": "Jetboard"
       },
       "titleLabel": "Título do anúncio",
       "titlePlaceholder": "Ex.: Patinete Aro 10",
@@ -847,7 +858,7 @@
       "subtitle": "Seus equipamentos, a análise da equipe e a etiqueta QR.",
       "new": "Novo anúncio",
       "emptyTitle": "Você ainda não tem anúncios",
-      "emptyText": "Anuncie seu patinete ou bike elétrica e comece a receber pedidos.",
+      "emptyText": "Anuncie seu patinete, bike, skate elétrico ou jetboard e comece a receber pedidos.",
       "review": {
         "pending": "Em análise",
         "approved": "Publicado",
@@ -1756,8 +1767,9 @@
     "next90": "Até 90 dias",
     "wantsScooter": "Patinete",
     "wantsEbike": "Bike",
-    "wantsBoth": "Os dois",
-    "tripEquipment": "Equipamentos lá"
+    "tripEquipment": "Equipamentos lá",
+    "wantsEskate": "Skate",
+    "wantsJetboard": "Jetboard"
   },
   "cityField": {
     "placeholder": "Digite e escolha na lista"

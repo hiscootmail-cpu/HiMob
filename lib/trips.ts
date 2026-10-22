@@ -1,17 +1,18 @@
 import "server-only";
 
 import { addDays } from "@/lib/booking";
+import type { EquipmentType } from "@/lib/equipment";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
 /*
  * Viagens do Rider (decisão de 22/10/2026): várias, sem cruzar datas. Cada uma
- * com cidade (lista oficial), ida, volta e o que pretende usar. Da ida até a
+ * com cidade (lista oficial), ida, volta e o que pretende usar (um ou mais tipos). Da ida até a
  * volta, o Explorar abre na cidade da viagem.
  */
 
-export type TripWants = "scooter" | "ebike" | "both";
+export type TripWants = EquipmentType[];
 
 export type Trip = { id: string; city: string; uf: string; from: string; until: string; wants: TripWants };
 
@@ -21,8 +22,8 @@ export const MAX_TRIPS = 10;
 /** Exemplo da demonstração (sem Supabase). */
 function exampleTrips(today: string): Trip[] {
   return [
-    { id: "viagem-exemplo-1", city: "Ubatuba", uf: "SP", from: addDays(today, 3), until: addDays(today, 6), wants: "scooter" },
-    { id: "viagem-exemplo-2", city: "Rio de Janeiro", uf: "RJ", from: addDays(today, 30), until: addDays(today, 34), wants: "both" },
+    { id: "viagem-exemplo-1", city: "Ubatuba", uf: "SP", from: addDays(today, 3), until: addDays(today, 6), wants: ["scooter"] },
+    { id: "viagem-exemplo-2", city: "Rio de Janeiro", uf: "RJ", from: addDays(today, 30), until: addDays(today, 34), wants: ["scooter", "ebike"] },
   ];
 }
 
@@ -44,7 +45,7 @@ export async function listMyTrips(today: string): Promise<Trip[]> {
     uf: row.city_state as string,
     from: row.from_day as string,
     until: row.until_day as string,
-    wants: row.wants as TripWants,
+    wants: (row.wants ?? []) as TripWants,
   }));
 }
 

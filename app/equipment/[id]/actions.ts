@@ -2,7 +2,8 @@
 
 import { redirect } from "next/navigation";
 
-import { rentalHours, saoPauloTime, type BookingDatesError } from "@/lib/booking";
+import { rentalHours, saoPauloTime, todayInSaoPaulo, type BookingDatesError } from "@/lib/booking";
+import { JETBOARD_MIN_AGE } from "@/lib/equipment";
 import { getEquipment } from "@/lib/equipment-db";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -23,6 +24,9 @@ export type BookingRequestState = {
     | "unavailable"
     | "datesUnavailable"
     | "identityRequired"
+    | "birthDateRequired"
+    | "birthDateInvalid"
+    | "tooYoung"
     | "tooShort"
     | "timeInvalid"
     | "outsideHours"
@@ -103,6 +107,16 @@ export async function requestBooking(
   if (hours < 1) return { error: "tooShort" };
 
   const coupon = cleanCoupon(formData.get("coupon"));
+  // Jetboard (decisão de 22/10/2026): só maiores de 21 anos. A data de nascimento
+  // vem na primeira reserva de jetboard; o banco confere a idade.
+  const birthDate = String(formData.get("birth_date") ?? "");
+  if (equipment.type === "jetboard" && formData.has("birth_date")) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) return { error: "birthDateRequired" };
+    // Na demonstração (sem banco), confere aqui: nascido depois de "hoje menos 21 anos" é menor.
+    const today = todayInSaoPaulo();
+    const limit = `${Number(today.slice(0, 4)) - JETBOARD_MIN_AGE}${today.slice(4)}`;
+    if (!supabaseConfigured() && birthDate > limit) return { error: "tooYoung" };
+  }
 
   // O valor é sempre calculado pelo banco (diária e horas), nunca vem do navegador.
   if (supabaseConfigured()) {
@@ -111,6 +125,10 @@ export async function requestBooking(
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) redirect("/auth/login");
+    if (equipment.type === "jetboard" && birthDate) {
+      const { error: bornError } = await supabase.rpc("set_birth_date", { p_date: birthDate });
+      if (bornError && bornError.message !== "birth_date_locked") return { error: "birthDateInvalid" };
+    }
     const { error } = await supabase.rpc("request_booking", {
       p_equipment: equipmentId,
       p_start: pickup,
@@ -130,6 +148,8 @@ export async function requestBooking(
         time_invalid: "timeInvalid",
         outside_hours: "outsideHours",
         times_taken: "timesTaken",
+        birth_date_required: "birthDateRequired",
+        too_young: "tooYoung",
       } as const;
       return { error: known[error.message as keyof typeof known] ?? "unavailable" };
     }
