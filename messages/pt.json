@@ -453,9 +453,6 @@
     "orPerHour": "ou {price} por hora",
     "chooseDays": "Escolha o dia e o horário",
     "noDaysYet": "O Host ainda não liberou dias para este equipamento. Fale com o Host ou volte depois.",
-    "calendarHelp": "Toque no dia da retirada. Para mais de um dia, toque também no dia da devolução. Dias em verde estão liberados.",
-    "chosenDay": "Dia: {day}",
-    "chosenDays": "De {start} a {end}",
     "pickupTime": "Hora da retirada",
     "returnTime": "Hora da devolução",
     "timePick": "Escolher",
@@ -475,7 +472,14 @@
     "couponAppliedDiscount": "Cupom {code} aplicado: {rental}% de desconto no aluguel e {fee}% na taxa.",
     "jetboardSafety": "Jetboard é só para maiores de {age} anos. Use sempre colete salva-vidas, fique nas áreas permitidas para jet e siga as regras locais (Marinha e prefeitura).",
     "birthDateLabel": "Data de nascimento",
-    "birthDateHint": "Precisamos dela uma vez para confirmar que você tem {age} anos ou mais. A equipe confere no seu documento."
+    "birthDateHint": "Precisamos dela uma vez para confirmar que você tem {age} anos ou mais. A equipe confere no seu documento.",
+    "pickupDay": "Dia da retirada",
+    "returnDay": "Dia da devolução",
+    "dayToChoose": "Escolher",
+    "sameDay": "mesmo dia",
+    "stepPickup": "Toque no dia em que você vai retirar. Dias em verde estão liberados.",
+    "stepReturn": "Agora toque no dia da devolução. Se for no mesmo dia, é só escolher os horários abaixo.",
+    "rangeBlocked": "Algum dia entre a retirada e a devolução não está liberado pelo Host. Escolha outra data de devolução."
   },
   "errorPage": {
     "title": "Algo deu errado",

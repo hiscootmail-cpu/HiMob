@@ -114,19 +114,25 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
 
   const [month, setMonth] = useState(schedule.available[0]?.slice(0, 7) ?? firstMonth);
   const [range, setRange] = useState<{ start: string; end: string } | null>(null);
+  // Qual dia o calendário está escolhendo agora: retirada ou devolução (decisão de 23/10/2026).
+  const [step, setStep] = useState<"pickup" | "return">("pickup");
+  const [rangeBlocked, setRangeBlocked] = useState(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const pickup = range?.start ?? "";
   const dropoff = range?.end ?? "";
 
   const selectDay = (day: string) => {
-    setRange((current) => {
-      // Primeiro toque (ou nova escolha): um dia só. Segundo toque num dia depois: até ele.
-      if (!current || current.end !== current.start || day < current.start) return { start: day, end: day };
-      if (day === current.start) return current;
-      const allFree = daysBetween(current.start, day).every((d) => available.has(d));
-      return allFree ? { start: current.start, end: day } : { start: day, end: day };
-    });
+    setRangeBlocked(false);
+    // Escolhendo a retirada: o dia vira retirada e devolução (mesmo dia); depois o calendário pede a devolução.
+    if (step === "pickup" || !range || day < range.start) {
+      setRange({ start: day, end: day });
+      setStep("return");
+      return;
+    }
+    // Escolhendo a devolução: todos os dias entre a retirada e a devolução precisam estar liberados.
+    if (daysBetween(range.start, day).every((d) => available.has(d))) setRange({ start: range.start, end: day });
+    else setRangeBlocked(true);
   };
 
   // Cupom (decisões de 20/10/2026): aluguel grátis, ou x% no aluguel e y% na taxa.
@@ -259,6 +265,35 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
             <p className="rounded-md bg-surface px-4 py-3 text-sm text-hs-black">{t("noDaysYet")}</p>
           ) : (
             <>
+              <div className="grid grid-cols-2 gap-2">
+                {(["pickup", "return"] as const).map((which) => {
+                  const day = which === "pickup" ? range?.start : range?.end;
+                  const active = step === which || (which === "pickup" && !range);
+                  return (
+                    <button
+                      key={which}
+                      type="button"
+                      aria-pressed={active}
+                      disabled={which === "return" && !range}
+                      onClick={() => setStep(which)}
+                      className={cn(
+                        "flex flex-col items-start gap-0.5 rounded-lg border-2 px-3 py-2 text-left outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 disabled:cursor-not-allowed disabled:opacity-60",
+                        active ? "border-hs-black bg-hs-white" : "border-line bg-surface",
+                      )}
+                    >
+                      <span className="text-xs font-semibold tracking-wide text-muted uppercase">
+                        {which === "pickup" ? t("pickupDay") : t("returnDay")}
+                      </span>
+                      <span className="text-sm font-semibold text-hs-black">
+                        {day ? shortDate(day) : t("dayToChoose")}
+                        {which === "return" && range && range.start === range.end ? (
+                          <span className="font-normal text-muted"> · {t("sameDay")}</span>
+                        ) : null}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
               <MonthCalendar
                 month={month}
                 onMonthChange={setMonth}
@@ -276,16 +311,16 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
                 }
                 dayLabel={(_, look) => t(`dayLook.${look}`)}
               />
-              <p className="text-xs text-muted">{t("calendarHelp")}</p>
+              <p role="status" className="text-sm text-hs-black">
+                {step === "pickup" || !range ? t("stepPickup") : t("stepReturn")}
+              </p>
+              {rangeBlocked ? (
+                <p role="alert" className="text-sm text-error">
+                  {t("rangeBlocked")}
+                </p>
+              ) : null}
             </>
           )}
-          {range ? (
-            <p className="text-sm font-semibold text-hs-black">
-              {range.start === range.end
-                ? t("chosenDay", { day: shortDate(range.start) })
-                : t("chosenDays", { start: shortDate(range.start), end: shortDate(range.end) })}
-            </p>
-          ) : null}
           {range ? (
             <div className="flex flex-col gap-2 sm:flex-row md:flex-col lg:flex-row">
               <TimeSelect
