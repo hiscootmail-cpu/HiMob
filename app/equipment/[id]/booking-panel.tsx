@@ -265,32 +265,49 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
             <p className="rounded-md bg-surface px-4 py-3 text-sm text-hs-black">{t("noDaysYet")}</p>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-2">
+              {/* Retirada (dia + hora) e devolução (dia + hora), cada uma num bloco (decisão de 23/10/2026). */}
+              <div className="flex flex-col gap-2">
                 {(["pickup", "return"] as const).map((which) => {
                   const day = which === "pickup" ? range?.start : range?.end;
                   const active = step === which || (which === "pickup" && !range);
                   return (
-                    <button
+                    <div
                       key={which}
-                      type="button"
-                      aria-pressed={active}
-                      disabled={which === "return" && !range}
-                      onClick={() => setStep(which)}
-                      className={cn(
-                        "flex flex-col items-start gap-0.5 rounded-lg border-2 px-3 py-2 text-left outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 disabled:cursor-not-allowed disabled:opacity-60",
-                        active ? "border-hs-black bg-hs-white" : "border-line bg-surface",
-                      )}
+                      className={cn("flex flex-col gap-2 rounded-lg border-2 p-2", active ? "border-hs-black bg-hs-white" : "border-line bg-surface")}
                     >
-                      <span className="text-xs font-semibold tracking-wide text-muted uppercase">
-                        {which === "pickup" ? t("pickupDay") : t("returnDay")}
+                      <span className="px-1 text-xs font-semibold tracking-wide text-hs-black uppercase">
+                        {which === "pickup" ? t("pickupBlock") : t("returnBlock")}
                       </span>
-                      <span className="text-sm font-semibold text-hs-black">
-                        {day ? shortDate(day) : t("dayToChoose")}
-                        {which === "return" && range && range.start === range.end ? (
-                          <span className="font-normal text-muted"> · {t("sameDay")}</span>
-                        ) : null}
-                      </span>
-                    </button>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          aria-pressed={active}
+                          disabled={which === "return" && !range}
+                          onClick={() => setStep(which)}
+                          className="flex min-w-0 flex-1 flex-col items-start gap-0.5 rounded-md border border-line bg-hs-white px-3 py-2 text-left outline-none focus-visible:ring-4 focus-visible:ring-hs-blue/40 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          <span className="text-xs text-muted">{t("dayLabel")}</span>
+                          <span className="text-sm font-semibold text-hs-black">
+                            {day ? shortDate(day) : t("dayToChoose")}
+                            {which === "return" && range && range.start === range.end ? (
+                              <span className="font-normal text-muted"> · {t("sameDay")}</span>
+                            ) : null}
+                          </span>
+                        </button>
+                        <div className="w-28 shrink-0">
+                          <TimeSelect
+                            id={which === "pickup" ? "pickup-time" : "return-time"}
+                            name={which === "pickup" ? "pickup_time" : "return_time"}
+                            label={t("timeLabel")}
+                            value={which === "pickup" ? startTime : endTime}
+                            options={which === "pickup" ? startSlots : endSlots}
+                            onChange={which === "pickup" ? setStartTime : setEndTime}
+                            invalid={which === "pickup" ? error === "pickupInPast" : error === "returnBeforePickup" || error === "tooShort"}
+                            placeholder={t("timePick")}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -321,30 +338,6 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
               ) : null}
             </>
           )}
-          {range ? (
-            <div className="flex flex-col gap-2 sm:flex-row md:flex-col lg:flex-row">
-              <TimeSelect
-                id="pickup-time"
-                name="pickup_time"
-                label={t("pickupTime")}
-                value={startTime}
-                options={startSlots}
-                onChange={setStartTime}
-                invalid={error === "pickupInPast"}
-                placeholder={t("timePick")}
-              />
-              <TimeSelect
-                id="return-time"
-                name="return_time"
-                label={t("returnTime")}
-                value={endTime}
-                options={endSlots}
-                onChange={setEndTime}
-                invalid={error === "returnBeforePickup" || error === "tooShort"}
-                placeholder={t("timePick")}
-              />
-            </div>
-          ) : null}
           <p className="text-xs text-muted">{t("hostHours", { from: openFrom, until: openUntil })}</p>
           {busyShown.length ? (
             <p className="text-sm text-hs-black">

@@ -473,13 +473,15 @@
     "jetboardSafety": "Jetboard is only for people aged {age} or older. Always wear a life jacket, stay in areas allowed for jets and follow local rules.",
     "birthDateLabel": "Date of birth",
     "birthDateHint": "We need it once to confirm you are {age} or older. The team checks it against your ID.",
-    "pickupDay": "Pickup day",
-    "returnDay": "Return day",
     "dayToChoose": "Choose",
     "sameDay": "same day",
-    "stepPickup": "Tap the day you'll pick up. Green days are open.",
-    "stepReturn": "Now tap the return day. If it's the same day, just pick the times below.",
-    "rangeBlocked": "A day between pickup and return isn't open by the Host. Choose another return day."
+    "stepPickup": "Tap the pickup day on the calendar and choose the time. Green days are open.",
+    "stepReturn": "Now tap the return day (it can be the same day) and choose the time.",
+    "rangeBlocked": "A day between pickup and return isn't open by the Host. Choose another return day.",
+    "pickupBlock": "Pickup",
+    "returnBlock": "Return",
+    "dayLabel": "Day",
+    "timeLabel": "Time"
   },
   "errorPage": {
     "title": "Something went wrong",
