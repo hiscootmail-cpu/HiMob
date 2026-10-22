@@ -37,7 +37,8 @@
     "rights": "© {year} Hi Scoot. All rights reserved.",
     "legalLabel": "Legal documents",
     "terms": "Terms of Use",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "help": "Help center"
   },
   "designSystem": {
     "badge": "Review page",
@@ -516,7 +517,8 @@
       "cancelTextUnpaid": "Nothing has been charged yet, so there is no cost. The Host will be notified. This action cannot be undone.",
       "cancelTextPaid": "You get {refund} back (the daily rate). The platform fee ({fee}) is not refunded. The Host will be notified. This action cannot be undone.",
       "requestAgain": "Request again",
-      "expiredText": "The deadline passed (the Host didn't answer or payment wasn't made in time). The time is free again: request again or message the Host."
+      "expiredText": "The deadline passed (the Host didn't answer or payment wasn't made in time). The time is free again: request again or message the Host.",
+      "sos": "SOS: problem during use"
     },
     "list": {
       "title": "My bookings",
@@ -557,7 +559,8 @@
       "cancelUntil": "You can cancel until {deadline} (24 hours before pick-up). We refund {refund} (the daily rate); the platform fee ({fee}) is not refunded.",
       "cancelDeadlinePassed": "The cancellation deadline ended on {deadline} (24 hours before pick-up).",
       "times": "Pick-up: {pickup} · Return: {return}",
-      "rejectedReason": "Host's reason: {reason}"
+      "rejectedReason": "Host's reason: {reason}",
+      "reportProblem": "Report a problem with this booking"
     },
     "payment": {
       "title": "Payment",
@@ -1310,7 +1313,8 @@
         "ongoing": "You have ongoing bookings. Complete or cancel them before deleting your account.",
         "failed": "We couldn't delete your account right now. Please try again."
       }
-    }
+    },
+    "help": "Help center"
   },
   "notifications": {
     "title": "Notifications",
@@ -1341,7 +1345,10 @@
       "returnWaiting": "{name} confirmed the return. Your turn.",
       "bookingExpired": "Deadline passed: {title}",
       "cityAvailable": "New equipment in {name}: {title}",
-      "hostDemand": "Hosts wanted in {name}: list your equipment and earn extra income"
+      "hostDemand": "Hosts wanted in {name}: list your equipment and earn extra income",
+      "supportNew": "Support from {name}: {title}",
+      "supportReply": "The Hi Scoot team replied: {title}",
+      "sosAlert": "SOS from {name}: {title}"
     }
   },
   "admin": {
@@ -1449,7 +1456,8 @@
     "scootWorld": "Scoot World",
     "coupons": "Coupons",
     "operations": "Operations",
-    "toolsLabel": "Admin tools"
+    "toolsLabel": "Admin tools",
+    "support": "Support"
   },
   "mercadoPago": {
     "connect": {
@@ -1930,5 +1938,151 @@
     "submit": "Notify me",
     "signUp": "Create an account to be notified",
     "done": "Done! You'll be notified when there is equipment in {city}."
+  },
+  "help": {
+    "title": "Help center",
+    "subtitle": "Quick answers and a chat with the Hi Scoot team.",
+    "faqTitle": "Frequently asked questions",
+    "faq": {
+      "payment": {
+        "title": "Payment",
+        "how": {
+          "q": "How do I pay for a booking?",
+          "a": "Through Mercado Pago, by card, no account needed. Payment is only requested after the Host accepts, and you have 10 minutes to pay."
+        },
+        "when": {
+          "q": "When am I charged?",
+          "a": "Only after the Host accepts, when you pay. Requesting a booking costs nothing."
+        }
+      },
+      "booking": {
+        "title": "Bookings and deadlines",
+        "deadlines": {
+          "q": "How long does the Host have to answer?",
+          "a": "Up to 20 minutes when pickup is the same day, and up to 24 hours when it's scheduled. If the deadline passes, the time is free again: you can request again or message the Host."
+        },
+        "cancel": {
+          "q": "Can I cancel?",
+          "a": "Yes, up to 24 hours before pickup. If you cancel a paid booking, you get the rental back; the 15% platform fee isn't refunded. If the Host cancels, you get everything back."
+        }
+      },
+      "handoff": {
+        "title": "Pickup and return",
+        "pickup": {
+          "q": "How does pickup work?",
+          "a": "At the agreed time, scan the QR code on the equipment (or type the code), take a photo and confirm. The Host confirms too. Return works the same way."
+        },
+        "late": {
+          "q": "What if I return late?",
+          "a": "Each late hour is charged at the equipment's hourly price + 15%. If you'll be late, message the Host as soon as possible."
+        }
+      },
+      "damage": {
+        "title": "Damage, accidents and theft",
+        "who": {
+          "q": "Who is responsible for damage or theft?",
+          "a": "The Rider is responsible for the equipment during the rental period, from pickup to return. Pickup and return photos record the equipment's condition."
+        },
+        "emergency": {
+          "q": "What to do in an emergency?",
+          "a": "First, stay safe and call 192 (ambulance), 193 (fire) or 190 (police). Then use the SOS button on your active booking: it alerts the Hi Scoot team and the Host right away."
+        }
+      },
+      "account": {
+        "title": "Account and ID",
+        "document": {
+          "q": "Why do you ask for my ID?",
+          "a": "For everyone's safety, the ID is requested when you rent or list. The team checks it by hand. Accent, abbreviation or married-name differences are common and the team sorts them out with you."
+        },
+        "phone": {
+          "q": "Who sees my phone number?",
+          "a": "Only the other person in the booking, and only after it's accepted."
+        }
+      },
+      "host": {
+        "title": "For Hosts",
+        "paid": {
+          "q": "When do I get paid?",
+          "a": "As soon as the Rider pays, your share goes straight to your Mercado Pago account. When you can withdraw depends on your Mercado Pago account. See Host → Earnings."
+        },
+        "visible": {
+          "q": "Why isn't my listing in search?",
+          "a": "It must be approved by the team, available and have open days. Use \"Repeat every week\" in Available days so you don't forget."
+        }
+      }
+    },
+    "contactTitle": "Talk to the team",
+    "contactText": "Write your question or problem. The chat is saved and the Hi Scoot team answers here and with a notification.",
+    "signInToTalk": "Sign in to talk to the team",
+    "topicLabel": "Topic",
+    "topicPlaceholder": "Choose a topic",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us what happened. If it's about a booking, say which one.",
+    "sendToTeam": "Send to the team",
+    "mine": "My conversations",
+    "topics": {
+      "payment": "Payment",
+      "booking": "Booking",
+      "handoff": "Pickup or return",
+      "damage": "Damage or accident",
+      "identity": "ID and account",
+      "host": "Listing and earnings",
+      "other": "Something else",
+      "accident": "Accident",
+      "theft": "Theft",
+      "breakdown": "Equipment fault"
+    },
+    "status": {
+      "open": "Waiting for the team",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "ticketTitle": "Conversation",
+    "ticketInfo": "The Hi Scoot team answers here. You get a notification when they reply.",
+    "back": "Back to the Help center",
+    "reply": "Write to the team",
+    "replyTeam": "Reply",
+    "send": "Send",
+    "closeTicket": "Close conversation",
+    "team": "Hi Scoot team",
+    "you": "You",
+    "person": "Person",
+    "seeLocation": "See location on the map",
+    "sosSent": "SOS sent. The Hi Scoot team and the Host were alerted now. If there's danger, call 192, 193 or 190.",
+    "errors": {
+      "messageRequired": "Write the message.",
+      "messageTooLong": "Use at most 2,000 characters.",
+      "topicRequired": "Choose a topic.",
+      "unexpected": "Couldn't send right now. Try again.",
+      "tooMany": "Too many conversations in a short time. Use the ones already open."
+    },
+    "sos": {
+      "title": "SOS",
+      "subtitle": "A problem during your rental? Your safety first. Then alert the team and the Host.",
+      "back": "Back to the booking",
+      "emergencyTitle": "Emergency: call now",
+      "emergency": {
+        "samu": "Ambulance",
+        "fire": "Fire",
+        "police": "Police"
+      },
+      "what": "What happened?",
+      "details": "Details (optional)",
+      "detailsPlaceholder": "Where you are and how the equipment is.",
+      "location": "Send my location",
+      "locationOk": "Location ready",
+      "locationHint": "Helps the team and the Host reach you.",
+      "send": "Send SOS",
+      "notActive": "SOS is available during the rental (from pickup to return).",
+      "responsibility": "Reminder: the Rider is responsible for the equipment during the rental period. Take photos of what happened if you can."
+    },
+    "admin": {
+      "title": "Support",
+      "subtitle": "SOS and open conversations come first.",
+      "back": "Back to admin",
+      "backList": "Back to Support",
+      "empty": "No conversations yet.",
+      "booking": "Booking:"
+    }
   }
 }

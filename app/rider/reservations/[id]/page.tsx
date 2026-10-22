@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 
@@ -107,6 +108,10 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
       ) : null}
 
       <BookingActions booking={booking} showDetails={false} />
+      {/* Reportar problema: abre um atendimento com a equipe já ligado a esta reserva. */}
+      <Link href={`/help?booking=${booking.id}#contato`} className="w-fit text-sm font-semibold text-hs-black underline underline-offset-2">
+        {t("reportProblem")}
+      </Link>
     </div>
   );
 }

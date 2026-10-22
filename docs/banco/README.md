@@ -41,3 +41,4 @@ Novos tipos e jetboard para maiores de 21: `docs/banco/testes-novos-tipos.sql`, 
 Prazos de resposta e pagamento: `docs/banco/testes-prazos.sql`, também depois de todas as migrações.
 Cidade sem oferta: `docs/banco/testes-cidade-sem-oferta.sql`, também depois de todas as migrações.
 Dias que se repetem e simulador: `docs/banco/testes-dias-semanais.sql`, também depois de todas as migrações.
+Central de ajuda e SOS: `docs/banco/testes-atendimento.sql`, também depois de todas as migrações.

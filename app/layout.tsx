@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -19,6 +19,15 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
+
+/**
+ * Site sempre claro: no modo escuro do celular, o navegador não escurece o
+ * cabeçalho, o rodapé nem as telas (decisão de 22/10/2026).
+ */
+export const viewport: Viewport = {
+  colorScheme: "only light",
+  themeColor: "#ffffff",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");

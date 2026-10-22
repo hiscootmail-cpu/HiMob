@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { signOut } from "@/app/auth/actions";
 import { DeleteAccount } from "@/app/settings/delete-account";
 import { LanguageChoice } from "@/app/settings/language-choice";
-import { ShieldAdminIcon, UserIcon, VerifiedBadgeIcon, type IconProps } from "@/components/icons";
+import { ChatIcon, ShieldAdminIcon, UserIcon, VerifiedBadgeIcon, type IconProps } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { requireUser } from "@/lib/session";
@@ -67,6 +67,7 @@ export default async function SettingsPage() {
             label={t("identity.label")}
             extra={<Badge tone={identityTone[user.identity]}>{tIdentity(user.identity)}</Badge>}
           />
+          <Row href="/help" icon={ChatIcon} label={t("help")} />
           {user.is_admin ? <Row href="/admin" icon={ShieldAdminIcon} label={t("admin")} /> : null}
         </ul>
       </section>

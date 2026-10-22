@@ -37,7 +37,8 @@
     "rights": "© {year} Hi Scoot. Todos os direitos reservados.",
     "legalLabel": "Documentos legais",
     "terms": "Termos de Uso",
-    "privacy": "Política de Privacidade"
+    "privacy": "Política de Privacidade",
+    "help": "Central de ajuda"
   },
   "designSystem": {
     "badge": "Página de conferência",
@@ -516,7 +517,8 @@
       "cancelTextUnpaid": "Nada foi cobrado ainda, então não há custo. O Host será avisado. Esta ação não pode ser desfeita.",
       "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita.",
       "requestAgain": "Pedir de novo",
-      "expiredText": "O prazo venceu (o Host não respondeu ou o pagamento não foi feito a tempo). O horário voltou a ficar livre: peça de novo ou fale com o Host."
+      "expiredText": "O prazo venceu (o Host não respondeu ou o pagamento não foi feito a tempo). O horário voltou a ficar livre: peça de novo ou fale com o Host.",
+      "sos": "SOS: problema no uso"
     },
     "list": {
       "title": "Minhas reservas",
@@ -557,7 +559,8 @@
       "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
       "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
       "times": "Retirada: {pickup} · Devolução: {return}",
-      "rejectedReason": "Motivo do Host: {reason}"
+      "rejectedReason": "Motivo do Host: {reason}",
+      "reportProblem": "Reportar problema nesta reserva"
     },
     "payment": {
       "title": "Pagamento",
@@ -1310,7 +1313,8 @@
         "ongoing": "Você tem reservas em andamento. Conclua ou cancele antes de excluir a conta.",
         "failed": "Não foi possível excluir a conta agora. Tente de novo."
       }
-    }
+    },
+    "help": "Central de ajuda"
   },
   "notifications": {
     "title": "Notificações",
@@ -1341,7 +1345,10 @@
       "returnWaiting": "{name} confirmou a devolução. Falta você.",
       "bookingExpired": "Prazo vencido: {title}",
       "cityAvailable": "Chegou equipamento em {name}: {title}",
-      "hostDemand": "Demanda por Hosts em {name}: cadastre seu equipamento e faça renda extra"
+      "hostDemand": "Demanda por Hosts em {name}: cadastre seu equipamento e faça renda extra",
+      "supportNew": "Atendimento de {name}: {title}",
+      "supportReply": "A equipe Hi Scoot respondeu: {title}",
+      "sosAlert": "SOS de {name}: {title}"
     }
   },
   "admin": {
@@ -1449,7 +1456,8 @@
     "scootWorld": "Mundo Scoot",
     "coupons": "Cupons",
     "operations": "Operação",
-    "toolsLabel": "Ferramentas do painel"
+    "toolsLabel": "Ferramentas do painel",
+    "support": "Atendimento"
   },
   "mercadoPago": {
     "connect": {
@@ -1930,5 +1938,151 @@
     "submit": "Avisar quando tiver",
     "signUp": "Criar conta para ser avisado",
     "done": "Pronto! Você vai ser avisado quando tiver equipamento em {city}."
+  },
+  "help": {
+    "title": "Central de ajuda",
+    "subtitle": "Respostas rápidas e conversa com a equipe Hi Scoot.",
+    "faqTitle": "Perguntas frequentes",
+    "faq": {
+      "payment": {
+        "title": "Pagamento",
+        "how": {
+          "q": "Como eu pago a reserva?",
+          "a": "Pelo Mercado Pago, com cartão, sem precisar ter conta lá. O pagamento só é pedido depois que o Host aceita, e você tem 10 minutos para pagar."
+        },
+        "when": {
+          "q": "Quando sou cobrado?",
+          "a": "Só depois do aceite do Host, no momento em que você paga. Pedir uma reserva não cobra nada."
+        }
+      },
+      "booking": {
+        "title": "Reserva e prazos",
+        "deadlines": {
+          "q": "Quanto tempo o Host tem para responder?",
+          "a": "Até 20 minutos quando a retirada é no mesmo dia, e até 24 horas quando é agendada. Se o prazo vencer, o horário volta a ficar livre: você pode pedir de novo ou falar com o Host."
+        },
+        "cancel": {
+          "q": "Posso cancelar?",
+          "a": "Sim, até 24 horas antes da retirada. Se você cancelar uma reserva paga, recebe de volta o valor do aluguel; a taxa da plataforma (15%) não volta. Se o Host cancelar, você recebe tudo de volta."
+        }
+      },
+      "handoff": {
+        "title": "Retirada e devolução",
+        "pickup": {
+          "q": "Como funciona a retirada?",
+          "a": "No horário combinado, leia o QR code colado no equipamento (ou digite o código), tire uma foto do equipamento e confirme. O Host confirma junto. Na devolução é o mesmo processo."
+        },
+        "late": {
+          "q": "E se eu atrasar a devolução?",
+          "a": "Cada hora de atraso é cobrada pelo valor da hora do equipamento + 15%. Se for atrasar, avise o Host pelo chat o quanto antes."
+        }
+      },
+      "damage": {
+        "title": "Dano, acidente e furto",
+        "who": {
+          "q": "Quem responde por dano ou furto?",
+          "a": "O Rider responde pelo equipamento durante o período de uso, da retirada até a devolução. As fotos da retirada e da devolução servem de registro do estado do equipamento."
+        },
+        "emergency": {
+          "q": "O que fazer numa emergência?",
+          "a": "Primeiro, cuide da sua segurança e ligue 192 (SAMU), 193 (Bombeiros) ou 190 (Polícia). Depois, use o botão SOS na sua reserva em uso: ele avisa na hora a equipe Hi Scoot e o Host."
+        }
+      },
+      "account": {
+        "title": "Conta e documento",
+        "document": {
+          "q": "Por que pedem meu documento?",
+          "a": "Para a segurança de todos, o documento é pedido na hora de alugar ou anunciar. A equipe confere manualmente. Diferenças de acento, abreviação ou nome de casada são comuns e a equipe resolve com você."
+        },
+        "phone": {
+          "q": "Quem vê meu telefone?",
+          "a": "Só a outra pessoa da reserva, e só depois que a reserva é aceita."
+        }
+      },
+      "host": {
+        "title": "Para Hosts",
+        "paid": {
+          "q": "Quando eu recebo?",
+          "a": "Na hora em que o Rider paga, sua parte vai direto para a sua conta Mercado Pago. O prazo para sacar é o da sua conta Mercado Pago. Veja tudo na aba Host → Ganhos."
+        },
+        "visible": {
+          "q": "Por que meu anúncio não aparece na busca?",
+          "a": "Ele precisa estar aprovado pela equipe, disponível e com dias liberados. Use \"Repetir toda semana\" em Dias disponíveis para não esquecer."
+        }
+      }
+    },
+    "contactTitle": "Falar com a equipe",
+    "contactText": "Escreva sua dúvida ou problema. A conversa fica salva e a equipe Hi Scoot responde aqui e por aviso.",
+    "signInToTalk": "Entrar para falar com a equipe",
+    "topicLabel": "Assunto",
+    "topicPlaceholder": "Escolha o assunto",
+    "messageLabel": "Mensagem",
+    "messagePlaceholder": "Conte o que aconteceu. Se for sobre uma reserva, diga qual.",
+    "sendToTeam": "Enviar para a equipe",
+    "mine": "Meus atendimentos",
+    "topics": {
+      "payment": "Pagamento",
+      "booking": "Reserva",
+      "handoff": "Retirada ou devolução",
+      "damage": "Dano ou acidente",
+      "identity": "Documento e conta",
+      "host": "Anúncio e ganhos",
+      "other": "Outro assunto",
+      "accident": "Acidente",
+      "theft": "Furto ou roubo",
+      "breakdown": "Defeito no equipamento"
+    },
+    "status": {
+      "open": "Aguardando a equipe",
+      "answered": "Respondido",
+      "closed": "Encerrado"
+    },
+    "ticketTitle": "Atendimento",
+    "ticketInfo": "A equipe Hi Scoot responde aqui. Você recebe um aviso quando chegar resposta.",
+    "back": "Voltar para a Central de ajuda",
+    "reply": "Escrever para a equipe",
+    "replyTeam": "Responder",
+    "send": "Enviar",
+    "closeTicket": "Encerrar atendimento",
+    "team": "Equipe Hi Scoot",
+    "you": "Você",
+    "person": "Pessoa",
+    "seeLocation": "Ver localização no mapa",
+    "sosSent": "SOS enviado. A equipe Hi Scoot e o Host foram avisados agora. Se houver risco, ligue 192, 193 ou 190.",
+    "errors": {
+      "messageRequired": "Escreva a mensagem.",
+      "messageTooLong": "Use no máximo 2.000 caracteres.",
+      "topicRequired": "Escolha o assunto.",
+      "unexpected": "Não deu para enviar agora. Tente de novo.",
+      "tooMany": "Muitos atendimentos em pouco tempo. Use os que já estão abertos."
+    },
+    "sos": {
+      "title": "SOS",
+      "subtitle": "Problema durante o uso? Primeiro a sua segurança. Depois avise a equipe e o Host.",
+      "back": "Voltar para a reserva",
+      "emergencyTitle": "Emergência: ligue agora",
+      "emergency": {
+        "samu": "SAMU",
+        "fire": "Bombeiros",
+        "police": "Polícia"
+      },
+      "what": "O que aconteceu?",
+      "details": "Detalhes (opcional)",
+      "detailsPlaceholder": "Onde você está e como está o equipamento.",
+      "location": "Enviar minha localização",
+      "locationOk": "Localização pronta",
+      "locationHint": "Ajuda a equipe e o Host a chegarem até você.",
+      "send": "Enviar SOS",
+      "notActive": "O SOS fica disponível durante o uso (da retirada até a devolução).",
+      "responsibility": "Lembrete: o Rider responde pelo equipamento durante o período de uso. Registre o que aconteceu com fotos, se puder."
+    },
+    "admin": {
+      "title": "Atendimento",
+      "subtitle": "SOS e atendimentos abertos aparecem primeiro.",
+      "back": "Voltar ao painel",
+      "backList": "Voltar para Atendimento",
+      "empty": "Nenhum atendimento ainda.",
+      "booking": "Reserva:"
+    }
   }
 }
