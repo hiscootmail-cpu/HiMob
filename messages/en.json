@@ -1335,7 +1335,8 @@
     },
     "scootWorld": "Scoot World",
     "coupons": "Coupons",
-    "operations": "Operations"
+    "operations": "Operations",
+    "toolsLabel": "Admin tools"
   },
   "mercadoPago": {
     "connect": {

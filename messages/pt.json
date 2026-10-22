@@ -1335,7 +1335,8 @@
     },
     "scootWorld": "Mundo Scoot",
     "coupons": "Cupons",
-    "operations": "Operação"
+    "operations": "Operação",
+    "toolsLabel": "Ferramentas do painel"
   },
   "mercadoPago": {
     "connect": {
