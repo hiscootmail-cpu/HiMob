@@ -1,11 +1,12 @@
 "use client";
 
 import { startTransition, useActionState, useRef, useState } from "react";
-import { Bike, LocateFixed } from "lucide-react";
+import { LocateFixed } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import type { ListingState } from "@/app/host/equipment/actions";
-import { CheckCircleIcon, ScooterIcon } from "@/components/icons";
+import { CheckCircleIcon } from "@/components/icons";
+import { EquipmentTypeIcon } from "@/components/equipment/equipment-type-icon";
 import { CityField } from "@/components/city-field";
 import { AvailabilityEditor } from "@/components/host/availability-editor";
 import { PhotoPicker } from "@/components/host/photo-picker";
@@ -140,8 +141,10 @@ export function ListingForm({ action, mode, defaults, cityPick = null, days }: L
   }
 
   const types: { value: EquipmentType; icon: React.ReactNode }[] = [
-    { value: "scooter", icon: <ScooterIcon className="size-7" /> },
-    { value: "ebike", icon: <Bike className="size-7" aria-hidden strokeWidth={1.8} /> },
+    { value: "scooter", icon: <EquipmentTypeIcon type="scooter" className="size-7" /> },
+    { value: "ebike", icon: <EquipmentTypeIcon type="ebike" className="size-7" /> },
+    { value: "eskate", icon: <EquipmentTypeIcon type="eskate" className="size-7" /> },
+    { value: "jetboard", icon: <EquipmentTypeIcon type="jetboard" className="size-7" /> },
   ];
 
   const sectionClass = "flex min-w-0 flex-col gap-4 rounded-lg border border-line bg-hs-white p-4 sm:p-5";

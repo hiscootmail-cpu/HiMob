@@ -22,7 +22,7 @@ type Operations = {
   riders: number;
   riders_verified: number;
   hosts: number;
-  equipment: { scooter?: TypeNumbers; ebike?: TypeNumbers };
+  equipment: Partial<Record<(typeof TYPES)[number], TypeNumbers>>;
   pickups_today: number;
   queue_listings: number;
   queue_edits: number;
@@ -32,7 +32,7 @@ type Operations = {
 /** Filtro escolhido (?r=): "city:Mogi Mirim", "state:BR:São Paulo" ou "country:BR". */
 type Filter = { p_city: string | null; p_state: string | null; p_country: string | null };
 
-const TYPES = ["scooter", "ebike"] as const;
+const TYPES = ["scooter", "ebike", "eskate", "jetboard"] as const;
 const EMPTY: TypeNumbers = { published: 0, with_days: 0, in_use: 0 };
 
 /** Números de exemplo da demonstração (sem Supabase). */
@@ -40,7 +40,12 @@ const EXAMPLE: Operations = {
   riders: 42,
   riders_verified: 18,
   hosts: 6,
-  equipment: { scooter: { published: 9, with_days: 7, in_use: 2 }, ebike: { published: 3, with_days: 2, in_use: 1 } },
+  equipment: {
+    scooter: { published: 9, with_days: 7, in_use: 2 },
+    ebike: { published: 3, with_days: 2, in_use: 1 },
+    eskate: { published: 1, with_days: 1, in_use: 0 },
+    jetboard: { published: 1, with_days: 0, in_use: 0 },
+  },
   pickups_today: 4,
   queue_listings: 1,
   queue_edits: 0,
@@ -98,13 +103,14 @@ type TripDemand = {
   next90: number;
   wants_scooter: number;
   wants_ebike: number;
-  wants_both: number;
+  wants_eskate: number;
+  wants_jetboard: number;
   equipment: number;
 };
 
 const EXAMPLE_DEMAND: TripDemand[] = [
-  { city: "Ubatuba", city_state: "SP", next7: 3, next30: 8, next90: 15, wants_scooter: 7, wants_ebike: 3, wants_both: 5, equipment: 0 },
-  { city: "Rio de Janeiro", city_state: "RJ", next7: 1, next30: 4, next90: 9, wants_scooter: 4, wants_ebike: 2, wants_both: 3, equipment: 2 },
+  { city: "Ubatuba", city_state: "SP", next7: 3, next30: 8, next90: 15, wants_scooter: 10, wants_ebike: 5, wants_eskate: 2, wants_jetboard: 4, equipment: 0 },
+  { city: "Rio de Janeiro", city_state: "RJ", next7: 1, next30: 4, next90: 9, wants_scooter: 6, wants_ebike: 4, wants_eskate: 1, wants_jetboard: 0, equipment: 2 },
 ];
 
 /** Viagens marcadas pelos Riders, por cidade (demanda futura, decisão de 22/10/2026). */
@@ -251,7 +257,7 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
               <p className="rounded-lg border border-dashed border-line px-4 py-6 text-center text-sm text-muted">{t("tripsEmpty")}</p>
             ) : (
               <div className="overflow-x-auto rounded-lg border border-line">
-                <table className="w-full min-w-[640px] text-left text-sm text-hs-black">
+                <table className="w-full min-w-[720px] text-left text-sm text-hs-black">
                   <thead className="bg-surface text-xs text-muted">
                     <tr>
                       <th scope="col" className="px-4 py-3 font-semibold">{t("tripCity")}</th>
@@ -260,7 +266,8 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
                       <th scope="col" className="px-3 py-3 text-right font-semibold">{t("next90")}</th>
                       <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsScooter")}</th>
                       <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsEbike")}</th>
-                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsBoth")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsEskate")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsJetboard")}</th>
                       <th scope="col" className="px-4 py-3 text-right font-semibold">{t("tripEquipment")}</th>
                     </tr>
                   </thead>
@@ -275,7 +282,8 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
                         <td className="px-3 py-3 text-right font-semibold">{row.next90}</td>
                         <td className="px-3 py-3 text-right">{row.wants_scooter}</td>
                         <td className="px-3 py-3 text-right">{row.wants_ebike}</td>
-                        <td className="px-3 py-3 text-right">{row.wants_both}</td>
+                        <td className="px-3 py-3 text-right">{row.wants_eskate}</td>
+                        <td className="px-3 py-3 text-right">{row.wants_jetboard}</td>
                         <td className={cn("px-4 py-3 text-right font-semibold", row.equipment === 0 && "text-error")}>{row.equipment}</td>
                       </tr>
                     ))}

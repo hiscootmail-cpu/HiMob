@@ -6,6 +6,7 @@ import { MapPinIcon } from "@/components/icons";
 import { BackLink } from "@/components/rider/back-link";
 import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSteps } from "@/components/rider/booking-steps";
+import { JetboardSafety } from "@/components/equipment/jetboard-safety";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { getRiderBooking } from "@/lib/bookings-db";
 import { riderCancelPolicy } from "@/lib/cancellation";
@@ -53,6 +54,7 @@ export default async function TrackReservationPage({ params }: PageProps<"/rider
       <div className="rounded-lg border border-line bg-hs-white p-4">
         <BookingSummary booking={booking} />
       </div>
+      {booking.equipment.type === "jetboard" ? <JetboardSafety /> : null}
 
       {banner ? (
         <div role="status" className="flex flex-col gap-1 rounded-md bg-surface px-4 py-3 text-sm text-hs-black">

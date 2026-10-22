@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { BackLink } from "@/components/rider/back-link";
+import { JetboardSafety } from "@/components/equipment/jetboard-safety";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { HandoffForm } from "@/components/rider/handoff-form";
 import { HANDOFF_WAIT_HOURS } from "@/lib/bookings";
@@ -27,6 +28,7 @@ export default async function PickupPage({ params }: PageProps<"/rider/reservati
       <div className="rounded-lg border border-line bg-hs-white p-4">
         <BookingSummary booking={booking} />
       </div>
+      {booking.equipment.type === "jetboard" ? <JetboardSafety /> : null}
       {booking.status === "confirmed" && booking.confirmed?.pickup.rider ? (
         <div role="status" className="flex flex-col gap-1 rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
           <p className="font-semibold">{t("waitingTitle")}</p>

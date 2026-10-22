@@ -339,12 +339,14 @@
   },
   "equipmentType": {
     "scooter": "E-scooter",
-    "ebike": "E-bike"
+    "ebike": "E-bike",
+    "eskate": "Electric skateboard",
+    "jetboard": "Jetboard"
   },
   "explore": {
     "title": "Rent near you",
     "searchLabel": "Search equipment",
-    "searchPlaceholder": "Search e-scooter, e-bike or neighborhood",
+    "searchPlaceholder": "Search scooter, bike, skateboard, jetboard or area",
     "typeFilterLabel": "Equipment type",
     "filterAll": "All",
     "nearMe": "Near me",
@@ -424,7 +426,10 @@
       "tooShort": "The minimum rental is 1 hour.",
       "timeInvalid": "Choose times in 30-minute steps.",
       "outsideHours": "Choose times within the Host’s hours.",
-      "timesTaken": "That time is already booked (or without a 1-hour gap). Choose another."
+      "timesTaken": "That time is already booked (or without a 1-hour gap). Choose another.",
+      "birthDateRequired": "Enter your date of birth.",
+      "birthDateInvalid": "Invalid date of birth.",
+      "tooYoung": "Jetboard is only for people aged 21 or older."
     },
     "hostReviewCount": "({count, plural, one {# review} other {# reviews}} as a Host)",
     "hostNoReviews": "No reviews as a Host yet",
@@ -466,7 +471,10 @@
     },
     "couponRental": "Coupon {code}: {percent}% off the rental",
     "couponFee": "Coupon {code}: {percent}% off the fee",
-    "couponAppliedDiscount": "Coupon {code} applied: {rental}% off the rental and {fee}% off the fee."
+    "couponAppliedDiscount": "Coupon {code} applied: {rental}% off the rental and {fee}% off the fee.",
+    "jetboardSafety": "Jetboard is only for people aged {age} or older. Always wear a life jacket, stay in areas allowed for jets and follow local rules.",
+    "birthDateLabel": "Date of birth",
+    "birthDateHint": "We need it once to confirm you are {age} or older. The team checks it against your ID."
   },
   "errorPage": {
     "title": "Something went wrong",
@@ -684,7 +692,7 @@
     "freeWithCoupon": "Free · coupon {code}",
     "travel": {
       "title": "My trips",
-      "text": "Add the trips where you will need a scooter or bike, even ahead of time. From leaving to back, Explore opens in the trip city.",
+      "text": "Add the trips where you will need a scooter, bike, skateboard or jetboard, even ahead of time. From leaving to back, Explore opens in the trip city.",
       "add": "Add trip",
       "empty": "No trips yet.",
       "now": "Now",
@@ -698,11 +706,12 @@
       "city": "Trip city",
       "from": "Leaving on",
       "until": "Back on",
-      "wantsLabel": "What do you plan to use?",
+      "wantsLabel": "What do you plan to use? (pick one or more)",
       "wants": {
         "scooter": "Scooter",
         "ebike": "Bike",
-        "both": "Both"
+        "eskate": "Skateboard",
+        "jetboard": "Jetboard"
       },
       "datesHint": "Trips can't overlap. After you're back, the site goes back to your city by itself.",
       "cancel": "Cancel",
@@ -735,7 +744,7 @@
       "back": "Back to My listings",
       "subtitle": "Fill in your equipment details. The Hi Scoot team checks it before publishing.",
       "becomeTitle": "Become a Host",
-      "becomeText": "List your e-scooter or e-bike and earn with every day it is rented.",
+      "becomeText": "List your e-scooter, e-bike, electric skateboard or jetboard and earn with every day it is rented.",
       "becomeStep1": "1. Add your equipment with photos, daily price and times.",
       "becomeStep2": "2. The Hi Scoot team checks and publishes your listing.",
       "becomeStep3": "3. You accept requests and get paid through Mercado Pago.",
@@ -762,7 +771,9 @@
       "typeLabel": "Type",
       "types": {
         "scooter": "E-scooter",
-        "ebike": "E-bike"
+        "ebike": "E-bike",
+        "eskate": "Electric skateboard",
+        "jetboard": "Jetboard"
       },
       "titleLabel": "Listing title",
       "titlePlaceholder": "E.g.: 10-inch scooter",
@@ -847,7 +858,7 @@
       "subtitle": "Your equipment, the team review and the QR label.",
       "new": "New listing",
       "emptyTitle": "You have no listings yet",
-      "emptyText": "List your e-scooter or e-bike and start getting requests.",
+      "emptyText": "List your e-scooter, e-bike, electric skateboard or jetboard and start getting requests.",
       "review": {
         "pending": "Under review",
         "approved": "Published",
@@ -1756,8 +1767,9 @@
     "next90": "Within 90 days",
     "wantsScooter": "Scooter",
     "wantsEbike": "Bike",
-    "wantsBoth": "Both",
-    "tripEquipment": "Equipment there"
+    "tripEquipment": "Equipment there",
+    "wantsEskate": "Skateboard",
+    "wantsJetboard": "Jetboard"
   },
   "cityField": {
     "placeholder": "Type and pick from the list"

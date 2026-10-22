@@ -2,17 +2,18 @@
 
 import { useActionState, useState, useTransition } from "react";
 import Link from "next/link";
-import { Bell, BellOff, TicketPercent } from "lucide-react";
+import { Bell, BellOff, LifeBuoy, TicketPercent } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { ChatIcon, CheckCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/text-field";
 import { MonthCalendar } from "@/components/equipment/month-calendar";
 import { GAP_HOURS, type Schedule } from "@/lib/availability-rules";
 import { daysBetween, rentalHours, saoPauloTime, timeSlots } from "@/lib/booking";
 import { durationText } from "@/lib/duration";
 import { discountedBreakdown, hostHourlyPrice, PLATFORM_FEE_PERCENT, rentalHostAmount, riderDailyPrice } from "@/lib/pricing";
-import type { Equipment } from "@/lib/equipment";
+import { JETBOARD_MIN_AGE, type Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError, type CouponPreview } from "./actions";
 
@@ -31,6 +32,8 @@ type BookingPanelProps = {
    * não enviou; "review" = em análise. Até a aprovação, só vê e conversa.
    */
   verification?: "send" | "review" | null;
+  /** Jetboard: a pessoa já informou a data de nascimento? Se não, pede aqui. */
+  hasBirthDate?: boolean;
 };
 
 type LocalError = "pickupInPast" | "returnBeforePickup" | "tooShort" | "timesTaken";
@@ -94,7 +97,7 @@ function TalkToHost({ equipmentId, label }: { equipmentId: string; label: string
  * dias liberados pelo Host e a hora de retirar e de devolver, de 30 em 30
  * minutos, dentro do atendimento. Mínimo de 1 hora. O preço sai da diária.
  */
-export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist = false, verification = null }: BookingPanelProps) {
+export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist = false, verification = null, hasBirthDate = false }: BookingPanelProps) {
   const t = useTranslations("equipment");
   const tDuration = useTranslations("duration");
   const format = useFormatter();
@@ -140,6 +143,8 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
       setCoupon(result.ok ? { code, kind: result.kind, rentalPercent: result.rentalPercent, feePercent: result.feePercent } : { code, error: result.error });
     });
   };
+  // Controlado: o campo não se apaga se o pedido voltar com erro.
+  const [birthDate, setBirthDate] = useState("");
   const [state, formAction, pending] = useActionState(requestBooking.bind(null, equipment.id), {} as BookingRequestState);
   const [waitlist, waitlistAction, waitlistPending] = useActionState(toggleWaitlist.bind(null, equipment.id), {
     onWaitlist,
@@ -411,6 +416,27 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
           </button>
         )}
 
+        {/* Jetboard (decisão de 22/10/2026): aviso de segurança e só para maiores de 21 anos. */}
+        {equipment.type === "jetboard" ? (
+          <div className="flex flex-col gap-3 rounded-md border border-line bg-surface p-3">
+            <p role="note" className="flex gap-2 text-sm text-hs-black">
+              <LifeBuoy className="mt-0.5 size-4 shrink-0" aria-hidden />
+              <span>{t("jetboardSafety", { age: JETBOARD_MIN_AGE })}</span>
+            </p>
+            {hasBirthDate ? null : (
+              <TextField
+                name="birth_date"
+                type="date"
+                value={birthDate}
+                onChange={(event) => setBirthDate(event.currentTarget.value)}
+                label={t("birthDateLabel")}
+                hint={t("birthDateHint", { age: JETBOARD_MIN_AGE })}
+                max={today}
+                required
+              />
+            )}
+          </div>
+        ) : null}
         {verification ? (
           <p role="note" className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
             {t.rich(verification === "send" ? "verifyToSend" : "verifyToBook", {
