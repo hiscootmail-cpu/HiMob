@@ -684,7 +684,7 @@
     "freeWithCoupon": "Free · coupon {code}",
     "travel": {
       "title": "Going on a trip?",
-      "text": "Set the city and how long you stay. Explore opens right there.",
+      "text": "Set the city and dates, even ahead of time. During the trip, Explore opens right there.",
       "start": "I'm traveling",
       "activeTitle": "Traveling: {city}",
       "activeText": "Until {until}. Explore opens in this city and goes back to normal by itself afterwards.",
@@ -693,15 +693,22 @@
       "end": "End trip",
       "formTitle": "I'm traveling",
       "city": "Trip city",
-      "until": "Staying until",
-      "untilHint": "The next day, the site goes back to your city by itself.",
+      "until": "Back on",
       "cancel": "Cancel",
       "save": "Save trip",
       "errors": {
         "untilRequired": "Tell us until when you stay.",
         "untilPast": "The return date can't be before today.",
-        "untilTooFar": "Trips can be up to 1 year."
-      }
+        "untilTooFar": "Trips can be up to 1 year.",
+        "fromRequired": "Tell us when you leave.",
+        "fromPast": "The leaving date can't be before today.",
+        "fromTooFar": "Trips must start within 1 year.",
+        "untilBeforeFrom": "The return must be on or after the leaving day."
+      },
+      "scheduledTitle": "Trip planned: {city}",
+      "scheduledText": "From {from} to {until}. When it starts, Explore opens in this city.",
+      "from": "Leaving on",
+      "datesHint": "You can set it ahead. From leaving to back, Explore opens in the trip city; afterwards it goes back to your city by itself."
     }
   },
   "host": {
