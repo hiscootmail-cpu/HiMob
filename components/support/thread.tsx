@@ -27,12 +27,13 @@ export function Thread({ ticket, viewer }: { ticket: SupportTicket; viewer: "use
       ) : null}
       <ol className="flex flex-col gap-2">
         {ticket.messages.map((m) => {
-          const right = viewer === "team" ? m.from_team : !m.from_team;
+          const fromUs = m.from_team || m.from_ai;
+          const right = viewer === "team" ? fromUs : !fromUs;
           return (
             <li key={m.id} className={cn("flex", right ? "justify-end" : "justify-start")}>
-              <div className={cn("max-w-[85%] rounded-lg px-3 py-2", right ? "bg-green-soft" : "bg-surface")}>
+              <div className={cn("max-w-[85%] rounded-lg px-3 py-2", m.from_ai ? "bg-purple-soft" : right ? "bg-green-soft" : "bg-surface")}>
                 <p className="text-xs font-semibold text-hs-black">
-                  {m.from_team ? t("team") : viewer === "team" ? (ticket.user_name ?? t("person")) : t("you")}
+                  {m.from_ai ? t("assistant") : m.from_team ? t("team") : viewer === "team" ? (ticket.user_name ?? t("person")) : t("you")}
                 </p>
                 <p className="text-sm whitespace-pre-line text-hs-black">{m.body}</p>
                 <p className="mt-1 text-[11px] text-muted">

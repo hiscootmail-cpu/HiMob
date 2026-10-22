@@ -6,6 +6,7 @@ import { BackLink } from "@/components/rider/back-link";
 import { ReplyForm } from "@/components/support/reply-form";
 import { Thread } from "@/components/support/thread";
 import { getCurrentUser } from "@/lib/session";
+import { aiSupportOn } from "@/lib/ai-support";
 import { getTicket } from "@/lib/support";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,7 +32,7 @@ export default async function TicketPage({ params, searchParams }: PageProps<"/h
           {t("sosSent")}
         </p>
       ) : (
-        <p className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">{t("ticketInfo")}</p>
+        <p className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">{aiSupportOn() && ticket.kind === "help" ? t("ticketInfoAi") : t("ticketInfo")}</p>
       )}
       <Thread ticket={ticket} viewer="user" />
       <ReplyForm ticketId={ticket.id} />

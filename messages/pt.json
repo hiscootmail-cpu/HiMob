@@ -2083,6 +2083,9 @@
       "backList": "Voltar para Atendimento",
       "empty": "Nenhum atendimento ainda.",
       "booking": "Reserva:"
-    }
+    },
+    "assistant": "Assistente virtual (IA)",
+    "ticketInfoAi": "O assistente virtual responde na hora e a equipe Hi Scoot acompanha a conversa. Não envie documentos, senhas ou dados de cartão aqui.",
+    "aiNotice": "Respostas automáticas feitas por um assistente virtual (IA do Google). A equipe Hi Scoot acompanha e entra quando precisar. Não envie documentos, senhas ou dados de cartão."
   }
 }
