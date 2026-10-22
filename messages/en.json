@@ -2083,6 +2083,9 @@
       "backList": "Back to Support",
       "empty": "No conversations yet.",
       "booking": "Booking:"
-    }
+    },
+    "assistant": "Virtual assistant (AI)",
+    "ticketInfoAi": "The virtual assistant answers right away and the Hi Scoot team follows the conversation. Don't send IDs, passwords or card details here.",
+    "aiNotice": "Automatic answers by a virtual assistant (Google AI). The Hi Scoot team follows and steps in when needed. Don't send IDs, passwords or card details."
   }
 }

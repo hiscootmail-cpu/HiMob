@@ -5,6 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { ContactForm } from "@/components/support/contact-form";
 import { Badge } from "@/components/ui/badge";
 import { isSignedIn } from "@/lib/session";
+import { aiSupportOn } from "@/lib/ai-support";
 import { listMyTickets } from "@/lib/support";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,6 +67,7 @@ export default async function HelpPage({ searchParams }: PageProps<"/help">) {
           {t("contactTitle")}
         </h2>
         <p className="text-sm text-muted">{t("contactText")}</p>
+        {aiSupportOn() ? <p className="rounded-md bg-purple-soft px-3 py-2 text-xs text-on-purple">{t("aiNotice")}</p> : null}
         <ContactForm signedIn={signedIn} bookingId={typeof booking === "string" ? booking : undefined} />
       </section>
 

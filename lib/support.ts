@@ -14,7 +14,7 @@ export const SOS_TOPICS = ["accident", "theft", "breakdown", "other"] as const;
 export type SupportTopic = (typeof HELP_TOPICS)[number] | (typeof SOS_TOPICS)[number];
 export const MESSAGE_MAX = 2000;
 
-export type SupportMessage = { id: string; from_team: boolean; body: string; created_at: string; mine: boolean };
+export type SupportMessage = { id: string; from_team: boolean; from_ai: boolean; body: string; created_at: string; mine: boolean };
 
 export type SupportTicket = {
   id: string;
@@ -46,8 +46,8 @@ function exampleTickets(): SupportTicket[] {
       updated_at: new Date(now - 2 * 3600_000).toISOString(),
       user_name: "Rafael S.",
       messages: [
-        { id: "m1", from_team: false, mine: true, body: "Paguei a reserva e ainda aparece \"falta pagar\".", created_at: new Date(now - 3 * 3600_000).toISOString() },
-        { id: "m2", from_team: true, mine: false, body: "Oi, Rafael! O pagamento foi confirmado agora. Boa viagem!", created_at: new Date(now - 2 * 3600_000).toISOString() },
+        { id: "m1", from_team: false, from_ai: false, mine: true, body: "Paguei a reserva e ainda aparece \"falta pagar\".", created_at: new Date(now - 3 * 3600_000).toISOString() },
+        { id: "m2", from_team: true, from_ai: false, mine: false, body: "Oi, Rafael! O pagamento foi confirmado agora. Boa viagem!", created_at: new Date(now - 2 * 3600_000).toISOString() },
       ],
     },
   ];
@@ -60,17 +60,25 @@ type TicketRow = Omit<SupportTicket, "messages" | "user_name"> & { user_id: stri
 async function withMessages(rows: TicketRow[], meId: string, names?: Map<string, string>): Promise<SupportTicket[]> {
   if (!rows.length) return [];
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("support_messages")
-    .select("id, ticket_id, author_id, from_team, body, created_at")
-    .in("ticket_id", rows.map((r) => r.id))
-    .order("created_at");
+  const ids = rows.map((r) => r.id);
+  const full = await supabase.from("support_messages").select("id, ticket_id, author_id, from_team, from_ai, body, created_at").in("ticket_id", ids).order("created_at");
+  // Se o banco ainda não tiver o campo da IA, lê sem ele.
+  const { data } = full.error
+    ? await supabase.from("support_messages").select("id, ticket_id, author_id, from_team, body, created_at").in("ticket_id", ids).order("created_at")
+    : full;
   return rows.map((row) => ({
     ...row,
     user_name: names?.get(row.user_id),
     messages: (data ?? [])
       .filter((m) => m.ticket_id === row.id)
-      .map((m) => ({ id: m.id, from_team: m.from_team, body: m.body, created_at: m.created_at, mine: m.author_id === meId })),
+      .map((m) => ({
+        id: m.id,
+        from_team: m.from_team,
+        from_ai: Boolean((m as { from_ai?: boolean }).from_ai),
+        body: m.body,
+        created_at: m.created_at,
+        mine: m.author_id === meId,
+      })),
   }));
 }
 

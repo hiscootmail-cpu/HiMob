@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { aiReply } from "@/lib/ai-support";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -34,6 +35,8 @@ export async function openTicket(_prev: SupportState, formData: FormData): Promi
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("open_support_ticket", { p_topic: topic, p_body: body, p_booking: booking });
   if (error || !data) return { error: error?.message === "too_many" ? "tooMany" : "unexpected" };
+  // Assistente virtual (IA) responde na hora, se estiver ligado; a equipe acompanha.
+  await aiReply(data as string);
   redirect(`/help/${data}`);
 }
 
@@ -51,6 +54,7 @@ export async function sendMessage(ticketId: string, _prev: SupportState, formDat
     const supabase = await createClient();
     const { error } = await supabase.rpc("send_support_message", { p_ticket: ticketId, p_body: body, p_close: close });
     if (error) return { error: "unexpected" };
+    if (!user.is_admin) await aiReply(ticketId);
   }
   revalidatePath(`/help/${ticketId}`);
   revalidatePath(`/admin/support/${ticketId}`);
