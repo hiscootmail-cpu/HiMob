@@ -37,16 +37,6 @@ select pg_temp.ok((select country = 'BR' and state = 'Rio de Janeiro' from publi
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 select pg_temp.fails($$update public.profiles set second_city = 'Santos', second_city_state = null where id = auth.uid()$$, '23514', 'Cidade secundária sem estado não vale');
 select pg_temp.fails($$update public.profiles set city_state = 'São Paulo' where id = auth.uid()$$, '23514', 'Estado só com a sigla');
--- Em viagem: cidade, estado e data de volta juntos
-update public.profiles set travel_city = 'Ubatuba', travel_city_state = 'SP', travel_from = public.today_sp() + 2, travel_until = public.today_sp() + 7 where id = auth.uid();
-select pg_temp.ok((select travel_city = 'Ubatuba' from public.profiles where id = auth.uid()), 'Pessoa marca a viagem');
-select pg_temp.fails($$update public.profiles set travel_until = null where id = auth.uid()$$, '23514', 'Viagem sem data de volta não vale');
-select pg_temp.fails($$update public.profiles set travel_from = null where id = auth.uid()$$, '23514', 'Viagem sem data de ida não vale');
-select pg_temp.fails($$update public.profiles set travel_from = travel_until + 1 where id = auth.uid()$$, '23514', 'Ida depois da volta não vale');
-update public.profiles set travel_city = null, travel_city_state = null, travel_from = null, travel_until = null where id = auth.uid();
-select pg_temp.ok((select travel_city is null from public.profiles where id = auth.uid()), 'Pessoa encerra a viagem');
-reset role;
-select pg_temp.ok((select state_code = 'SP' from public.city_regions where city_key = public.city_key('Ubatuba')), 'Cidade da viagem entra nas regiões');
 select pg_temp.as_user('00000000-0000-0000-0000-00000000000d');
 update public.profiles set city = 'Bia', city_state = 'SP' where id = '00000000-0000-0000-0000-00000000000b';
 select pg_temp.as_user(null);

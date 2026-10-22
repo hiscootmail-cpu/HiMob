@@ -36,3 +36,4 @@ A equipe cadastra equipamentos da Hi Scoot: `docs/banco/testes-equipe-anuncia.sq
 Dias disponíveis e aluguel por horas: `docs/banco/testes-horarios.sql`, também depois de todas as migrações.
 Painel → Operação (números por cidade): `docs/banco/testes-operacao.sql`, também depois de todas as migrações.
 Cidade onde mora e cidade secundária: `docs/banco/testes-cidades.sql`, também depois de todas as migrações.
+Viagens do Rider e demanda: `docs/banco/testes-viagens.sql`, também depois de todas as migrações.

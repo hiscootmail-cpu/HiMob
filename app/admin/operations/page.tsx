@@ -90,6 +90,31 @@ function regionOptions(places: Place[], locale: string): RegionOption[] {
   return [...options.values()].sort((a, b) => order[a.kind] - order[b.kind] || a.label.localeCompare(b.label, "pt-BR"));
 }
 
+type TripDemand = {
+  city: string;
+  city_state: string;
+  next7: number;
+  next30: number;
+  next90: number;
+  wants_scooter: number;
+  wants_ebike: number;
+  wants_both: number;
+  equipment: number;
+};
+
+const EXAMPLE_DEMAND: TripDemand[] = [
+  { city: "Ubatuba", city_state: "SP", next7: 3, next30: 8, next90: 15, wants_scooter: 7, wants_ebike: 3, wants_both: 5, equipment: 0 },
+  { city: "Rio de Janeiro", city_state: "RJ", next7: 1, next30: 4, next90: 9, wants_scooter: 4, wants_ebike: 2, wants_both: 3, equipment: 2 },
+];
+
+/** Viagens marcadas pelos Riders, por cidade (demanda futura, decisão de 22/10/2026). */
+async function loadTripDemand(filter: Filter): Promise<TripDemand[] | null> {
+  if (!supabaseConfigured()) return EXAMPLE_DEMAND;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("admin_trip_demand", filter);
+  return error ? null : ((data ?? []) as TripDemand[]);
+}
+
 async function loadOperations(filter: Filter): Promise<Operations | null> {
   if (!supabaseConfigured()) return EXAMPLE;
   const supabase = await createClient();
@@ -127,7 +152,11 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
   const { r } = await searchParams;
   const regionValue = typeof r === "string" && r.trim() ? r.trim() : null;
   const filter = parseFilter(regionValue);
-  const [ops, places] = await Promise.all([loadOperations(filter), supabaseConfigured() ? listPlaces() : EXAMPLE_PLACES]);
+  const [ops, places, demand] = await Promise.all([
+    loadOperations(filter),
+    supabaseConfigured() ? listPlaces() : EXAMPLE_PLACES,
+    loadTripDemand(filter),
+  ]);
   const options = regionOptions(places, await getLocale());
   const selected =
     regionValue && (filter.p_city || filter.p_state || filter.p_country)
@@ -211,6 +240,49 @@ export default async function AdminOperationsPage({ searchParams }: PageProps<"/
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <Tile label={t("pickupsToday")} value={ops.pickups_today} hint={t("pickupsTodayHint")} />
             </div>
+          </section>
+
+          <section aria-labelledby="ops-trips" className="flex flex-col gap-3">
+            <h2 id="ops-trips" className="text-lg font-semibold text-hs-black">{t("trips")}</h2>
+            <p className="-mt-2 text-xs text-muted">{t("tripsHint")}</p>
+            {demand === null ? (
+              <p className="rounded-lg border border-dashed border-line px-4 py-6 text-center text-sm text-hs-black">{t("error")}</p>
+            ) : demand.length === 0 ? (
+              <p className="rounded-lg border border-dashed border-line px-4 py-6 text-center text-sm text-muted">{t("tripsEmpty")}</p>
+            ) : (
+              <div className="overflow-x-auto rounded-lg border border-line">
+                <table className="w-full min-w-[640px] text-left text-sm text-hs-black">
+                  <thead className="bg-surface text-xs text-muted">
+                    <tr>
+                      <th scope="col" className="px-4 py-3 font-semibold">{t("tripCity")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("next7")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("next30")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("next90")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsScooter")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsEbike")}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{t("wantsBoth")}</th>
+                      <th scope="col" className="px-4 py-3 text-right font-semibold">{t("tripEquipment")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {demand.map((row) => (
+                      <tr key={`${row.city}-${row.city_state}`} className="border-t border-line">
+                        <th scope="row" className="px-4 py-3 font-medium">
+                          {row.city} <span className="text-muted">- {row.city_state}</span>
+                        </th>
+                        <td className="px-3 py-3 text-right font-semibold">{row.next7}</td>
+                        <td className="px-3 py-3 text-right font-semibold">{row.next30}</td>
+                        <td className="px-3 py-3 text-right font-semibold">{row.next90}</td>
+                        <td className="px-3 py-3 text-right">{row.wants_scooter}</td>
+                        <td className="px-3 py-3 text-right">{row.wants_ebike}</td>
+                        <td className="px-3 py-3 text-right">{row.wants_both}</td>
+                        <td className={cn("px-4 py-3 text-right font-semibold", row.equipment === 0 && "text-error")}>{row.equipment}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
 
           <section aria-labelledby="ops-queues" className="flex flex-col gap-3">

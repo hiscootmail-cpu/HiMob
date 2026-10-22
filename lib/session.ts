@@ -27,11 +27,6 @@ export type CurrentUser = {
   /** Cidade secundária (opcional): trabalho, estudo, fim de semana. */
   second_city: string;
   second_city_state: string;
-  /** Em viagem (aba Rider): cidade, estado, ida e volta (AAAA-MM-DD). Vazio = sem viagem marcada. */
-  travel_city: string;
-  travel_city_state: string;
-  travel_from: string;
-  travel_until: string;
   /** Já virou Host? (conta única: a mesma pessoa é Rider e Host) */
   is_host: boolean;
   /** Faz parte da equipe Hi Scoot? Só a equipe abre o painel do administrador. */
@@ -49,10 +44,6 @@ const demoUser: CurrentUser = {
   city_state: "SP",
   second_city: "",
   second_city_state: "",
-  travel_city: "",
-  travel_city_state: "",
-  travel_from: "",
-  travel_until: "",
   is_host: true,
   is_admin: true,
   identity: "approved",
@@ -67,10 +58,6 @@ type ProfileRow = {
   city_state: string | null;
   second_city: string | null;
   second_city_state: string | null;
-  travel_city?: string | null;
-  travel_city_state?: string | null;
-  travel_from?: string | null;
-  travel_until?: string | null;
   is_host: boolean;
   identity_status: string;
   deleted_at: string | null;
@@ -78,17 +65,7 @@ type ProfileRow = {
 
 const PROFILE_COLUMNS = "city, city_state, second_city, second_city_state, is_host, identity_status, deleted_at";
 
-/**
- * Lê o perfil. Se o banco ainda não tiver os campos da viagem (atualização do
- * banco chegando depois do site), lê sem eles em vez de deixar a pessoa sem perfil.
- */
 async function readProfile(supabase: Awaited<ReturnType<typeof createClient>>, id: string) {
-  const full = await supabase
-    .from("profiles")
-    .select(`${PROFILE_COLUMNS}, travel_city, travel_city_state, travel_from, travel_until`)
-    .eq("id", id)
-    .maybeSingle<ProfileRow>();
-  if (!full.error) return full;
   return supabase.from("profiles").select(PROFILE_COLUMNS).eq("id", id).maybeSingle<ProfileRow>();
 }
 
@@ -122,10 +99,6 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     city_state: profile?.city_state ?? "",
     second_city: profile?.second_city ?? "",
     second_city_state: profile?.second_city_state ?? "",
-    travel_city: profile?.travel_city ?? "",
-    travel_city_state: profile?.travel_city_state ?? "",
-    travel_from: profile?.travel_from ?? "",
-    travel_until: profile?.travel_until ?? "",
     is_host: profile?.is_host ?? false,
     is_admin: secret?.is_admin ?? false,
     identity: (profile?.identity_status as IdentityStatus | undefined) ?? "pending",
@@ -166,16 +139,4 @@ export async function identityStep(user: Pick<CurrentUser, "id" | "identity" | "
     .eq("user_id", user.id)
     .eq("status", "pending");
   return count ? "review" : "send";
-}
-
-/** Viagem marcada que ainda não terminou (pode começar no futuro). */
-export function plannedTravel(user: CurrentUser | null, today: string): { city: string; uf: string; from: string; until: string } | null {
-  if (!user?.travel_city || !user.travel_city_state || !user.travel_until || user.travel_until < today) return null;
-  return { city: user.travel_city, uf: user.travel_city_state, from: user.travel_from || today, until: user.travel_until };
-}
-
-/** Viagem valendo hoje (da ida até a volta, inclusive). */
-export function activeTravel(user: CurrentUser | null, today: string) {
-  const travel = plannedTravel(user, today);
-  return travel && travel.from <= today ? travel : null;
 }
