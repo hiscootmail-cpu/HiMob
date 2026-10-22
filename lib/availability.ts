@@ -139,10 +139,36 @@ export async function setAvailableDays(equipmentId: string, days: string[], avai
   return { ok: true, kept };
 }
 
-/** Dias liberados e dias com reserva aceita (estes não podem sair), de hoje em diante. */
-export async function listingDays(equipmentId: string, today: string): Promise<{ available: string[]; booked: string[] }> {
-  const [available, schedule] = await Promise.all([listAvailableDays(equipmentId, today), equipmentSchedule(equipmentId, today)]);
+/** Dias liberados, dias com reserva aceita (estes não podem sair) e dias da semana que se repetem. */
+export async function listingDays(
+  equipmentId: string,
+  today: string,
+): Promise<{ available: string[]; booked: string[]; weekly: number[] }> {
+  const [available, schedule, weekly] = await Promise.all([
+    listAvailableDays(equipmentId, today),
+    equipmentSchedule(equipmentId, today),
+    listWeeklyDays(equipmentId),
+  ]);
   const iso = (ms: number) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(ms));
   const booked = [...new Set(schedule.busy.flatMap((b) => daysBetween(iso(b.start), iso(b.end))))].filter((d) => d >= today);
-  return { available, booked };
+  return { available, booked, weekly };
+}
+
+/** Dias da semana que se repetem (0 = domingo; decisão de 22/10/2026). */
+export async function listWeeklyDays(equipmentId: string): Promise<number[]> {
+  if (!supabaseConfigured()) return [];
+  const supabase = await createClient();
+  const { data } = await supabase.from("equipment_weekly_days").select("weekday").eq("equipment_id", equipmentId);
+  return (data ?? []).map((row) => Number(row.weekday)).sort();
+}
+
+/** Troca os dias da semana: o banco libera os próximos 90 dias e renova sozinho. */
+export async function setWeeklyDays(equipmentId: string, weekdays: number[]): Promise<boolean> {
+  if (!supabaseConfigured()) return true;
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_weekly_days", {
+    p_equipment: equipmentId,
+    p_weekdays: [...new Set(weekdays)].filter((d) => Number.isInteger(d) && d >= 0 && d <= 6),
+  });
+  return !error;
 }

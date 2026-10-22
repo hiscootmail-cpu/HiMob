@@ -28,7 +28,7 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
   const format = await getFormatter();
   const today = todayInSaoPaulo();
   const policy = editPolicy(listing, today, Boolean((await getCurrentUser())?.is_admin));
-  const { available, booked } = await listingDays(listing.id, today);
+  const { available, booked, weekly } = await listingDays(listing.id, today);
   const longDate = (date: string) =>
     format.dateTime(new Date(`${date}T12:00:00Z`), { day: "numeric", month: "long", timeZone: "UTC" });
 
@@ -70,7 +70,7 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
               return_time: listing.return_time,
             }}
             cityPick={findCity(listing.city)}
-            days={{ listingId: listing.id, today, initial: available, booked }}
+            days={{ listingId: listing.id, today, initial: available, booked, weekly }}
           />
         </>
       ) : (

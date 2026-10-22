@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { setAvailableDays } from "@/lib/availability";
+import { setAvailableDays, setWeeklyDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { checkCity } from "@/lib/br-cities-server";
 import { editPolicy, getHostListing } from "@/lib/host";
@@ -60,6 +60,16 @@ function chosenDays(formData: FormData): string[] {
     const today = todayInSaoPaulo();
     if (!Array.isArray(parsed)) return [];
     return [...new Set(parsed)].filter((d): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= today).slice(0, 400);
+  } catch {
+    return [];
+  }
+}
+
+/** Dias da semana marcados em "Repetir toda semana" (0 = domingo). */
+function chosenWeekdays(formData: FormData): number[] {
+  try {
+    const parsed: unknown = JSON.parse(String(formData.get("available_days_weekly") ?? "[]"));
+    return Array.isArray(parsed) ? [...new Set(parsed)].filter((d): d is number => Number.isInteger(d) && d >= 0 && d <= 6) : [];
   } catch {
     return [];
   }
@@ -139,6 +149,9 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
   // Dias marcados no próprio anúncio (decisão de 21/10/2026). Se falhar, dá para marcar depois.
   const days = chosenDays(formData);
   if (days.length) await setAvailableDays(created.id, days, true);
+  // Dias que se repetem toda semana (decisão de 22/10/2026).
+  const weekly = chosenWeekdays(formData);
+  if (weekly.length) await setWeeklyDays(created.id, weekly);
   // Equipamento da própria Hi Scoot: a equipe publica na hora (decisão de 20/10/2026).
   if ((await getCurrentUser())?.is_admin) {
     const { error: reviewError } = await supabase.rpc("review_listing", { p_id: created.id, p_approve: true, p_reason: null });

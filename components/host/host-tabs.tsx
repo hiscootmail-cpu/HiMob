@@ -2,19 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LayoutGrid } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { CalendarIcon, KeyIcon, WalletIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-/** Abas da área do Host: Visão geral, Meus anúncios e Reservas recebidas. */
+/** Abas da área do Host: Visão geral, Meus anúncios, Reservas recebidas e Ganhos. */
 export function HostTabs() {
   const t = useTranslations("host.tabs");
   const pathname = usePathname();
   const tabs = [
-    { href: "/host", label: t("overview"), icon: WalletIcon },
+    { href: "/host", label: t("overview"), icon: LayoutGrid },
     { href: "/host/equipment", label: t("listings"), icon: KeyIcon },
     { href: "/host/reservations", label: t("reservations"), icon: CalendarIcon },
+    { href: "/host/earnings", label: t("earnings"), icon: WalletIcon },
   ];
 
   return (
