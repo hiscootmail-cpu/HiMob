@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { cancelBooking, type CancelState } from "@/app/rider/reservations/actions";
+import { Deadline } from "@/components/bookings/deadline";
 import { ChatIcon, QrCodeIcon, StarIcon, WalletIcon } from "@/components/icons";
 import {
   AlertDialog,
@@ -61,6 +62,13 @@ function PrimaryAction({ booking }: { booking: Booking }) {
             <StarIcon />
             {t("review")}
           </Link>
+        </Button>
+      );
+    case "expired":
+      // Prazo vencido (decisão de 22/10/2026): dá para pedir de novo e conversar com o Host.
+      return (
+        <Button asChild>
+          <Link href={`/equipment/${booking.equipment.id}#reservar`}>{t("requestAgain")}</Link>
         </Button>
       );
     default:
@@ -125,6 +133,10 @@ export function BookingActions({
   const policy = riderCancelPolicy(booking);
 
   return (
+    <div className="flex flex-col gap-2">
+      {booking.status === "pending" && booking.respond_by ? <Deadline until={booking.respond_by} kind="riderWaitHost" /> : null}
+      {booking.status === "accepted" && booking.pay_by ? <Deadline until={booking.pay_by} kind="pay" /> : null}
+      {booking.status === "expired" ? <p className="text-sm text-hs-black">{t("expiredText")}</p> : null}
     <div
       className={cn(
         "flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center [&>*]:w-full sm:[&>*]:w-auto",
@@ -146,6 +158,7 @@ export function BookingActions({
         </Button>
       )}
       {policy.allowed ? <CancelButton booking={booking} policy={policy} /> : null}
+    </div>
     </div>
   );
 }

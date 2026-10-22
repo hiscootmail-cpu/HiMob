@@ -30,6 +30,7 @@ const tones: Record<BookingStatus, "pending" | "info" | "success" | "highlight" 
   completed: "neutral",
   rejected: "error",
   cancelled: "neutral",
+  expired: "neutral",
 };
 
 async function HostBookingCard({ booking }: { booking: HostBooking }) {

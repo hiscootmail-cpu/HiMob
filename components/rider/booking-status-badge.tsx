@@ -11,6 +11,7 @@ const tones = {
   completed: "neutral",
   rejected: "error",
   cancelled: "neutral",
+  expired: "neutral",
 } as const;
 
 /** Etiqueta com a situação da reserva. */

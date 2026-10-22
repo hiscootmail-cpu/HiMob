@@ -30,12 +30,14 @@ async function ownPhotoPath(formData: FormData): Promise<string | null> {
   return user && path.startsWith(`${user.id}/`) ? path : null;
 }
 
-export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" | "reasonRequired" };
+export type DecisionState = { done?: "accepted" | "rejected"; error?: "notAllowed" | "datesTaken" | "reasonRequired" | "expired" };
 
 /** Pedido novo: Aceitar ou Recusar (recusar pede um motivo curto, que o Rider vê). */
 export async function decideBooking(bookingId: string, decision: "accept" | "reject", reason = ""): Promise<DecisionState> {
   const booking = await getHostBooking(bookingId);
   if (!booking || booking.status !== "pending") return { error: "notAllowed" };
+  // Prazo para responder (20 min no mesmo dia, 24 h agendada; decisão de 22/10/2026).
+  if (decision === "accept" && booking.respond_by && new Date(booking.respond_by).getTime() < Date.now()) return { error: "expired" };
   if (decision === "reject" && !validRejectReason(reason)) return { error: "reasonRequired" };
   if (decision === "accept") {
     // Não aceita pedido em dias que já foram reservados ou bloqueados.
@@ -50,7 +52,7 @@ export async function decideBooking(bookingId: string, decision: "accept" | "rej
       p_reason: decision === "reject" ? reason.trim() : null,
     });
     if (error) {
-      const known = { dates_taken: "datesTaken", reason_required: "reasonRequired" } as const;
+      const known = { dates_taken: "datesTaken", reason_required: "reasonRequired", request_expired: "expired" } as const;
       return { error: known[error.message as keyof typeof known] ?? "notAllowed" };
     }
     revalidatePath("/host/reservations");

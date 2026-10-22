@@ -6,6 +6,7 @@ import { List, LoaderCircle, LocateFixed, Map as MapIcon, Plane, X } from "lucid
 import { useTranslations } from "next-intl";
 
 import { EquipmentCard } from "@/components/equipment/equipment-card";
+import { CityAlert } from "@/components/explore/city-alert";
 import { ScooterIcon, SearchIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/text-field";
@@ -28,7 +29,15 @@ function normalize(text: string) {
 }
 
 /** Home: busca com lista e mapa lado a lado no computador; no celular, alterna por botão. */
-export function ExploreView({ items, travelCity = null }: { items: Equipment[]; travelCity?: ChosenCity | null }) {
+export function ExploreView({
+  items,
+  travelCity = null,
+  signedIn = false,
+}: {
+  items: Equipment[];
+  travelCity?: ChosenCity | null;
+  signedIn?: boolean;
+}) {
   const t = useTranslations("explore");
   const tType = useTranslations("equipmentType");
   const [query, setQuery] = useState("");
@@ -202,6 +211,8 @@ export function ExploreView({ items, travelCity = null }: { items: Equipment[]; 
               <Button variant="outline" size="sm" onClick={clearFilters}>
                 {t("clearFilters")}
               </Button>
+              {/* Cidade sem oferta (decisão de 22/10/2026): avisar quando tiver. */}
+              <CityAlert signedIn={signedIn} city={cityFilter} />
             </div>
           ) : (
             results.map(({ item, km }) => (

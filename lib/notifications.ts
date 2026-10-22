@@ -23,6 +23,9 @@ export const notificationKinds = [
   "equipmentAvailable",
   "pickupWaiting",
   "returnWaiting",
+  "bookingExpired",
+  "cityAvailable",
+  "hostDemand",
 ] as const;
 
 export type NotificationKind = (typeof notificationKinds)[number];

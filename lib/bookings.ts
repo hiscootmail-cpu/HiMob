@@ -16,7 +16,8 @@ import { discountedBreakdown, type DiscountedBreakdown } from "@/lib/pricing";
  * Cancelamento e reembolso: ver lib/cancellation.ts (decisão de 09/10/2026).
  */
 
-export type BookingStatus = "pending" | "accepted" | "confirmed" | "active" | "completed" | "rejected" | "cancelled";
+/** "expired": o Host não respondeu ou o Rider não pagou no prazo (decisão de 22/10/2026). */
+export type BookingStatus = "pending" | "accepted" | "confirmed" | "active" | "completed" | "rejected" | "cancelled" | "expired";
 
 export type Booking = {
   id: string;
@@ -37,6 +38,9 @@ export type Booking = {
   pickup_time: string;
   return_time: string;
   status: BookingStatus;
+  /** Prazo para o Host responder (pedido) e para o Rider pagar (aceita), em ISO. */
+  respond_by?: string | null;
+  pay_by?: string | null;
   /** Endereço exato de retirada: só existe para o Rider depois do pagamento confirmado. */
   pickup_address: string | null;
   /** O Rider já avaliou esta reserva? */
@@ -56,6 +60,11 @@ export type Booking = {
    */
   confirmed?: Record<"pickup" | "return", { rider: boolean; host: boolean }>;
 };
+
+/** Prazos (decisão de 22/10/2026; o banco aplica os mesmos valores). */
+export const RESPOND_MINUTES_SAME_DAY = 20;
+export const RESPOND_HOURS_SCHEDULED = 24;
+export const PAY_MINUTES = 10;
 
 /** Prazo para a outra pessoa confirmar antes de a equipe Hi Scoot verificar. */
 export const HANDOFF_WAIT_HOURS = 2;

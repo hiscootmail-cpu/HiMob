@@ -37,7 +37,7 @@ export type PaymentResult =
   | { status: "approved" }
   | { status: "pending"; pix?: PixData }
   | { status: "rejected" }
-  | { status: "error"; error: "notAllowed" | "unavailable" };
+  | { status: "error"; error: "notAllowed" | "unavailable" | "expired" };
 
 /** PIX vence em 30 minutos (horário de Brasília, formato pedido pelo Mercado Pago). */
 export function pixExpiration() {
@@ -68,6 +68,8 @@ export async function payBookingWithMercadoPago(
   form: BrickFormData,
 ): Promise<PaymentResult> {
   if (booking.status !== "accepted") return { status: "error", error: "notAllowed" };
+  // Prazo de 10 minutos para pagar depois do aceite (decisão de 22/10/2026).
+  if (booking.pay_by && new Date(booking.pay_by).getTime() < Date.now()) return { status: "error", error: "expired" };
   if (!mercadoPagoServerReady() || !(await mercadoPagoOn())) return { status: "error", error: "unavailable" };
 
   const method: PaymentMethod = form.payment_method_id === "pix" ? "pix" : "card";

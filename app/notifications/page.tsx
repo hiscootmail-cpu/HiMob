@@ -9,6 +9,7 @@ import {
   ChatIcon,
   CheckCircleIcon,
   KeyIcon,
+  MapPinIcon,
   QrCodeIcon,
   StarIcon,
   VerifiedBadgeIcon,
@@ -40,6 +41,9 @@ const icons: Record<NotificationKind, React.ComponentType<IconProps>> = {
   newMessage: ChatIcon,
   equipmentAvailable: CalendarIcon,
   pickupWaiting: QrCodeIcon,
+  bookingExpired: CalendarIcon,
+  cityAvailable: MapPinIcon,
+  hostDemand: KeyIcon,
   returnWaiting: QrCodeIcon,
 };
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 
+import { Deadline } from "@/components/bookings/deadline";
 import { BackLink } from "@/components/rider/back-link";
 import { BookingSummary } from "@/components/rider/booking-summary";
 import { bookingPrice } from "@/lib/bookings";
@@ -67,6 +68,7 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
 
       <p className="rounded-md border border-line px-4 py-3 text-sm text-hs-black">{t("cancelPolicy")}</p>
 
+      {booking.status === "accepted" && booking.pay_by ? <Deadline until={booking.pay_by} kind="pay" /> : null}
       {booking.status === "accepted" && mpOn ? (
         <MercadoPagoPayment
           bookingId={booking.id}

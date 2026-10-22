@@ -141,7 +141,17 @@ export async function realBookings(role: "rider" | "host", id?: string): Promise
     .order("start_date", { ascending: false });
   if (id) query = query.eq("id", id);
   const { data } = await query;
-  return ((data ?? []) as unknown as Row[]).map(fromRow);
+  const bookings = ((data ?? []) as unknown as Row[]).map(fromRow);
+  // Prazos lidos à parte: se o banco ainda não tiver esses campos, a lista continua aparecendo.
+  if (bookings.length) {
+    const { data: deadlines } = await supabase.from("bookings").select("id, respond_by, pay_by").in("id", bookings.map((b) => b.id));
+    const byId = new Map((deadlines ?? []).map((d) => [d.id as string, d]));
+    for (const booking of bookings) {
+      booking.respond_by = (byId.get(booking.id)?.respond_by as string | null) ?? null;
+      booking.pay_by = (byId.get(booking.id)?.pay_by as string | null) ?? null;
+    }
+  }
+  return bookings;
 }
 
 /*

@@ -133,6 +133,8 @@ function booking(
     pickup_time: equipment.pickup_time,
     return_time: equipment.return_time,
     status,
+    // Exemplo de prazo: pedido agendado, Host com 24 horas para responder.
+    respond_by: status === "pending" ? new Date(Date.now() + 18 * 60 * 60_000).toISOString() : null,
     pickup_address: paid ? (exampleHostListings.find((l) => l.id === equipment.id)?.pickup_address ?? null) : null,
     rider_reviewed: false,
     host_reviewed,

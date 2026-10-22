@@ -23,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Deadline } from "@/components/bookings/deadline";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DocumentUpload } from "@/components/ui/document-upload";
@@ -324,6 +325,8 @@ export function HostBookingActions({ booking }: { booking: HostBooking }) {
 
   return (
     <div className="flex flex-col gap-2">
+      {booking.status === "pending" && booking.respond_by ? <Deadline until={booking.respond_by} kind="hostRespond" /> : null}
+      {booking.status === "accepted" && booking.pay_by ? <Deadline until={booking.pay_by} kind="hostWaitPay" /> : null}
       {booking.status === "pending" ? (
         <div className={row}>
           <Button loading={pending} onClick={() => decide("accept")}>

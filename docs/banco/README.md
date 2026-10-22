@@ -38,3 +38,5 @@ Painel → Operação (números por cidade): `docs/banco/testes-operacao.sql`, t
 Cidade onde mora e cidade secundária: `docs/banco/testes-cidades.sql`, também depois de todas as migrações.
 Viagens do Rider e demanda: `docs/banco/testes-viagens.sql`, também depois de todas as migrações.
 Novos tipos e jetboard para maiores de 21: `docs/banco/testes-novos-tipos.sql`, também depois de todas as migrações.
+Prazos de resposta e pagamento: `docs/banco/testes-prazos.sql`, também depois de todas as migrações.
+Cidade sem oferta: `docs/banco/testes-cidade-sem-oferta.sql`, também depois de todas as migrações.

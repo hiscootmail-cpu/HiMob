@@ -297,10 +297,10 @@
     "goHome": "Back to home",
     "rejected": {
       "title": "Upload your document again",
-      "description": "The name on the document did not match the name on your account. Upload the front and the back again.",
+      "description": "The name on the ID didn't match your account name. This is common (accents, abbreviations, married names) and the team reviews each case carefully. Send the front and back again, with a clear photo showing the full name.",
       "reasonLabel": "Reason given by our team",
       "exampleReason": "(Example) The name on the document is different from the name on your account.",
-      "lastAttempt": "Please note: this is your last attempt. If the name does not match again, your account will be blocked.",
+      "lastAttempt": "Before sending again, check that your account name matches the ID (you can change it in Profile). If the difference is an accent or abbreviation, that's fine: the team will sort it out with you.",
       "submit": "Upload document again"
     },
     "pending": {
@@ -308,9 +308,9 @@
       "description": "We received the front and back of your document. Our team will check the name and let you know as soon as it is done."
     },
     "blocked": {
-      "title": "Account blocked",
-      "description": "The name on the document did not match your account in two attempts. For security reasons, this account has been blocked.",
-      "canBrowse": "You can still browse the website, but you cannot rent or list."
+      "title": "Account under team review",
+      "description": "The name on the ID didn't match your account in two attempts. For your safety, renting and listing are paused until the team reviews the case with you.",
+      "canBrowse": "You can still browse the site. The operations team will contact you to sort it out."
     },
     "approved": {
       "title": "Identity verified",
@@ -495,7 +495,8 @@
       "completed": "Completed",
       "rejected": "Declined",
       "cancelled": "Cancelled",
-      "confirmedFree": "Confirmed (free), ready for pickup"
+      "confirmedFree": "Confirmed (free), ready for pickup",
+      "expired": "Expired"
     },
     "dates": "{start} to {end}",
     "days": "{count, plural, one {# day} other {# days}}",
@@ -513,7 +514,9 @@
       "cancelConfirm": "Cancel booking",
       "cancelled": "Booking cancelled.",
       "cancelTextUnpaid": "Nothing has been charged yet, so there is no cost. The Host will be notified. This action cannot be undone.",
-      "cancelTextPaid": "You get {refund} back (the daily rate). The platform fee ({fee}) is not refunded. The Host will be notified. This action cannot be undone."
+      "cancelTextPaid": "You get {refund} back (the daily rate). The platform fee ({fee}) is not refunded. The Host will be notified. This action cannot be undone.",
+      "requestAgain": "Request again",
+      "expiredText": "The deadline passed (the Host didn't answer or payment wasn't made in time). The time is free again: request again or message the Host."
     },
     "list": {
       "title": "My bookings",
@@ -574,7 +577,8 @@
       "splitInfo": "Payment processed by Mercado Pago. The Host's share is transferred automatically.",
       "errors": {
         "methodRequired": "Choose PIX or credit card.",
-        "notAllowed": "This booking is not awaiting payment."
+        "notAllowed": "This booking is not awaiting payment.",
+        "expired": "The payment deadline passed. Request the booking again."
       },
       "cancelPolicy": "Cancellation: you can cancel up to 24 hours before pick-up. In that case, we refund the daily rate; the platform fee is not refunded.",
       "testNotice": "Test payment: nothing is charged. Real payment (Mercado Pago) is coming soon.",
@@ -593,7 +597,8 @@
         "errors": {
           "rejected": "Payment declined. Check the details or use another card.",
           "unavailable": "Payment is unavailable right now. Please try again in a few minutes.",
-          "notAllowed": "This booking is not waiting for payment."
+          "notAllowed": "This booking is not waiting for payment.",
+          "expired": "The payment deadline passed. Request the booking again."
         }
       },
       "rentalOf": "Rental for {duration}",
@@ -1013,7 +1018,8 @@
         "completed": "Completed",
         "rejected": "Declined",
         "cancelled": "Cancelled",
-        "confirmedFree": "Confirmed (free), ready for pickup"
+        "confirmedFree": "Confirmed (free), ready for pickup",
+        "expired": "Expired"
       },
       "rider": "Rider: <link>{name}</link>",
       "when": "{start} to {end}",
@@ -1239,7 +1245,10 @@
       "newMessage": "New message from {name}",
       "equipmentAvailable": "Available again: {title}",
       "pickupWaiting": "{name} confirmed the pickup. Your turn.",
-      "returnWaiting": "{name} confirmed the return. Your turn."
+      "returnWaiting": "{name} confirmed the return. Your turn.",
+      "bookingExpired": "Deadline passed: {title}",
+      "cityAvailable": "New equipment in {name}: {title}",
+      "hostDemand": "Hosts wanted in {name}: list your equipment and earn extra income"
     }
   },
   "admin": {
@@ -1781,5 +1790,52 @@
     "secondCity": "Second city (optional)",
     "secondCityHint": "Where you work, study or spend weekends.",
     "save": "Continue"
+  },
+  "deadline": {
+    "riderWaitHost": "The Host answers by {time} · {left} left. If not, the request expires and you can ask again or message them.",
+    "hostRespond": "Answer by {time} · {left} left. After that the request expires and the time is free again.",
+    "pay": "Pay by {time} · {left} left. After that the booking expires and the time is free again.",
+    "hostWaitPay": "The Rider has until {time} to pay · {left} left.",
+    "over": "The deadline has passed. The screen updates in a moment.",
+    "lessThanMinute": "less than 1 minute",
+    "minutes": "{count, plural, one {# minute} other {# minutes}}",
+    "hours": "{h} h {m} min"
+  },
+  "howItWorks": {
+    "title": "How Hi Scoot works",
+    "subtitle": "Rent a scooter, bike, electric skateboard or jetboard from people in your city, by the hour or by the day.",
+    "steps": {
+      "find": {
+        "title": "Choose",
+        "text": "Search near you and see price, photos and reviews."
+      },
+      "request": {
+        "title": "Request a time",
+        "text": "Pick day and time. The Host answers within 20 min (same day) or 24 h."
+      },
+      "pay": {
+        "title": "Pay safely",
+        "text": "Through Mercado Pago, no account needed. You have 10 min after the Host accepts."
+      },
+      "pickup": {
+        "title": "Pick up with QR",
+        "text": "Scan the equipment QR and take a photo. The Host confirms too."
+      },
+      "return": {
+        "title": "Return and review",
+        "text": "Same steps on return. Then review the Host."
+      }
+    },
+    "signUp": "Create free account",
+    "becomeHost": "I want to list and earn",
+    "haveAccount": "Already have an account? <link>Sign in</link>"
+  },
+  "cityAlert": {
+    "title": "Nothing in your city?",
+    "text": "Ask to be notified. As soon as someone lists there, you'll get a notice. And we'll invite new Hosts to your city.",
+    "cityLabel": "City",
+    "submit": "Notify me",
+    "signUp": "Create an account to be notified",
+    "done": "Done! You'll be notified when there is equipment in {city}."
   }
 }
