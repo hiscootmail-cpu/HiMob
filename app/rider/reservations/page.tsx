@@ -5,12 +5,13 @@ import { getTranslations } from "next-intl/server";
 import { CalendarIcon } from "@/components/icons";
 import { BookingActions } from "@/components/rider/booking-actions";
 import { BookingSummary } from "@/components/rider/booking-summary";
-import { TravelCard } from "@/components/rider/travel-card";
+import { TripsCard } from "@/components/rider/trips-card";
 import { Button } from "@/components/ui/button";
 import { ONGOING, type Booking } from "@/lib/bookings";
 import { listRiderBookings } from "@/lib/bookings-db";
 import { addDays, todayInSaoPaulo } from "@/lib/booking";
-import { getCurrentUser, plannedTravel, requireUser } from "@/lib/session";
+import { getCurrentUser, requireUser } from "@/lib/session";
+import { listMyTrips, MAX_TRIPS } from "@/lib/trips";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -45,7 +46,7 @@ export default async function RiderReservationsPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-hs-black sm:text-3xl">{t("title")}</h1>
-      {user ? <TravelCard travel={plannedTravel(user, today)} today={today} maxDay={addDays(today, 365)} /> : null}
+      {user ? <TripsCard trips={await listMyTrips(today)} today={today} maxDay={addDays(today, 365)} maxTrips={MAX_TRIPS} /> : null}
 
       {bookings.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-lg border border-line px-6 py-12 text-center">

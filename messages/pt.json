@@ -683,32 +683,44 @@
     },
     "freeWithCoupon": "Grátis · cupom {code}",
     "travel": {
-      "title": "Vai viajar?",
-      "text": "Marque a cidade e as datas, mesmo com antecedência. Durante a viagem, o Explorar abre direto nela.",
-      "start": "Estou em viagem",
-      "activeTitle": "Em viagem: {city}",
-      "activeText": "Até {until}. O Explorar abre nessa cidade e volta ao normal sozinho depois.",
+      "title": "Minhas viagens",
+      "text": "Marque as viagens em que vai precisar de patinete ou bike, mesmo com antecedência. Da ida até a volta, o Explorar abre na cidade da viagem.",
+      "add": "Adicionar viagem",
+      "empty": "Nenhuma viagem marcada.",
+      "now": "Agora",
+      "planned": "Marcada",
+      "dates": "{from} a {until}",
       "explore": "Ver equipamentos",
-      "change": "Mudar",
-      "end": "Encerrar viagem",
-      "formTitle": "Estou em viagem",
+      "editTrip": "Mudar a viagem para {city}",
+      "deleteTrip": "Excluir a viagem para {city}",
+      "formNew": "Nova viagem",
+      "formEdit": "Mudar viagem",
       "city": "Cidade da viagem",
+      "from": "Vou em",
       "until": "Volto em",
+      "wantsLabel": "O que pretende usar?",
+      "wants": {
+        "scooter": "Patinete",
+        "ebike": "Bike",
+        "both": "Os dois"
+      },
+      "datesHint": "As viagens não podem cruzar datas. Depois da volta, o site volta para a sua cidade sozinho.",
       "cancel": "Cancelar",
       "save": "Salvar viagem",
       "errors": {
-        "untilRequired": "Informe até quando você fica.",
-        "untilPast": "A data de volta não pode ser antes de hoje.",
-        "untilTooFar": "Marque viagens de até 1 ano.",
         "fromRequired": "Informe quando você vai.",
         "fromPast": "A ida não pode ser antes de hoje.",
         "fromTooFar": "Marque viagens que começam em até 1 ano.",
-        "untilBeforeFrom": "A volta precisa ser no dia da ida ou depois."
-      },
-      "scheduledTitle": "Viagem marcada: {city}",
-      "scheduledText": "De {from} a {until}. Quando começar, o Explorar abre nessa cidade.",
-      "from": "Vou em",
-      "datesHint": "Pode marcar antes. Da ida até a volta o Explorar abre na cidade da viagem; depois, volta para a sua cidade sozinho."
+        "untilRequired": "Informe quando você volta.",
+        "untilPast": "A volta não pode ser antes de hoje.",
+        "untilBeforeFrom": "A volta precisa ser no dia da ida ou depois.",
+        "untilTooFar": "Marque viagens de até 1 ano.",
+        "wantsRequired": "Escolha o que pretende usar.",
+        "overlap": "Essas datas cruzam com outra viagem sua.",
+        "tooMany": "Você pode ter até {max} viagens marcadas.",
+        "cityRequired": "Escolha na lista a cidade da viagem.",
+        "cityInvalid": "Escolha a cidade na lista de sugestões."
+      }
     }
   },
   "host": {
@@ -1733,7 +1745,18 @@
       "city": "Cidade",
       "state": "Estado",
       "country": "País"
-    }
+    },
+    "trips": "Viagens marcadas",
+    "tripsHint": "Riders que vão estar em cada cidade (já lá ou chegando) e o que pretendem usar, comparado com os equipamentos publicados lá. Em vermelho: cidade sem equipamento.",
+    "tripsEmpty": "Nenhuma viagem marcada nos próximos 90 dias.",
+    "tripCity": "Cidade",
+    "next7": "Até 7 dias",
+    "next30": "Até 30 dias",
+    "next90": "Até 90 dias",
+    "wantsScooter": "Patinete",
+    "wantsEbike": "Bike",
+    "wantsBoth": "Os dois",
+    "tripEquipment": "Equipamentos lá"
   },
   "cityField": {
     "placeholder": "Digite e escolha na lista"

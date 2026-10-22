@@ -683,32 +683,44 @@
     },
     "freeWithCoupon": "Free · coupon {code}",
     "travel": {
-      "title": "Going on a trip?",
-      "text": "Set the city and dates, even ahead of time. During the trip, Explore opens right there.",
-      "start": "I'm traveling",
-      "activeTitle": "Traveling: {city}",
-      "activeText": "Until {until}. Explore opens in this city and goes back to normal by itself afterwards.",
+      "title": "My trips",
+      "text": "Add the trips where you will need a scooter or bike, even ahead of time. From leaving to back, Explore opens in the trip city.",
+      "add": "Add trip",
+      "empty": "No trips yet.",
+      "now": "Now",
+      "planned": "Planned",
+      "dates": "{from} to {until}",
       "explore": "See equipment",
-      "change": "Change",
-      "end": "End trip",
-      "formTitle": "I'm traveling",
+      "editTrip": "Change the trip to {city}",
+      "deleteTrip": "Delete the trip to {city}",
+      "formNew": "New trip",
+      "formEdit": "Change trip",
       "city": "Trip city",
+      "from": "Leaving on",
       "until": "Back on",
+      "wantsLabel": "What do you plan to use?",
+      "wants": {
+        "scooter": "Scooter",
+        "ebike": "Bike",
+        "both": "Both"
+      },
+      "datesHint": "Trips can't overlap. After you're back, the site goes back to your city by itself.",
       "cancel": "Cancel",
       "save": "Save trip",
       "errors": {
-        "untilRequired": "Tell us until when you stay.",
-        "untilPast": "The return date can't be before today.",
-        "untilTooFar": "Trips can be up to 1 year.",
         "fromRequired": "Tell us when you leave.",
         "fromPast": "The leaving date can't be before today.",
         "fromTooFar": "Trips must start within 1 year.",
-        "untilBeforeFrom": "The return must be on or after the leaving day."
-      },
-      "scheduledTitle": "Trip planned: {city}",
-      "scheduledText": "From {from} to {until}. When it starts, Explore opens in this city.",
-      "from": "Leaving on",
-      "datesHint": "You can set it ahead. From leaving to back, Explore opens in the trip city; afterwards it goes back to your city by itself."
+        "untilRequired": "Tell us when you're back.",
+        "untilPast": "The return date can't be before today.",
+        "untilBeforeFrom": "The return must be on or after the leaving day.",
+        "untilTooFar": "Trips can be up to 1 year.",
+        "wantsRequired": "Pick what you plan to use.",
+        "overlap": "These dates overlap another trip of yours.",
+        "tooMany": "You can have up to {max} planned trips.",
+        "cityRequired": "Pick the trip city from the list.",
+        "cityInvalid": "Pick the city from the suggestions."
+      }
     }
   },
   "host": {
@@ -1733,7 +1745,18 @@
       "city": "City",
       "state": "State",
       "country": "Country"
-    }
+    },
+    "trips": "Planned trips",
+    "tripsHint": "Riders who will be in each city (already there or arriving) and what they plan to use, compared with the equipment published there. In red: city with no equipment.",
+    "tripsEmpty": "No trips planned in the next 90 days.",
+    "tripCity": "City",
+    "next7": "Within 7 days",
+    "next30": "Within 30 days",
+    "next90": "Within 90 days",
+    "wantsScooter": "Scooter",
+    "wantsEbike": "Bike",
+    "wantsBoth": "Both",
+    "tripEquipment": "Equipment there"
   },
   "cityField": {
     "placeholder": "Type and pick from the list"
