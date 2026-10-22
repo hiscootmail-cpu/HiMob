@@ -15,6 +15,7 @@ const doneCount: Record<BookingStatus, number> = {
   completed: 5,
   rejected: 0,
   cancelled: 0,
+  expired: 0,
 };
 
 /** Etapa atual (destacada) em cada situação; -1 quando não há etapa em andamento. */
@@ -26,6 +27,7 @@ const currentIndex: Record<BookingStatus, number> = {
   completed: -1,
   rejected: -1,
   cancelled: -1,
+  expired: -1,
 };
 
 /** Passo a passo da reserva (tela 6 do PDF): aceita, paga, pronta, em uso, devolvida. */

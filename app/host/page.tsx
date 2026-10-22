@@ -28,6 +28,7 @@ const tones: Record<BookingStatus, "pending" | "info" | "success" | "highlight" 
   completed: "neutral",
   rejected: "error",
   cancelled: "neutral",
+  expired: "neutral",
 };
 
 /** Dias do período que olhamos para "dias liberados". */

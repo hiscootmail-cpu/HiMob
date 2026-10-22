@@ -297,10 +297,10 @@
     "goHome": "Voltar ao início",
     "rejected": {
       "title": "Envie o documento de novo",
-      "description": "O nome no documento não bateu com o nome do seu cadastro. Envie de novo a frente e o verso.",
+      "description": "O nome no documento ficou diferente do nome do cadastro. Isso é comum (acento, abreviação, nome de casada) e a equipe confere cada caso com calma. Envie de novo a frente e o verso, com a foto nítida e o nome inteiro aparecendo.",
       "reasonLabel": "Motivo informado pela equipe",
       "exampleReason": "(Exemplo) O nome no documento está diferente do nome informado no cadastro.",
-      "lastAttempt": "Atenção: esta é a última tentativa. Se o nome não bater de novo, o cadastro será bloqueado.",
+      "lastAttempt": "Antes de reenviar, confira se o nome do cadastro é o mesmo do documento (você pode ajustar em Perfil). Se a diferença for de acento ou abreviação, tudo bem: a equipe resolve com você.",
       "submit": "Reenviar documento"
     },
     "pending": {
@@ -308,9 +308,9 @@
       "description": "Recebemos a frente e o verso do seu documento. A equipe vai conferir o nome e avisar você assim que terminar."
     },
     "blocked": {
-      "title": "Cadastro bloqueado",
-      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Por segurança, este cadastro foi bloqueado.",
-      "canBrowse": "Você ainda pode navegar pelo site, mas não pode alugar nem anunciar."
+      "title": "Cadastro em verificação pela equipe",
+      "description": "O nome no documento não bateu com o cadastro em duas tentativas. Para sua segurança, alugar e anunciar ficam pausados até a equipe conferir o caso com você.",
+      "canBrowse": "Você continua podendo navegar pelo site. A equipe de operação entra em contato para resolver."
     },
     "approved": {
       "title": "Identidade verificada",
@@ -495,7 +495,8 @@
       "completed": "Concluída",
       "rejected": "Recusada",
       "cancelled": "Cancelada",
-      "confirmedFree": "Confirmada (grátis), pronta para retirada"
+      "confirmedFree": "Confirmada (grátis), pronta para retirada",
+      "expired": "Prazo vencido"
     },
     "dates": "{start} a {end}",
     "days": "{count, plural, one {# diária} other {# diárias}}",
@@ -513,7 +514,9 @@
       "cancelConfirm": "Cancelar reserva",
       "cancelled": "Reserva cancelada.",
       "cancelTextUnpaid": "Nada foi cobrado ainda, então não há custo. O Host será avisado. Esta ação não pode ser desfeita.",
-      "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita."
+      "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita.",
+      "requestAgain": "Pedir de novo",
+      "expiredText": "O prazo venceu (o Host não respondeu ou o pagamento não foi feito a tempo). O horário voltou a ficar livre: peça de novo ou fale com o Host."
     },
     "list": {
       "title": "Minhas reservas",
@@ -574,7 +577,8 @@
       "splitInfo": "Pagamento processado pelo Mercado Pago. O valor do Host é repassado automaticamente.",
       "errors": {
         "methodRequired": "Escolha PIX ou cartão de crédito.",
-        "notAllowed": "Esta reserva não está esperando pagamento."
+        "notAllowed": "Esta reserva não está esperando pagamento.",
+        "expired": "O prazo para pagar venceu. Peça a reserva de novo."
       },
       "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida.",
       "testNotice": "Pagamento de teste: nenhum valor é cobrado. O pagamento de verdade (Mercado Pago) entra em breve.",
@@ -593,7 +597,8 @@
         "errors": {
           "rejected": "Pagamento recusado. Confira os dados ou use outro cartão.",
           "unavailable": "O pagamento está indisponível agora. Tente de novo em alguns minutos.",
-          "notAllowed": "Esta reserva não está esperando pagamento."
+          "notAllowed": "Esta reserva não está esperando pagamento.",
+          "expired": "O prazo para pagar venceu. Peça a reserva de novo."
         }
       },
       "rentalOf": "Aluguel de {duration}",
@@ -1013,7 +1018,8 @@
         "completed": "Concluída",
         "rejected": "Recusada",
         "cancelled": "Cancelada",
-        "confirmedFree": "Confirmada (grátis), pronta para retirada"
+        "confirmedFree": "Confirmada (grátis), pronta para retirada",
+        "expired": "Prazo vencido"
       },
       "rider": "Rider: <link>{name}</link>",
       "when": "{start} até {end}",
@@ -1239,7 +1245,10 @@
       "newMessage": "Nova mensagem de {name}",
       "equipmentAvailable": "Disponível de novo: {title}",
       "pickupWaiting": "{name} confirmou a retirada. Falta você.",
-      "returnWaiting": "{name} confirmou a devolução. Falta você."
+      "returnWaiting": "{name} confirmou a devolução. Falta você.",
+      "bookingExpired": "Prazo vencido: {title}",
+      "cityAvailable": "Chegou equipamento em {name}: {title}",
+      "hostDemand": "Demanda por Hosts em {name}: cadastre seu equipamento e faça renda extra"
     }
   },
   "admin": {
@@ -1781,5 +1790,52 @@
     "secondCity": "Cidade secundária (opcional)",
     "secondCityHint": "Onde você trabalha, estuda ou passa os fins de semana.",
     "save": "Continuar"
+  },
+  "deadline": {
+    "riderWaitHost": "O Host responde até {time} · faltam {left}. Se não responder, o pedido vence e você pode pedir de novo ou falar com ele.",
+    "hostRespond": "Responda até {time} · faltam {left}. Depois disso o pedido vence e o horário volta a ficar livre.",
+    "pay": "Pague até {time} · faltam {left}. Depois disso a reserva vence e o horário volta a ficar livre.",
+    "hostWaitPay": "O Rider tem até {time} para pagar · faltam {left}.",
+    "over": "O prazo venceu. A tela se atualiza em instantes.",
+    "lessThanMinute": "menos de 1 minuto",
+    "minutes": "{count, plural, one {# minuto} other {# minutos}}",
+    "hours": "{h} h {m} min"
+  },
+  "howItWorks": {
+    "title": "Como funciona a Hi Scoot",
+    "subtitle": "Alugue patinete, bike, skate elétrico ou jetboard de pessoas da sua cidade, por hora ou por dia.",
+    "steps": {
+      "find": {
+        "title": "Escolha",
+        "text": "Busque perto de você e veja preço, fotos e avaliações."
+      },
+      "request": {
+        "title": "Peça o horário",
+        "text": "Escolha dia e hora. O Host responde em até 20 min (mesmo dia) ou 24 h."
+      },
+      "pay": {
+        "title": "Pague com segurança",
+        "text": "Pelo Mercado Pago, sem precisar de conta lá. Você tem 10 min depois do aceite."
+      },
+      "pickup": {
+        "title": "Retire com QR",
+        "text": "Leia o QR do equipamento e tire uma foto. O Host confirma junto."
+      },
+      "return": {
+        "title": "Devolva e avalie",
+        "text": "Mesmo processo na devolução. Depois, avalie o Host."
+      }
+    },
+    "signUp": "Criar conta grátis",
+    "becomeHost": "Quero anunciar e ganhar",
+    "haveAccount": "Já tem conta? <link>Entrar</link>"
+  },
+  "cityAlert": {
+    "title": "Não tem na sua cidade?",
+    "text": "Peça para ser avisado. Assim que alguém anunciar ali, você recebe um aviso. E a gente chama novos Hosts para a sua cidade.",
+    "cityLabel": "Cidade",
+    "submit": "Avisar quando tiver",
+    "signUp": "Criar conta para ser avisado",
+    "done": "Pronto! Você vai ser avisado quando tiver equipamento em {city}."
   }
 }

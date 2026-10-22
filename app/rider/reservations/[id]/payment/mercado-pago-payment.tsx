@@ -44,7 +44,7 @@ export function MercadoPagoPayment({ bookingId, total, payerEmail, pixEnabled, i
   const router = useRouter();
   const [sdkReady, setSdkReady] = useState(false);
   const [pix, setPix] = useState<PixData | null>(initialPix);
-  const [error, setError] = useState<"rejected" | "unavailable" | "notAllowed" | null>(null);
+  const [error, setError] = useState<"rejected" | "unavailable" | "notAllowed" | "expired" | null>(null);
   const [copied, setCopied] = useState(false);
   const brick = useRef<Brick | null>(null);
 
