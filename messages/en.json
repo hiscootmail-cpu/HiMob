@@ -453,9 +453,6 @@
     "orPerHour": "or {price} per hour",
     "chooseDays": "Choose the day and time",
     "noDaysYet": "The Host has not opened any days for this equipment yet. Talk to the Host or come back later.",
-    "calendarHelp": "Tap the pickup day. For more than one day, also tap the return day. Days in green are open.",
-    "chosenDay": "Day: {day}",
-    "chosenDays": "From {start} to {end}",
     "pickupTime": "Pickup time",
     "returnTime": "Return time",
     "timePick": "Choose",
@@ -475,7 +472,14 @@
     "couponAppliedDiscount": "Coupon {code} applied: {rental}% off the rental and {fee}% off the fee.",
     "jetboardSafety": "Jetboard is only for people aged {age} or older. Always wear a life jacket, stay in areas allowed for jets and follow local rules.",
     "birthDateLabel": "Date of birth",
-    "birthDateHint": "We need it once to confirm you are {age} or older. The team checks it against your ID."
+    "birthDateHint": "We need it once to confirm you are {age} or older. The team checks it against your ID.",
+    "pickupDay": "Pickup day",
+    "returnDay": "Return day",
+    "dayToChoose": "Choose",
+    "sameDay": "same day",
+    "stepPickup": "Tap the day you'll pick up. Green days are open.",
+    "stepReturn": "Now tap the return day. If it's the same day, just pick the times below.",
+    "rangeBlocked": "A day between pickup and return isn't open by the Host. Choose another return day."
   },
   "errorPage": {
     "title": "Something went wrong",
