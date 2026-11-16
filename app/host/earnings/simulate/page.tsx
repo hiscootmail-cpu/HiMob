@@ -19,7 +19,7 @@ export default async function SimulatePage() {
   const t = await getTranslations("host.earnings");
   const [listings, user] = await Promise.all([listHostListings(), getCurrentUser()]);
   const prices = listings.map((l) => hostHourlyPrice(l.daily_price, l.pickup_time, l.return_time, l.hourly_price)).filter((p) => p > 0);
-  const hourly = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 28;
+  const hourly = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 30;
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 sm:px-6">

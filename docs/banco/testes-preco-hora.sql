@@ -59,6 +59,6 @@ select pg_temp.ok(public.submit_listing_edit('10000000-0000-0000-0000-0000000000
 reset role;
 select public.apply_listing_changes('10000000-0000-0000-0000-000000000001', '{"hourly_price": 35}');
 select pg_temp.ok((select hourly_price = 35 from public.equipment where id = '10000000-0000-0000-0000-000000000001'), 'Edição aplicada muda o preço por hora');
-select pg_temp.fails($$update public.equipment set hourly_price = 0 where id = '10000000-0000-0000-0000-000000000001'$$, '23514', 'Preço por hora precisa ser maior que zero');
+select pg_temp.fails($$update public.equipment set hourly_price = 29.99 where id = '10000000-0000-0000-0000-000000000001'$$, '23514', 'Preço por hora mínimo de R$ 30');
 
 \echo 'Preço por hora: todos os testes passaram'

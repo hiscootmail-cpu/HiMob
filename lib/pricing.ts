@@ -151,7 +151,8 @@ export function discountedBreakdown(
 // -----------------------------------------------------------------------------
 // Preço sugerido para o Host (decisão de 16/11/2026), por hora, no que ele recebe.
 // Referência: patinete compartilhado em capital (~R$ 37/h para o Rider em 2025)
-// = Host ~R$ 28/h com as duas taxas. Turismo e alta temporada: o Host decide.
+// = Host ~R$ 28/h com as duas taxas. Mínimo da Hi Scoot: R$ 30/h para o Host.
+// Turismo e alta temporada: o Host decide.
 // -----------------------------------------------------------------------------
 
 /** Capitais (nome da cidade + UF), para a faixa sugerida de capital. */
@@ -165,9 +166,9 @@ const CAPITALS = new Set([
 export type PriceSuggestion = { min: number; max: number; tier: "capital" | "interior"; dailyHours: number };
 
 const SUGGESTED: Record<"scooter" | "ebike" | "eskate", Record<"capital" | "interior", [number, number]>> = {
-  scooter: { capital: [28, 40], interior: [20, 28] },
-  eskate: { capital: [28, 40], interior: [20, 28] },
-  ebike: { capital: [25, 35], interior: [18, 25] },
+  scooter: { capital: [30, 40], interior: [30, 30] },
+  eskate: { capital: [30, 40], interior: [30, 30] },
+  ebike: { capital: [30, 35], interior: [30, 30] },
 };
 
 /** Faixa sugerida por hora para o tipo e a cidade. Jetboard: sem referência (o Host define). */

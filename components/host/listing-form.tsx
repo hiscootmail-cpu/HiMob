@@ -18,6 +18,7 @@ import { PHOTO_MAX_MB } from "@/lib/handoff";
 import {
   DAILY_MAX,
   DESCRIPTION_MAX,
+  HOURLY_MIN,
   PRICE_MAX,
   TITLE_MAX,
   parsePrice,
@@ -176,6 +177,7 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
       max: field === "title" ? TITLE_MAX : field === "description" ? DESCRIPTION_MAX : MAX_PHOTOS,
       size: PHOTO_MAX_MB,
       price: PRICE_MAX,
+      minPrice: HOURLY_MIN,
     });
   };
 
@@ -368,7 +370,7 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
             label={t("hourlyLabel")}
             inputMode="decimal"
             autoComplete="off"
-            placeholder="28,00"
+            placeholder="30,00"
             value={hourlyText}
             onChange={(event) => {
               setHourlyText(event.currentTarget.value);
@@ -395,7 +397,7 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
           {type === "jetboard"
             ? t("suggestionJetboard")
             : suggestion
-              ? t(suggestion.tier === "capital" ? "suggestionCapital" : "suggestionInterior", {
+              ? t(suggestion.tier === "capital" ? "suggestionCapital" : suggestion.min === suggestion.max ? "suggestionInteriorMin" : "suggestionInterior", {
                   city: chosenCity ? chosenCity.city : t("yourCity"),
                   min: money(suggestion.min),
                   max: money(suggestion.max),

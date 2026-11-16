@@ -860,7 +860,8 @@
         "editInReview": "An edit is already under review.",
         "locationNotFound": "We could not find this address on the map. Check the address, neighbourhood and city, or tap \"Use my location\".",
         "cityPick": "Pick the city from the suggestions.",
-        "dailyBelowHourly": "The daily price must be at least the hourly price."
+        "dailyBelowHourly": "The daily price must be at least the hourly price.",
+        "hourlyBelowMin": "The minimum hourly price is R$ {minPrice}."
       },
       "daysHintNew": "Tap the days you will rent, or use the shortcuts. With no days marked, nobody can book. You can change it later.",
       "daysHintEdit": "Days save right away, without going through the team review.",
@@ -871,6 +872,7 @@
       "dailyHint": "Day cap: renting many hours never costs more than the daily price. Empty: the hourly price applies until closing time.",
       "suggestionCapital": "Suggestion for {city} (capital): {min} to {max} per hour. Daily from {daily}. In tourist areas and high season, you decide.",
       "suggestionInterior": "Suggestion for {city}: {min} to {max} per hour. Daily from {daily}. In tourist areas and high season, you decide.",
+      "suggestionInteriorMin": "Suggestion for {city}: {min} per hour (Hi Scoot's minimum). Daily price from {daily}. For tourism and high season, you decide.",
       "suggestionJetboard": "Jetboard: set the price for your region and season.",
       "suggestionPickType": "Choose the equipment type and city to see the suggested price.",
       "yourCity": "your city",
