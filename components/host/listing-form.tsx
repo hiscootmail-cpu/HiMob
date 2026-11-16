@@ -16,6 +16,7 @@ import { parseCityValue, type ChosenCity } from "@/lib/br-cities";
 import { MAX_PHOTOS, MIN_PHOTOS, type EquipmentType } from "@/lib/equipment";
 import { PHOTO_MAX_MB } from "@/lib/handoff";
 import {
+  DAILY_MAX,
   DESCRIPTION_MAX,
   PRICE_MAX,
   TITLE_MAX,
@@ -26,7 +27,7 @@ import {
   type ListingErrors,
   type ListingField,
 } from "@/lib/listing";
-import { PLATFORM_FEE_PERCENT, SUGGESTED_DAILY_PRICE, riderDailyPrice } from "@/lib/pricing";
+import { PLATFORM_FEE_PERCENT, listedPrice, riderTotalPrice, suggestedHourly } from "@/lib/pricing";
 import { uploadOwnFiles } from "@/lib/supabase/client";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,8 @@ export type ListingDefaults = {
   title: string;
   description: string;
   daily_price: number;
+  /** Preço por hora (anúncios antigos: diária ÷ horas de atendimento). */
+  hourly_price: number;
   city: string;
   area: string;
   pickup_address: string;
@@ -62,7 +65,7 @@ type LocationStatus = "idle" | "locating" | "saved" | "denied";
 /** Rascunho do anúncio novo, guardado no aparelho (decisão de 22/10/2026). As fotos não entram. */
 const DRAFT_KEY = "hs-listing-draft-v1";
 const DRAFT_FIELDS = [
-  "type", "title", "description", "daily_price", "city", "area", "pickup_address", "pickup_time", "return_time",
+  "type", "title", "description", "hourly_price", "daily_price", "city", "area", "pickup_address", "pickup_time", "return_time",
   "available_days", "available_days_weekly",
 ] as const;
 type Draft = Partial<Record<(typeof DRAFT_FIELDS)[number], string>>;
@@ -148,8 +151,12 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
   const tDays = useTranslations("host.availability");
 
   const [type, setType] = useState<EquipmentType | "">(defaults?.type ?? ((draft?.type as EquipmentType | undefined) || ""));
-  const [price, setPrice] = useState(defaults ? String(defaults.daily_price).replace(".", ",") : (draft?.daily_price ?? ""));
+  const asText = (value: number) => String(value).replace(".", ",");
+  const [hourlyText, setHourlyText] = useState(defaults ? asText(defaults.hourly_price) : (draft?.hourly_price ?? ""));
+  const [dailyText, setDailyText] = useState(defaults ? asText(defaults.daily_price) : (draft?.daily_price ?? ""));
   const draftCity = draft?.city ? parseCityValue(draft.city) : null;
+  // Cidade escolhida: define a faixa de preço sugerida (capital ou interior).
+  const [chosenCity, setChosenCity] = useState<ChosenCity | null>(draftCity ?? cityPick);
   const [photos, setPhotos] = useState<File[]>([]);
   const [coords, setCoords] = useState(defaults ? { lat: defaults.latitude, lng: defaults.longitude } : null);
   const [location, setLocation] = useState<LocationStatus>(defaults ? "saved" : "idle");
@@ -172,7 +179,9 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
     });
   };
 
-  const hostPrice = parsePrice(price);
+  const hourly = parsePrice(hourlyText);
+  const daily = dailyText.trim() ? parsePrice(dailyText, DAILY_MAX) : null;
+  const suggestion = type ? suggestedHourly(type, chosenCity?.city ?? null, chosenCity?.uf ?? null) : null;
 
   function locate() {
     if (!("geolocation" in navigator)) {
@@ -352,39 +361,70 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
         <h2 id="sec-price" className="text-lg font-semibold text-hs-black">
           {t("sectionPrice")}
         </h2>
-        <TextField
-          name="daily_price"
-          label={t("priceLabel")}
-          inputMode="decimal"
-          autoComplete="off"
-          placeholder="35,00"
-          value={price}
-          onChange={(event) => {
-            setPrice(event.currentTarget.value);
-            clear("daily_price");
-          }}
-          hint={t("priceSuggestion", {
-            min: money(SUGGESTED_DAILY_PRICE.min),
-            max: money(SUGGESTED_DAILY_PRICE.max),
-          })}
-          error={message("daily_price")}
-        />
+        {/* Preço por hora (base) e diária como teto (decisão de 16/11/2026). */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <TextField
+            name="hourly_price"
+            label={t("hourlyLabel")}
+            inputMode="decimal"
+            autoComplete="off"
+            placeholder="28,00"
+            value={hourlyText}
+            onChange={(event) => {
+              setHourlyText(event.currentTarget.value);
+              clear("hourly_price");
+            }}
+            error={message("hourly_price")}
+          />
+          <TextField
+            name="daily_price"
+            label={t("dailyLabel")}
+            inputMode="decimal"
+            autoComplete="off"
+            placeholder={hourly ? asText(Math.round(hourly * 6 * 100) / 100) : "150,00"}
+            value={dailyText}
+            onChange={(event) => {
+              setDailyText(event.currentTarget.value);
+              clear("daily_price");
+            }}
+            hint={t("dailyHint")}
+            error={message("daily_price")}
+          />
+        </div>
+        <p className="rounded-md bg-blue-soft px-4 py-3 text-sm text-on-blue">
+          {type === "jetboard"
+            ? t("suggestionJetboard")
+            : suggestion
+              ? t(suggestion.tier === "capital" ? "suggestionCapital" : "suggestionInterior", {
+                  city: chosenCity ? chosenCity.city : t("yourCity"),
+                  min: money(suggestion.min),
+                  max: money(suggestion.max),
+                  daily: money(suggestion.min * suggestion.dailyHours),
+                })
+              : t("suggestionPickType")}
+        </p>
         <div className="flex flex-col gap-1 rounded-md bg-surface p-4" aria-live="polite">
-          {hostPrice ? (
+          {hourly ? (
             <>
               <p className="text-base text-hs-black">
-                {t.rich("riderSees", {
-                  price: money(riderDailyPrice(hostPrice)),
+                {t.rich("riderSeesHourly", {
+                  price: money(listedPrice(hourly)),
                   strong: (chunks) => <strong className="font-bold">{chunks}</strong>,
                 })}
               </p>
+              <p className="text-sm text-hs-black">{t("riderPaysHourly", { total: money(riderTotalPrice(hourly)), percent: PLATFORM_FEE_PERCENT })}</p>
+              <p className="text-sm font-semibold text-hs-black">{t("youReceiveHourly", { price: money(hourly) })}</p>
               <p className="text-sm text-muted">
-                {t("riderSeesFee", { percent: PLATFORM_FEE_PERCENT, fee: money(riderDailyPrice(hostPrice) - hostPrice) })}
+                {daily
+                  ? t("dailyPreview", { daily: money(daily), listed: money(listedPrice(daily)), total: money(riderTotalPrice(daily)) })
+                  : t("dailyPreviewEmpty")}
               </p>
-              <p className="text-sm text-hs-black">{t("youReceive", { price: money(hostPrice) })}</p>
+              <p className="text-xs text-muted">
+                {t("feesExplained", { percent: PLATFORM_FEE_PERCENT, fee: money(Math.round((riderTotalPrice(hourly) - hourly) * 100) / 100) })}
+              </p>
             </>
           ) : (
-            <p className="text-sm text-muted">{t("pricePreviewEmpty", { percent: PLATFORM_FEE_PERCENT })}</p>
+            <p className="text-sm text-muted">{t("pricePreviewEmptyHourly", { percent: PLATFORM_FEE_PERCENT })}</p>
           )}
         </div>
       </section>
@@ -401,7 +441,10 @@ function ListingFormInner({ action, mode, defaults, cityPick = null, days, draft
             label={t("cityLabel")}
             defaultValue={draftCity ?? cityPick}
             error={message("city") ? t("errors.cityPick") : undefined}
-            onChange={() => clear("city")}
+            onChange={(city) => {
+              setChosenCity(city);
+              clear("city");
+            }}
           />
           <TextField
             name="area"

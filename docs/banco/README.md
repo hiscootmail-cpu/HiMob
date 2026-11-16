@@ -42,3 +42,4 @@ Prazos de resposta e pagamento: `docs/banco/testes-prazos.sql`, também depois d
 Cidade sem oferta: `docs/banco/testes-cidade-sem-oferta.sql`, também depois de todas as migrações.
 Dias que se repetem e simulador: `docs/banco/testes-dias-semanais.sql`, também depois de todas as migrações.
 Central de ajuda e SOS: `docs/banco/testes-atendimento.sql`, também depois de todas as migrações.
+Preço por hora e taxa 15% + 15%: `docs/banco/testes-preco-hora.sql`, também depois de todas as migrações.

@@ -7,7 +7,8 @@ import { todayInSaoPaulo } from "@/lib/booking";
 import { checkCity } from "@/lib/br-cities-server";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { locateAddress } from "@/lib/geocode";
-import { parsePrice, readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
+import { DAILY_MAX, parsePrice, readListingForm, validateListing, type ListingErrors } from "@/lib/listing";
+import { openHours } from "@/lib/pricing";
 import { getCurrentUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -37,11 +38,16 @@ const asFiles = (paths: string[]) => paths.map(() => ({ size: 1, type: "image/jp
 /** Campos do formulário no formato do banco. */
 function listingFields(formData: FormData) {
   const get = (name: string) => String(formData.get(name) ?? "").trim();
+  // Preço por hora (base) e diária como teto (decisão de 16/11/2026). Sem diária:
+  // vale o preço por hora até o fim do atendimento.
+  const hourly = parsePrice(get("hourly_price")) ?? 0;
+  const fullDay = Math.min(DAILY_MAX, Math.round(hourly * openHours(get("pickup_time"), get("return_time")) * 100) / 100);
   return {
     type: get("type"),
     title: get("title"),
     description: get("description"),
-    daily_price: parsePrice(get("daily_price")) ?? 0,
+    hourly_price: hourly,
+    daily_price: parsePrice(get("daily_price"), DAILY_MAX) ?? fullDay,
     // Só cidade da lista oficial (o nome, sem o estado).
     city: checkCity(get("city"))?.city ?? "",
     area: get("area"),
@@ -123,6 +129,7 @@ export async function createListing(_prev: ListingState, formData: FormData): Pr
       title: f.title,
       description: f.description,
       daily_price: f.daily_price,
+      hourly_price: f.hourly_price,
       city: f.city,
       area: f.area,
       pickup_time: f.pickup_time,
@@ -201,6 +208,7 @@ export async function updateListing(listingId: string, _prev: ListingState, form
     title: listing.title,
     description: listing.description,
     daily_price: listing.daily_price,
+    hourly_price: listing.hourly_price ?? null,
     city: listing.city,
     area: listing.area,
     pickup_time: listing.pickup_time,

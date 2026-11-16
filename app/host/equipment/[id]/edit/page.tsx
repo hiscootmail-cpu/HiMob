@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { listingDays } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { findCity } from "@/lib/br-cities-server";
+import { hostHourlyPrice } from "@/lib/pricing";
 import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
 import { editPolicy, getHostListing } from "@/lib/host";
 import { getCurrentUser } from "@/lib/session";
@@ -61,6 +62,7 @@ export default async function EditListingPage({ params }: PageProps<"/host/equip
               title: listing.title,
               description: listing.description,
               daily_price: listing.daily_price,
+              hourly_price: hostHourlyPrice(listing.daily_price, listing.pickup_time, listing.return_time, listing.hourly_price),
               city: listing.city,
               area: listing.area,
               pickup_address: listing.pickup_address,

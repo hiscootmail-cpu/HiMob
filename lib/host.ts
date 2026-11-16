@@ -86,6 +86,7 @@ type HostRow = {
   longitude: number | null;
   pickup_time: string;
   return_time: string;
+  hourly_price?: number | null;
   is_available: boolean;
   review_status: ListingReview;
   review_reason: string | null;
@@ -102,15 +103,16 @@ async function realHostListings(id?: string): Promise<HostListing[]> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return [];
-  let query = supabase
-    .from("equipment")
-    .select(
-      "id, host_id, type, title, description, daily_price, city, area, latitude, longitude, pickup_time, return_time, is_available, review_status, review_reason, last_sent_at, equipment_private(pickup_address, latitude, longitude, label_code), equipment_photos(path, position), equipment_edits(status)",
-    )
-    .eq("host_id", user.id)
-    .order("created_at", { ascending: false });
-  if (id) query = query.eq("id", id);
-  const { data } = await query;
+  const columns = (hourly: boolean) =>
+    `id, host_id, type, title, description, daily_price,${hourly ? " hourly_price," : ""} city, area, latitude, longitude, pickup_time, return_time, is_available, review_status, review_reason, last_sent_at, equipment_private(pickup_address, latitude, longitude, label_code), equipment_photos(path, position), equipment_edits(status)`;
+  const run = (hourly: boolean) => {
+    let query = supabase.from("equipment").select(columns(hourly)).eq("host_id", user.id).order("created_at", { ascending: false });
+    if (id) query = query.eq("id", id);
+    return query;
+  };
+  // Preço por hora: se o banco ainda não tiver o campo, lê sem ele.
+  const first = await run(true);
+  const { data } = first.error ? await run(false) : first;
 
   return ((data ?? []) as unknown as HostRow[]).map((row) => ({
     id: row.id,
@@ -119,6 +121,7 @@ async function realHostListings(id?: string): Promise<HostListing[]> {
     title: row.title,
     description: row.description,
     daily_price: Number(row.daily_price),
+    hourly_price: row.hourly_price == null ? null : Number(row.hourly_price),
     city: row.city,
     area: row.area,
     // O Host vê o ponto exato do próprio anúncio.

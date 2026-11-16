@@ -10,7 +10,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import type { Equipment } from "@/lib/equipment";
 import type { LatLng } from "@/lib/geo";
-import { riderDailyPrice } from "@/lib/pricing";
+import { hostHourlyPrice, listedPrice } from "@/lib/pricing";
 
 type EquipmentMapProps = {
   items: Equipment[];
@@ -93,11 +93,14 @@ export default function EquipmentMap({ items, center, userLocation, highlightedI
         <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userDot} interactive={false} />
       ) : null}
       {items.map((item) => {
-        const price = format.number(riderDailyPrice(item.daily_price), {
+        const value = listedPrice(hostHourlyPrice(item.daily_price, item.pickup_time, item.return_time, item.hourly_price));
+        // Inteiro sem centavos (R$ 35); com centavos, sempre 2 casas (R$ 32,20).
+        const cents = Number.isInteger(value) ? 0 : 2;
+        const price = format.number(value, {
           style: "currency",
           currency: "BRL",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
+          minimumFractionDigits: cents,
+          maximumFractionDigits: cents,
         });
         return (
           <Marker

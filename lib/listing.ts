@@ -12,12 +12,15 @@ import { validatePhoto } from "@/lib/handoff";
 
 export const TITLE_MAX = 60;
 export const DESCRIPTION_MAX = 1000;
+/** Preço por hora: até R$ 999. Diária (teto, opcional): até R$ 9.999 (decisão de 16/11/2026). */
 export const PRICE_MAX = 999;
+export const DAILY_MAX = 9999;
 
 export type ListingField =
   | "type"
   | "title"
   | "description"
+  | "hourly_price"
   | "daily_price"
   | "city"
   | "area"
@@ -31,6 +34,7 @@ export type ListingError =
   | "required"
   | "tooLong"
   | "priceInvalid"
+  | "dailyBelowHourly"
   | "locationRequired"
   | "locationNotFound"
   | "photosTooFew"
@@ -42,11 +46,11 @@ export type ListingError =
 export type ListingErrors = Partial<Record<ListingField, ListingError>>;
 
 /** "45", "45,50" ou "45.50" → 45.5. Devolve null se não for um valor válido. */
-export function parsePrice(raw: string): number | null {
-  const text = raw.trim().replace(/\s/g, "").replace(",", ".");
-  if (!/^\d{1,3}(\.\d{1,2})?$/.test(text)) return null;
+export function parsePrice(raw: string, max = PRICE_MAX): number | null {
+  const text = raw.trim().replace(/\s/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".");
+  if (!/^\d{1,4}(\.\d{1,2})?$/.test(text)) return null;
   const value = Number(text);
-  return value > 0 && value <= PRICE_MAX ? value : null;
+  return value > 0 && value <= max ? value : null;
 }
 
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -55,6 +59,8 @@ export type ListingInput = {
   type: string;
   title: string;
   description: string;
+  hourly_price: string;
+  /** Opcional: vazio = o preço por hora até o fim do atendimento. */
   daily_price: string;
   city: string;
   area: string;
@@ -79,8 +85,15 @@ export function validateListing(input: ListingInput): ListingErrors {
   if (!equipmentTypes.includes(input.type as EquipmentType)) errors.type = "required";
   text("title", input.title, TITLE_MAX);
   text("description", input.description, DESCRIPTION_MAX);
-  if (!input.daily_price.trim()) errors.daily_price = "required";
-  else if (parsePrice(input.daily_price) === null) errors.daily_price = "priceInvalid";
+  // Preço por hora (obrigatório) e diária como teto (opcional).
+  const hourly = parsePrice(input.hourly_price);
+  if (!input.hourly_price.trim()) errors.hourly_price = "required";
+  else if (hourly === null) errors.hourly_price = "priceInvalid";
+  if (input.daily_price.trim()) {
+    const daily = parsePrice(input.daily_price, DAILY_MAX);
+    if (daily === null) errors.daily_price = "priceInvalid";
+    else if (hourly !== null && daily < hourly) errors.daily_price = "dailyBelowHourly";
+  }
   text("city", input.city);
   text("area", input.area);
   text("pickup_address", input.pickup_address);
@@ -122,6 +135,7 @@ export function readListingForm(formData: FormData, keepPhotos = false): Listing
     type: get("type"),
     title: get("title"),
     description: get("description"),
+    hourly_price: get("hourly_price"),
     daily_price: get("daily_price"),
     // Cidade da lista oficial chega como "Nome|UF" (vazio se não escolheu da lista).
     city: get("city").split("|")[0],

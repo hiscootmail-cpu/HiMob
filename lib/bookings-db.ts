@@ -2,6 +2,7 @@ import "server-only";
 
 import { calendarDays, rentalHours } from "@/lib/booking";
 import type { Booking, BookingStatus } from "@/lib/bookings";
+import type { FeeModel } from "@/lib/pricing";
 import { FALLBACK_LOCATION, type EquipmentType } from "@/lib/equipment";
 import type { HostBooking } from "@/lib/host";
 import { exampleBookings } from "@/lib/mock/bookings";
@@ -142,8 +143,19 @@ export async function realBookings(role: "rider" | "host", id?: string): Promise
   if (id) query = query.eq("id", id);
   const { data } = await query;
   const bookings = ((data ?? []) as unknown as Row[]).map(fromRow);
-  // Prazos lidos à parte: se o banco ainda não tiver esses campos, a lista continua aparecendo.
+  // Prazos e regra de taxa lidos à parte: se o banco ainda não tiver esses campos, a lista continua aparecendo.
   if (bookings.length) {
+    const { data: fees, error: feesError } = await supabase
+      .from("bookings")
+      .select("id, fee_model, host_hourly_price")
+      .in("id", bookings.map((b) => b.id));
+    const feeById = new Map((fees ?? []).map((f) => [f.id as string, f]));
+    for (const booking of bookings) {
+      const row = feeById.get(booking.id);
+      // Sem o campo no banco, todas as reservas são da regra antiga.
+      booking.fee_model = feesError ? "single" : ((row?.fee_model as FeeModel | undefined) ?? "single");
+      booking.host_hourly_price = row?.host_hourly_price == null ? null : Number(row.host_hourly_price);
+    }
     const { data: deadlines } = await supabase.from("bookings").select("id, respond_by, pay_by").in("id", bookings.map((b) => b.id));
     const byId = new Map((deadlines ?? []).map((d) => [d.id as string, d]));
     for (const booking of bookings) {

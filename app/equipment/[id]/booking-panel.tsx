@@ -12,7 +12,7 @@ import { MonthCalendar } from "@/components/equipment/month-calendar";
 import { GAP_HOURS, type Schedule } from "@/lib/availability-rules";
 import { daysBetween, rentalHours, saoPauloTime, timeSlots } from "@/lib/booking";
 import { durationText } from "@/lib/duration";
-import { discountedBreakdown, hostHourlyPrice, PLATFORM_FEE_PERCENT, rentalHostAmount, riderDailyPrice } from "@/lib/pricing";
+import { breakdownFromHost, discountedBreakdown, hostHourlyPrice, listedPrice, PLATFORM_FEE_PERCENT, rentalHostAmount } from "@/lib/pricing";
 import { JETBOARD_MIN_AGE, type Equipment } from "@/lib/equipment";
 import { cn } from "@/lib/utils";
 import { checkCoupon, requestBooking, startConversation, toggleWaitlist, type BookingRequestState, type CouponError, type CouponPreview } from "./actions";
@@ -175,14 +175,16 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
             ? "timesTaken"
             : null;
   const error = localError ?? state.error;
-  const hostAmount = rentalHostAmount(equipment.daily_price, openFrom, openUntil, hours);
+  // Preço por hora com a diária como teto (decisão de 16/11/2026).
+  const hostAmount = rentalHostAmount(equipment.daily_price, openFrom, openUntil, hours, equipment.hourly_price);
+  const fullPrice = breakdownFromHost(hostAmount);
   const freeCoupon = Boolean(appliedCoupon) && (coupon?.kind === "free" || (coupon?.rentalPercent === 100 && coupon?.feePercent === 100));
   const breakdown = discountedBreakdown(
     hostAmount,
     appliedCoupon && !freeCoupon ? (coupon?.rentalPercent ?? 0) : 0,
     appliedCoupon && !freeCoupon ? (coupon?.feePercent ?? 0) : 0,
   );
-  const hourly = riderDailyPrice(hostHourlyPrice(equipment.daily_price, openFrom, openUntil));
+  const hourly = listedPrice(hostHourlyPrice(equipment.daily_price, openFrom, openUntil, equipment.hourly_price));
 
   // Horários já ocupados nos dias escolhidos (para a pessoa evitar).
   const time = (ms: number) =>
@@ -196,11 +198,12 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
   const header = (
     <div className="flex flex-col gap-0.5">
       <p className="text-hs-black">
-        <span className="text-2xl font-bold text-hs-black">{money(riderDailyPrice(equipment.daily_price))}</span>
-        <span className="text-base text-muted"> {t("perDay")}</span>
+        <span className="text-sm text-muted">{t("fromPrefix")} </span>
+        <span className="text-2xl font-bold text-hs-black">{money(hourly)}</span>
+        <span className="text-base text-muted"> {t("perHour")}</span>
       </p>
-      <p className="text-sm text-hs-black">{t("orPerHour", { price: money(hourly) })}</p>
-      <p className="text-xs text-muted">{t("feeIncluded", { percent: PLATFORM_FEE_PERCENT })}</p>
+      <p className="text-sm text-hs-black">{t("dailyCap", { price: money(listedPrice(equipment.daily_price)) })}</p>
+      <p className="text-xs text-muted">{t("plusServiceFee", { percent: PLATFORM_FEE_PERCENT })}</p>
     </div>
   );
 
@@ -359,11 +362,12 @@ export function BookingPanel({ equipment, today, isOwner, schedule, onWaitlist =
           <dl className="flex flex-col gap-2 rounded-md bg-surface px-4 py-3 text-sm">
             <div className="flex justify-between gap-3">
               <dt className="text-hs-black">{t("rentalOf", { duration: durationText(tDuration, hours) })}</dt>
-              <dd className="text-hs-black">{money(breakdown.fullTotal)}</dd>
+              <dd className="text-hs-black">{money(fullPrice.listed)}</dd>
             </div>
-            <p className="text-xs text-muted">
-              {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(breakdown.fee + breakdown.feeDiscount) })}
-            </p>
+            <div className="flex justify-between gap-3">
+              <dt className="text-hs-black">{t("serviceFeeLine", { percent: PLATFORM_FEE_PERCENT })}</dt>
+              <dd className="text-hs-black">{money(fullPrice.riderFee)}</dd>
+            </div>
             {freeCoupon ? (
               <div className="flex justify-between gap-3 text-on-green">
                 <dt>{t("couponLine", { code: appliedCoupon })}</dt>

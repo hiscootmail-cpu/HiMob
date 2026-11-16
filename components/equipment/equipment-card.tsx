@@ -7,7 +7,7 @@ import { EquipmentPhoto } from "@/components/equipment/equipment-photo";
 import { StarIcon, VerifiedBadgeIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import type { Equipment } from "@/lib/equipment";
-import { riderDailyPrice } from "@/lib/pricing";
+import { hostHourlyPrice, listedPrice } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 type EquipmentCardProps = {
@@ -23,8 +23,8 @@ export function EquipmentCard({ item, distanceKm, highlighted = false, onHover }
   const t = useTranslations("explore");
   const tType = useTranslations("equipmentType");
   const format = useFormatter();
-  // Preço por dia que o Rider vê: valor do Host + taxa da plataforma.
-  const price = format.number(riderDailyPrice(item.daily_price), { style: "currency", currency: "BRL" });
+  // Preço por hora do anúncio (decisão de 16/11/2026): valor do Host + 15%; a taxa do Rider vem no pagamento.
+  const price = format.number(listedPrice(hostHourlyPrice(item.daily_price, item.pickup_time, item.return_time, item.hourly_price)), { style: "currency", currency: "BRL" });
 
   return (
     <Link
@@ -68,7 +68,7 @@ export function EquipmentCard({ item, distanceKm, highlighted = false, onHover }
           ) : null}
         </p>
         <div className="mt-auto flex items-end justify-between gap-2 pt-1">
-          <p className="text-base font-bold text-hs-black">{t("pricePerDay", { price })}</p>
+          <p className="text-base font-bold text-hs-black">{t("priceFromHour", { price })}</p>
           <span className="rounded-full bg-hs-green px-3 py-1 text-sm font-semibold text-on-green group-hover:brightness-95">
             {t("reserve")}
           </span>

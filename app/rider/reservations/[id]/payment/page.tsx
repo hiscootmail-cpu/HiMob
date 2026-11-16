@@ -11,7 +11,7 @@ import { durationText } from "@/lib/duration";
 import { pendingPix } from "@/lib/mercadopago/booking-payments";
 import { mercadoPagoOn } from "@/lib/mercadopago/server";
 import { methodEnabled } from "@/lib/payment-split";
-import { PLATFORM_FEE_PERCENT } from "@/lib/pricing";
+import { breakdownFromHost, CURRENT_FEE_MODEL, PLATFORM_FEE_PERCENT } from "@/lib/pricing";
 import { getCurrentUser } from "@/lib/session";
 import { MercadoPagoPayment } from "./mercado-pago-payment";
 import { PaymentForm } from "./payment-form";
@@ -35,6 +35,9 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
   const mpOn = booking.status === "accepted" && (await mercadoPagoOn());
   const [user, initialPix] = mpOn ? await Promise.all([getCurrentUser(), pendingPix(booking.id)]) : [null, null];
 
+  // Preço cheio (sem cupom) para mostrar aluguel e taxa separados.
+  const full = breakdownFromHost(booking.host_amount, booking.fee_model ?? CURRENT_FEE_MODEL);
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6">
       <BackLink href={`/rider/reservations/${booking.id}`} label={t("back")} />
@@ -49,11 +52,17 @@ export default async function PaymentPage({ params }: PageProps<"/rider/reservat
           <dt className="text-hs-black">
             {t("rentalOf", { duration: durationText(tDuration, booking.hours) })}
           </dt>
-          <dd className="text-hs-black">{money(price.fullTotal)}</dd>
+          <dd className="text-hs-black">{money(full.listed)}</dd>
         </div>
-        <p className="text-xs text-muted">
-          {t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(price.fee + price.feeDiscount) })}
-        </p>
+        {full.riderFee > 0 ? (
+          <div className="flex justify-between gap-3">
+            <dt className="text-hs-black">{t("serviceFeeLine", { percent: PLATFORM_FEE_PERCENT })}</dt>
+            <dd className="text-hs-black">{money(full.riderFee)}</dd>
+          </div>
+        ) : (
+          // Reserva feita antes da taxa nova: só os 15% do Host, já no preço.
+          <p className="text-xs text-muted">{t("feeIncludedLine", { percent: PLATFORM_FEE_PERCENT, fee: money(full.fee) })}</p>
+        )}
         {price.rentalDiscount + price.feeDiscount > 0 ? (
           <div className="flex justify-between gap-3 text-on-green">
             <dt>{t("couponDiscount", { code: booking.coupon_code ?? "" })}</dt>

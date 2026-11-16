@@ -80,7 +80,7 @@ export default async function HostEarningsPage() {
           <li>{t("when1")}</li>
           <li>{t("when2", { fee: PLATFORM_FEE_PERCENT })}</li>
           <li>{t("when3")}</li>
-          <li>{t("when4")}</li>
+          <li>{t("when4", { fee: PLATFORM_FEE_PERCENT })}</li>
         </ul>
       </section>
 

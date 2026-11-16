@@ -3,7 +3,7 @@
  * Formato de um equipamento anunciado, como as telas recebem.
  * Campos vindos do inventário de ações (formulário "Publicar anúncio"):
  * tipo, título, descrição, preço por dia, cidade e localização.
- * Preço é SEMPRE por dia (daily_price), nunca por hora.
+ * Preço por hora (hourly_price), com a diária (daily_price) como teto (decisão de 16/11/2026).
  *
  * Decisões de 09/10/2026:
  * - Fotos: no mínimo 4 e no máximo 10 por anúncio.
@@ -52,8 +52,10 @@ export type Equipment = {
   type: EquipmentType;
   title: string;
   description: string;
-  /** Preço por dia, em reais. */
+  /** Diária (teto), em reais: o que o Host recebe por um dia inteiro. */
   daily_price: number;
+  /** Preço por hora que o Host recebe (decisão de 16/11/2026). Anúncios antigos: null (diária ÷ horas de atendimento). */
+  hourly_price?: number | null;
   city: string;
   /** Bairro mostrado antes da reserva (o endereço exato só depois da confirmação). */
   area: string;
