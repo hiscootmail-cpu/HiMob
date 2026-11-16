@@ -59,7 +59,7 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "6. Reservas e pagamento",
         paragraphs: [
-          "O aluguel é sempre por diária. O preço que o Rider vê já inclui a taxa da plataforma de 15% sobre o valor do Host.",
+          "O aluguel é por hora, com a diária como teto. O preço do anúncio inclui a taxa de operação do Host (15% sobre o valor do Host). No pagamento, o Rider paga também a taxa por operação (15% sobre o preço do anúncio).",
           "O Rider pede a reserva, o Host aceita ou recusa (com um motivo curto) e, depois de aceita, o Rider paga pelo Mercado Pago (PIX ou cartão de crédito à vista). A reserva só é confirmada quando o Mercado Pago confirma o pagamento.",
           "O valor é dividido automaticamente: as diárias vão para o Host e a taxa da plataforma fica com a Hi Scoot. A taxa do Mercado Pago é paga pela Hi Scoot.",
           "Dias já reservados ou bloqueados pelo Host não podem ser reservados.",
@@ -185,7 +185,7 @@ export const terms: Record<"pt" | "en", LegalDocument> = {
       {
         title: "6. Bookings and payment",
         paragraphs: [
-          "Rentals are always by the day. The price the Rider sees already includes the 15% platform fee on the Host's price.",
+          "Rentals are by the hour, capped at the daily price. The listing price includes the Host operation fee (15% of the Host's price). At payment, the Rider also pays the service fee (15% of the listing price).",
           "The Rider requests a booking, the Host accepts or declines (with a short reason) and, once accepted, the Rider pays through Mercado Pago (PIX or credit card in a single installment). The booking is confirmed only when Mercado Pago confirms the payment.",
           "The amount is split automatically: the daily rates go to the Host and the platform fee stays with Hi Scoot. The Mercado Pago fee is paid by Hi Scoot.",
           "Days already booked or blocked by the Host cannot be booked.",

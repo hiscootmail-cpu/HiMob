@@ -76,7 +76,8 @@ export function cancelRefund(
 ): { refund: number; hostDebt: number } {
   const totalCents = toCents(price.total);
   const subtotalCents = toCents(price.subtotal);
-  if (who === "host") return { refund: price.total, hostDebt: price.fee };
+  // Host cancela: o Rider recebe tudo e a taxa de operação do Host (15%) fica para o próximo pagamento dele.
+  if (who === "host") return { refund: price.total, hostDebt: price.hostFee };
   const hostKeptCents = totalCents ? Math.round(subtotalCents - (subtotalCents * subtotalCents) / totalCents) : 0;
   return { refund: price.subtotal, hostDebt: toReais(hostKeptCents) };
 }

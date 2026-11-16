@@ -68,7 +68,7 @@
       "description": "Inter em todo o site, em quatro tamanhos principais.",
       "sampleHeading": "A cidade se move.",
       "sampleSubheading": "Vem no Flow.",
-      "sampleBody": "Alugue um patinete perto de você e pague por diária.",
+      "sampleBody": "Alugue um patinete perto de você e pague por hora.",
       "sampleSmall": "Texto de apoio, para informações secundárias."
     },
     "icons": {
@@ -378,7 +378,8 @@
     "travelClear": "Ver todas as cidades",
     "travelShowing": "Equipamentos em {city}, a cidade da sua viagem",
     "travelEmptyTitle": "Ainda não há equipamentos em {city}",
-    "travelEmptyText": "Toque em \"{button}\" para ver os equipamentos de outras cidades."
+    "travelEmptyText": "Toque em \"{button}\" para ver os equipamentos de outras cidades.",
+    "priceFromHour": "a partir de {price}/hora + taxa"
   },
   "equipment": {
     "backToSearch": "Voltar para a busca",
@@ -481,7 +482,13 @@
     "pickupBlock": "Retirada",
     "returnBlock": "Devolução",
     "dayLabel": "Dia",
-    "timeLabel": "Hora"
+    "timeLabel": "Hora",
+    "fromPrefix": "a partir de",
+    "perHour": "por hora",
+    "dailyCap": "Diária: {price} (nunca passa disso por dia)",
+    "plusServiceFee": "+ taxa por operação de {percent}% no pagamento",
+    "serviceFeeLine": "Taxa por operação ({percent}%)",
+    "perHourPlusFee": "por hora + taxa"
   },
   "errorPage": {
     "title": "Algo deu errado",
@@ -521,7 +528,7 @@
       "cancelConfirm": "Cancelar reserva",
       "cancelled": "Reserva cancelada.",
       "cancelTextUnpaid": "Nada foi cobrado ainda, então não há custo. O Host será avisado. Esta ação não pode ser desfeita.",
-      "cancelTextPaid": "Você recebe de volta {refund} (valor das diárias). A taxa da plataforma ({fee}) não é devolvida. O Host será avisado. Esta ação não pode ser desfeita.",
+      "cancelTextPaid": "Você recebe de volta {refund} (o valor do aluguel que iria para o Host). As taxas ({fee}) não são devolvidas. O Host será avisado. Esta ação não pode ser desfeita.",
       "requestAgain": "Pedir de novo",
       "expiredText": "O prazo venceu (o Host não respondeu ou o pagamento não foi feito a tempo). O horário voltou a ficar livre: peça de novo ou fale com o Host.",
       "sos": "SOS: problema no uso"
@@ -562,7 +569,7 @@
       "addressAfterPayment": "O endereço exato aparece depois que o pagamento for confirmado.",
       "cancelTitle": "Cancelamento",
       "cancelFree": "Você pode cancelar sem custo: nada foi cobrado ainda.",
-      "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (valor das diárias); a taxa da plataforma ({fee}) não é devolvida.",
+      "cancelUntil": "Você pode cancelar até {deadline} (24 horas antes da retirada). Devolvemos {refund} (o valor do aluguel que iria para o Host); as taxas ({fee}) não são devolvidas.",
       "cancelDeadlinePassed": "O prazo para cancelar terminou em {deadline} (24 horas antes da retirada).",
       "times": "Retirada: {pickup} · Devolução: {return}",
       "rejectedReason": "Motivo do Host: {reason}",
@@ -589,7 +596,7 @@
         "notAllowed": "Esta reserva não está esperando pagamento.",
         "expired": "O prazo para pagar venceu. Peça a reserva de novo."
       },
-      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor das diárias; a taxa da plataforma não é devolvida.",
+      "cancelPolicy": "Cancelamento: você pode cancelar até 24 horas antes da retirada. Nesse caso, devolvemos o valor do aluguel que iria para o Host; as taxas não são devolvidas.",
       "testNotice": "Pagamento de teste: nenhum valor é cobrado. O pagamento de verdade (Mercado Pago) entra em breve.",
       "payTest": "Pagar {total} (teste)",
       "mp": {
@@ -611,7 +618,8 @@
         }
       },
       "rentalOf": "Aluguel de {duration}",
-      "couponDiscount": "Desconto do cupom {code}"
+      "couponDiscount": "Desconto do cupom {code}",
+      "serviceFeeLine": "Taxa por operação ({percent}%)"
     },
     "confirmed": {
       "title": "Reserva confirmada!",
@@ -805,7 +813,7 @@
       "photosAdd": "Adicionar",
       "photosChoose": "Escolher fotos",
       "photosCount": "{count} de {max} fotos",
-      "sectionPrice": "Preço por dia",
+      "sectionPrice": "Preço",
       "priceLabel": "Quanto você quer receber por dia (R$)",
       "priceSuggestion": "Sugestão da Hi Scoot: de {min} a {max} por dia. Você decide.",
       "riderSees": "O Rider vê <strong>{price} por dia</strong>.",
@@ -828,7 +836,7 @@
       "locationSaved": "Localização salva.",
       "pickupTimeLabel": "Atende a partir de",
       "returnTimeLabel": "Atende até",
-      "timesHint": "Horário de Brasília. O Rider escolhe a hora de retirar e de devolver dentro deste horário. O preço por hora sai da sua diária.",
+      "timesHint": "Horário de Brasília. O Rider escolhe a hora de retirar e de devolver dentro deste horário. Ele paga por hora, nunca mais que a diária por dia.",
       "submitNew": "Enviar para análise",
       "submitEdit": "Enviar edição para análise",
       "reviewNoteNew": "A equipe Hi Scoot confere o anúncio antes de publicar.",
@@ -851,12 +859,28 @@
         "inReview": "Este anúncio está em análise.",
         "editInReview": "Já existe uma edição em análise.",
         "locationNotFound": "Não achamos esse endereço no mapa. Confira o endereço, o bairro e a cidade, ou toque em \"Usar minha localização\".",
-        "cityPick": "Escolha a cidade na lista de sugestões."
+        "cityPick": "Escolha a cidade na lista de sugestões.",
+        "dailyBelowHourly": "A diária precisa ser maior ou igual ao preço por hora."
       },
       "daysHintNew": "Toque nos dias em que você vai alugar, ou use os atalhos. Sem dias marcados, ninguém consegue reservar. Dá para mudar depois.",
       "daysHintEdit": "Os dias salvam na hora, sem passar pela análise da equipe.",
       "draftRestored": "Rascunho recuperado: continue de onde parou. As fotos precisam ser escolhidas de novo.",
-      "draftDiscard": "Descartar rascunho"
+      "draftDiscard": "Descartar rascunho",
+      "hourlyLabel": "Preço por hora (você recebe)",
+      "dailyLabel": "Diária (opcional)",
+      "dailyHint": "Teto do dia: quem alugar muitas horas paga no máximo a diária. Vazio: vale o preço por hora até o fim do atendimento.",
+      "suggestionCapital": "Sugestão para {city} (capital): {min} a {max} por hora. Diária a partir de {daily}. Em turismo e alta temporada, você decide.",
+      "suggestionInterior": "Sugestão para {city}: {min} a {max} por hora. Diária a partir de {daily}. Em turismo e alta temporada, você decide.",
+      "suggestionJetboard": "Jetboard: defina o preço conforme a sua região e a temporada.",
+      "suggestionPickType": "Escolha o tipo do equipamento e a cidade para ver o preço sugerido.",
+      "yourCity": "sua cidade",
+      "riderSeesHourly": "Seu anúncio aparece por <strong>{price}/hora</strong> + taxa.",
+      "riderPaysHourly": "O Rider paga {total}/hora (preço do anúncio + {percent}% de taxa por operação).",
+      "youReceiveHourly": "Você recebe {price} por hora.",
+      "dailyPreview": "Diária: você recebe {daily}; o anúncio mostra {listed}; o Rider paga {total}.",
+      "dailyPreviewEmpty": "Sem diária: quem alugar o dia todo paga as horas até o fim do atendimento.",
+      "feesExplained": "A Hi Scoot fica com {fee} por hora ({percent}% de operação do Host + {percent}% de taxa por operação do Rider) e paga a tarifa do Mercado Pago.",
+      "pricePreviewEmptyHourly": "Digite o preço por hora para ver o que aparece no anúncio e quanto o Rider paga (seu valor + {percent}% + {percent}%)."
     },
     "label": {
       "open": "Etiqueta QR",
@@ -883,7 +907,7 @@
         "editPending": "Edição em análise"
       },
       "hours": "Retirada {pickup} · Devolução {return}",
-      "price": "Você recebe <strong>{host}</strong> por dia · Rider vê {rider}",
+      "price": "Você recebe <strong>{host}</strong> por hora (diária {daily}) · o anúncio mostra {rider}/hora",
       "rejectedReason": "Motivo da recusa",
       "pendingText": "A equipe Hi Scoot está conferindo este anúncio. Você recebe um aviso com a resposta.",
       "edit": "Editar anúncio",
@@ -1125,7 +1149,7 @@
         },
         "listing": {
           "title": "Anúncio criado",
-          "text": "Fotos (mínimo 2), diária, horário e endereço de retirada.",
+          "text": "Fotos (mínimo 2), preço por hora, horário e endereço de retirada.",
           "waiting": "",
           "action": "Criar anúncio"
         },
@@ -1159,9 +1183,9 @@
       "year": "Este ano",
       "whenTitle": "Quando eu recebo?",
       "when1": "Na hora em que o Rider paga, o Mercado Pago separa sozinho a sua parte e manda direto para a sua conta Mercado Pago.",
-      "when2": "Você recebe a diária inteira que definiu. A taxa de {fee}% da Hi Scoot é paga pelo Rider por cima, e a tarifa do Mercado Pago sai da parte da Hi Scoot.",
+      "when2": "Você recebe o preço por hora inteiro que definiu. As taxas da Hi Scoot ({fee}% de operação do Host, já no preço do anúncio, e {fee}% de taxa por operação do Rider) ficam por cima, e a tarifa do Mercado Pago sai da parte da Hi Scoot.",
       "when3": "O prazo para o dinheiro ficar disponível para saque é o da sua conta Mercado Pago. Confira no app do Mercado Pago, em \"Seu dinheiro\".",
-      "when4": "Se você cancelar uma reserva paga, a taxa da plataforma é descontada de um próximo pagamento.",
+      "when4": "Se você cancelar uma reserva paga, o Rider recebe tudo de volta e a sua taxa de operação ({fee}%) é descontada de um próximo pagamento.",
       "byMonth": "Mês a mês",
       "list": "Reservas pagas",
       "empty": "Nenhuma reserva paga ainda. Quando alguém pagar, aparece aqui.",
@@ -1169,13 +1193,8 @@
         "title": "Simular ganhos",
         "subtitle": "Veja quanto pode ganhar com mais equipamentos e em outras cidades.",
         "equipment": "Quantos equipamentos",
-        "daily": "Diária de cada um (R$)",
-        "riderPays": "O Rider paga {value} por dia (diária + taxa).",
-        "days": "Dias alugados por mês: {days}",
-        "daysHint": "Média por equipamento. Comece com uma estimativa conservadora.",
         "city": "Cidade (opcional)",
-        "cityHint": "Veja a procura e a diária média em outra cidade.",
-        "perDay": "Por dia alugado",
+        "cityHint": "Veja a procura e o preço médio por hora em outra cidade.",
         "perMonth": "Por mês",
         "perYear": "Por ano",
         "loading": "Buscando a procura na cidade...",
@@ -1183,9 +1202,14 @@
         "trips": "{count, plural, =0 {Nenhuma viagem marcada para os próximos 90 dias} one {# viagem marcada para os próximos 90 dias} other {# viagens marcadas para os próximos 90 dias}}",
         "equipmentThere": "{count, plural, one {# equipamento publicado lá} other {# equipamentos publicados lá}}",
         "noEquipment": "Nenhum equipamento publicado lá ainda: você pode ser o primeiro.",
-        "avgDaily": "Diária média dos anúncios de lá: {value}",
         "noData": "Não foi possível buscar a procura agora.",
-        "disclaimer": "Estimativa simples (equipamentos × diária × dias alugados), sem garantia de ganho. Não inclui custos como manutenção, carregamento e transporte."
+        "disclaimer": "Estimativa simples (equipamentos × preço por hora × horas alugadas), sem garantia de ganho. Não inclui custos como manutenção, carregamento e transporte.",
+        "hourly": "Preço por hora de cada um (R$)",
+        "riderPaysHourly": "O anúncio mostra {listed}/hora; o Rider paga {value}/hora (com as taxas).",
+        "hours": "Horas alugadas por mês: {hours}",
+        "hoursHint": "Média por equipamento. Ex.: 3 horas por dia em 20 dias = 60 horas.",
+        "perHourAll": "Por hora (todos os equipamentos)",
+        "avgHourly": "Preço médio por hora dos anúncios de lá: {value}"
       }
     }
   },
@@ -1374,7 +1398,7 @@
     "hostLabel": "Host:",
     "verified": "identidade verificada",
     "notVerified": "identidade não verificada",
-    "price": "Host recebe {host} por dia · Rider vê {rider}",
+    "price": "Diária: Host recebe {host} · anúncio mostra {rider}",
     "changesTitle": "O que mudou",
     "changeField": "Campo",
     "changeBefore": "Antes",
@@ -1767,7 +1791,7 @@
     "back": "Voltar ao painel",
     "empty": "Nenhum cupom ainda.",
     "newTitle": "Novo cupom",
-    "newHelp": "Aluguel grátis: a reserva fica confirmada sem pagamento quando o Host aceita. Desconto: x% no aluguel (sai da parte do Host) e y% na taxa de 15% (sai da parte da Hi Scoot).",
+    "newHelp": "Aluguel grátis: a reserva fica confirmada sem pagamento quando o Host aceita. Desconto: x% no aluguel (sai da parte do Host) e y% nas taxas de 15% + 15% (sai da parte da Hi Scoot).",
     "code": "Código",
     "codeHint": "Só letras e números, sem espaço. Ex.: ScootemMogi",
     "city": "Cidade (opcional)",
@@ -1821,7 +1845,7 @@
     "rentalPercent": "Desconto no aluguel (%)",
     "rentalPercentHint": "Sai da parte do Host. Vazio ou 0: sem desconto no aluguel.",
     "feePercent": "Desconto na taxa (%)",
-    "feePercentHint": "Sai da taxa de 15% da Hi Scoot. Vazio ou 0: sem desconto na taxa.",
+    "feePercentHint": "Sai das taxas da Hi Scoot (15% do Host + 15% do Rider). Vazio ou 0: sem desconto nas taxas.",
     "discountShown": "{rental}% no aluguel · {fee}% na taxa"
   },
   "duration": {
@@ -1954,7 +1978,7 @@
         "title": "Pagamento",
         "how": {
           "q": "Como eu pago a reserva?",
-          "a": "Pelo Mercado Pago, com cartão, sem precisar ter conta lá. O pagamento só é pedido depois que o Host aceita, e você tem 10 minutos para pagar."
+          "a": "Pelo Mercado Pago, com cartão, sem precisar ter conta lá. O valor é o preço do anúncio (por hora, com a diária como teto) + 15% de taxa por operação. O pagamento só é pedido depois que o Host aceita, e você tem 10 minutos para pagar."
         },
         "when": {
           "q": "Quando sou cobrado?",
@@ -1969,7 +1993,7 @@
         },
         "cancel": {
           "q": "Posso cancelar?",
-          "a": "Sim, até 24 horas antes da retirada. Se você cancelar uma reserva paga, recebe de volta o valor do aluguel; a taxa da plataforma (15%) não volta. Se o Host cancelar, você recebe tudo de volta."
+          "a": "Sim, até 24 horas antes da retirada. Se você cancelar uma reserva paga, recebe de volta o valor do aluguel que iria para o Host; as taxas (15% do Host e 15% por operação) não voltam. Se o Host cancelar, você recebe tudo de volta."
         }
       },
       "handoff": {
@@ -2009,7 +2033,7 @@
         "title": "Para Hosts",
         "paid": {
           "q": "Quando eu recebo?",
-          "a": "Na hora em que o Rider paga, sua parte vai direto para a sua conta Mercado Pago. O prazo para sacar é o da sua conta Mercado Pago. Veja tudo na aba Host → Ganhos."
+          "a": "Você recebe o preço por hora que definiu, direto na sua conta Mercado Pago, na hora em que o Rider paga. A Hi Scoot fica com 15% de operação do Host (já no preço do anúncio) e 15% de taxa por operação do Rider. O prazo para sacar é o da sua conta Mercado Pago. Veja tudo na aba Host → Ganhos."
         },
         "visible": {
           "q": "Por que meu anúncio não aparece na busca?",

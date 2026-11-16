@@ -5,31 +5,32 @@ import { useState, useTransition } from "react";
 
 import { CityField } from "@/components/city-field";
 import { cityValue, type ChosenCity } from "@/lib/br-cities";
-import { riderDailyPrice } from "@/lib/pricing";
+import { listedPrice, riderTotalPrice } from "@/lib/pricing";
 import { cityDemand, type CityDemand } from "./actions";
 
 const inputClass =
   "h-11 w-full rounded-md border border-line bg-hs-white px-4 text-base text-hs-black outline-none focus-visible:border-hs-blue focus-visible:ring-4 focus-visible:ring-hs-blue/25";
 
 /**
- * Simulador de ganhos (decisão de 22/10/2026): quanto o Host pode ganhar com
- * mais equipamentos e em outras cidades. Estimativa simples: equipamentos ×
- * diária × dias alugados por mês. O Host recebe a diária inteira (a taxa de 15%
- * é paga pelo Rider por cima).
+ * Simulador de ganhos (decisões de 22/10 e 16/11/2026): quanto o Host pode
+ * ganhar com mais equipamentos e em outras cidades. Estimativa simples:
+ * equipamentos × preço por hora × horas alugadas por mês. O Host recebe o preço
+ * por hora inteiro; as taxas (15% + 15%) ficam por cima.
  */
-export function Simulator({ defaults }: { defaults: { equipment: number; daily: number; city: ChosenCity | null } }) {
+export function Simulator({ defaults }: { defaults: { equipment: number; hourly: number; city: ChosenCity | null } }) {
   const t = useTranslations("host.earnings.sim");
   const format = useFormatter();
   const money = (value: number) => format.number(value, { style: "currency", currency: "BRL" });
   const [equipment, setEquipment] = useState(String(defaults.equipment));
-  const [daily, setDaily] = useState(String(defaults.daily));
-  const [days, setDays] = useState(8);
+  const [hourlyText, setHourlyText] = useState(String(defaults.hourly).replace(".", ","));
+  // Horas alugadas por mês, por equipamento (decisão de 16/11/2026: preço por hora).
+  const [hours, setHours] = useState(60);
   const [demand, setDemand] = useState<{ city: ChosenCity; data: CityDemand | null } | null>(null);
   const [loading, start] = useTransition();
 
   const n = Math.min(100, Math.max(0, Math.floor(Number(equipment) || 0)));
-  const price = Math.min(999, Math.max(0, Number(daily.replace(",", ".")) || 0));
-  const monthly = n * price * days;
+  const price = Math.min(999, Math.max(0, Number(hourlyText.replace(",", ".")) || 0));
+  const monthly = n * price * hours;
 
   return (
     <div className="flex flex-col gap-6">
@@ -39,14 +40,14 @@ export function Simulator({ defaults }: { defaults: { equipment: number; daily: 
           <input type="number" inputMode="numeric" min={1} max={100} value={equipment} onChange={(e) => setEquipment(e.currentTarget.value)} className={inputClass} />
         </label>
         <label className="flex flex-col gap-1.5 text-sm font-medium text-hs-black">
-          {t("daily")}
-          <input inputMode="decimal" value={daily} onChange={(e) => setDaily(e.currentTarget.value)} className={inputClass} />
-          <span className="text-xs font-normal text-muted">{t("riderPays", { value: money(riderDailyPrice(price)) })}</span>
+          {t("hourly")}
+          <input inputMode="decimal" value={hourlyText} onChange={(e) => setHourlyText(e.currentTarget.value)} className={inputClass} />
+          <span className="text-xs font-normal text-muted">{t("riderPaysHourly", { listed: money(listedPrice(price)), value: money(riderTotalPrice(price)) })}</span>
         </label>
         <label className="flex flex-col gap-1.5 text-sm font-medium text-hs-black sm:col-span-2">
-          {t("days", { days })}
-          <input type="range" min={0} max={30} value={days} onChange={(e) => setDays(Number(e.currentTarget.value))} className="accent-hs-green" />
-          <span className="text-xs font-normal text-muted">{t("daysHint")}</span>
+          {t("hours", { hours })}
+          <input type="range" min={0} max={300} step={5} value={hours} onChange={(e) => setHours(Number(e.currentTarget.value))} className="accent-hs-green" />
+          <span className="text-xs font-normal text-muted">{t("hoursHint")}</span>
         </label>
         <div className="sm:col-span-2">
           <CityField
@@ -67,7 +68,7 @@ export function Simulator({ defaults }: { defaults: { equipment: number; daily: 
 
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <li className="flex flex-col gap-1 rounded-lg border border-line bg-hs-white p-4">
-          <span className="text-sm text-muted">{t("perDay")}</span>
+          <span className="text-sm text-muted">{t("perHourAll")}</span>
           <span className="text-2xl font-bold text-hs-black">{money(n * price)}</span>
         </li>
         <li className="flex flex-col gap-1 rounded-lg border-2 border-hs-green bg-green-soft p-4">
@@ -88,7 +89,7 @@ export function Simulator({ defaults }: { defaults: { equipment: number; daily: 
             <ul className="flex list-disc flex-col gap-1 pl-5">
               <li>{t("trips", { count: demand.data.trips })}</li>
               <li>{demand.data.equipment ? t("equipmentThere", { count: demand.data.equipment }) : t("noEquipment")}</li>
-              {demand.data.avgDaily ? <li>{t("avgDaily", { value: money(demand.data.avgDaily) })}</li> : null}
+              {demand.data.avgHourly ? <li>{t("avgHourly", { value: money(demand.data.avgHourly) })}</li> : null}
             </ul>
           ) : (
             <p>{t("noData")}</p>

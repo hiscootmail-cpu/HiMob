@@ -14,7 +14,7 @@ import { todayInSaoPaulo } from "@/lib/booking";
 import { EDIT_INTERVAL_DAYS } from "@/lib/equipment";
 import { getEquipment } from "@/lib/equipment-db";
 import { editPolicy, listHostListings, type HostListing } from "@/lib/host";
-import { riderDailyPrice } from "@/lib/pricing";
+import { hostHourlyPrice, listedPrice } from "@/lib/pricing";
 import { getCurrentUser, requireUser } from "@/lib/session";
 import { supabaseConfigured } from "@/lib/supabase/config";
 
@@ -62,8 +62,9 @@ async function ListingCard({ listing, today, isAdmin }: { listing: HostListing; 
           </p>
           <p className="text-sm text-hs-black">
             {t.rich("price", {
-              host: money(listing.daily_price),
-              rider: money(riderDailyPrice(listing.daily_price)),
+              host: money(hostHourlyPrice(listing.daily_price, listing.pickup_time, listing.return_time, listing.hourly_price)),
+              rider: money(listedPrice(hostHourlyPrice(listing.daily_price, listing.pickup_time, listing.return_time, listing.hourly_price))),
+              daily: money(listing.daily_price),
               strong: (chunks) => <strong className="font-bold">{chunks}</strong>,
             })}
           </p>

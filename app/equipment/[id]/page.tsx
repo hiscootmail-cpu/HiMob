@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { equipmentSchedule } from "@/lib/availability";
 import { todayInSaoPaulo } from "@/lib/booking";
 import { getEquipment } from "@/lib/equipment-db";
-import { riderDailyPrice } from "@/lib/pricing";
+import { hostHourlyPrice, listedPrice } from "@/lib/pricing";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { BookingPanel } from "./booking-panel";
@@ -79,7 +79,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
   const t = await getTranslations("equipment");
   const tType = await getTranslations("equipmentType");
   const format = await getFormatter();
-  const price = format.number(riderDailyPrice(equipment.daily_price), { style: "currency", currency: "BRL" });
+  const price = format.number(listedPrice(hostHourlyPrice(equipment.daily_price, equipment.pickup_time, equipment.return_time, equipment.hourly_price)), { style: "currency", currency: "BRL" });
 
   // Na demonstração, ?preview=owner mostra a tela como o dono do anúncio vê.
   const { isOwner, onWaitlist, verification, hasBirthDate } = supabaseConfigured()
@@ -209,7 +209,7 @@ export default async function EquipmentPage({ params, searchParams }: PageProps<
           <div className="mx-auto flex max-w-md items-center justify-between gap-3">
             <p className="text-hs-black">
               <span className="text-lg font-bold text-hs-black">{price}</span>
-              <span className="text-sm text-muted"> {t("perDay")}</span>
+              <span className="text-sm text-muted"> {t("perHourPlusFee")}</span>
             </p>
             <a
               href="#reservar"

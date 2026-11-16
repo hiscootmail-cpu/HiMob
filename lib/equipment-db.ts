@@ -14,6 +14,8 @@ type ListingRow = {
   title: string;
   description: string;
   daily_price: number;
+  /** Só existe depois da atualização do banco de 16/11/2026. */
+  hourly_price?: number | null;
   city: string;
   area: string;
   latitude: number | null;
@@ -41,6 +43,7 @@ function fromRow(row: ListingRow): Equipment {
     title: row.title,
     description: row.description,
     daily_price: Number(row.daily_price),
+    hourly_price: row.hourly_price == null ? null : Number(row.hourly_price),
     city: row.city,
     area: row.area,
     photos: row.photos.map(equipmentPhotoUrl),

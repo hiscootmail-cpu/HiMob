@@ -46,7 +46,8 @@ export function riderCancelPolicy(booking: Booking, now: Date = new Date()): Can
   if (now.getTime() > deadline.getTime()) return { allowed: false, reason: "deadlinePassed", deadline };
 
   const price = bookingPrice(booking);
-  return { allowed: true, paid: true, refund: price.subtotal, fee: price.fee, deadline };
+  // Rider cancela: recebe só o valor do Host (ex.: R$ 30,00); as duas taxas não voltam.
+  return { allowed: true, paid: true, refund: price.subtotal, fee: Math.round((price.total - price.subtotal) * 100) / 100, deadline };
 }
 
 export type HostCancelPolicy =
@@ -68,5 +69,5 @@ export function hostCancelPolicy(booking: Booking, now: Date = new Date()): Host
   if (now.getTime() > deadline.getTime()) return { allowed: false, reason: "deadlinePassed", deadline };
 
   const price = bookingPrice(booking);
-  return { allowed: true, paid: true, riderRefund: price.total, hostFee: price.fee, deadline };
+  return { allowed: true, paid: true, riderRefund: price.total, hostFee: price.hostFee, deadline };
 }

@@ -12,7 +12,7 @@ import { CheckCircleIcon, ShieldAdminIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { listHandoffQueue, listIdentityQueue, listListingQueue, type AdminHandoff, type AdminListing } from "@/lib/admin";
 import { MAX_DOCUMENT_REJECTIONS } from "@/lib/identity";
-import { riderDailyPrice } from "@/lib/pricing";
+import { listedPrice } from "@/lib/pricing";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +50,7 @@ async function ListingItem({ item }: { item: AdminListing }) {
             {item.host.verified ? ` · ${t("verified")}` : ` · ${t("notVerified")}`}
           </p>
           <p className="text-sm text-hs-black">
-            {t("price", { host: money(item.daily_price), rider: money(riderDailyPrice(item.daily_price)) })}
+            {t("price", { host: money(item.daily_price), rider: money(listedPrice(item.daily_price)) })}
           </p>
         </div>
       </div>

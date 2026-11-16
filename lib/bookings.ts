@@ -1,5 +1,5 @@
 import type { Equipment } from "@/lib/equipment";
-import { discountedBreakdown, type DiscountedBreakdown } from "@/lib/pricing";
+import { CURRENT_FEE_MODEL, discountedBreakdown, type DiscountedBreakdown, type FeeModel } from "@/lib/pricing";
 
 /*
  * Reserva, do ponto de vista do Rider.
@@ -32,6 +32,10 @@ export type Booking = {
   hours: number;
   /** Valor do Host por dia no momento da reserva (o preço do anúncio pode mudar depois). */
   host_daily_price: number;
+  /** Preço por hora do Host no momento da reserva (null em reservas antigas). */
+  host_hourly_price?: number | null;
+  /** Regra de taxa da reserva: "double" (15% + 15%, reservas novas) ou "single" (antigas). */
+  fee_model?: FeeModel;
   /** Valor do Host por esta reserva, antes da taxa (guardado pelo banco). */
   host_amount: number;
   /** Hora de retirada e de devolução escolhidas pelo Rider (HH:MM, horário de Brasília). */
@@ -84,7 +88,12 @@ export const REVIEW_COMMENT_MAX = 500;
 export const ONGOING: BookingStatus[] = ["pending", "accepted", "confirmed", "active"];
 
 export function bookingPrice(booking: Booking): DiscountedBreakdown {
-  return discountedBreakdown(booking.host_amount, booking.coupon_rental_percent ?? 0, booking.coupon_fee_percent ?? 0);
+  return discountedBreakdown(
+    booking.host_amount,
+    booking.coupon_rental_percent ?? 0,
+    booking.coupon_fee_percent ?? 0,
+    booking.fee_model ?? CURRENT_FEE_MODEL,
+  );
 }
 
 // Leitura das reservas (banco ou exemplos): lib/bookings-db.ts (só no servidor).
