@@ -67,7 +67,7 @@ export const exampleHostListings: HostListing[] = [
     title: "Patinete Aro 8,5",
     description: "Patinete leve, ótimo para trajetos curtos. Autonomia de cerca de 20 km.",
     daily_price: 168,
-    hourly_price: 28,
+    hourly_price: 30,
     area: "Itaim Bibi",
     latitude: -23.5846,
     longitude: -46.6787,

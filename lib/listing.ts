@@ -14,6 +14,8 @@ export const TITLE_MAX = 60;
 export const DESCRIPTION_MAX = 1000;
 /** Preço por hora: até R$ 999. Diária (teto, opcional): até R$ 9.999 (decisão de 16/11/2026). */
 export const PRICE_MAX = 999;
+/** Preço por hora mínimo: R$ 30 (decisão de 16/11/2026). */
+export const HOURLY_MIN = 30;
 export const DAILY_MAX = 9999;
 
 export type ListingField =
@@ -35,6 +37,7 @@ export type ListingError =
   | "tooLong"
   | "priceInvalid"
   | "dailyBelowHourly"
+  | "hourlyBelowMin"
   | "locationRequired"
   | "locationNotFound"
   | "photosTooFew"
@@ -89,6 +92,7 @@ export function validateListing(input: ListingInput): ListingErrors {
   const hourly = parsePrice(input.hourly_price);
   if (!input.hourly_price.trim()) errors.hourly_price = "required";
   else if (hourly === null) errors.hourly_price = "priceInvalid";
+  else if (hourly < HOURLY_MIN) errors.hourly_price = "hourlyBelowMin";
   if (input.daily_price.trim()) {
     const daily = parsePrice(input.daily_price, DAILY_MAX);
     if (daily === null) errors.daily_price = "priceInvalid";

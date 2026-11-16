@@ -12,7 +12,7 @@ export async function cityDemand(cityValue: string): Promise<CityDemand | null> 
   if (!(await getCurrentUser())) return null;
   const city = checkCity(cityValue);
   if (!city) return null;
-  if (!supabaseConfigured()) return { trips: 12, equipment: 1, avgHourly: 28 };
+  if (!supabaseConfigured()) return { trips: 12, equipment: 1, avgHourly: 30 };
   const supabase = await createClient();
   const { data } = await supabase.rpc("city_demand_summary", { p_city: city.city });
   const row = (Array.isArray(data) ? data[0] : data) as { trips_90?: number; equipment?: number; avg_hourly?: number | null } | null;

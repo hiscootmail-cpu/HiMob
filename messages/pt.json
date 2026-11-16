@@ -860,7 +860,8 @@
         "editInReview": "Já existe uma edição em análise.",
         "locationNotFound": "Não achamos esse endereço no mapa. Confira o endereço, o bairro e a cidade, ou toque em \"Usar minha localização\".",
         "cityPick": "Escolha a cidade na lista de sugestões.",
-        "dailyBelowHourly": "A diária precisa ser maior ou igual ao preço por hora."
+        "dailyBelowHourly": "A diária precisa ser maior ou igual ao preço por hora.",
+        "hourlyBelowMin": "O preço por hora mínimo é R$ {minPrice}."
       },
       "daysHintNew": "Toque nos dias em que você vai alugar, ou use os atalhos. Sem dias marcados, ninguém consegue reservar. Dá para mudar depois.",
       "daysHintEdit": "Os dias salvam na hora, sem passar pela análise da equipe.",
@@ -871,6 +872,7 @@
       "dailyHint": "Teto do dia: quem alugar muitas horas paga no máximo a diária. Vazio: vale o preço por hora até o fim do atendimento.",
       "suggestionCapital": "Sugestão para {city} (capital): {min} a {max} por hora. Diária a partir de {daily}. Em turismo e alta temporada, você decide.",
       "suggestionInterior": "Sugestão para {city}: {min} a {max} por hora. Diária a partir de {daily}. Em turismo e alta temporada, você decide.",
+      "suggestionInteriorMin": "Sugestão para {city}: {min} por hora (o mínimo da Hi Scoot). Diária a partir de {daily}. Em turismo e alta temporada, você decide.",
       "suggestionJetboard": "Jetboard: defina o preço conforme a sua região e a temporada.",
       "suggestionPickType": "Escolha o tipo do equipamento e a cidade para ver o preço sugerido.",
       "yourCity": "sua cidade",
